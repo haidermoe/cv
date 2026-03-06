@@ -1,0 +1,19 @@
+{
+  "name": "haider-cv-website",
+  "version": "1.0.0",
+  "description": "موقع شخصي بسيط لعرض السيرة الذاتية لحيدر محمد باللغة العربية باستخدام HTML و CSS فقط.",
+  "private": true,
+  "scripts": {
+    "start": "echo \"افتح ملف index.html مباشرة في المتصفح (لا توجد حاجة لأوامر npm).\""
+  },
+  "keywords": [
+    "cv",
+    "resume",
+    "arabic",
+    "personal-website"
+  ],
+  "author": "Haider Mohammed",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}
