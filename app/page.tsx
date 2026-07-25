@@ -234,10 +234,7 @@ export default function Home() {
       console.error("FormSubmit Error:", err);
     }
 
-    setTimeout(() => {
-      setSubmitted(false);
-      setIsClientDrawerOpen(false);
-    }, 4000);
+    window.location.href = "/thanks";
   };
 
   const marqueeContent = (
