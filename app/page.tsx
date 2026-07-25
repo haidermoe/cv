@@ -397,7 +397,7 @@ export default function Home() {
       <section className="hero" id="home" style={{ position: "relative", minHeight: "100vh", paddingTop: "120px", display: "flex", alignItems: "center", overflow: "hidden" }}>
         <div className="hero-background" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 1, pointerEvents: "none" }}>
           <video
-            src="/media/hero.mp4"
+            src="media/hero.mp4"
             autoPlay
             loop
             muted
@@ -483,28 +483,28 @@ export default function Home() {
           <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "35px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "230px", border: "1px solid #e2e8f0" }}>
             <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left" }}>+22K</span>
             <p style={{ color: "#475569", fontSize: "16px", marginTop: "10px", lineHeight: "1.6", fontWeight: "700", maxWidth: "75%", textAlign: lang === "AR" ? "right" : "left" }}>{t.stat1}</p>
-            <video src="/volchek-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "95px", height: "95px", position: "absolute", bottom: "10px", left: lang === "AR" ? "10px" : "auto", right: lang === "EN" ? "10px" : "auto", objectFit: "cover", pointerEvents: "none" }}></video>
+            <video src="media/volchek-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "95px", height: "95px", position: "absolute", bottom: "10px", left: lang === "AR" ? "10px" : "auto", right: lang === "EN" ? "10px" : "auto", objectFit: "cover", pointerEvents: "none" }}></video>
           </div>
 
           {/* STAT CARD 2 */}
           <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "35px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "230px", border: "1px solid #e2e8f0" }}>
             <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left" }}>+3K</span>
             <p style={{ color: "#475569", fontSize: "16px", marginTop: "10px", lineHeight: "1.6", fontWeight: "700", maxWidth: "75%", textAlign: lang === "AR" ? "right" : "left" }}>{t.stat2}</p>
-            <video src="/pruzina-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "95px", height: "95px", position: "absolute", bottom: "10px", left: lang === "AR" ? "10px" : "auto", right: lang === "EN" ? "10px" : "auto", objectFit: "cover", pointerEvents: "none" }}></video>
+            <video src="media/pruzina-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "95px", height: "95px", position: "absolute", bottom: "10px", left: lang === "AR" ? "10px" : "auto", right: lang === "EN" ? "10px" : "auto", objectFit: "cover", pointerEvents: "none" }}></video>
           </div>
 
           {/* STAT CARD 3 */}
           <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "35px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "230px", border: "1px solid #e2e8f0" }}>
             <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left" }}>+6</span>
             <p style={{ color: "#475569", fontSize: "16px", marginTop: "10px", lineHeight: "1.6", fontWeight: "700", maxWidth: "75%", textAlign: lang === "AR" ? "right" : "left" }}>{t.stat3}</p>
-            <video src="/time-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "95px", height: "95px", position: "absolute", bottom: "10px", left: lang === "AR" ? "10px" : "auto", right: lang === "EN" ? "10px" : "auto", objectFit: "cover", pointerEvents: "none" }}></video>
+            <video src="media/time-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "95px", height: "95px", position: "absolute", bottom: "10px", left: lang === "AR" ? "10px" : "auto", right: lang === "EN" ? "10px" : "auto", objectFit: "cover", pointerEvents: "none" }}></video>
           </div>
 
           {/* STAT CARD 4 */}
           <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "35px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "230px", border: "1px solid #e2e8f0" }}>
             <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left" }}>+2K</span>
             <p style={{ color: "#475569", fontSize: "16px", marginTop: "10px", lineHeight: "1.6", fontWeight: "700", maxWidth: "75%", textAlign: lang === "AR" ? "right" : "left" }}>{t.stat4}</p>
-            <video src="/ball-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "95px", height: "95px", position: "absolute", bottom: "10px", left: lang === "AR" ? "10px" : "auto", right: lang === "EN" ? "10px" : "auto", objectFit: "cover", pointerEvents: "none" }}></video>
+            <video src="media/ball-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "95px", height: "95px", position: "absolute", bottom: "10px", left: lang === "AR" ? "10px" : "auto", right: lang === "EN" ? "10px" : "auto", objectFit: "cover", pointerEvents: "none" }}></video>
           </div>
 
         </div>
