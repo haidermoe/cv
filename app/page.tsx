@@ -698,7 +698,16 @@ export default function Home() {
                   <p style={{ color: "#15803d", fontSize: "16px", marginTop: "8px", fontWeight: "600" }}>{t.submittedText}</p>
                 </div>
               ) : (
-                <form onSubmit={handleFormSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                <form
+                  action="https://formsubmit.co/haider.m.shwkat@outlook.com"
+                  method="POST"
+                  onSubmit={handleFormSubmit}
+                  style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+                >
+                  <input type="hidden" name="_subject" value="📩 طلب عمل جديد من موقعك الشخصي!" />
+                  <input type="hidden" name="_captcha" value="false" />
+                  <input type="hidden" name="_template" value="table" />
+
                   <div>
                     <label style={{ display: "block", fontSize: "14.5px", fontWeight: "800", marginBottom: "8px", color: "#0f111a" }}>
                       {t.nameLabel}
@@ -706,6 +715,7 @@ export default function Home() {
                     <input
                       required
                       type="text"
+                      name="الاسم والشركة / Client Name"
                       placeholder={t.namePlaceholder}
                       style={{
                         width: "100%",
@@ -727,6 +737,7 @@ export default function Home() {
                     <input
                       required
                       type="email"
+                      name="البريد الإلكتروني / Client Email"
                       placeholder={t.emailPlaceholder}
                       style={{
                         width: "100%",
@@ -748,6 +759,7 @@ export default function Home() {
                     <textarea
                       required
                       rows={5}
+                      name="تفاصيل المشروع / Project Details"
                       placeholder={t.projectPlaceholder}
                       style={{
                         width: "100%",
