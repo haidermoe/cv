@@ -249,6 +249,7 @@ export default function Home() {
     >
       {/* AWSMD TOP ACTION BUTTONS MATCHING SCREENSHOT */}
       <div
+        className="awsmd-top-actions"
         style={{
           position: "fixed",
           top: "24px",
@@ -334,6 +335,7 @@ export default function Home() {
 
       {/* Floating Pill Header Navigation */}
       <header
+        className="desktop-header-nav"
         style={{
           position: "fixed",
           top: "24px",
@@ -416,7 +418,7 @@ export default function Home() {
 
         <div className="container" style={{ position: "relative", zIndex: 2, width: "100%", maxWidth: "1500px", margin: "0 auto", padding: "0 40px", display: "flex", justifyContent: "flex-start", direction: "ltr" }}>
           <div style={{ maxWidth: "550px", textAlign: lang === "AR" ? "right" : "left", direction: lang === "AR" ? "rtl" : "ltr" }}>
-            <div style={{ fontSize: "72px", fontWeight: "900", lineHeight: "1.0", letterSpacing: "-1.5px", color: "#ffffff", marginBottom: "25px" }}>
+            <div className="hero-title-text" style={{ fontSize: "72px", fontWeight: "900", lineHeight: "1.0", letterSpacing: "-1.5px", color: "#ffffff", marginBottom: "25px" }}>
               <div style={{ display: "block" }}>{t.heroLine1}</div>
 
               <div style={{ display: "flex", alignItems: "center", gap: "15px", marginTop: "8px", marginBottom: "8px" }}>
