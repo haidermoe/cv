@@ -1080,6 +1080,14 @@ ul {
   transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
   transform: translateY(0) !important;
   will-change: transform !important;
+  height: 48px !important;
+}
+
+.flip-text-primary, .flip-text-secondary {
+  height: 24px !important;
+  line-height: 24px !important;
+  display: block !important;
+  white-space: nowrap !important;
 }
 
 .flip-link-group:hover .flip-wrapper {
