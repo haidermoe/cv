@@ -119,7 +119,7 @@ export default function ThanksPage() {
             lineHeight: "1.3"
           }}
         >
-          {lang === "AR" ? "تم إرسال طلبك بنجاح 😃" : "Your request has been successfully sent 😃"}
+          {lang === "AR" ? "تم إرسال طلبك بنجاح 😉" : "Your request has been successfully sent 😉"}
         </p>
 
         <p
@@ -133,8 +133,8 @@ export default function ThanksPage() {
           }}
         >
           {lang === "AR"
-            ? "انتظر رداً من مديرنا. وسنتواصل معك خلال الـ 24 ساعة القادمة."
-            : "Wait for a response from our manager. If the manager didn't answer, he will contact you within the next 24 hours"}
+            ? "انتظر رداً. وسوف يتم التواصل معك خلال الـ 24 ساعة القادمة."
+            : "Wait for a response. We will contact you within the next 24 hours."}
         </p>
 
         <Link
