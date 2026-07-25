@@ -211,13 +211,33 @@ export default function Home() {
     }
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
     setSubmitted(true);
+
+    try {
+      await fetch("https://formsubmit.co/ajax/haider.m.shwkat@outlook.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          "الاسم والشركة / Client Name": formData.get("الاسم والشركة / Client Name"),
+          "البريد الإلكتروني / Client Email": formData.get("البريد الإلكتروني / Client Email"),
+          "تفاصيل المشروع / Project Details": formData.get("تفاصيل المشروع / Project Details"),
+          "_subject": "📩 طلب عمل جديد من موقعك الشخصي!"
+        })
+      });
+    } catch (err) {
+      console.error("FormSubmit Error:", err);
+    }
+
     setTimeout(() => {
       setSubmitted(false);
       setIsClientDrawerOpen(false);
-    }, 2000);
+    }, 4000);
   };
 
   const marqueeContent = (
