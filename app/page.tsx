@@ -187,8 +187,17 @@ export default function Home() {
   const [isClientDrawerOpen, setIsClientDrawerOpen] = useState(false);
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
 
   const t = translations[lang];
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   useEffect(() => {
     const vids = document.querySelectorAll("video");
@@ -264,6 +273,20 @@ export default function Home() {
         fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif"
       }}
     >
+      {/* AWSMD INTERACTIVE MOUSE SPOTLIGHT AURA */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          pointerEvents: "none",
+          zIndex: 99,
+          background: `radial-gradient(650px circle at ${mousePos.x}px ${mousePos.y}px, rgba(96, 165, 250, 0.14), rgba(79, 70, 229, 0.06) 45%, transparent 75%)`,
+          transition: "background 0.05s ease-out"
+        }}
+      />
       {/* AWSMD TOP ACTION BUTTONS MATCHING SCREENSHOT */}
       <div
         className="awsmd-top-actions"
