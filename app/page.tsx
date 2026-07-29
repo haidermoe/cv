@@ -182,38 +182,6 @@ const translations = {
   }
 };
 
-const LuxuryInteractiveGrid = () => {
-  const [mousePos, setMousePos] = React.useState({ x: -1000, y: -1000 });
-
-  React.useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        pointerEvents: "none",
-        zIndex: 1,
-        backgroundImage: `
-          radial-gradient(550px circle at ${mousePos.x}px ${mousePos.y}px, rgba(59, 130, 246, 0.08) 0%, rgba(99, 102, 241, 0.025) 45%, transparent 70%),
-          linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-          linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px)
-        `,
-        backgroundSize: "100% 100%, 65px 65px, 65px 65px"
-      }}
-    />
-  );
-};
-
 export default function Home() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
   const [isClientDrawerOpen, setIsClientDrawerOpen] = useState(false);
@@ -296,8 +264,6 @@ export default function Home() {
         fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif"
       }}
     >
-      {/* LUXURY INTERACTIVE MESH GRID & AMBIENT GLOW */}
-      <LuxuryInteractiveGrid />
       {/* AWSMD TOP ACTION BUTTONS MATCHING SCREENSHOT */}
       <div
         className="awsmd-top-actions"
