@@ -620,23 +620,29 @@ export default function Home() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "25px", marginBottom: "40px" }}>
-            <div style={{ background: "#151624", padding: "35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <span style={{ color: "#60a5fa", fontSize: "14.5px", fontWeight: "800" }}>{t.edu1Year}</span>
-              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "10px" }}>{t.edu1School}</h3>
+            <div className="awsmd-dark-card" style={{ background: "#151624", padding: "35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)", position: "relative", overflow: "hidden" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span style={{ background: "rgba(96, 165, 250, 0.15)", color: "#60a5fa", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.edu1Year}</span>
+                <span style={{ fontSize: "24px" }}>🎓</span>
+              </div>
+              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "16px", color: "#ffffff" }}>{t.edu1School}</h3>
               <p style={{ color: "#94a3b8", fontSize: "16.5px", marginTop: "8px", fontWeight: "500" }}>{t.edu1Degree}</p>
             </div>
 
-            <div style={{ background: "#151624", padding: "35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <span style={{ color: "#94a3b8", fontSize: "14.5px", fontWeight: "800" }}>{t.edu2Year}</span>
-              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "10px" }}>{t.edu2School}</h3>
+            <div className="awsmd-dark-card" style={{ background: "#151624", padding: "35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)", position: "relative", overflow: "hidden" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span style={{ background: "rgba(255, 255, 255, 0.08)", color: "#ffffff", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.edu2Year}</span>
+                <span style={{ fontSize: "24px" }}>🏆</span>
+              </div>
+              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "16px", color: "#ffffff" }}>{t.edu2School}</h3>
               <p style={{ color: "#94a3b8", fontSize: "16.5px", marginTop: "8px", fontWeight: "500" }}>{t.edu2Degree}</p>
             </div>
           </div>
 
           <div style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
-            <span style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700" }}>{t.cert1}</span>
-            <span style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700" }}>{t.cert2}</span>
-            <span style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700" }}>{t.cert3}</span>
+            <span className="awsmd-cert-pill" style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px" }}><span>📜</span> <span>{t.cert1}</span></span>
+            <span className="awsmd-cert-pill" style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px" }}><span>🌐</span> <span>{t.cert2}</span></span>
+            <span className="awsmd-cert-pill" style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px" }}><span>⚡</span> <span>{t.cert3}</span></span>
           </div>
         </div>
       </section>

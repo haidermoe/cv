@@ -1295,6 +1295,31 @@ ul {
   opacity: 0.85 !important;
 }
 
+/* AWSMD DARK CARDS & CERTIFICATES HOVER ANIMATION & GLOW EFFECTS */
+.awsmd-dark-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease !important;
+}
+
+.awsmd-dark-card:hover {
+  transform: translateY(-8px) scale(1.015) !important;
+  border-color: rgba(96, 165, 250, 0.4) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(96, 165, 250, 0.15) !important;
+  background: #1a1c2e !important;
+}
+
+.awsmd-cert-pill {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease !important;
+  cursor: pointer !important;
+}
+
+.awsmd-cert-pill:hover {
+  transform: translateY(-4px) scale(1.05) !important;
+  border-color: #60a5fa !important;
+  background: rgba(96, 165, 250, 0.15) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 25px rgba(96, 165, 250, 0.25) !important;
+}
+
 /* MOBILE RESPONSIVE OPTIMIZATIONS (AWSMD DESIGN SYSTEM) */
 @media (max-width: 900px) {
   .desktop-header-nav {
