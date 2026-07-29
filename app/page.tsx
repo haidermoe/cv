@@ -465,7 +465,7 @@ export default function Home() {
               {t.bio}
             </p>
 
-            <div style={{ marginTop: "25px" }}>
+            <div className="mobile-only-cv-btn" style={{ marginTop: "25px" }}>
               <a
                 href="/HAIDER-MOHAMED-SHWKAT-CV.pdf"
                 download="HAIDER-MOHAMED-SHWKAT-CV.pdf"
