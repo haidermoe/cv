@@ -182,22 +182,170 @@ const translations = {
   }
 };
 
+const CanvasCometTrail = () => {
+  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener("resize", handleResize);
+
+    interface Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      alpha: number;
+      color: string;
+      life: number;
+      maxLife: number;
+      isStar: boolean;
+    }
+
+    const particles: Particle[] = [];
+    let lastX = -100;
+    let lastY = -100;
+
+    const colors = ["#60a5fa", "#818cf8", "#c084fc", "#ffffff", "#38bdf8", "#fbbf24"];
+
+    const drawStar = (ctx: CanvasRenderingContext2D, cx: number, cy: number, spikes: number, outerRadius: number, innerRadius: number) => {
+      let rot = (Math.PI / 2) * 3;
+      let x = cx;
+      let y = cy;
+      let step = Math.PI / spikes;
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - outerRadius);
+      for (let i = 0; i < spikes; i++) {
+        x = cx + Math.cos(rot) * outerRadius;
+        y = cy + Math.sin(rot) * outerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+
+        x = cx + Math.cos(rot) * innerRadius;
+        y = cy + Math.sin(rot) * innerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+      }
+      ctx.lineTo(cx, cy - outerRadius);
+      ctx.closePath();
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = e.clientX;
+      const y = e.clientY;
+      const dx = x - lastX;
+      const dy = y - lastY;
+      const dist = Math.hypot(dx, dy);
+
+      const count = Math.min(Math.floor(dist / 2) + 2, 9);
+
+      for (let i = 0; i < count; i++) {
+        const isStar = Math.random() < 0.38;
+        const angle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.9 + Math.PI;
+        const speed = Math.random() * 2.5 + 0.5;
+
+        particles.push({
+          x: x + (Math.random() - 0.5) * 14,
+          y: y + (Math.random() - 0.5) * 14,
+          vx: Math.cos(angle) * speed + (Math.random() - 0.5) * 0.6,
+          vy: Math.sin(angle) * speed + (Math.random() - 0.5) * 0.6 - 0.3,
+          size: isStar ? Math.random() * 4.5 + 3.5 : Math.random() * 2.5 + 1.2,
+          alpha: 1,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          life: 0,
+          maxLife: Math.random() * 45 + 30,
+          isStar
+        });
+      }
+
+      lastX = x;
+      lastY = y;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.life++;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha = 1 - p.life / p.maxLife;
+
+        if (p.life >= p.maxLife || p.alpha <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = p.isStar ? 12 : 6;
+
+        if (p.isStar) {
+          drawStar(ctx, p.x, p.y, 4, p.size, p.size / 2.5);
+          ctx.fill();
+        } else {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.restore();
+      }
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("resize", handleResize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        pointerEvents: "none",
+        zIndex: 99
+      }}
+    />
+  );
+};
+
 export default function Home() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
   const [isClientDrawerOpen, setIsClientDrawerOpen] = useState(false);
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
 
   const t = translations[lang];
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
 
   useEffect(() => {
     const vids = document.querySelectorAll("video");
@@ -273,20 +421,8 @@ export default function Home() {
         fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif"
       }}
     >
-      {/* AWSMD INTERACTIVE MOUSE SPOTLIGHT AURA */}
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          pointerEvents: "none",
-          zIndex: 99,
-          background: `radial-gradient(650px circle at ${mousePos.x}px ${mousePos.y}px, rgba(96, 165, 250, 0.14), rgba(79, 70, 229, 0.06) 45%, transparent 75%)`,
-          transition: "background 0.05s ease-out"
-        }}
-      />
+      {/* AWSMD CANVAS COMET TAIL & STARDUST PARTICLES */}
+      <CanvasCometTrail />
       {/* AWSMD TOP ACTION BUTTONS MATCHING SCREENSHOT */}
       <div
         className="awsmd-top-actions"
