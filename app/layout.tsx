@@ -38,6 +38,11 @@ export default function RootLayout({
       className={`${tajawal.variable} ${outfit.variable} dark scroll-smooth`}
     >
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if (window.location.hostname.includes("github.io")) { window.location.replace("https://cv-wine-tau.vercel.app" + window.location.pathname.replace("/cv", "")); }`
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet" />
