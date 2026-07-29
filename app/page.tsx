@@ -464,6 +464,32 @@ export default function Home() {
             <p style={{ fontSize: "18.5px", color: "#ffffff", lineHeight: "1.65", fontWeight: "500" }}>
               {t.bio}
             </p>
+
+            <div style={{ marginTop: "25px" }}>
+              <a
+                href="/HAIDER-MOHAMED-SHWKAT-CV.pdf"
+                download="HAIDER-MOHAMED-SHWKAT-CV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="awsmd-btn-glow"
+                style={{
+                  background: "#4f46e5",
+                  color: "#ffffff",
+                  padding: "14px 28px",
+                  borderRadius: "50px",
+                  fontSize: "15px",
+                  fontWeight: "800",
+                  textDecoration: "none",
+                  boxShadow: "0 8px 25px rgba(79, 70, 229, 0.4)",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "10px"
+                }}
+              >
+                <span>📥</span>
+                <span>{t.downloadCV}</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -992,7 +1018,7 @@ export default function Home() {
           </div>
 
           {/* FOOTER INFO */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", borderTop: "1px solid rgba(255,255,255,0.2)", paddingTop: "25px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(255,255,255,0.2)", paddingTop: "25px", flexWrap: "wrap", gap: "20px" }}>
             <div>
               <span style={{ fontSize: "14px", opacity: 0.8, display: "block", marginBottom: "4px" }}>
                 {lang === "AR" ? "البريد الإلكتروني المباشر" : "Direct Email"}
@@ -1001,6 +1027,29 @@ export default function Home() {
                 haider.m.shwkat@outlook.com
               </a>
             </div>
+
+            <a
+              href="/HAIDER-MOHAMED-SHWKAT-CV.pdf"
+              download="HAIDER-MOHAMED-SHWKAT-CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: "#ffffff",
+                color: "#0f111a",
+                padding: "12px 24px",
+                borderRadius: "50px",
+                fontSize: "14px",
+                fontWeight: "900",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                boxShadow: "0 4px 15px rgba(0,0,0,0.2)"
+              }}
+            >
+              <span>📥</span>
+              <span>{t.downloadCV}</span>
+            </a>
 
             <div style={{ textAlign: lang === "AR" ? "left" : "right" }}>
               <span style={{ fontSize: "13px", opacity: 0.8, display: "block" }}>© Haider Mohamed Shwkat 2026</span>
