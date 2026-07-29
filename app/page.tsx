@@ -525,31 +525,31 @@ export default function Home() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "25px" }}>
           
           {/* STAT CARD 1 */}
-          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "35px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "260px", border: "1px solid #e2e8f0" }}>
-            <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left" }}>+22K</span>
-            <p style={{ color: "#475569", fontSize: "16px", marginTop: "10px", lineHeight: "1.6", fontWeight: "700", maxWidth: "70%", textAlign: lang === "AR" ? "right" : "left" }}>{t.stat1}</p>
-            <video src="media/volchek-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "140px", height: "140px", position: "absolute", bottom: "5px", left: lang === "AR" ? "5px" : "auto", right: lang === "EN" ? "5px" : "auto", objectFit: "cover", pointerEvents: "none", transition: "transform 0.4s ease" }}></video>
+          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "32px 28px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "280px", border: "1px solid #e2e8f0" }}>
+            <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", position: "relative", zIndex: 2 }}>+22K</span>
+            <p style={{ color: "#475569", fontSize: "16px", marginTop: "12px", lineHeight: "1.65", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", position: "relative", zIndex: 2, maxWidth: "85%" }}>{t.stat1}</p>
+            <video src="media/volchek-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 0.9, transition: "transform 0.4s ease" }}></video>
           </div>
 
           {/* STAT CARD 2 */}
-          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "35px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "260px", border: "1px solid #e2e8f0" }}>
-            <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left" }}>+3K</span>
-            <p style={{ color: "#475569", fontSize: "16px", marginTop: "10px", lineHeight: "1.6", fontWeight: "700", maxWidth: "70%", textAlign: lang === "AR" ? "right" : "left" }}>{t.stat2}</p>
-            <video src="media/pruzina-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "140px", height: "140px", position: "absolute", bottom: "5px", left: lang === "AR" ? "5px" : "auto", right: lang === "EN" ? "5px" : "auto", objectFit: "cover", pointerEvents: "none", transition: "transform 0.4s ease" }}></video>
+          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "32px 28px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "280px", border: "1px solid #e2e8f0" }}>
+            <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", position: "relative", zIndex: 2 }}>+3K</span>
+            <p style={{ color: "#475569", fontSize: "16px", marginTop: "12px", lineHeight: "1.65", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", position: "relative", zIndex: 2, maxWidth: "85%" }}>{t.stat2}</p>
+            <video src="media/pruzina-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 0.9, transition: "transform 0.4s ease" }}></video>
           </div>
 
           {/* STAT CARD 3 */}
-          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "35px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "260px", border: "1px solid #e2e8f0" }}>
-            <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left" }}>+6</span>
-            <p style={{ color: "#475569", fontSize: "16px", marginTop: "10px", lineHeight: "1.6", fontWeight: "700", maxWidth: "70%", textAlign: lang === "AR" ? "right" : "left" }}>{t.stat3}</p>
-            <video src="media/time-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "140px", height: "140px", position: "absolute", bottom: "5px", left: lang === "AR" ? "5px" : "auto", right: lang === "EN" ? "5px" : "auto", objectFit: "cover", pointerEvents: "none", transition: "transform 0.4s ease" }}></video>
+          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "32px 28px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "280px", border: "1px solid #e2e8f0" }}>
+            <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", position: "relative", zIndex: 2 }}>+6</span>
+            <p style={{ color: "#475569", fontSize: "16px", marginTop: "12px", lineHeight: "1.65", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", position: "relative", zIndex: 2, maxWidth: "85%" }}>{t.stat3}</p>
+            <video src="media/time-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 0.9, transition: "transform 0.4s ease" }}></video>
           </div>
 
           {/* STAT CARD 4 */}
-          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "35px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "260px", border: "1px solid #e2e8f0" }}>
-            <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left" }}>+2K</span>
-            <p style={{ color: "#475569", fontSize: "16px", marginTop: "10px", lineHeight: "1.6", fontWeight: "700", maxWidth: "70%", textAlign: lang === "AR" ? "right" : "left" }}>{t.stat4}</p>
-            <video src="media/ball-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "140px", height: "140px", position: "absolute", bottom: "5px", left: lang === "AR" ? "5px" : "auto", right: lang === "EN" ? "5px" : "auto", objectFit: "cover", pointerEvents: "none", transition: "transform 0.4s ease" }}></video>
+          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "32px 28px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "280px", border: "1px solid #e2e8f0" }}>
+            <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", position: "relative", zIndex: 2 }}>+2K</span>
+            <p style={{ color: "#475569", fontSize: "16px", marginTop: "12px", lineHeight: "1.65", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", position: "relative", zIndex: 2, maxWidth: "85%" }}>{t.stat4}</p>
+            <video src="media/ball-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 0.9, transition: "transform 0.4s ease" }}></video>
           </div>
 
         </div>
