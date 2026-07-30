@@ -204,7 +204,7 @@ export default function Home() {
           el.scrollIntoView({ behavior: "smooth" });
         }
       }
-    }, 650);
+    }, 1100);
   };
 
   const closeClientDrawer = () => {
@@ -212,7 +212,7 @@ export default function Home() {
     setTimeout(() => {
       setIsClientDrawerOpen(false);
       setIsClientDrawerClosing(false);
-    }, 450);
+    }, 800);
   };
 
   useEffect(() => {
