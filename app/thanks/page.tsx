@@ -22,7 +22,7 @@ export default function ThanksPage() {
         overflow: "hidden"
       }}
     >
-      {/* TOP HEADER BAR */}
+      {/* TOP HEADER BAR (APPLE-STYLE GLASSMATERIAL FROSTED BAR) */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", zIndex: 10 }}>
         {/* LOGO */}
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", color: "#0f111a", fontSize: "20px", fontWeight: "900" }}>
@@ -34,16 +34,20 @@ export default function ThanksPage() {
           <span>{lang === "AR" ? "حيدر محمد" : "Haider Mohamed"}</span>
         </Link>
 
-        {/* CENTER PILL NAV */}
+        {/* CENTER PILL NAV (APPLE FROSTED GLASS BAR) */}
         <div
           className="desktop-header-nav"
           style={{
             display: "flex",
             alignItems: "center",
             gap: "24px",
-            background: "#f1f5f9",
+            background: "rgba(241, 245, 249, 0.8)",
+            backdropFilter: "blur(20px) saturate(180%)",
+            WebkitBackdropFilter: "blur(20px) saturate(180%)",
             padding: "8px 24px",
-            borderRadius: "50px"
+            borderRadius: "50px",
+            border: "1px solid rgba(226, 232, 240, 0.8)",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)"
           }}
         >
           <Link href="/#about" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14px" }}>
@@ -64,6 +68,7 @@ export default function ThanksPage() {
         <div style={{ display: "flex", alignItems: "center", gap: "10px", direction: "ltr" }}>
           <button
             onClick={() => setLang(lang === "AR" ? "EN" : "AR")}
+            className="awsmd-btn-glow"
             style={{
               background: "#ffffff",
               border: "1.5px solid #4f46e5",
@@ -80,6 +85,7 @@ export default function ThanksPage() {
 
           <Link
             href="/"
+            className="awsmd-btn-glow"
             style={{
               background: "#f1f5f9",
               color: "#0f111a",
@@ -95,15 +101,15 @@ export default function ThanksPage() {
         </div>
       </div>
 
-      {/* CENTER HUGE THANK YOU HERO CONTENT (MATCHING AWSMD SCREENSHOT) */}
+      {/* CENTER HERO CONTENT (APPLE OPTICAL TYPOGRAPHY & FLUID ENTRANCE) */}
       <div style={{ margin: "auto", maxWidth: "750px", textAlign: "center", padding: "60px 20px" }}>
         <h1
           style={{
             fontSize: "clamp(48px, 9vw, 96px)",
             fontWeight: "900",
             color: "#0f111a",
-            lineHeight: "1.0",
-            letterSpacing: "-2px",
+            lineHeight: "1.05",
+            letterSpacing: "-0.02em",
             marginBottom: "25px"
           }}
         >
@@ -139,6 +145,7 @@ export default function ThanksPage() {
 
         <Link
           href="/"
+          className="awsmd-btn-glow"
           style={{
             background: "#2563eb",
             color: "#ffffff",
