@@ -1,20 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800;900&family=Inter:wght@400;500;700;900&display=swap');
 
 :root {
-  /* Colors based on AWSMD UI */
-  --bg-primary: #FFFFFF;
-  --bg-dark: #000000;
-  --bg-dark-overlay: rgba(0, 0, 0, 0.5);
-  --color-primary: #2CA8FE; /* Dodger Blue */
-  --color-accent: #FFC149; /* Texas Rose */
-  --text-dark: #2E2F30; /* Shark */
-  --text-light: #FFFFFF;
-  --text-gray: #999999;
-  --text-gray-dark: rgba(0, 0, 0, 0.38);
-  --card-bg: #F5F5F5; /* Westar-like */
-  --border-color: rgba(0, 0, 0, 0.1);
+  /* 60:30:10 UI DESIGN PALETTE TOKENS */
+  /* 60% DOMINANT CANVAS (60% Surface: Deep Charcoal Luxury Canvas) */
+  --bg-dominant: #0e0d15;
+  --bg-dominant-alt: #0a0910;
+  
+  /* 30% SECONDARY STRUCTURE (30% Surface: Pearl Light & Dark Glass Containers) */
+  --bg-secondary-light: #f2f0f1;
+  --bg-secondary-dark: #151726;
+  --border-secondary: rgba(255, 255, 255, 0.08);
+
+  /* 10% ACCENT INTERACTIVE (10% Surface: Electric Azure, Cobalt & Purple CTAs) */
+  --color-accent-azure: #60a5fa;
+  --color-accent-cobalt: #2563eb;
+  --color-accent-purple: #8b5cf6;
+  --color-accent-gold: #fbbf24;
+
+  /* Typography */
+  --text-primary: #ffffff;
+  --text-muted: #94a3b8;
+  --text-dark: #0f111a;
+  
   --radius-pill: 1000px;
-  --radius-card: 20px;
+  --radius-card: 24px;
 }
 
 *, *::before, *::after {
