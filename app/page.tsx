@@ -204,7 +204,7 @@ export default function Home() {
           el.scrollIntoView({ behavior: "smooth" });
         }
       }
-    }, 1100);
+    }, 750);
   };
 
   const closeClientDrawer = () => {
@@ -212,7 +212,7 @@ export default function Home() {
     setTimeout(() => {
       setIsClientDrawerOpen(false);
       setIsClientDrawerClosing(false);
-    }, 800);
+    }, 500);
   };
 
   useEffect(() => {
@@ -1053,7 +1053,8 @@ export default function Home() {
                   alignItems: "baseline",
                   gap: "20px",
                   lineHeight: "1.0",
-                  width: "fit-content"
+                  width: "fit-content",
+                  animationDelay: `${index * 45 + 300}ms`
                 }}
               >
                 <span>{item.label}</span>
