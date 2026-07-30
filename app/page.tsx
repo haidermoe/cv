@@ -185,10 +185,35 @@ const translations = {
 export default function Home() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
   const [isClientDrawerOpen, setIsClientDrawerOpen] = useState(false);
+  const [isClientDrawerClosing, setIsClientDrawerClosing] = useState(false);
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
+  const [isNavMenuClosing, setIsNavMenuClosing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const t = translations[lang];
+
+  const closeNavMenu = (targetHref?: string) => {
+    setIsNavMenuClosing(true);
+    setTimeout(() => {
+      setIsNavMenuOpen(false);
+      setIsNavMenuClosing(false);
+      if (targetHref) {
+        const targetId = targetHref.replace("#", "");
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    }, 650);
+  };
+
+  const closeClientDrawer = () => {
+    setIsClientDrawerClosing(true);
+    setTimeout(() => {
+      setIsClientDrawerOpen(false);
+      setIsClientDrawerClosing(false);
+    }, 450);
+  };
 
   useEffect(() => {
     const vids = document.querySelectorAll("video");
@@ -689,12 +714,18 @@ export default function Home() {
             WebkitBackdropFilter: "blur(12px)",
             zIndex: 2000,
             display: "flex",
-            justifyContent: lang === "AR" ? "flex-end" : "flex-start"
+            justifyContent: lang === "AR" ? "flex-end" : "flex-start",
+            opacity: isClientDrawerClosing ? 0 : 1,
+            transition: "opacity 0.45s ease"
           }}
-          onClick={() => setIsClientDrawerOpen(false)}
+          onClick={() => closeClientDrawer()}
         >
           <div
-            className={lang === "AR" ? "awsmd-drawer-panel-ar" : "awsmd-drawer-panel-en"}
+            className={
+              lang === "AR"
+                ? (isClientDrawerClosing ? "awsmd-drawer-panel-ar awsmd-drawer-panel-ar-exit" : "awsmd-drawer-panel-ar")
+                : (isClientDrawerClosing ? "awsmd-drawer-panel-en awsmd-drawer-panel-en-exit" : "awsmd-drawer-panel-en")
+            }
             style={{
               position: "fixed",
               top: 0,
@@ -866,11 +897,11 @@ export default function Home() {
       )}
 
       {/* AWSMD FULLSCREEN NAVIGATION MENU OVERLAY (VERTICAL OPPOSITE SLIDE COLUMNS) */}
-      {isNavMenuOpen && (
+      {(isNavMenuOpen || isNavMenuClosing) && (
         <React.Fragment>
-          {/* DARK BLUE SIDEBAR COLUMN (SLIDES UP FROM BOTTOM TO FULL HEIGHT) */}
+          {/* DARK BLUE SIDEBAR COLUMN (SLIDES UP FROM BOTTOM TO FULL HEIGHT, SLIDES DOWN ON EXIT) */}
           <div
-            className="awsmd-col-dark"
+            className={isNavMenuClosing ? "awsmd-col-dark awsmd-col-dark-exit" : "awsmd-col-dark"}
             style={{
               position: "fixed",
               top: 0,
@@ -906,9 +937,9 @@ export default function Home() {
             </div>
           </div>
 
-          {/* LIGHT COBALT BLUE MAIN PANEL (SLIDES DOWN FROM TOP TO FULL HEIGHT) */}
+          {/* LIGHT COBALT BLUE MAIN PANEL (SLIDES DOWN FROM TOP TO FULL HEIGHT, SLIDES UP ON EXIT) */}
           <div
-            className="awsmd-col-light"
+            className={isNavMenuClosing ? "awsmd-col-light awsmd-col-light-exit" : "awsmd-col-light"}
             style={{
               position: "fixed",
               top: 0,
@@ -922,9 +953,9 @@ export default function Home() {
             }}
           ></div>
 
-          {/* MAIN MENU CONTENT (FADES IN FLUIDLY) */}
+          {/* MAIN MENU CONTENT (FADES OUT SLOWLY ON EXIT) */}
           <div
-            className="awsmd-nav-content"
+            className={isNavMenuClosing ? "awsmd-nav-content awsmd-nav-content-exit" : "awsmd-nav-content"}
             style={{
               position: "fixed",
               top: 0,
@@ -960,7 +991,7 @@ export default function Home() {
 
             <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
               <button
-                onClick={() => { setIsNavMenuOpen(false); setIsClientDrawerOpen(true); }}
+                onClick={() => { closeNavMenu(); setIsClientDrawerOpen(true); }}
                 style={{
                   background: "rgba(255, 255, 255, 0.2)",
                   backdropFilter: "blur(10px)",
@@ -977,7 +1008,7 @@ export default function Home() {
               </button>
 
               <button
-                onClick={() => setIsNavMenuOpen(false)}
+                onClick={() => closeNavMenu()}
                 style={{
                   width: "42px",
                   height: "42px",
@@ -1011,7 +1042,7 @@ export default function Home() {
               <a
                 key={index}
                 href={item.href}
-                onClick={() => setIsNavMenuOpen(false)}
+                onClick={(e) => { e.preventDefault(); closeNavMenu(item.href); }}
                 className="awsmd-nav-item"
                 style={{
                   fontSize: "72px",

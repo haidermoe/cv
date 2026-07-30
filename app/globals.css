@@ -1286,6 +1286,78 @@ ul {
   will-change: transform, opacity !important;
 }
 
+/* AWSMD REVERSE EXIT SLIDE ANIMATIONS */
+@keyframes awsmdColumnExitDown {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+@keyframes awsmdColumnExitUp {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, -100%, 0);
+  }
+}
+
+@keyframes awsmdContentFadeOut {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0);
+  }
+}
+
+.awsmd-col-dark-exit {
+  animation: awsmdColumnExitDown 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  will-change: transform !important;
+}
+
+.awsmd-col-light-exit {
+  animation: awsmdColumnExitUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  will-change: transform !important;
+}
+
+.awsmd-nav-content-exit {
+  animation: awsmdContentFadeOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  will-change: transform, opacity !important;
+}
+
+/* DRAWER EXIT SLIDE ANIMATIONS */
+@keyframes awsmdDrawerExitAR {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@keyframes awsmdDrawerExitEN {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+.awsmd-drawer-panel-ar-exit {
+  animation: awsmdDrawerExitAR 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+.awsmd-drawer-panel-en-exit {
+  animation: awsmdDrawerExitEN 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
 .awsmd-nav-item {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease !important;
 }
