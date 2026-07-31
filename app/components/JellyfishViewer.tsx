@@ -90,100 +90,113 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
     pointLight.position.set(0, 0, 2);
     scene.add(pointLight);
 
-    // 6. Load GLTF Model directly with DRACOLoader support
+    // 6. Load GLTF Model directly from GitHub Raw CDN with fallback
     const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.5.6/");
 
     const loader = new GLTFLoader();
     loader.setDRACOLoader(dracoLoader);
+
     const safetyTimeout = setTimeout(() => {
       setLoading(false);
     }, 6000);
 
-    loader.load(
-      "/jellyfish0.glb",
-      (gltf) => {
-        clearTimeout(safetyTimeout);
-        setLoading(false);
+    const primaryUrl = "https://raw.githubusercontent.com/haidermoe/cv/main/public/jellyfish0.glb";
+    const fallbackUrl = "/jellyfish0.glb";
 
-        try {
-          loadedModel = gltf.scene;
+    const loadModel = (url: string, isFallback = false) => {
+      loader.load(
+        url,
+        (gltf) => {
+          clearTimeout(safetyTimeout);
+          setLoading(false);
 
-          // Remove Blender work placeholders if present
-          const objectsToRemove: THREE.Object3D[] = [];
-          loadedModel.traverse((child) => {
-            const name = child.name || "";
-            if (
-              name.includes("Work_") ||
-              name.includes("Camera_target") ||
-              name.includes("Empty_Words") ||
-              name.includes("Sphere_From") ||
-              name.includes("NoomoLabs")
-            ) {
-              objectsToRemove.push(child);
+          try {
+            loadedModel = gltf.scene;
+
+            // Remove Blender work placeholders if present
+            const objectsToRemove: THREE.Object3D[] = [];
+            loadedModel.traverse((child) => {
+              const name = child.name || "";
+              if (
+                name.includes("Work_") ||
+                name.includes("Camera_target") ||
+                name.includes("Empty_Words") ||
+                name.includes("Sphere_From") ||
+                name.includes("NoomoLabs")
+              ) {
+                objectsToRemove.push(child);
+              }
+            });
+
+            objectsToRemove.forEach((obj) => {
+              if (obj.parent) {
+                obj.parent.remove(obj);
+              }
+            });
+
+            // Traverse remaining Jellyfish meshes and apply a vibrant glowing translucent material
+            loadedModel.traverse((child) => {
+              if ((child as THREE.Mesh).isMesh) {
+                const mesh = child as THREE.Mesh;
+                mesh.material = new THREE.MeshPhongMaterial({
+                  color: 0x60a5fa,
+                  emissive: 0x2563eb,
+                  emissiveIntensity: 0.5,
+                  specular: 0xffffff,
+                  shininess: 90,
+                  transparent: true,
+                  opacity: 0.92,
+                  side: THREE.DoubleSide,
+                  depthWrite: true,
+                  depthTest: true
+                });
+              }
+            });
+
+            // Center and auto-scale ONLY the 3-layer Jellyfish model to fit canvas cleanly
+            const box = new THREE.Box3().setFromObject(loadedModel);
+            const center = box.getCenter(new THREE.Vector3());
+            const boxSize = box.getSize(new THREE.Vector3());
+
+            if (isFinite(center.x) && isFinite(center.y) && isFinite(center.z)) {
+              loadedModel.position.sub(center);
             }
-          });
 
-          objectsToRemove.forEach((obj) => {
-            if (obj.parent) {
-              obj.parent.remove(obj);
+            const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
+            if (isFinite(maxDim) && maxDim > 0) {
+              const scale = 2.8 / maxDim;
+              loadedModel.scale.setScalar(scale);
             }
-          });
 
-          // Traverse remaining Jellyfish meshes and apply a vibrant glowing translucent material
-          loadedModel.traverse((child) => {
-            if ((child as THREE.Mesh).isMesh) {
-              const mesh = child as THREE.Mesh;
-              mesh.material = new THREE.MeshPhongMaterial({
-                color: 0x60a5fa,
-                emissive: 0x2563eb,
-                emissiveIntensity: 0.5,
-                specular: 0xffffff,
-                shininess: 90,
-                transparent: true,
-                opacity: 0.92,
-                side: THREE.DoubleSide,
-                depthWrite: true,
-                depthTest: true
+            scene.add(loadedModel);
+
+            // Handle embedded Blender animations if present
+            if (gltf.animations && gltf.animations.length > 0) {
+              mixer = new THREE.AnimationMixer(loadedModel);
+              gltf.animations.forEach((clip) => {
+                mixer?.clipAction(clip).play();
               });
             }
-          });
-
-          // Center and auto-scale ONLY the 3-layer Jellyfish model to fit canvas cleanly
-          const box = new THREE.Box3().setFromObject(loadedModel);
-          const center = box.getCenter(new THREE.Vector3());
-          const boxSize = box.getSize(new THREE.Vector3());
-
-          if (isFinite(center.x) && isFinite(center.y) && isFinite(center.z)) {
-            loadedModel.position.sub(center);
+          } catch (err) {
+            console.error("Error processing GLTF scene:", err);
           }
-
-          const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
-          if (isFinite(maxDim) && maxDim > 0) {
-            const scale = 2.8 / maxDim;
-            loadedModel.scale.setScalar(scale);
+        },
+        undefined,
+        (error) => {
+          if (!isFallback) {
+            console.warn("Primary GitHub CDN load failed, trying local fallback...", error);
+            loadModel(fallbackUrl, true);
+          } else {
+            clearTimeout(safetyTimeout);
+            console.error("Error loading jellyfish0.glb:", error);
+            setLoading(false);
           }
-
-          scene.add(loadedModel);
-
-          // Handle embedded Blender animations if present
-          if (gltf.animations && gltf.animations.length > 0) {
-            mixer = new THREE.AnimationMixer(loadedModel);
-            gltf.animations.forEach((clip) => {
-              mixer?.clipAction(clip).play();
-            });
-          }
-        } catch (err) {
-          console.error("Error processing GLTF scene:", err);
         }
-      },
-      undefined,
-      (error) => {
-        clearTimeout(safetyTimeout);
-        console.error("Error loading /jellyfish0.glb:", error);
-        setLoading(false);
-      }
-    );
+      );
+    };
+
+    loadModel(primaryUrl);
 
     // 7. Animation Loop with smooth lerp towards mouse & floating motion
     const animate = () => {
