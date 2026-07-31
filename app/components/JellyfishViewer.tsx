@@ -70,21 +70,39 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
     const ambientLight = new THREE.AmbientLight(0xffffff, 2.5);
     scene.add(ambientLight);
 
-    const dirLight1 = new THREE.DirectionalLight(0xffffff, 2.5);
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 2.8);
     dirLight1.position.set(5, 10, 7);
     scene.add(dirLight1);
 
-    const rimLightPink = new THREE.DirectionalLight(0xe087ff, 3.8);
+    const rimLightPink = new THREE.DirectionalLight(0xe087ff, 4.5);
     rimLightPink.position.set(6, 4, 5);
     scene.add(rimLightPink);
 
-    const rimLightCyan = new THREE.DirectionalLight(0x00f0ff, 3.8);
+    const rimLightCyan = new THREE.DirectionalLight(0x00f0ff, 4.5);
     rimLightCyan.position.set(-6, -4, 5);
     scene.add(rimLightCyan);
 
-    const pointLight = new THREE.PointLight(0xa855f7, 5, 15);
+    const pointLight = new THREE.PointLight(0xa855f7, 6, 18);
     pointLight.position.set(0, 0, 3);
     scene.add(pointLight);
+
+    // Create Noomo Labs Iridescent Reflection Environment Map
+    const envCanvas = document.createElement("canvas");
+    envCanvas.width = 256;
+    envCanvas.height = 256;
+    const envCtx = envCanvas.getContext("2d");
+    if (envCtx) {
+      const grad = envCtx.createLinearGradient(0, 0, 0, 256);
+      grad.addColorStop(0, "#ffffff");
+      grad.addColorStop(0.3, "#e087ff");
+      grad.addColorStop(0.65, "#00f0ff");
+      grad.addColorStop(1, "#1d4ed8");
+      envCtx.fillStyle = grad;
+      envCtx.fillRect(0, 0, 256, 256);
+    }
+    const envTexture = new THREE.CanvasTexture(envCanvas);
+    envTexture.mapping = THREE.EquirectangularReflectionMapping;
+    scene.environment = envTexture;
 
     // 6. Direct native fetch & GLTFLoader parse (100% reliable Network request & zero worker security errors)
     const loader = new GLTFLoader();
@@ -142,7 +160,7 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
                   }
                 });
 
-                // Preserve original GLB materials & textures from Tripo3D model
+                // Upgrade Materials to Noomo Labs Iridescent Glass Physical Material
                 loadedModel.traverse((child) => {
                   if ((child as THREE.Mesh).isMesh) {
                     const mesh = child as THREE.Mesh;
@@ -150,20 +168,35 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
                     mesh.receiveShadow = true;
 
                     if (mesh.material) {
-                      // Handle array of materials or single material
-                      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-                      materials.forEach((mat) => {
-                        mat.side = THREE.DoubleSide;
-                        mat.depthWrite = true;
-                        mat.depthTest = true;
-                        mat.needsUpdate = true;
-                        
-                        // Preserve original map/textures while giving realistic translucency
-                        if ((mat as THREE.MeshStandardMaterial).map) {
-                          (mat as THREE.MeshStandardMaterial).map!.needsUpdate = true;
-                          (mat as THREE.MeshStandardMaterial).map!.colorSpace = THREE.SRGBColorSpace;
-                        }
+                      const oldMat = (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material) as THREE.MeshStandardMaterial;
+                      const textureMap = oldMat.map || null;
+
+                      if (textureMap) {
+                        textureMap.colorSpace = THREE.SRGBColorSpace;
+                        textureMap.needsUpdate = true;
+                      }
+
+                      const physicalMat = new THREE.MeshPhysicalMaterial({
+                        map: textureMap,
+                        color: new THREE.Color(0xf5f0ff),
+                        transmission: 0.82,          // Water/glass translucency & refraction
+                        opacity: 0.96,
+                        transparent: true,
+                        ior: 1.48,                   // Index of refraction
+                        roughness: 0.12,             // Polished smooth glass sheen
+                        metalness: 0.15,
+                        clearcoat: 1.0,              // Glossy outer skin coat
+                        clearcoatRoughness: 0.08,
+                        iridescence: 1.0,            // MAGICAL RAINBOW SOAP-BUBBLE CHROMATIC SHINE!
+                        iridescenceIOR: 1.35,
+                        iridescenceThicknessRange: [100, 400],
+                        thickness: 1.5,
+                        side: THREE.DoubleSide,
+                        depthWrite: true,
+                        depthTest: true
                       });
+
+                      mesh.material = physicalMat;
                     }
                   }
                 });
