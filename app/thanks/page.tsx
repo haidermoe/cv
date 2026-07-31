@@ -222,8 +222,8 @@ export default function ThanksPage() {
           <Link href="/" className="awsmd-royal-client-btn">
             <span className="flip-box">
               <span className="flip-wrapper">
-                <span className="flip-text-primary">+ {lang === "AR" ? "عميل" : "Client"}</span>
-                <span className="flip-text-secondary">+ {lang === "AR" ? "عميل" : "Client"}</span>
+                <span className="flip-text-primary">+ {lang === "AR" ? "كن عميلاً" : "Become a Client"}</span>
+                <span className="flip-text-secondary">+ {lang === "AR" ? "كن عميلاً" : "Become a Client"}</span>
               </span>
             </span>
           </Link>
