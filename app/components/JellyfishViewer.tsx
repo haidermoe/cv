@@ -12,6 +12,7 @@ interface JellyfishViewerProps {
 export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
+  const [progressPercent, setProgressPercent] = useState(0);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -85,33 +86,31 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
     pointLight.position.set(0, 0, 2);
     scene.add(pointLight);
 
-    // 6. Load GLTF Model
+    // 6. Progressive GLTF Streamer & Mesh Stagger Assembly
     const loader = new GLTFLoader();
     loader.load(
       "/jellyfish0.glb",
       (gltf) => {
         loadedModel = gltf.scene;
 
+        const meshes: THREE.Mesh[] = [];
+
+        // Collect meshes and initialize materials with 0 opacity
         loadedModel.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
             if (mesh.material) {
+              meshes.push(mesh);
               const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
               materials.forEach((mat) => {
                 mat.side = THREE.DoubleSide;
+                mat.transparent = true;
+                mat.opacity = 0;
                 mat.needsUpdate = true;
               });
             }
           }
         });
-
-        // Handle animation if model has embedded animations
-        if (gltf.animations && gltf.animations.length > 0) {
-          mixer = new THREE.AnimationMixer(loadedModel);
-          gltf.animations.forEach((clip) => {
-            mixer?.clipAction(clip).play();
-          });
-        }
 
         // Center and auto-scale model
         const box = new THREE.Box3().setFromObject(loadedModel);
@@ -129,9 +128,42 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
         }
 
         scene.add(loadedModel);
+
+        // Handle animation if model has embedded animations
+        if (gltf.animations && gltf.animations.length > 0) {
+          mixer = new THREE.AnimationMixer(loadedModel);
+          gltf.animations.forEach((clip) => {
+            mixer?.clipAction(clip).play();
+          });
+        }
+
+        // Hide main loading indicator
         setLoading(false);
+
+        // Staggered Layer-by-Layer Fade-In Reveal Animation (Emil Kowalski Craft)
+        meshes.forEach((mesh, idx) => {
+          setTimeout(() => {
+            let opacity = 0;
+            const fadeInterval = setInterval(() => {
+              opacity += 0.15;
+              const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+              mats.forEach((m) => {
+                if (m) m.opacity = Math.min(opacity, 1);
+              });
+              if (opacity >= 1) {
+                clearInterval(fadeInterval);
+              }
+            }, 30);
+          }, idx * 40);
+        });
       },
-      undefined,
+      (xhr) => {
+        // Track byte streaming progress
+        if (xhr.total && xhr.total > 0) {
+          const pct = Math.round((xhr.loaded / xhr.total) * 100);
+          setProgressPercent(pct);
+        }
+      },
       (error) => {
         console.error("Error loading jellyfish0.glb:", error);
         setLoading(false);
@@ -209,22 +241,22 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
             justifyContent: "center",
             gap: "10px",
             background: "transparent",
-            color: "#60a5fa",
-            fontSize: "13px",
-            fontWeight: "700"
+            color: "#2563eb",
+            fontSize: "13.5px",
+            fontWeight: "800"
           }}
         >
           <div
             style={{
-              width: "28px",
-              height: "28px",
-              border: "3px solid rgba(96, 165, 250, 0.3)",
-              borderTopColor: "#60a5fa",
+              width: "32px",
+              height: "32px",
+              border: "3px solid rgba(37, 99, 235, 0.2)",
+              borderTopColor: "#2563eb",
               borderRadius: "50%",
               animation: "spin 0.8s linear infinite"
             }}
           />
-          <span>جاري تحميل مجسم 3D...</span>
+          <span>جاري بناء مجسم الـ 3D ({progressPercent}%)...</span>
         </div>
       )}
 
