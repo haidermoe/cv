@@ -2,6 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const JellyfishViewer = dynamic(() => import("../components/JellyfishViewer"), {
+  ssr: false
+});
 
 export default function ThanksPage() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
@@ -117,25 +122,27 @@ export default function ThanksPage() {
         </div>
       </div>
 
-      {/* CENTER LUXURY AWSMD THANK YOU CARD / HERO CONTENT */}
-      <div style={{ margin: "auto", maxWidth: "720px", textAlign: "center", padding: "60px 20px", zIndex: 10 }}>
-        {/* ICON BADGE */}
-        <div
-          style={{
-            width: "90px",
-            height: "90px",
-            borderRadius: "50%",
-            background: "linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(99, 102, 241, 0.2))",
-            border: "1px solid rgba(96, 165, 250, 0.3)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "42px",
-            margin: "0 auto 28px auto",
-            boxShadow: "0 15px 35px rgba(37, 99, 235, 0.25)"
-          }}
-        >
-          🚀
+      {/* CENTER LUXURY AWSMD THANK YOU CARD WITH 3D JELLYFISH MODEL */}
+      <div style={{ margin: "auto", maxWidth: "720px", textAlign: "center", padding: "40px 20px", zIndex: 10 }}>
+        {/* INTERACTIVE 3D JELLYFISH CANVAS */}
+        <div style={{ marginBottom: "24px", position: "relative" }}>
+          <JellyfishViewer size={260} />
+          <div
+            style={{
+              marginTop: "12px",
+              display: "inline-block",
+              background: "rgba(37, 99, 235, 0.15)",
+              border: "1px solid rgba(96, 165, 250, 0.35)",
+              color: "#93c5fd",
+              fontSize: "13px",
+              fontWeight: "700",
+              padding: "4px 16px",
+              borderRadius: "50px",
+              backdropFilter: "blur(8px)"
+            }}
+          >
+            🪼 3D Blender Model: jellyfish0.glb
+          </div>
         </div>
 
         <h1
