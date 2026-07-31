@@ -32,8 +32,8 @@ export default function ThanksPage() {
         className="jellyfish-side-container"
         style={{
           position: "absolute",
-          top: "50%",
-          transform: "translateY(-50%)",
+          top: "55%",
+          transform: "translateY(-45%)",
           ...(lang === "AR" ? { left: "10vw" } : { right: "10vw" }),
           zIndex: 5,
           pointerEvents: "auto"
