@@ -51,7 +51,7 @@ export default function ThanksPage() {
       style={{
         background: "#f2f1f6",
         color: "#0f111a",
-        minHeight: "100vh",
+        minHeight: "100dvh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
@@ -174,8 +174,8 @@ export default function ThanksPage() {
         style={{
           position: "fixed",
           inset: 0,
-          width: "100vw",
-          height: "100vh",
+          width: "100dvw",
+          height: "100dvh",
           zIndex: 10,
           pointerEvents: "none",
           overflow: "visible",
@@ -194,7 +194,7 @@ export default function ThanksPage() {
         style={{
           position: "relative",
           width: "100%",
-          minHeight: "68vh",
+          minHeight: "68dvh",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
