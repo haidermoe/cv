@@ -138,22 +138,29 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
                   }
                 });
 
-                // Traverse remaining Jellyfish meshes and apply a vibrant glowing translucent material
+                // Preserve original GLB materials & textures from Tripo3D model
                 loadedModel.traverse((child) => {
                   if ((child as THREE.Mesh).isMesh) {
                     const mesh = child as THREE.Mesh;
-                    mesh.material = new THREE.MeshPhongMaterial({
-                      color: 0x60a5fa,
-                      emissive: 0x2563eb,
-                      emissiveIntensity: 0.5,
-                      specular: 0xffffff,
-                      shininess: 90,
-                      transparent: true,
-                      opacity: 0.92,
-                      side: THREE.DoubleSide,
-                      depthWrite: true,
-                      depthTest: true
-                    });
+                    mesh.castShadow = true;
+                    mesh.receiveShadow = true;
+
+                    if (mesh.material) {
+                      // Handle array of materials or single material
+                      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+                      materials.forEach((mat) => {
+                        mat.side = THREE.DoubleSide;
+                        mat.depthWrite = true;
+                        mat.depthTest = true;
+                        mat.needsUpdate = true;
+                        
+                        // Preserve original map/textures while giving realistic translucency
+                        if ((mat as THREE.MeshStandardMaterial).map) {
+                          (mat as THREE.MeshStandardMaterial).map!.needsUpdate = true;
+                          (mat as THREE.MeshStandardMaterial).map!.colorSpace = THREE.SRGBColorSpace;
+                        }
+                      });
+                    }
                   }
                 });
 
