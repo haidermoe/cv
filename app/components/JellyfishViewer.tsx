@@ -74,8 +74,11 @@ export default function JellyfishViewer({ size = 280 }: JellyfishViewerProps) {
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
             if (mesh.material) {
-              (mesh.material as THREE.Material).side = THREE.DoubleSide;
-              mesh.material.needsUpdate = true;
+              const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+              materials.forEach((mat) => {
+                mat.side = THREE.DoubleSide;
+                mat.needsUpdate = true;
+              });
             }
           }
         });
