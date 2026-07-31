@@ -306,12 +306,9 @@ export default function Home() {
         {/* ENLARGED ROYAL BLUE SIDE FILL & FLIP TEXT BUTTON */}
         <button
           onClick={() => setIsClientDrawerOpen(true)}
-          className="awsmd-royal-client-btn flip-link-group"
+          className="awsmd-royal-client-btn"
         >
-          <span className="flip-wrapper">
-            <span className="flip-text-primary" style={{ color: "#0f111a" }}>+ {t.becomeClient}</span>
-            <span className="flip-text-secondary" style={{ color: "#ffffff" }}>+ {t.becomeClient}</span>
-          </span>
+          + {t.becomeClient}
         </button>
 
         {/* BORDERED LANGUAGE SELECTOR PILL */}
