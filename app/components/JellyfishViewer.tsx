@@ -105,7 +105,7 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
     const loader = new GLTFLoader();
     const safetyTimeout = setTimeout(() => {
       setLoading(false);
-    }, 8000);
+    }, 2500);
 
     const modelUrls = [
       "/jellyfish0.glb",
@@ -120,7 +120,7 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
       }
 
       const url = modelUrls[urlIndex];
-      fetch(url)
+      fetch(url, { cache: "no-cache" })
         .then((res) => {
           if (!res.ok) throw new Error(`HTTP error ${res.status}`);
           return res.arrayBuffer();
@@ -294,7 +294,7 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
         const c2 = new THREE.Color(NEON_PALETTES[index2]);
         const currentColor = c1.clone().lerp(c2, factor);
 
-        // Apply dynamic emissive glow synced with contraction pulse
+        // Apply dynamic emissive glow synced with contraction pulse efficiently without shader re-compilation
         loadedModel.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
@@ -302,8 +302,7 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
               const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
               materials.forEach((mat) => {
                 const stdMat = mat as THREE.MeshStandardMaterial;
-                stdMat.color = new THREE.Color(0xffffff); // 100% preserve texture map!
-                stdMat.emissive = currentColor;
+                stdMat.emissive.copy(currentColor);
                 stdMat.emissiveIntensity = 0.5 + Math.abs(pulse) * 0.22;
               });
             }
