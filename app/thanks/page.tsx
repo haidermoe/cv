@@ -16,8 +16,6 @@ export default function ThanksPage() {
       dir={lang === "AR" ? "rtl" : "ltr"}
       style={{
         background: "#f2f1f6",
-        backgroundImage: "radial-gradient(rgba(15, 17, 26, 0.08) 1px, transparent 1px)",
-        backgroundSize: "24px 24px",
         color: "#0f111a",
         minHeight: "100vh",
         display: "flex",
@@ -29,6 +27,30 @@ export default function ThanksPage() {
         overflow: "hidden"
       }}
     >
+      <div
+        style={{
+          position: "absolute",
+          inset: "-15%",
+          zIndex: 0,
+          pointerEvents: "none",
+          overflow: "hidden",
+          perspective: "1000px"
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            backgroundImage: "radial-gradient(rgba(15, 17, 26, 0.22) 2.5px, transparent 2.5px)",
+            backgroundSize: "36px 36px",
+            transform: "perspective(1000px) rotateX(16deg) scale(1.25)",
+            transformOrigin: "center center",
+            maskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
+            WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)"
+          }}
+        />
+      </div>
+
       {/* TOP HEADER BAR */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", zIndex: 30 }}>
         {/* LOGO */}
