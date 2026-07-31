@@ -1119,8 +1119,6 @@ ul {
   justify-content: center !important;
   padding: 0 28px !important;
   height: 48px !important;
-  font-size: 15px !important;
-  font-weight: 800 !important;
   border-radius: 50px !important;
   background-color: #f1f5f9 !important;
   color: #0f111a !important;
@@ -1133,9 +1131,45 @@ ul {
   transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.2s ease !important;
 }
 
-.awsmd-royal-client-btn .flip-wrapper {
-  height: 24px !important;
+.awsmd-royal-client-btn .flip-box {
+  position: relative !important;
+  display: block !important;
+  height: 22px !important;
+  line-height: 22px !important;
   overflow: hidden !important;
+}
+
+.awsmd-royal-client-btn .flip-wrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 44px !important;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transform: translateY(0) !important;
+  will-change: transform !important;
+}
+
+.awsmd-royal-client-btn .flip-text-primary,
+.awsmd-royal-client-btn .flip-text-secondary {
+  height: 22px !important;
+  line-height: 22px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 14.5px !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+}
+
+.awsmd-royal-client-btn .flip-text-primary {
+  color: #0f111a !important;
+}
+
+.awsmd-royal-client-btn .flip-text-secondary {
+  color: #ffffff !important;
+}
+
+.awsmd-royal-client-btn:hover .flip-wrapper {
+  transform: translateY(-22px) !important;
 }
 
 .awsmd-royal-client-btn::before {

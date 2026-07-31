@@ -308,7 +308,12 @@ export default function Home() {
           onClick={() => setIsClientDrawerOpen(true)}
           className="awsmd-royal-client-btn"
         >
-          + {t.becomeClient}
+          <span className="flip-box">
+            <span className="flip-wrapper">
+              <span className="flip-text-primary">+ {t.becomeClient}</span>
+              <span className="flip-text-secondary">+ {t.becomeClient}</span>
+            </span>
+          </span>
         </button>
 
         {/* BORDERED LANGUAGE SELECTOR PILL */}
