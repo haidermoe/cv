@@ -11,16 +11,6 @@ const JellyfishViewer = dynamic(() => import("../components/JellyfishViewer"), {
 export default function ThanksPage() {
   const [lang, setLang] = useState<"AR" | "EN">("EN");
 
-  React.useEffect(() => {
-    // Instant HTML/Fetch Preload for 0ms network latency
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.href = "/jellyfish0.glb";
-    link.as = "fetch";
-    link.crossOrigin = "anonymous";
-    document.head.appendChild(link);
-  }, []);
-
   return (
     <div
       dir={lang === "AR" ? "rtl" : "ltr"}

@@ -3,16 +3,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 interface JellyfishViewerProps {
   size?: number;
-}
-
-// Eagerly trigger fetch for /jellyfish0.glb at module load time (0ms latency!)
-if (typeof window !== "undefined") {
-  fetch("/jellyfish0.glb", { cache: "force-cache" }).catch(() => {});
 }
 
 export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
