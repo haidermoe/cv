@@ -10,6 +10,9 @@ const JellyfishViewer = dynamic(() => import("../components/JellyfishViewer"), {
 
 export default function ThanksPage() {
   const [lang, setLang] = useState<"AR" | "EN">("EN");
+  const [jellyColor, setJellyColor] = useState<string | null>("#ff007f"); // Default to Neon Pink matching Noomo Labs screenshot!
+  const [matMode, setMatMode] = useState<"solid" | "glass" | "wireframe">("solid");
+  const [isCustomizerOpen, setIsCustomizerOpen] = useState(true);
 
   return (
     <div
@@ -182,7 +185,7 @@ export default function ThanksPage() {
             pointerEvents: "auto"
           }}
         >
-          <JellyfishViewer size={750} />
+          <JellyfishViewer size={750} customColor={jellyColor} materialMode={matMode} />
         </div>
 
         {/* FOREGROUND SUB-CONTENT & CTA BUTTON (IN FRONT - Z-INDEX 20) */}
@@ -240,6 +243,171 @@ export default function ThanksPage() {
           >
             ← {lang === "AR" ? "تصفح بقية الأقسام" : "Explore Portfolio"}
           </Link>
+        </div>
+      </div>
+
+      {/* NOOMO LABS SIGNATURE 3D CUSTOMIZER FLOATING WIDGET */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: "24px",
+          right: "24px",
+          zIndex: 100,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          gap: "10px",
+          fontFamily: "'Outfit', sans-serif"
+        }}
+      >
+        {/* EXPANDABLE COLOR & MATERIAL PALETTE BOX */}
+        {isCustomizerOpen && (
+          <div
+            style={{
+              background: "rgba(15, 17, 26, 0.94)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              border: "1px solid rgba(255, 255, 255, 0.12)",
+              borderRadius: "20px",
+              padding: "16px",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.4), 0 0 30px rgba(255, 0, 127, 0.15)",
+              display: "flex",
+              flexDirection: "column",
+              gap: "14px",
+              minWidth: "250px"
+            }}
+          >
+            {/* COLOR PALETTE GRID */}
+            <div>
+              <span style={{ fontSize: "11px", color: "#94a3b8", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.08em", display: "block", marginBottom: "8px" }}>
+                {lang === "AR" ? "لون القنديل 3D" : "3D Jellyfish Color"}
+              </span>
+
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px" }}>
+                {[
+                  { color: "#ff007f", label: "Neon Pink" },
+                  { color: "#00f0ff", label: "Cyber Cyan" },
+                  { color: "#a855f7", label: "Electric Violet" },
+                  { color: "#2563eb", label: "Royal Blue" },
+                  { color: "#10b981", label: "Emerald Green" },
+                  { color: "#f59e0b", label: "Golden Amber" },
+                  { color: "#ef4444", label: "Crimson Red" },
+                  { color: null, label: "Original" }
+                ].map((item, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setJellyColor(item.color)}
+                    title={item.label}
+                    style={{
+                      width: "100%",
+                      height: "34px",
+                      borderRadius: "10px",
+                      border: jellyColor === item.color ? "2.5px solid #ffffff" : "1.5px solid rgba(255,255,255,0.15)",
+                      background: item.color ? item.color : "linear-gradient(135deg, #e087ff 0%, #00f0ff 100%)",
+                      cursor: "pointer",
+                      transform: jellyColor === item.color ? "scale(1.08)" : "scale(1)",
+                      transition: "all 0.2s ease",
+                      boxShadow: jellyColor === item.color ? "0 4px 12px rgba(255,255,255,0.3)" : "none",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#ffffff",
+                      fontSize: "12px"
+                    }}
+                  >
+                    {item.color === null && "🌈"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* MATERIAL RENDER MODE */}
+            <div>
+              <span style={{ fontSize: "11px", color: "#94a3b8", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.08em", display: "block", marginBottom: "8px" }}>
+                {lang === "AR" ? "نوع الخامة" : "Material Mode"}
+              </span>
+
+              <div style={{ display: "flex", gap: "6px" }}>
+                {[
+                  { id: "solid", label: lang === "AR" ? "صلب ✦" : "Solid ✦" },
+                  { id: "glass", label: lang === "AR" ? "زجاج ✧" : "Glass ✧" },
+                  { id: "wireframe", label: lang === "AR" ? "شبكي ⬡" : "Wireframe ⬡" }
+                ].map((m) => (
+                  <button
+                    key={m.id}
+                    onClick={() => setMatMode(m.id as any)}
+                    style={{
+                      flex: 1,
+                      padding: "7px 0",
+                      borderRadius: "8px",
+                      fontSize: "11.5px",
+                      fontWeight: "700",
+                      border: "none",
+                      cursor: "pointer",
+                      background: matMode === m.id ? "#2563eb" : "rgba(255,255,255,0.08)",
+                      color: "#ffffff",
+                      transition: "all 0.2s ease"
+                    }}
+                  >
+                    {m.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* BOTTOM TRIGGER PILL BUTTON */}
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          {/* RESET BUTTON */}
+          <button
+            onClick={() => {
+              setJellyColor("#ff007f");
+              setMatMode("solid");
+            }}
+            title="Reset"
+            style={{
+              width: "42px",
+              height: "42px",
+              borderRadius: "50%",
+              background: "#0f111a",
+              border: "1px solid rgba(255,255,255,0.15)",
+              color: "#ffffff",
+              fontSize: "15px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 8px 24px rgba(0,0,0,0.3)"
+            }}
+          >
+            ↺
+          </button>
+
+          {/* CUSTOMIZE ME PILL BUTTON */}
+          <button
+            onClick={() => setIsCustomizerOpen(!isCustomizerOpen)}
+            style={{
+              background: "#0f111a",
+              color: "#ffffff",
+              border: "1px solid rgba(255,255,255,0.15)",
+              padding: "11px 22px",
+              borderRadius: "50px",
+              fontSize: "13px",
+              fontWeight: "900",
+              letterSpacing: "0.05em",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
+              transition: "all 0.2s ease"
+            }}
+          >
+            <span style={{ fontSize: "16px" }}>🪼</span>
+            <span>CUSTOMIZE ME</span>
+            <span style={{ fontSize: "10px", opacity: 0.7 }}>{isCustomizerOpen ? "▼" : "▲"}</span>
+          </button>
         </div>
       </div>
 

@@ -7,11 +7,15 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 interface JellyfishViewerProps {
   size?: number;
+  customColor?: string | null;
+  materialMode?: "solid" | "glass" | "wireframe";
 }
 
-export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
+export default function JellyfishViewer({ size = 320, customColor = null, materialMode = "solid" }: JellyfishViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
+  const loadedModelRef = useRef<THREE.Group | null>(null);
+  const pointLightRef = useRef<THREE.PointLight | null>(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -81,6 +85,7 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
     const pointLight = new THREE.PointLight(0xa855f7, 2.0, 15);
     pointLight.position.set(0, 2, 4);
     scene.add(pointLight);
+    pointLightRef.current = pointLight;
 
     // 6. Direct native fetch & GLTFLoader parse (100% reliable Network request & zero worker security errors)
     const loader = new GLTFLoader();
@@ -116,6 +121,7 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
 
               try {
                 loadedModel = gltf.scene;
+                loadedModelRef.current = loadedModel;
 
                 // Remove Blender work placeholders if present
                 const objectsToRemove: THREE.Object3D[] = [];
@@ -138,7 +144,7 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
                   }
                 });
 
-                // Preserve & Enhance original Tripo3D GLTF materials with full texture maps & rich colors
+                // Apply initial material settings
                 loadedModel.traverse((child) => {
                   if ((child as THREE.Mesh).isMesh) {
                     const mesh = child as THREE.Mesh;
@@ -158,11 +164,28 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
                           stdMat.map.colorSpace = THREE.SRGBColorSpace;
                           stdMat.map.needsUpdate = true;
                         }
-                        if (stdMat.normalMap) {
-                          stdMat.normalMap.needsUpdate = true;
+
+                        stdMat.wireframe = materialMode === "wireframe";
+                        if (materialMode === "glass") {
+                          stdMat.transparent = true;
+                          stdMat.opacity = 0.55;
+                        } else if (materialMode === "wireframe") {
+                          stdMat.transparent = true;
+                          stdMat.opacity = 0.85;
+                        } else {
+                          stdMat.transparent = false;
+                          stdMat.opacity = 1.0;
                         }
-                        stdMat.roughness = 0.3;
-                        stdMat.metalness = 0.05;
+
+                        if (customColor) {
+                          stdMat.color = new THREE.Color(customColor);
+                          stdMat.emissive = new THREE.Color(customColor);
+                          stdMat.emissiveIntensity = 0.45;
+                        } else {
+                          stdMat.color = new THREE.Color(0xffffff);
+                          stdMat.emissive = new THREE.Color(0x000000);
+                          stdMat.emissiveIntensity = 0;
+                        }
                       });
                     }
                   }
@@ -251,6 +274,52 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
       if (container) container.innerHTML = "";
     };
   }, [size]);
+
+  // Live real-time material & color customization update effect
+  useEffect(() => {
+    const model = loadedModelRef.current;
+    if (!model) return;
+
+    model.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        if (mesh.material) {
+          const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+          materials.forEach((mat) => {
+            const stdMat = mat as THREE.MeshStandardMaterial;
+
+            stdMat.wireframe = materialMode === "wireframe";
+            if (materialMode === "glass") {
+              stdMat.transparent = true;
+              stdMat.opacity = 0.55;
+            } else if (materialMode === "wireframe") {
+              stdMat.transparent = true;
+              stdMat.opacity = 0.85;
+            } else {
+              stdMat.transparent = false;
+              stdMat.opacity = 1.0;
+            }
+
+            if (customColor) {
+              stdMat.color = new THREE.Color(customColor);
+              stdMat.emissive = new THREE.Color(customColor);
+              stdMat.emissiveIntensity = 0.45;
+            } else {
+              stdMat.color = new THREE.Color(0xffffff);
+              stdMat.emissive = new THREE.Color(0x000000);
+              stdMat.emissiveIntensity = 0;
+            }
+
+            stdMat.needsUpdate = true;
+          });
+        }
+      }
+    });
+
+    if (pointLightRef.current) {
+      pointLightRef.current.color = new THREE.Color(customColor || 0xa855f7);
+    }
+  }, [customColor, materialMode]);
 
   return (
     <div
