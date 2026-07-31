@@ -50,15 +50,29 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera (positioned at z = 6.2 to guarantee zero edge clipping)
-    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 1000);
-    camera.position.set(0, 0, 6.2);
+    // 2. Camera with dynamic aspect ratio
+    const initialWidth = container.clientWidth || window.innerWidth;
+    const initialHeight = container.clientHeight || window.innerHeight;
+    const camera = new THREE.PerspectiveCamera(42, initialWidth / initialHeight, 0.1, 1000);
+    camera.position.set(0, 0, 5.8);
 
     // 3. Renderer with transparent background
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(size, size);
+    renderer.setSize(initialWidth, initialHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    // Handle dynamic window / container resize
+    const handleResize = () => {
+      if (!container) return;
+      const w = container.clientWidth || window.innerWidth;
+      const h = container.clientHeight || window.innerHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    };
+
+    window.addEventListener("resize", handleResize);
 
     // Clear existing canvas
     container.innerHTML = "";
@@ -263,6 +277,7 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
 
     // Clean up
     return () => {
+      window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
       controls.dispose();
       renderer.dispose();
@@ -320,14 +335,15 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
     <div
       style={{
         position: "relative",
-        width: `${size}px`,
-        height: `${size}px`,
+        width: "100%",
+        height: "100%",
         background: "transparent",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         margin: "0 auto",
-        cursor: "grab"
+        cursor: "grab",
+        overflow: "visible"
       }}
     >
       {loading && (

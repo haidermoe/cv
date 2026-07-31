@@ -207,19 +207,19 @@ export default function ThanksPage() {
           {lang === "AR" ? "شكراً لك !" : "THANK YOU !"}
         </h1>
 
-        {/* CENTERED FLOATING 3D JELLYFISH (IN FRONT OF GIANT TEXT - Z-INDEX 10) */}
+        {/* CENTERED FLOATING 3D JELLYFISH - 100% UNBOUNDED FULLPAGE VIEWPORT CANVAS - Z-INDEX 10 */}
         <div
           style={{
             position: "absolute",
-            top: "48%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
+            inset: 0,
+            width: "100%",
+            height: "100%",
             zIndex: 10,
             pointerEvents: "auto",
             overflow: "visible"
           }}
         >
-          <JellyfishViewer size={920} customColor={jellyColor} materialMode={matMode} />
+          <JellyfishViewer customColor={jellyColor} materialMode={matMode} />
         </div>
 
         {/* FOREGROUND SUB-CONTENT & CTA BUTTON (IN FRONT - Z-INDEX 20) */}
