@@ -86,33 +86,29 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
     pointLight.position.set(0, 0, 2);
     scene.add(pointLight);
 
-    // 6. Progressive GLTF Streamer & Mesh Stagger Assembly
+    // 6. Progressive GLTF Streamer & Mesh Renderer
     const loader = new GLTFLoader();
     loader.load(
       "/jellyfish0.glb",
       (gltf) => {
         loadedModel = gltf.scene;
 
-        const meshes: THREE.Mesh[] = [];
-
-        // Collect meshes and initialize materials with 0 opacity
+        // Traverse meshes and ensure DoubleSide and visible materials
         loadedModel.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
             if (mesh.material) {
-              meshes.push(mesh);
               const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
               materials.forEach((mat) => {
                 mat.side = THREE.DoubleSide;
-                mat.transparent = true;
-                mat.opacity = 0;
+                mat.depthWrite = true;
                 mat.needsUpdate = true;
               });
             }
           }
         });
 
-        // Center and auto-scale model
+        // Center and auto-scale model to fit canvas cleanly
         const box = new THREE.Box3().setFromObject(loadedModel);
         const center = box.getCenter(new THREE.Vector3());
         const boxSize = box.getSize(new THREE.Vector3());
@@ -123,13 +119,13 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
 
         const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
         if (isFinite(maxDim) && maxDim > 0) {
-          const scale = 2.6 / maxDim;
+          const scale = 2.8 / maxDim;
           loadedModel.scale.setScalar(scale);
         }
 
         scene.add(loadedModel);
 
-        // Handle animation if model has embedded animations
+        // Handle embedded Blender animations if present
         if (gltf.animations && gltf.animations.length > 0) {
           mixer = new THREE.AnimationMixer(loadedModel);
           gltf.animations.forEach((clip) => {
@@ -137,25 +133,8 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
           });
         }
 
-        // Hide main loading indicator
+        // Hide loading spinner as model is 100% loaded and visible
         setLoading(false);
-
-        // Staggered Layer-by-Layer Fade-In Reveal Animation (Emil Kowalski Craft)
-        meshes.forEach((mesh, idx) => {
-          setTimeout(() => {
-            let opacity = 0;
-            const fadeInterval = setInterval(() => {
-              opacity += 0.15;
-              const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-              mats.forEach((m) => {
-                if (m) m.opacity = Math.min(opacity, 1);
-              });
-              if (opacity >= 1) {
-                clearInterval(fadeInterval);
-              }
-            }, 30);
-          }, idx * 40);
-        });
       },
       (xhr) => {
         // Track byte streaming progress
