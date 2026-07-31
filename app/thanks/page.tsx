@@ -211,14 +211,14 @@ export default function ThanksPage() {
         <div
           style={{
             position: "absolute",
-            top: "46%",
+            top: "44%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             zIndex: 10,
             pointerEvents: "auto"
           }}
         >
-          <JellyfishViewer size={750} customColor={jellyColor} materialMode={matMode} />
+          <JellyfishViewer size={980} customColor={jellyColor} materialMode={matMode} />
         </div>
 
         {/* FOREGROUND SUB-CONTENT & CTA BUTTON (IN FRONT - Z-INDEX 20) */}

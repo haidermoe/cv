@@ -202,7 +202,7 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
 
                 const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
                 if (isFinite(maxDim) && maxDim > 0) {
-                  const scale = 2.7 / maxDim;
+                  const scale = 3.6 / maxDim; // Giant towering scale matching Noomo Labs screenshot!
                   loadedModel.scale.setScalar(scale);
                 }
 
