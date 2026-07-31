@@ -34,12 +34,12 @@ export default function ThanksPage() {
           position: "absolute",
           top: "50%",
           transform: "translateY(-50%)",
-          ...(lang === "AR" ? { left: "4vw" } : { right: "4vw" }),
+          ...(lang === "AR" ? { left: "10vw" } : { right: "10vw" }),
           zIndex: 5,
           pointerEvents: "auto"
         }}
       >
-        <JellyfishViewer size={360} />
+        <JellyfishViewer size={650} />
       </div>
 
       {/* TOP HEADER BAR (AWSMD EXACT HEADER LAYOUT) */}

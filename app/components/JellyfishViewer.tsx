@@ -175,7 +175,7 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
 
                 const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
                 if (isFinite(maxDim) && maxDim > 0) {
-                  const scale = 2.8 / maxDim;
+                  const scale = 3.6 / maxDim;
                   loadedModel.scale.setScalar(scale);
                 }
 
