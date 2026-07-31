@@ -1572,6 +1572,45 @@ ul {
     justify-content: flex-end !important;
     gap: 4px !important;
   }
+}
+
+/* NOOMO LABS SPACE FLOATING WEIGHTLESS ANIMATIONS */
+@keyframes spatialFloatSlow {
+  0% {
+    transform: translate(-50%, -50%) translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translate(-50%, -50%) translateY(-14px) rotate(0.6deg);
+  }
+  66% {
+    transform: translate(-50%, -50%) translateY(8px) rotate(-0.5deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes spatialFloatMedium {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.noomo-giant-title-float {
+  animation: spatialFloatSlow 9s ease-in-out infinite !important;
+  will-change: transform !important;
+}
+
+.noomo-content-float {
+  animation: spatialFloatMedium 6.5s ease-in-out infinite !important;
+  will-change: transform !important;
+}
   
   .awsmd-top-actions button {
     padding: 6px 10px !important;

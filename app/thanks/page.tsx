@@ -127,6 +127,7 @@ export default function ThanksPage() {
       >
         {/* GIANT BACKGROUND TITLE (BEHIND JELLYFISH - Z-INDEX 1) */}
         <h1
+          className="noomo-giant-title-float"
           style={{
             position: "absolute",
             top: "42%",
@@ -164,6 +165,7 @@ export default function ThanksPage() {
 
         {/* FOREGROUND SUB-CONTENT & CTA BUTTON (IN FRONT - Z-INDEX 20) */}
         <div
+          className="noomo-content-float"
           style={{
             position: "relative",
             zIndex: 20,
