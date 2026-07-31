@@ -12,8 +12,10 @@ interface JellyfishViewerProps {
 export default function JellyfishViewer({ size = 280 }: JellyfishViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const container = containerRef.current;
     if (!container) return;
 
@@ -140,6 +142,21 @@ export default function JellyfishViewer({ size = 280 }: JellyfishViewerProps) {
       if (container) container.innerHTML = "";
     };
   }, [size]);
+
+  if (!mounted) {
+    return (
+      <div
+        style={{
+          width: `${size}px`,
+          height: `${size}px`,
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(37, 99, 235, 0.25) 0%, rgba(139, 92, 246, 0.12) 50%, rgba(14, 13, 21, 0.9) 100%)",
+          border: "1.5px solid rgba(96, 165, 250, 0.4)",
+          margin: "0 auto"
+        }}
+      />
+    );
+  }
 
   return (
     <div
