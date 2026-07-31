@@ -211,7 +211,7 @@ export default function ThanksPage() {
         <div
           style={{
             position: "absolute",
-            top: "44%",
+            top: "48%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             zIndex: 10,
