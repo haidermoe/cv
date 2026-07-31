@@ -303,28 +303,15 @@ export default function Home() {
           direction: "ltr"
         }}
       >
-        {/* VIVID BLUE PILL BUTTON */}
+        {/* ENLARGED ROYAL BLUE SIDE FILL & FLIP TEXT BUTTON */}
         <button
           onClick={() => setIsClientDrawerOpen(true)}
-          className="awsmd-client-btn"
-          style={{
-            background: "#4f46e5",
-            color: "#ffffff",
-            padding: "10px 22px",
-            borderRadius: "50px",
-            fontSize: "14px",
-            fontWeight: "800",
-            border: "none",
-            cursor: "pointer",
-            boxShadow: "0 8px 25px rgba(79, 70, 229, 0.35)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
-            fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif"
-          }}
+          className="awsmd-royal-client-btn flip-link-group"
         >
-          <span style={{ fontSize: "16px", fontWeight: "900", lineHeight: "1" }}>+</span>
-          <span>{t.becomeClient}</span>
+          <span className="flip-wrapper">
+            <span className="flip-text-primary" style={{ color: "#0f111a" }}>+ {t.becomeClient}</span>
+            <span className="flip-text-secondary" style={{ color: "#ffffff" }}>+ {t.becomeClient}</span>
+          </span>
         </button>
 
         {/* BORDERED LANGUAGE SELECTOR PILL */}

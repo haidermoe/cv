@@ -54,7 +54,7 @@ export default function ThanksPage() {
           <span>{lang === "AR" ? "حيدر محمد" : "Haider Mohamed"}</span>
         </Link>
 
-        {/* CENTER PILL NAV */}
+        {/* CENTER PILL NAV WITH FLIP ROLL TEXT LINKS */}
         <div
           className="desktop-header-nav"
           style={{
@@ -63,24 +63,37 @@ export default function ThanksPage() {
             gap: "28px",
             background: "#f1f5f9",
             padding: "10px 28px",
-            borderRadius: "50px"
+            borderRadius: "50px",
+            boxShadow: "0 4px 15px rgba(0,0,0,0.03)"
           }}
         >
-          <Link href="/#about" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14px" }}>
-            {lang === "AR" ? "النبذة" : "About Us"}
+          <Link href="/#about" className="flip-link-group" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14.5px" }}>
+            <span className="flip-wrapper">
+              <span className="flip-text-primary">{lang === "AR" ? "النبذة" : "About Us"}</span>
+              <span className="flip-text-secondary" style={{ color: "#2563eb" }}>{lang === "AR" ? "النبذة" : "About Us"}</span>
+            </span>
           </Link>
-          <Link href="/#experience" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14px" }}>
-            {lang === "AR" ? "الخبرات" : "Experience"}
+          <Link href="/#experience" className="flip-link-group" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14.5px" }}>
+            <span className="flip-wrapper">
+              <span className="flip-text-primary">{lang === "AR" ? "الخبرات" : "Experience"}</span>
+              <span className="flip-text-secondary" style={{ color: "#2563eb" }}>{lang === "AR" ? "الخبرات" : "Experience"}</span>
+            </span>
           </Link>
-          <Link href="/#education" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14px" }}>
-            {lang === "AR" ? "التعليم" : "Education"}
+          <Link href="/#education" className="flip-link-group" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14.5px" }}>
+            <span className="flip-wrapper">
+              <span className="flip-text-primary">{lang === "AR" ? "التعليم" : "Education"}</span>
+              <span className="flip-text-secondary" style={{ color: "#2563eb" }}>{lang === "AR" ? "التعليم" : "Education"}</span>
+            </span>
           </Link>
-          <Link href="/#contact" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14px" }}>
-            {lang === "AR" ? "تواصل معي" : "Contact Us"}
+          <Link href="/#contact" className="flip-link-group" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14.5px" }}>
+            <span className="flip-wrapper">
+              <span className="flip-text-primary">{lang === "AR" ? "تواصل معي" : "Contact Us"}</span>
+              <span className="flip-text-secondary" style={{ color: "#2563eb" }}>{lang === "AR" ? "تواصل معي" : "Contact Us"}</span>
+            </span>
           </Link>
         </div>
 
-        {/* RIGHT TOP ACTIONS */}
+        {/* RIGHT TOP ACTIONS WITH ENLARGED ROYAL BLUE SIDE-FILL BUTTON */}
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <button
             onClick={() => setLang(lang === "AR" ? "EN" : "AR")}
@@ -89,9 +102,9 @@ export default function ThanksPage() {
               background: "#ffffff",
               border: "1.5px solid #e2e8f0",
               color: "#0f111a",
-              padding: "8px 16px",
+              padding: "10px 18px",
               borderRadius: "50px",
-              fontSize: "13px",
+              fontSize: "13.5px",
               fontWeight: "800",
               cursor: "pointer"
             }}
@@ -101,18 +114,12 @@ export default function ThanksPage() {
 
           <Link
             href="/"
-            className="awsmd-btn-glow"
-            style={{
-              background: "#f1f5f9",
-              color: "#0f111a",
-              padding: "10px 22px",
-              borderRadius: "50px",
-              fontSize: "14px",
-              fontWeight: "800",
-              textDecoration: "none"
-            }}
+            className="awsmd-royal-client-btn flip-link-group"
           >
-            + {lang === "AR" ? "كن عميلاً" : "Become a Client"}
+            <span className="flip-wrapper">
+              <span className="flip-text-primary" style={{ color: "#0f111a" }}>+ {lang === "AR" ? "كن عميلاً" : "Become a Client"}</span>
+              <span className="flip-text-secondary" style={{ color: "#ffffff" }}>+ {lang === "AR" ? "كن عميلاً" : "Become a Client"}</span>
+            </span>
           </Link>
         </div>
       </div>
