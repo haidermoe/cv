@@ -12,7 +12,6 @@ interface JellyfishViewerProps {
 export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
-  const [progressPercent, setProgressPercent] = useState(0);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -49,7 +48,7 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera
+    // 2. Camera (explicitly positioned at z = 5)
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
     camera.position.set(0, 0, 5);
 
@@ -68,9 +67,8 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.enableZoom = false;
-    controls.autoRotate = false; // Mouse tracking takes priority
 
-    // 5. Lighting
+    // 5. Ambient & Directional Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 2.8);
     scene.add(ambientLight);
 
@@ -86,14 +84,14 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
     pointLight.position.set(0, 0, 2);
     scene.add(pointLight);
 
-    // 6. Progressive GLTF Streamer & Mesh Renderer
+    // 6. Load GLTF Model directly from /public/jellyfish0.glb
     const loader = new GLTFLoader();
     loader.load(
       "/jellyfish0.glb",
       (gltf) => {
         loadedModel = gltf.scene;
 
-        // Traverse meshes and ensure DoubleSide and visible materials
+        // Traverse meshes and ensure DoubleSide and depthWrite
         loadedModel.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
@@ -108,7 +106,7 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
           }
         });
 
-        // Center and auto-scale model to fit canvas cleanly
+        // Center and auto-scale model to fit container cleanly
         const box = new THREE.Box3().setFromObject(loadedModel);
         const center = box.getCenter(new THREE.Vector3());
         const boxSize = box.getSize(new THREE.Vector3());
@@ -133,18 +131,11 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
           });
         }
 
-        // Hide loading spinner as model is 100% loaded and visible
         setLoading(false);
       },
-      (xhr) => {
-        // Track byte streaming progress
-        if (xhr.total && xhr.total > 0) {
-          const pct = Math.round((xhr.loaded / xhr.total) * 100);
-          setProgressPercent(pct);
-        }
-      },
+      undefined,
       (error) => {
-        console.error("Error loading jellyfish0.glb:", error);
+        console.error("Error loading /jellyfish0.glb:", error);
         setLoading(false);
       }
     );
@@ -235,7 +226,7 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
               animation: "spin 0.8s linear infinite"
             }}
           />
-          <span>جاري بناء مجسم الـ 3D ({progressPercent}%)...</span>
+          <span>Loading 3D Model...</span>
         </div>
       )}
 
