@@ -9,7 +9,7 @@ interface JellyfishViewerProps {
   size?: number;
 }
 
-export default function JellyfishViewer({ size = 280 }: JellyfishViewerProps) {
+export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -24,6 +24,27 @@ export default function JellyfishViewer({ size = 280 }: JellyfishViewerProps) {
     let mixer: THREE.AnimationMixer | null = null;
     const clock = new THREE.Clock();
 
+    // Mouse tracking targets
+    let targetRotationY = 0;
+    let targetRotationX = 0;
+
+    const handlePointerMove = (e: MouseEvent | TouchEvent) => {
+      const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+      const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+      const rect = container.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      // Normalized coordinates (-1 to +1)
+      const mouseX = (clientX - centerX) / (window.innerWidth / 2);
+      const mouseY = (clientY - centerY) / (window.innerHeight / 2);
+
+      targetRotationY = mouseX * 0.8;
+      targetRotationX = mouseY * 0.4;
+    };
+
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+
     // 1. Scene
     const scene = new THREE.Scene();
 
@@ -31,7 +52,7 @@ export default function JellyfishViewer({ size = 280 }: JellyfishViewerProps) {
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
     camera.position.set(0, 0, 5);
 
-    // 3. Renderer
+    // 3. Renderer with transparent background
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(size, size);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -46,22 +67,21 @@ export default function JellyfishViewer({ size = 280 }: JellyfishViewerProps) {
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.enableZoom = false;
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 2.5;
+    controls.autoRotate = false; // Mouse tracking takes priority
 
     // 5. Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 2.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 2.8);
     scene.add(ambientLight);
 
-    const dirLight1 = new THREE.DirectionalLight(0xffffff, 2.0);
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 2.2);
     dirLight1.position.set(5, 10, 7);
     scene.add(dirLight1);
 
-    const dirLight2 = new THREE.DirectionalLight(0x60a5fa, 2.0);
+    const dirLight2 = new THREE.DirectionalLight(0x60a5fa, 2.5);
     dirLight2.position.set(-5, -5, -5);
     scene.add(dirLight2);
 
-    const pointLight = new THREE.PointLight(0x8b5cf6, 3, 10);
+    const pointLight = new THREE.PointLight(0x8b5cf6, 4, 12);
     pointLight.position.set(0, 0, 2);
     scene.add(pointLight);
 
@@ -104,7 +124,7 @@ export default function JellyfishViewer({ size = 280 }: JellyfishViewerProps) {
 
         const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
         if (isFinite(maxDim) && maxDim > 0) {
-          const scale = 2.4 / maxDim;
+          const scale = 2.6 / maxDim;
           loadedModel.scale.setScalar(scale);
         }
 
@@ -118,14 +138,21 @@ export default function JellyfishViewer({ size = 280 }: JellyfishViewerProps) {
       }
     );
 
-    // 7. Animation Loop
+    // 7. Animation Loop with smooth lerp towards mouse & floating motion
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
       const delta = clock.getDelta();
+      const elapsedTime = clock.getElapsedTime();
 
       if (mixer) mixer.update(delta);
-      if (loadedModel && !mixer) {
-        loadedModel.rotation.y += 0.005;
+
+      if (loadedModel) {
+        // Floating Y animation (organic breathing)
+        loadedModel.position.y = Math.sin(elapsedTime * 1.5) * 0.12;
+
+        // Smooth Lerp Rotation to follow mouse position
+        loadedModel.rotation.y += (targetRotationY - loadedModel.rotation.y) * 0.05;
+        loadedModel.rotation.x += (targetRotationX - loadedModel.rotation.x) * 0.05;
       }
 
       controls.update();
@@ -136,6 +163,7 @@ export default function JellyfishViewer({ size = 280 }: JellyfishViewerProps) {
 
     // Clean up
     return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
       cancelAnimationFrame(animationFrameId);
       controls.dispose();
       renderer.dispose();
@@ -149,10 +177,8 @@ export default function JellyfishViewer({ size = 280 }: JellyfishViewerProps) {
         style={{
           width: `${size}px`,
           height: `${size}px`,
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(37, 99, 235, 0.25) 0%, rgba(139, 92, 246, 0.12) 50%, rgba(14, 13, 21, 0.9) 100%)",
-          border: "1.5px solid rgba(96, 165, 250, 0.4)",
-          margin: "0 auto"
+          margin: "0 auto",
+          background: "transparent"
         }}
       />
     );
@@ -164,14 +190,10 @@ export default function JellyfishViewer({ size = 280 }: JellyfishViewerProps) {
         position: "relative",
         width: `${size}px`,
         height: `${size}px`,
-        borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(37, 99, 235, 0.25) 0%, rgba(139, 92, 246, 0.12) 50%, rgba(14, 13, 21, 0.9) 100%)",
-        border: "1.5px solid rgba(96, 165, 250, 0.4)",
-        boxShadow: "0 0 45px rgba(37, 99, 235, 0.35), inset 0 0 20px rgba(255, 255, 255, 0.1)",
+        background: "transparent",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        overflow: "hidden",
         margin: "0 auto",
         cursor: "grab"
       }}
@@ -186,7 +208,7 @@ export default function JellyfishViewer({ size = 280 }: JellyfishViewerProps) {
             alignItems: "center",
             justifyContent: "center",
             gap: "10px",
-            background: "rgba(14, 13, 21, 0.8)",
+            background: "transparent",
             color: "#60a5fa",
             fontSize: "13px",
             fontWeight: "700"
@@ -210,3 +232,4 @@ export default function JellyfishViewer({ size = 280 }: JellyfishViewerProps) {
     </div>
   );
 }
+
