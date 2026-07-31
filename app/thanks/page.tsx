@@ -13,6 +13,37 @@ export default function ThanksPage() {
   const [jellyColor, setJellyColor] = useState<string | null>("#ff007f"); // Default to Neon Pink matching Noomo Labs screenshot!
   const [matMode, setMatMode] = useState<"solid" | "glass" | "wireframe">("solid");
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(true);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  React.useEffect(() => {
+    let animationFrameId: number;
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      targetX = x;
+      targetY = y;
+    };
+
+    const updateParallax = () => {
+      currentX += (targetX - currentX) * 0.05;
+      currentY += (targetY - currentY) * 0.05;
+      setMousePos({ x: currentX, y: currentY });
+      animationFrameId = requestAnimationFrame(updateParallax);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    animationFrameId = requestAnimationFrame(updateParallax);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
 
   return (
     <div
@@ -30,6 +61,7 @@ export default function ThanksPage() {
         overflow: "hidden"
       }}
     >
+      {/* 3D CONCAVE DOT GRID BACKGROUND LAYER WITH DYNAMIC MOUSE PARALLAX TILT */}
       <div
         style={{
           position: "absolute",
@@ -46,8 +78,9 @@ export default function ThanksPage() {
             height: "100%",
             backgroundImage: "radial-gradient(rgba(15, 17, 26, 0.22) 2.5px, transparent 2.5px)",
             backgroundSize: "36px 36px",
-            transform: "perspective(1000px) rotateX(16deg) scale(1.25)",
+            transform: `perspective(1000px) rotateX(${16 + mousePos.y * 14}deg) rotateY(${mousePos.x * 16}deg) scale(1.25)`,
             transformOrigin: "center center",
+            transition: "transform 0.08s linear",
             maskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
             WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)"
           }}

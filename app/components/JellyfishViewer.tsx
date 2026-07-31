@@ -240,7 +240,7 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
 
     fetchAndParse(0);
 
-    // 7. Animation Loop with smooth lerp towards mouse & floating motion
+    // 7. Animation Loop with autonomous weightless deep space floating
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
       const delta = clock.getDelta();
@@ -249,14 +249,11 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
       if (mixer) mixer.update(delta);
 
       if (loadedModel) {
-        // Weightless deep space floating & multi-axis breathing motion
+        // Autonomous weightless deep space floating & multi-axis breathing motion
         loadedModel.position.y = -0.18 + Math.sin(elapsedTime * 1.3) * 0.16;
         loadedModel.position.x = Math.cos(elapsedTime * 0.8) * 0.08;
         loadedModel.rotation.z = Math.sin(elapsedTime * 0.6) * 0.05;
-
-        // Smooth Lerp Rotation to follow mouse position with fluid inertia
-        loadedModel.rotation.y += (targetRotationY - loadedModel.rotation.y) * 0.04;
-        loadedModel.rotation.x += (targetRotationX - loadedModel.rotation.x) * 0.04;
+        loadedModel.rotation.y = Math.sin(elapsedTime * 0.4) * 0.12;
       }
 
       controls.update();
@@ -267,7 +264,6 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
 
     // Clean up
     return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
       cancelAnimationFrame(animationFrameId);
       controls.dispose();
       renderer.dispose();
