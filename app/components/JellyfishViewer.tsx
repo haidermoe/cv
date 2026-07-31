@@ -160,7 +160,7 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
                   }
                 });
 
-                // Upgrade Materials to Noomo Labs Iridescent Glass Physical Material
+                // Upgrade Materials to Noomo Labs Iridescent Glass Physical Material with full Normal Map & Emissive Glow
                 loadedModel.traverse((child) => {
                   if ((child as THREE.Mesh).isMesh) {
                     const mesh = child as THREE.Mesh;
@@ -169,26 +169,30 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
 
                     if (mesh.material) {
                       const oldMat = (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material) as THREE.MeshStandardMaterial;
-                      const textureMap = oldMat.map || null;
 
-                      if (textureMap) {
-                        textureMap.colorSpace = THREE.SRGBColorSpace;
-                        textureMap.needsUpdate = true;
-                      }
+                      if (oldMat.map) oldMat.map.colorSpace = THREE.SRGBColorSpace;
+                      if (oldMat.normalMap) oldMat.normalMap.colorSpace = THREE.NoColorSpace;
+                      if (oldMat.emissiveMap) oldMat.emissiveMap.colorSpace = THREE.SRGBColorSpace;
 
                       const physicalMat = new THREE.MeshPhysicalMaterial({
-                        map: textureMap,
-                        color: new THREE.Color(0xf5f0ff),
-                        transmission: 0.82,          // Water/glass translucency & refraction
-                        opacity: 0.96,
+                        map: oldMat.map || null,
+                        normalMap: oldMat.normalMap || null,
+                        normalScale: new THREE.Vector2(1.5, 1.5),  // Deep 3D surface ripples
+                        roughnessMap: oldMat.roughnessMap || null,
+                        emissiveMap: oldMat.emissiveMap || oldMat.map || null,
+                        emissive: new THREE.Color(0xd8b4fe),      // Neon purple bioluminescent glow
+                        emissiveIntensity: 0.7,
+                        color: new THREE.Color(0xffffff),
+                        transmission: 0.78,                       // Glass/water translucency & refraction
+                        opacity: 0.98,
                         transparent: true,
-                        ior: 1.48,                   // Index of refraction
-                        roughness: 0.12,             // Polished smooth glass sheen
-                        metalness: 0.15,
-                        clearcoat: 1.0,              // Glossy outer skin coat
+                        ior: 1.48,                                // Index of refraction
+                        roughness: 0.15,                          // Polished smooth glass sheen with normal map ripples
+                        metalness: 0.1,
+                        clearcoat: 1.0,                           // Glossy outer skin coat
                         clearcoatRoughness: 0.08,
-                        iridescence: 1.0,            // MAGICAL RAINBOW SOAP-BUBBLE CHROMATIC SHINE!
-                        iridescenceIOR: 1.35,
+                        iridescence: 1.0,                         // MAGICAL RAINBOW SOAP-BUBBLE CHROMATIC SHINE!
+                        iridescenceIOR: 1.38,
                         iridescenceThicknessRange: [100, 400],
                         thickness: 1.5,
                         side: THREE.DoubleSide,
