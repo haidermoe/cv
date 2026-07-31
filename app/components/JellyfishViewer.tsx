@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 interface JellyfishViewerProps {
@@ -84,8 +85,12 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
     pointLight.position.set(0, 0, 2);
     scene.add(pointLight);
 
-    // 6. Load GLTF Model directly from /public/jellyfish0.glb
+    // 6. Load GLTF Model directly with DRACOLoader support
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.5.6/");
+
     const loader = new GLTFLoader();
+    loader.setDRACOLoader(dracoLoader);
     const safetyTimeout = setTimeout(() => {
       setLoading(false);
     }, 6000);
