@@ -169,6 +169,26 @@ export default function ThanksPage() {
         </div>
       </div>
 
+      {/* 3D JELLYFISH FIXED FULLPAGE VIEWPORT OVERLAY (FLOATS UNBOUNDED OVER ALL SECTIONS - Z-INDEX 10) */}
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          width: "100vw",
+          height: "100vh",
+          zIndex: 10,
+          pointerEvents: "none",
+          overflow: "visible",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        <div style={{ width: "100%", height: "100%", pointerEvents: "auto" }}>
+          <JellyfishViewer customColor={jellyColor} materialMode={matMode} />
+        </div>
+      </div>
+
       {/* NOOMO LABS SIGNATURE CENTER HERO: GIANT TYPOGRAPHY BEHIND 3D JELLYFISH */}
       <div
         style={{
@@ -206,21 +226,6 @@ export default function ThanksPage() {
         >
           {lang === "AR" ? "شكراً لك !" : "THANK YOU !"}
         </h1>
-
-        {/* CENTERED FLOATING 3D JELLYFISH - 100% UNBOUNDED FULLPAGE VIEWPORT CANVAS - Z-INDEX 10 */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            zIndex: 10,
-            pointerEvents: "auto",
-            overflow: "visible"
-          }}
-        >
-          <JellyfishViewer customColor={jellyColor} materialMode={matMode} />
-        </div>
 
         {/* FOREGROUND SUB-CONTENT & CTA BUTTON (IN FRONT - Z-INDEX 20) */}
         <div
