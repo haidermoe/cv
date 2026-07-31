@@ -9,93 +9,89 @@ const JellyfishViewer = dynamic(() => import("../components/JellyfishViewer"), {
 });
 
 export default function ThanksPage() {
-  const [lang, setLang] = useState<"AR" | "EN">("AR");
+  const [lang, setLang] = useState<"AR" | "EN">("EN");
 
   return (
     <div
       dir={lang === "AR" ? "rtl" : "ltr"}
       style={{
-        background: "#0e0d15",
-        color: "#ffffff",
+        background: "#ffffff",
+        color: "#0f111a",
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        padding: "30px clamp(20px, 5vw, 60px)",
+        padding: "36px clamp(20px, 6vw, 80px)",
         position: "relative",
         fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif",
         overflow: "hidden"
       }}
     >
-      {/* BACKGROUND AMBIENT RADIAL GLOW */}
+      {/* FLOATING 3D JELLYFISH IN EMPTY SIDE SPACE */}
       <div
+        className="jellyfish-side-container"
         style={{
           position: "absolute",
-          top: "30%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "600px",
-          height: "600px",
-          background: "radial-gradient(circle, rgba(37, 99, 235, 0.18) 0%, rgba(99, 102, 241, 0.08) 50%, transparent 70%)",
-          pointerEvents: "none",
-          zIndex: 1
+          top: "50%",
+          transform: "translateY(-50%)",
+          ...(lang === "AR" ? { left: "4vw" } : { right: "4vw" }),
+          zIndex: 5,
+          pointerEvents: "auto"
         }}
-      />
+      >
+        <JellyfishViewer size={360} />
+      </div>
 
-      {/* TOP HEADER BAR (AWSMD DARK GLASS FLOATING HEADER) */}
+      {/* TOP HEADER BAR (AWSMD EXACT HEADER LAYOUT) */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", zIndex: 10 }}>
         {/* LOGO */}
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", color: "#ffffff", fontSize: "20px", fontWeight: "900" }}>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", color: "#0f111a", fontSize: "22px", fontWeight: "900" }}>
           <svg width="24" height="20" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="7" y="1" width="8" height="10" fill="#ffffff"/>
-            <rect x="0" y="13" width="16" height="7" fill="#ffffff"/>
-            <rect x="10" y="13" width="15" height="7" fill="#60a5fa"/>
+            <rect x="7" y="1" width="8" height="10" fill="#0f111a"/>
+            <rect x="0" y="13" width="16" height="7" fill="#0f111a"/>
+            <rect x="10" y="13" width="15" height="7" fill="#4f46e5"/>
           </svg>
           <span>{lang === "AR" ? "حيدر محمد" : "Haider Mohamed"}</span>
         </Link>
 
-        {/* CENTER PILL NAV (AWSMD FROSTED GLASS BAR) */}
+        {/* CENTER PILL NAV */}
         <div
           className="desktop-header-nav"
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "24px",
-            background: "rgba(255, 255, 255, 0.06)",
-            backdropFilter: "blur(20px) saturate(180%)",
-            WebkitBackdropFilter: "blur(20px) saturate(180%)",
-            padding: "8px 24px",
-            borderRadius: "50px",
-            border: "1px solid rgba(255, 255, 255, 0.12)",
-            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)"
+            gap: "28px",
+            background: "#f1f5f9",
+            padding: "10px 28px",
+            borderRadius: "50px"
           }}
         >
-          <Link href="/#about" style={{ textDecoration: "none", color: "#cbd5e1", fontWeight: "700", fontSize: "14px" }}>
+          <Link href="/#about" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14px" }}>
             {lang === "AR" ? "النبذة" : "About Us"}
           </Link>
-          <Link href="/#experience" style={{ textDecoration: "none", color: "#cbd5e1", fontWeight: "700", fontSize: "14px" }}>
+          <Link href="/#experience" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14px" }}>
             {lang === "AR" ? "الخبرات" : "Experience"}
           </Link>
-          <Link href="/#education" style={{ textDecoration: "none", color: "#cbd5e1", fontWeight: "700", fontSize: "14px" }}>
+          <Link href="/#education" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14px" }}>
             {lang === "AR" ? "التعليم" : "Education"}
           </Link>
-          <Link href="/#contact" style={{ textDecoration: "none", color: "#cbd5e1", fontWeight: "700", fontSize: "14px" }}>
+          <Link href="/#contact" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14px" }}>
             {lang === "AR" ? "تواصل معي" : "Contact Us"}
           </Link>
         </div>
 
         {/* RIGHT TOP ACTIONS */}
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", direction: "ltr" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <button
             onClick={() => setLang(lang === "AR" ? "EN" : "AR")}
             className="awsmd-btn-glow"
             style={{
-              background: "rgba(255, 255, 255, 0.08)",
-              border: "1px solid rgba(96, 165, 250, 0.4)",
-              color: "#60a5fa",
-              padding: "6px 14px",
+              background: "#ffffff",
+              border: "1.5px solid #e2e8f0",
+              color: "#0f111a",
+              padding: "8px 16px",
               borderRadius: "50px",
-              fontSize: "12px",
+              fontSize: "13px",
               fontWeight: "800",
               cursor: "pointer"
             }}
@@ -107,111 +103,116 @@ export default function ThanksPage() {
             href="/"
             className="awsmd-btn-glow"
             style={{
-              background: "rgba(255, 255, 255, 0.1)",
-              color: "#ffffff",
-              padding: "8px 20px",
+              background: "#f1f5f9",
+              color: "#0f111a",
+              padding: "10px 22px",
               borderRadius: "50px",
-              fontSize: "13.5px",
+              fontSize: "14px",
               fontWeight: "800",
-              textDecoration: "none",
-              border: "1px solid rgba(255, 255, 255, 0.15)"
+              textDecoration: "none"
             }}
           >
-            ← {lang === "AR" ? "العودة للرئيسية" : "Back to Home"}
+            + {lang === "AR" ? "كن عميلاً" : "Become a Client"}
           </Link>
         </div>
       </div>
 
-      {/* CENTER LUXURY AWSMD THANK YOU CARD WITH 3D JELLYFISH MODEL */}
-      <div style={{ margin: "auto", maxWidth: "720px", textAlign: "center", padding: "40px 20px", zIndex: 10 }}>
-        {/* INTERACTIVE 3D JELLYFISH CANVAS */}
-        <div style={{ marginBottom: "24px", position: "relative" }}>
-          <JellyfishViewer size={260} />
-          <div
+      {/* MAIN HERO CONTENT (MATCHING AWSMD SCREENSHOT) */}
+      <div style={{ margin: "auto 0", maxWidth: "680px", textAlign: lang === "AR" ? "right" : "left", zIndex: 10, padding: "40px 0" }}>
+        {/* HUGE TITLE WITH INLINE 3D SPINNING TOP VIDEO */}
+        <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap", marginBottom: "28px" }}>
+          <h1
             style={{
-              marginTop: "12px",
-              display: "inline-block",
-              background: "rgba(37, 99, 235, 0.15)",
-              border: "1px solid rgba(96, 165, 250, 0.35)",
-              color: "#93c5fd",
-              fontSize: "13px",
-              fontWeight: "700",
-              padding: "4px 16px",
-              borderRadius: "50px",
-              backdropFilter: "blur(8px)"
+              fontSize: "clamp(56px, 9.5vw, 110px)",
+              fontWeight: "900",
+              color: "#0f111a",
+              lineHeight: "1.0",
+              letterSpacing: "-0.03em",
+              margin: 0
             }}
           >
-            🪼 3D Blender Model: jellyfish0.glb
+            {lang === "AR" ? "شكراً لك !" : "Thank You !"}
+          </h1>
+
+          {/* INLINE 3D SPINNING ELEMENT VIDEO */}
+          <div
+            style={{
+              width: "70px",
+              height: "70px",
+              borderRadius: "50%",
+              overflow: "hidden",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <video
+              src="/media/volchek-color.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
           </div>
         </div>
 
-        <h1
-          style={{
-            fontSize: "clamp(48px, 9vw, 92px)",
-            fontWeight: "900",
-            color: "#ffffff",
-            lineHeight: "1.05",
-            letterSpacing: "-0.02em",
-            marginBottom: "20px"
-          }}
-        >
-          {lang === "AR" ? "شكراً لك !" : "Thank You !"}
-        </h1>
-
+        {/* SUBTITLE */}
         <p
           style={{
-            fontSize: "clamp(20px, 3.5vw, 28px)",
+            fontSize: "clamp(22px, 3.5vw, 30px)",
             fontWeight: "800",
-            color: "#60a5fa",
-            marginBottom: "15px",
-            lineHeight: "1.3"
+            color: "#0f111a",
+            marginBottom: "16px",
+            lineHeight: "1.25"
           }}
         >
-          {lang === "AR" ? "تم إرسال طلبك بنجاح 😉" : "Your request has been successfully sent 😉"}
+          {lang === "AR" ? "تم إرسال طلبك بنجاح 😉" : "Your request has been successfully sent 🫡"}
         </p>
 
+        {/* DESCRIPTION */}
         <p
           style={{
-            fontSize: "clamp(15px, 2vw, 18px)",
-            color: "#94a3b8",
-            lineHeight: "1.7",
-            fontWeight: "600",
-            maxWidth: "580px",
-            margin: "0 auto 40px auto"
+            fontSize: "clamp(16px, 2vw, 19px)",
+            color: "#64748b",
+            lineHeight: "1.65",
+            fontWeight: "500",
+            maxWidth: "540px",
+            margin: "0 0 36px 0"
           }}
         >
           {lang === "AR"
             ? "انتظر رداً. وسوف يتم التواصل معك خلال الـ 24 ساعة القادمة."
-            : "Wait for a response. We will contact you within the next 24 hours."}
+            : "Wait for a response from our manager. If the manager didn't answer, he will contact you within the next 24 hours."}
         </p>
 
+        {/* CTA BUTTON */}
         <Link
           href="/"
           className="awsmd-btn-glow"
           style={{
-            background: "linear-gradient(135deg, #2563eb 0%, #4f46e5 100%)",
+            background: "#2563eb",
             color: "#ffffff",
-            padding: "16px 38px",
+            padding: "16px 36px",
             borderRadius: "50px",
-            fontSize: "16px",
+            fontSize: "15.5px",
             fontWeight: "800",
             textDecoration: "none",
-            boxShadow: "0 12px 35px rgba(37, 99, 235, 0.45)",
-            display: "inline-block",
-            border: "1px solid rgba(255, 255, 255, 0.2)"
+            boxShadow: "0 10px 30px rgba(37, 99, 235, 0.35)",
+            display: "inline-block"
           }}
         >
-          {lang === "AR" ? "تصفح بقية الأقسام" : "Explore Portfolio"}
+          ← {lang === "AR" ? "تصفح بقية الأقسام" : "Explore Portfolio"}
         </Link>
       </div>
 
-      {/* FOOTER INFO */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(255, 255, 255, 0.08)", paddingTop: "20px", width: "100%", zIndex: 10 }}>
-        <span style={{ fontSize: "13px", color: "#64748b", fontWeight: "700" }}>© 2026 Haider Mohamed Shwkat</span>
+      {/* FOOTER INFO (AWSMD EXACT FOOTER LAYOUT) */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", width: "100%", zIndex: 10, paddingTop: "20px" }}>
+        <span style={{ fontSize: "14px", color: "#0f111a", fontWeight: "800" }}>© 2026 Haider Mohamed Shwkat</span>
         
-        <div style={{ textAlign: "right" }}>
-          <span style={{ fontSize: "12px", color: "#64748b", display: "block", fontWeight: "700" }}>Stay In Touch</span>
-          <a href="mailto:haider.m.shwkat@outlook.com" style={{ fontSize: "14px", color: "#60a5fa", fontWeight: "800", textDecoration: "none" }}>
+        <div style={{ textAlign: lang === "AR" ? "left" : "right" }}>
+          <span style={{ fontSize: "12px", color: "#94a3b8", display: "block", fontWeight: "700", marginBottom: "4px" }}>Stay In Touch</span>
+          <a href="mailto:haider.m.shwkat@outlook.com" style={{ fontSize: "14px", color: "#64748b", fontWeight: "700", textDecoration: "none" }}>
             haider.m.shwkat@outlook.com
           </a>
         </div>
