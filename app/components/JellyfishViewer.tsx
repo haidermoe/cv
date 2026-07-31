@@ -46,9 +46,9 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera (explicitly positioned at z = 5)
-    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-    camera.position.set(0, 0, 5);
+    // 2. Camera (explicitly positioned at z = 5.5 to prevent top/bottom clipping)
+    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 1000);
+    camera.position.set(0, 0, 5.5);
 
     // 3. Renderer with transparent background
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -175,7 +175,7 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
 
                 const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
                 if (isFinite(maxDim) && maxDim > 0) {
-                  const scale = 3.6 / maxDim;
+                  const scale = 2.7 / maxDim;
                   loadedModel.scale.setScalar(scale);
                 }
 
@@ -222,8 +222,8 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
       if (mixer) mixer.update(delta);
 
       if (loadedModel) {
-        // Floating Y animation (organic breathing)
-        loadedModel.position.y = Math.sin(elapsedTime * 1.5) * 0.12;
+        // Floating Y animation (organic breathing) - shifted safely down so top head is NEVER clipped
+        loadedModel.position.y = -0.2 + Math.sin(elapsedTime * 1.5) * 0.1;
 
         // Smooth Lerp Rotation to follow mouse position
         loadedModel.rotation.y += (targetRotationY - loadedModel.rotation.y) * 0.05;
