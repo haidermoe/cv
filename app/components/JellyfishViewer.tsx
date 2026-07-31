@@ -10,6 +10,11 @@ interface JellyfishViewerProps {
   size?: number;
 }
 
+// Eagerly trigger fetch for /jellyfish0.glb at module load time (0ms latency!)
+if (typeof window !== "undefined") {
+  fetch("/jellyfish0.glb", { cache: "force-cache" }).catch(() => {});
+}
+
 export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
