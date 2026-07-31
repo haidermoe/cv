@@ -1564,16 +1564,6 @@ ul {
   }
 }
 
-@media (max-width: 768px) {
-  .awsmd-top-actions {
-    top: 10px !important;
-    right: 10px !important;
-    left: 10px !important;
-    justify-content: flex-end !important;
-    gap: 4px !important;
-  }
-}
-
 /* NOOMO LABS SPACE FLOATING WEIGHTLESS ANIMATIONS */
 @keyframes spatialFloatSlow {
   0% {
@@ -1611,6 +1601,15 @@ ul {
   animation: spatialFloatMedium 6.5s ease-in-out infinite !important;
   will-change: transform !important;
 }
+
+@media (max-width: 768px) {
+  .awsmd-top-actions {
+    top: 10px !important;
+    right: 10px !important;
+    left: 10px !important;
+    justify-content: flex-end !important;
+    gap: 4px !important;
+  }
   
   .awsmd-top-actions button {
     padding: 6px 10px !important;
