@@ -91,7 +91,28 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
       (gltf) => {
         loadedModel = gltf.scene;
 
-        // Traverse meshes and ensure DoubleSide and depthWrite
+        // Remove Blender work placeholders & giant 10,000x rings (Work_1_Empty, Work_2_Empty)
+        const objectsToRemove: THREE.Object3D[] = [];
+        loadedModel.traverse((child) => {
+          const name = child.name || "";
+          if (
+            name.includes("Work_") ||
+            name.includes("Camera_target") ||
+            name.includes("Empty_Words") ||
+            name.includes("Sphere_From") ||
+            name.includes("NoomoLabs")
+          ) {
+            objectsToRemove.push(child);
+          }
+        });
+
+        objectsToRemove.forEach((obj) => {
+          if (obj.parent) {
+            obj.parent.remove(obj);
+          }
+        });
+
+        // Traverse remaining Jellyfish meshes and ensure DoubleSide and visible materials
         loadedModel.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
@@ -106,7 +127,7 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
           }
         });
 
-        // Center and auto-scale model to fit container cleanly
+        // Center and auto-scale ONLY the 3-layer Jellyfish model to fit canvas cleanly
         const box = new THREE.Box3().setFromObject(loadedModel);
         const center = box.getCenter(new THREE.Vector3());
         const boxSize = box.getSize(new THREE.Vector3());
