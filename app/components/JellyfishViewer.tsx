@@ -66,43 +66,21 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
     controls.dampingFactor = 0.05;
     controls.enableZoom = false;
 
-    // 5. Iridescent Ambient & Directional Rim Lighting (Noomo Labs Bioluminescent Look)
-    const ambientLight = new THREE.AmbientLight(0xffffff, 2.5);
+    // 5. Balanced Studio Lighting for Rich Deep Textures
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
     scene.add(ambientLight);
 
-    const dirLight1 = new THREE.DirectionalLight(0xffffff, 2.8);
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.5);
     dirLight1.position.set(5, 10, 7);
     scene.add(dirLight1);
 
-    const rimLightPink = new THREE.DirectionalLight(0xe087ff, 4.5);
-    rimLightPink.position.set(6, 4, 5);
-    scene.add(rimLightPink);
+    const dirLight2 = new THREE.DirectionalLight(0x60a5fa, 1.2);
+    dirLight2.position.set(-5, -5, -5);
+    scene.add(dirLight2);
 
-    const rimLightCyan = new THREE.DirectionalLight(0x00f0ff, 4.5);
-    rimLightCyan.position.set(-6, -4, 5);
-    scene.add(rimLightCyan);
-
-    const pointLight = new THREE.PointLight(0xa855f7, 6, 18);
-    pointLight.position.set(0, 0, 3);
+    const pointLight = new THREE.PointLight(0xa855f7, 2.0, 15);
+    pointLight.position.set(0, 2, 4);
     scene.add(pointLight);
-
-    // Create Noomo Labs Iridescent Reflection Environment Map
-    const envCanvas = document.createElement("canvas");
-    envCanvas.width = 256;
-    envCanvas.height = 256;
-    const envCtx = envCanvas.getContext("2d");
-    if (envCtx) {
-      const grad = envCtx.createLinearGradient(0, 0, 0, 256);
-      grad.addColorStop(0, "#ffffff");
-      grad.addColorStop(0.3, "#e087ff");
-      grad.addColorStop(0.65, "#00f0ff");
-      grad.addColorStop(1, "#1d4ed8");
-      envCtx.fillStyle = grad;
-      envCtx.fillRect(0, 0, 256, 256);
-    }
-    const envTexture = new THREE.CanvasTexture(envCanvas);
-    envTexture.mapping = THREE.EquirectangularReflectionMapping;
-    scene.environment = envTexture;
 
     // 6. Direct native fetch & GLTFLoader parse (100% reliable Network request & zero worker security errors)
     const loader = new GLTFLoader();
@@ -160,7 +138,7 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
                   }
                 });
 
-                // Upgrade Materials to Noomo Labs Iridescent Glass Physical Material with full Normal Map & Emissive Glow
+                // Preserve & Enhance original Tripo3D GLTF materials with full texture maps & rich colors
                 loadedModel.traverse((child) => {
                   if ((child as THREE.Mesh).isMesh) {
                     const mesh = child as THREE.Mesh;
@@ -168,38 +146,24 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
                     mesh.receiveShadow = true;
 
                     if (mesh.material) {
-                      const oldMat = (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material) as THREE.MeshStandardMaterial;
+                      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+                      materials.forEach((mat) => {
+                        mat.side = THREE.DoubleSide;
+                        mat.depthWrite = true;
+                        mat.depthTest = true;
+                        mat.needsUpdate = true;
 
-                      if (oldMat.map) oldMat.map.colorSpace = THREE.SRGBColorSpace;
-                      if (oldMat.normalMap) oldMat.normalMap.colorSpace = THREE.NoColorSpace;
-                      if (oldMat.emissiveMap) oldMat.emissiveMap.colorSpace = THREE.SRGBColorSpace;
-
-                      const physicalMat = new THREE.MeshPhysicalMaterial({
-                        map: oldMat.map || null,
-                        normalMap: oldMat.normalMap || null,
-                        normalScale: new THREE.Vector2(1.8, 1.8),  // Deep 3D surface ripples
-                        roughnessMap: oldMat.roughnessMap || null,
-                        emissiveMap: oldMat.emissiveMap || oldMat.map || null,
-                        emissive: new THREE.Color(0x381045),      // Rich neon purple/violet inner glow
-                        emissiveIntensity: 0.5,
-                        color: new THREE.Color(0xffffff),
-                        transmission: 0.05,                       // Solid, rich, vibrant non-ghost body!
-                        opacity: 1.0,
-                        transparent: false,
-                        ior: 1.45,
-                        roughness: 0.2,                           // Shiny polished surface with normal map ripples
-                        metalness: 0.05,
-                        clearcoat: 1.0,                           // Glossy outer skin varnish
-                        clearcoatRoughness: 0.08,
-                        iridescence: 0.85,                        // MAGICAL RAINBOW SOAP-BUBBLE CHROMATIC SHINE!
-                        iridescenceIOR: 1.35,
-                        iridescenceThicknessRange: [100, 400],
-                        side: THREE.DoubleSide,
-                        depthWrite: true,
-                        depthTest: true
+                        const stdMat = mat as THREE.MeshStandardMaterial;
+                        if (stdMat.map) {
+                          stdMat.map.colorSpace = THREE.SRGBColorSpace;
+                          stdMat.map.needsUpdate = true;
+                        }
+                        if (stdMat.normalMap) {
+                          stdMat.normalMap.needsUpdate = true;
+                        }
+                        stdMat.roughness = 0.3;
+                        stdMat.metalness = 0.05;
                       });
-
-                      mesh.material = physicalMat;
                     }
                   }
                 });
