@@ -32,14 +32,16 @@ export default function ThanksPage() {
       setCircleActive(true);
     });
 
+    // Slow, smooth cinematic expansion (700ms)
     setTimeout(() => {
       setLang((prev) => (prev === "AR" ? "EN" : "AR"));
       setCircleActive(false);
 
+      // Slow, smooth contraction back to tab (700ms)
       setTimeout(() => {
         setIsLangAnimating(false);
-      }, 380);
-    }, 380);
+      }, 700);
+    }, 700);
   };
 
   React.useEffect(() => {
@@ -101,7 +103,7 @@ export default function ThanksPage() {
             clipPath: circleActive
               ? `circle(150vmax at ${langOrigin.x}px ${langOrigin.y}px)`
               : `circle(0px at ${langOrigin.x}px ${langOrigin.y}px)`,
-            transition: "clip-path 0.38s cubic-bezier(0.4, 0, 0.2, 1)",
+            transition: "clip-path 0.7s cubic-bezier(0.76, 0, 0.24, 1)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center"
