@@ -12,10 +12,8 @@ interface JellyfishViewerProps {
 export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     const container = containerRef.current;
     if (!container) return;
 
@@ -233,19 +231,6 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
       if (container) container.innerHTML = "";
     };
   }, [size]);
-
-  if (!mounted) {
-    return (
-      <div
-        style={{
-          width: `${size}px`,
-          height: `${size}px`,
-          margin: "0 auto",
-          background: "transparent"
-        }}
-      />
-    );
-  }
 
   return (
     <div
