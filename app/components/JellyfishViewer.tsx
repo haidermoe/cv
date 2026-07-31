@@ -126,9 +126,22 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
               const mesh = child as THREE.Mesh;
               if (mesh.material) {
                 const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-                materials.forEach((mat) => {
+                materials.forEach((mat: any) => {
                   mat.side = THREE.DoubleSide;
                   mat.depthWrite = true;
+                  mat.depthTest = true;
+
+                  // Ensure material is 100% visible even if GLTF BLEND mode has low opacity
+                  if (mat.opacity !== undefined && mat.opacity < 0.3) {
+                    mat.opacity = 0.95;
+                  }
+
+                  // Add vibrant royal blue emissive glow
+                  if (mat.emissive) {
+                    mat.emissive = new THREE.Color(0x2563eb);
+                    mat.emissiveIntensity = 0.4;
+                  }
+
                   mat.needsUpdate = true;
                 });
               }
