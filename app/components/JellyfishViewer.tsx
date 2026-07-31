@@ -66,20 +66,24 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
     controls.dampingFactor = 0.05;
     controls.enableZoom = false;
 
-    // 5. Ambient & Directional Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 2.8);
+    // 5. Iridescent Ambient & Directional Rim Lighting (Noomo Labs Bioluminescent Look)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 2.5);
     scene.add(ambientLight);
 
-    const dirLight1 = new THREE.DirectionalLight(0xffffff, 2.2);
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 2.5);
     dirLight1.position.set(5, 10, 7);
     scene.add(dirLight1);
 
-    const dirLight2 = new THREE.DirectionalLight(0x60a5fa, 2.5);
-    dirLight2.position.set(-5, -5, -5);
-    scene.add(dirLight2);
+    const rimLightPink = new THREE.DirectionalLight(0xe087ff, 3.8);
+    rimLightPink.position.set(6, 4, 5);
+    scene.add(rimLightPink);
 
-    const pointLight = new THREE.PointLight(0x8b5cf6, 4, 12);
-    pointLight.position.set(0, 0, 2);
+    const rimLightCyan = new THREE.DirectionalLight(0x00f0ff, 3.8);
+    rimLightCyan.position.set(-6, -4, 5);
+    scene.add(rimLightCyan);
+
+    const pointLight = new THREE.PointLight(0xa855f7, 5, 15);
+    pointLight.position.set(0, 0, 3);
     scene.add(pointLight);
 
     // 6. Direct native fetch & GLTFLoader parse (100% reliable Network request & zero worker security errors)
