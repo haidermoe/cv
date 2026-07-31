@@ -12,8 +12,15 @@ export default function ThanksPage() {
   const [lang, setLang] = useState<"AR" | "EN">("EN");
   const [jellyColor, setJellyColor] = useState<string | null>("#ff007f"); // Default to Neon Pink matching Noomo Labs screenshot!
   const [matMode, setMatMode] = useState<"solid" | "glass" | "wireframe">("solid");
-  const [isCustomizerOpen, setIsCustomizerOpen] = useState(true);
+  const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  // Open customizer by default ONLY on desktop screens (>768px)
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth > 768) {
+      setIsCustomizerOpen(true);
+    }
+  }, []);
 
   // Circular Language Transition Ripple State
   const [isLangAnimating, setIsLangAnimating] = useState(false);
@@ -85,7 +92,7 @@ export default function ThanksPage() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        padding: "32px clamp(20px, 6vw, 80px)",
+        padding: "20px clamp(16px, 5vw, 80px)",
         position: "relative",
         fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif",
         overflow: "hidden"
@@ -152,8 +159,8 @@ export default function ThanksPage() {
       {/* TOP HEADER BAR */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", zIndex: 30 }}>
         {/* LOGO */}
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", color: "#0f111a", fontSize: "22px", fontWeight: "900" }}>
-          <svg width="24" height="20" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none", color: "#0f111a", fontSize: "clamp(16px, 4.5vw, 22px)", fontWeight: "900" }}>
+          <svg width="22" height="18" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="7" y="1" width="8" height="10" fill="#0f111a"/>
             <rect x="0" y="13" width="16" height="7" fill="#0f111a"/>
             <rect x="10" y="13" width="15" height="7" fill="#4f46e5"/>
@@ -202,7 +209,7 @@ export default function ThanksPage() {
         </div>
 
         {/* RIGHT TOP ACTIONS */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <button
             onClick={handleLangSwitch}
             className="awsmd-btn-glow"
@@ -210,9 +217,9 @@ export default function ThanksPage() {
               background: "#ffffff",
               border: "1.5px solid #e2e8f0",
               color: "#0f111a",
-              padding: "10px 18px",
+              padding: "8px 14px",
               borderRadius: "50px",
-              fontSize: "13.5px",
+              fontSize: "12.5px",
               fontWeight: "800",
               cursor: "pointer"
             }}
@@ -223,8 +230,8 @@ export default function ThanksPage() {
           <Link href="/" className="awsmd-royal-client-btn">
             <span className="flip-box">
               <span className="flip-wrapper">
-                <span className="flip-text-primary">+ {lang === "AR" ? "كن عميلاً" : "Become a Client"}</span>
-                <span className="flip-text-secondary">+ {lang === "AR" ? "كن عميلاً" : "Become a Client"}</span>
+                <span className="flip-text-primary">+ {lang === "AR" ? "عميل" : "Client"}</span>
+                <span className="flip-text-secondary">+ {lang === "AR" ? "عميل" : "Client"}</span>
               </span>
             </span>
           </Link>
@@ -273,7 +280,7 @@ export default function ThanksPage() {
             top: "42%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            fontSize: "clamp(85px, 15vw, 210px)",
+            fontSize: "clamp(44px, 12vw, 210px)",
             fontWeight: "900",
             color: "#0f111a",
             letterSpacing: "-0.04em",
@@ -375,7 +382,8 @@ export default function ThanksPage() {
               display: "flex",
               flexDirection: "column",
               gap: "14px",
-              minWidth: "250px"
+              minWidth: "250px",
+              maxWidth: "calc(100vw - 32px)"
             }}
           >
             {/* COLOR PALETTE GRID */}
