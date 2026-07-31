@@ -1117,7 +1117,8 @@ ul {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 12px 28px !important;
+  padding: 0 28px !important;
+  height: 48px !important;
   font-size: 15px !important;
   font-weight: 800 !important;
   border-radius: 50px !important;
@@ -1130,6 +1131,11 @@ ul {
   cursor: pointer !important;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04) !important;
   transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.2s ease !important;
+}
+
+.awsmd-royal-client-btn .flip-wrapper {
+  height: 24px !important;
+  overflow: hidden !important;
 }
 
 .awsmd-royal-client-btn::before {
