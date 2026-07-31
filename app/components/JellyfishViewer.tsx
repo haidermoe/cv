@@ -177,24 +177,23 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
                       const physicalMat = new THREE.MeshPhysicalMaterial({
                         map: oldMat.map || null,
                         normalMap: oldMat.normalMap || null,
-                        normalScale: new THREE.Vector2(1.5, 1.5),  // Deep 3D surface ripples
+                        normalScale: new THREE.Vector2(1.8, 1.8),  // Deep 3D surface ripples
                         roughnessMap: oldMat.roughnessMap || null,
                         emissiveMap: oldMat.emissiveMap || oldMat.map || null,
-                        emissive: new THREE.Color(0xd8b4fe),      // Neon purple bioluminescent glow
-                        emissiveIntensity: 0.7,
+                        emissive: new THREE.Color(0x381045),      // Rich neon purple/violet inner glow
+                        emissiveIntensity: 0.5,
                         color: new THREE.Color(0xffffff),
-                        transmission: 0.78,                       // Glass/water translucency & refraction
-                        opacity: 0.98,
-                        transparent: true,
-                        ior: 1.48,                                // Index of refraction
-                        roughness: 0.15,                          // Polished smooth glass sheen with normal map ripples
-                        metalness: 0.1,
-                        clearcoat: 1.0,                           // Glossy outer skin coat
+                        transmission: 0.05,                       // Solid, rich, vibrant non-ghost body!
+                        opacity: 1.0,
+                        transparent: false,
+                        ior: 1.45,
+                        roughness: 0.2,                           // Shiny polished surface with normal map ripples
+                        metalness: 0.05,
+                        clearcoat: 1.0,                           // Glossy outer skin varnish
                         clearcoatRoughness: 0.08,
-                        iridescence: 1.0,                         // MAGICAL RAINBOW SOAP-BUBBLE CHROMATIC SHINE!
-                        iridescenceIOR: 1.38,
+                        iridescence: 0.85,                        // MAGICAL RAINBOW SOAP-BUBBLE CHROMATIC SHINE!
+                        iridescenceIOR: 1.35,
                         iridescenceThicknessRange: [100, 400],
-                        thickness: 1.5,
                         side: THREE.DoubleSide,
                         depthWrite: true,
                         depthTest: true
