@@ -252,9 +252,23 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
         });
     };
 
-    fetchAndParse(0);
+    // 6 Color Spectrums with 6 Gradient Shades each (36 curated neon hues total!)
+    const NEON_PALETTES = [
+      // 1. Neon Pink & Rose Spectrum
+      "#ff007f", "#f43f5e", "#ec4899", "#d946ef", "#e879f9", "#f472b6",
+      // 2. Cyber Cyan & Turquoise Spectrum
+      "#00f0ff", "#06b6d4", "#0891b2", "#38bdf8", "#22d3ee", "#67e8f9",
+      // 3. Electric Violet & Purple Spectrum
+      "#a855f7", "#8b5cf6", "#7c3aed", "#6d28d9", "#c084fc", "#9333ea",
+      // 4. Royal Sapphire & Indigo Spectrum
+      "#2563eb", "#3b82f6", "#6366f1", "#4f46e5", "#4338ca", "#818cf8",
+      // 5. Emerald Bioluminescence & Mint Spectrum
+      "#10b981", "#059669", "#34d399", "#00ff9d", "#14b8a6", "#2dd4bf",
+      // 6. Golden Amber & Sunset Orange Spectrum
+      "#f59e0b", "#fbbf24", "#f97316", "#ff0055", "#eab308", "#fb7185"
+    ];
 
-    // 7. Animation Loop with autonomous weightless deep space floating
+    // 7. Animation Loop with autonomous weightless floating & dynamic bioluminescent neon morphing
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
       const delta = clock.getDelta();
@@ -263,10 +277,43 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
       if (mixer) mixer.update(delta);
 
       if (loadedModel) {
-        // Pure vertical floating motion - 100% straight & upright (0 degree tilt)
-        loadedModel.position.y = -0.18 + Math.sin(elapsedTime * 1.2) * 0.12;
+        // Pure vertical floating motion with contraction pulse
+        const pulse = Math.sin(elapsedTime * 1.2);
+        loadedModel.position.y = -0.18 + pulse * 0.12;
         loadedModel.position.x = 0;
         loadedModel.rotation.set(0, 0, 0);
+
+        // Smooth color morphing across 6 spectrums (36 shades)
+        const totalColors = NEON_PALETTES.length;
+        const colorProgress = (elapsedTime * 0.22) % totalColors;
+        const index1 = Math.floor(colorProgress);
+        const index2 = (index1 + 1) % totalColors;
+        const factor = colorProgress - index1;
+
+        const c1 = new THREE.Color(NEON_PALETTES[index1]);
+        const c2 = new THREE.Color(NEON_PALETTES[index2]);
+        const currentColor = c1.clone().lerp(c2, factor);
+
+        // Apply dynamic emissive glow synced with contraction pulse
+        loadedModel.traverse((child) => {
+          if ((child as THREE.Mesh).isMesh) {
+            const mesh = child as THREE.Mesh;
+            if (mesh.material) {
+              const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+              materials.forEach((mat) => {
+                const stdMat = mat as THREE.MeshStandardMaterial;
+                stdMat.color = new THREE.Color(0xffffff); // 100% preserve texture map!
+                stdMat.emissive = currentColor;
+                stdMat.emissiveIntensity = 0.5 + Math.abs(pulse) * 0.22;
+              });
+            }
+          }
+        });
+
+        if (pointLightRef.current) {
+          pointLightRef.current.color = currentColor;
+          pointLightRef.current.intensity = 1.8 + Math.abs(pulse) * 0.7;
+        }
       }
 
       controls.update();
