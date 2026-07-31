@@ -174,11 +174,18 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
 
                 scene.add(loadedModel);
 
-                // Handle embedded Blender animations if present
+                // Handle embedded Blender animations if present (filtering out root position and scale drift)
                 if (gltf.animations && gltf.animations.length > 0) {
                   mixer = new THREE.AnimationMixer(loadedModel);
                   gltf.animations.forEach((clip) => {
-                    mixer?.clipAction(clip).play();
+                    clip.tracks = clip.tracks.filter((track) => {
+                      const name = track.name.toLowerCase();
+                      return !name.endsWith(".position") && !name.endsWith(".scale");
+                    });
+
+                    if (clip.tracks.length > 0) {
+                      mixer?.clipAction(clip).play();
+                    }
                   });
                 }
               } catch (err) {
