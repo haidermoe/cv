@@ -178,9 +178,9 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
                         }
 
                         if (customColor) {
-                          stdMat.color = new THREE.Color(customColor);
+                          stdMat.color = new THREE.Color(0xffffff); // Preserve texture map 100% intact
                           stdMat.emissive = new THREE.Color(customColor);
-                          stdMat.emissiveIntensity = 0.45;
+                          stdMat.emissiveIntensity = 0.55;
                         } else {
                           stdMat.color = new THREE.Color(0xffffff);
                           stdMat.emissive = new THREE.Color(0x000000);
@@ -301,9 +301,9 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
             }
 
             if (customColor) {
-              stdMat.color = new THREE.Color(customColor);
+              stdMat.color = new THREE.Color(0xffffff); // Preserve texture map 100% intact!
               stdMat.emissive = new THREE.Color(customColor);
-              stdMat.emissiveIntensity = 0.45;
+              stdMat.emissiveIntensity = 0.55;
             } else {
               stdMat.color = new THREE.Color(0xffffff);
               stdMat.emissive = new THREE.Color(0x000000);
