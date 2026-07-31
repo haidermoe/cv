@@ -50,9 +50,9 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera (explicitly positioned at z = 5.5 to prevent top/bottom clipping)
+    // 2. Camera (positioned at z = 6.2 to guarantee zero edge clipping)
     const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 1000);
-    camera.position.set(0, 0, 5.5);
+    camera.position.set(0, 0, 6.2);
 
     // 3. Renderer with transparent background
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -202,7 +202,7 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
 
                 const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
                 if (isFinite(maxDim) && maxDim > 0) {
-                  const scale = 3.6 / maxDim; // Giant towering scale matching Noomo Labs screenshot!
+                  const scale = 2.9 / maxDim; // Perfectly sized without any edge truncation!
                   loadedModel.scale.setScalar(scale);
                 }
 
