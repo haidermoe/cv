@@ -86,76 +86,86 @@ export default function JellyfishViewer({ size = 320 }: JellyfishViewerProps) {
 
     // 6. Load GLTF Model directly from /public/jellyfish0.glb
     const loader = new GLTFLoader();
+    const safetyTimeout = setTimeout(() => {
+      setLoading(false);
+    }, 6000);
+
     loader.load(
       "/jellyfish0.glb",
       (gltf) => {
-        loadedModel = gltf.scene;
-
-        // Remove Blender work placeholders & giant 10,000x rings (Work_1_Empty, Work_2_Empty)
-        const objectsToRemove: THREE.Object3D[] = [];
-        loadedModel.traverse((child) => {
-          const name = child.name || "";
-          if (
-            name.includes("Work_") ||
-            name.includes("Camera_target") ||
-            name.includes("Empty_Words") ||
-            name.includes("Sphere_From") ||
-            name.includes("NoomoLabs")
-          ) {
-            objectsToRemove.push(child);
-          }
-        });
-
-        objectsToRemove.forEach((obj) => {
-          if (obj.parent) {
-            obj.parent.remove(obj);
-          }
-        });
-
-        // Traverse remaining Jellyfish meshes and ensure DoubleSide and visible materials
-        loadedModel.traverse((child) => {
-          if ((child as THREE.Mesh).isMesh) {
-            const mesh = child as THREE.Mesh;
-            if (mesh.material) {
-              const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-              materials.forEach((mat) => {
-                mat.side = THREE.DoubleSide;
-                mat.depthWrite = true;
-                mat.needsUpdate = true;
-              });
-            }
-          }
-        });
-
-        // Center and auto-scale ONLY the 3-layer Jellyfish model to fit canvas cleanly
-        const box = new THREE.Box3().setFromObject(loadedModel);
-        const center = box.getCenter(new THREE.Vector3());
-        const boxSize = box.getSize(new THREE.Vector3());
-
-        if (isFinite(center.x) && isFinite(center.y) && isFinite(center.z)) {
-          loadedModel.position.sub(center);
-        }
-
-        const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
-        if (isFinite(maxDim) && maxDim > 0) {
-          const scale = 2.8 / maxDim;
-          loadedModel.scale.setScalar(scale);
-        }
-
-        scene.add(loadedModel);
-
-        // Handle embedded Blender animations if present
-        if (gltf.animations && gltf.animations.length > 0) {
-          mixer = new THREE.AnimationMixer(loadedModel);
-          gltf.animations.forEach((clip) => {
-            mixer?.clipAction(clip).play();
-          });
-        }
-
+        clearTimeout(safetyTimeout);
         setLoading(false);
+
+        try {
+          loadedModel = gltf.scene;
+
+          // Remove Blender work placeholders if present
+          const objectsToRemove: THREE.Object3D[] = [];
+          loadedModel.traverse((child) => {
+            const name = child.name || "";
+            if (
+              name.includes("Work_") ||
+              name.includes("Camera_target") ||
+              name.includes("Empty_Words") ||
+              name.includes("Sphere_From") ||
+              name.includes("NoomoLabs")
+            ) {
+              objectsToRemove.push(child);
+            }
+          });
+
+          objectsToRemove.forEach((obj) => {
+            if (obj.parent) {
+              obj.parent.remove(obj);
+            }
+          });
+
+          // Traverse remaining Jellyfish meshes and ensure DoubleSide and visible materials
+          loadedModel.traverse((child) => {
+            if ((child as THREE.Mesh).isMesh) {
+              const mesh = child as THREE.Mesh;
+              if (mesh.material) {
+                const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+                materials.forEach((mat) => {
+                  mat.side = THREE.DoubleSide;
+                  mat.depthWrite = true;
+                  mat.needsUpdate = true;
+                });
+              }
+            }
+          });
+
+          // Center and auto-scale ONLY the 3-layer Jellyfish model to fit canvas cleanly
+          const box = new THREE.Box3().setFromObject(loadedModel);
+          const center = box.getCenter(new THREE.Vector3());
+          const boxSize = box.getSize(new THREE.Vector3());
+
+          if (isFinite(center.x) && isFinite(center.y) && isFinite(center.z)) {
+            loadedModel.position.sub(center);
+          }
+
+          const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
+          if (isFinite(maxDim) && maxDim > 0) {
+            const scale = 2.8 / maxDim;
+            loadedModel.scale.setScalar(scale);
+          }
+
+          scene.add(loadedModel);
+
+          // Handle embedded Blender animations if present
+          if (gltf.animations && gltf.animations.length > 0) {
+            mixer = new THREE.AnimationMixer(loadedModel);
+            gltf.animations.forEach((clip) => {
+              mixer?.clipAction(clip).play();
+            });
+          }
+        } catch (err) {
+          console.error("Error processing GLTF scene:", err);
+        }
       },
       undefined,
       (error) => {
+        clearTimeout(safetyTimeout);
         console.error("Error loading /jellyfish0.glb:", error);
         setLoading(false);
       }
