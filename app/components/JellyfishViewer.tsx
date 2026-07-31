@@ -302,8 +302,10 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
               const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
               materials.forEach((mat) => {
                 const stdMat = mat as THREE.MeshStandardMaterial;
-                stdMat.emissive.copy(currentColor);
-                stdMat.emissiveIntensity = 0.5 + Math.abs(pulse) * 0.22;
+                if (stdMat.emissive) {
+                  stdMat.emissive.copy(currentColor);
+                  stdMat.emissiveIntensity = 0.5 + Math.abs(pulse) * 0.22;
+                }
               });
             }
           }
@@ -358,12 +360,16 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
 
             if (customColor) {
               stdMat.color = new THREE.Color(0xffffff); // Preserve texture map 100% intact!
-              stdMat.emissive = new THREE.Color(customColor);
-              stdMat.emissiveIntensity = 0.55;
+              if (stdMat.emissive) {
+                stdMat.emissive = new THREE.Color(customColor);
+                stdMat.emissiveIntensity = 0.55;
+              }
             } else {
               stdMat.color = new THREE.Color(0xffffff);
-              stdMat.emissive = new THREE.Color(0x000000);
-              stdMat.emissiveIntensity = 0;
+              if (stdMat.emissive) {
+                stdMat.emissive = new THREE.Color(0x000000);
+                stdMat.emissiveIntensity = 0;
+              }
             }
 
             stdMat.needsUpdate = true;
