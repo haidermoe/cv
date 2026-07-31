@@ -249,11 +249,10 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
       if (mixer) mixer.update(delta);
 
       if (loadedModel) {
-        // Autonomous weightless deep space floating & multi-axis breathing motion
-        loadedModel.position.y = -0.18 + Math.sin(elapsedTime * 1.3) * 0.16;
-        loadedModel.position.x = Math.cos(elapsedTime * 0.8) * 0.08;
-        loadedModel.rotation.z = Math.sin(elapsedTime * 0.6) * 0.05;
-        loadedModel.rotation.y = Math.sin(elapsedTime * 0.4) * 0.12;
+        // Pure vertical floating motion - 100% straight & upright (0 degree tilt)
+        loadedModel.position.y = -0.18 + Math.sin(elapsedTime * 1.2) * 0.12;
+        loadedModel.position.x = 0;
+        loadedModel.rotation.set(0, 0, 0);
       }
 
       controls.update();
