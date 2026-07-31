@@ -15,6 +15,33 @@ export default function ThanksPage() {
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(true);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
+  // Circular Language Transition Ripple State
+  const [isLangAnimating, setIsLangAnimating] = useState(false);
+  const [langOrigin, setLangOrigin] = useState({ x: 0, y: 0 });
+  const [circleActive, setCircleActive] = useState(false);
+
+  const handleLangSwitch = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (isLangAnimating) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    setLangOrigin({ x, y });
+    setIsLangAnimating(true);
+
+    requestAnimationFrame(() => {
+      setCircleActive(true);
+    });
+
+    setTimeout(() => {
+      setLang((prev) => (prev === "AR" ? "EN" : "AR"));
+      setCircleActive(false);
+
+      setTimeout(() => {
+        setIsLangAnimating(false);
+      }, 380);
+    }, 380);
+  };
+
   React.useEffect(() => {
     let animationFrameId: number;
     let targetX = 0;
@@ -30,8 +57,9 @@ export default function ThanksPage() {
     };
 
     const updateParallax = () => {
-      currentX += (targetX - currentX) * 0.05;
-      currentY += (targetY - currentY) * 0.05;
+      // Silky smooth inertia lerp factor 0.025 for ultra-professional fluid feel
+      currentX += (targetX - currentX) * 0.025;
+      currentY += (targetY - currentY) * 0.025;
       setMousePos({ x: currentX, y: currentY });
       animationFrameId = requestAnimationFrame(updateParallax);
     };
@@ -61,7 +89,39 @@ export default function ThanksPage() {
         overflow: "hidden"
       }}
     >
-      {/* 3D CONCAVE DOT GRID BACKGROUND LAYER WITH DYNAMIC MOUSE PARALLAX TILT */}
+      {/* CIRCULAR LANGUAGE RIPPLE TRANSITION OVERLAY */}
+      {isLangAnimating && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            pointerEvents: "none",
+            background: "#0f111a",
+            clipPath: circleActive
+              ? `circle(150vmax at ${langOrigin.x}px ${langOrigin.y}px)`
+              : `circle(0px at ${langOrigin.x}px ${langOrigin.y}px)`,
+            transition: "clip-path 0.38s cubic-bezier(0.4, 0, 0.2, 1)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <span
+            style={{
+              color: "#ffffff",
+              fontSize: "clamp(28px, 5vw, 42px)",
+              fontWeight: "900",
+              letterSpacing: "0.08em",
+              fontFamily: "'Outfit', sans-serif"
+            }}
+          >
+            {lang === "AR" ? "ENGLISH" : "العربية"}
+          </span>
+        </div>
+      )}
+
+      {/* 3D CONCAVE HIGH-DENSITY FINE DOT GRID BACKGROUND LAYER WITH SILKY MOUSE PARALLAX */}
       <div
         style={{
           position: "absolute",
@@ -76,8 +136,8 @@ export default function ThanksPage() {
           style={{
             width: "100%",
             height: "100%",
-            backgroundImage: "radial-gradient(rgba(15, 17, 26, 0.22) 2.5px, transparent 2.5px)",
-            backgroundSize: "36px 36px",
+            backgroundImage: "radial-gradient(rgba(15, 17, 26, 0.16) 1.5px, transparent 1.5px)",
+            backgroundSize: "20px 20px",
             transform: `perspective(1000px) rotateX(${16 + mousePos.y * 14}deg) rotateY(${mousePos.x * 16}deg) scale(1.25)`,
             transformOrigin: "center center",
             transition: "transform 0.08s linear",
@@ -142,7 +202,7 @@ export default function ThanksPage() {
         {/* RIGHT TOP ACTIONS */}
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <button
-            onClick={() => setLang(lang === "AR" ? "EN" : "AR")}
+            onClick={handleLangSwitch}
             className="awsmd-btn-glow"
             style={{
               background: "#ffffff",
