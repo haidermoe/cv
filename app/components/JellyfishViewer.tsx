@@ -253,9 +253,35 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
         });
     };
 
+    // Preload Desktop textur images into Three.js textures
+    const TEXTURE_PATHS = [
+      "/textures/jellyfish+3d+model_tripo_part_0_basecolor.jpg",
+      "/textures/jellyfish+3d+model_tripo_part_1_basecolor.jpg",
+      "/textures/jellyfish+3d+model_tripo_part_2_basecolor.jpg",
+      "/textures/jellyfish+3d+model_tripo_part_3_basecolor.jpg",
+      "/textures/jellyfish+3d+model_tripo_part_10_basecolor.jpg",
+      "/textures/jellyfish+3d+model_tripo_part_16_basecolor.jpg",
+      "/textures/jellyfish+3d+model_tripo_part_17_basecolor.jpg",
+      "/textures/jellyfish+3d+model_tripo_part_20_basecolor.jpg",
+      "/textures/jellyfish+3d+model_tripo_part_6_basecolor.jpg",
+      "/textures/jellyfish+3d+model_tripo_part_7_basecolor.jpg",
+      "/textures/jellyfish+3d+model_tripo_part_8_basecolor.jpg",
+      "/textures/jellyfish+3d+model_tripo_part_9_basecolor.jpg"
+    ];
+
+    const textureLoader = new THREE.TextureLoader();
+    const loadedTextures: THREE.Texture[] = TEXTURE_PATHS.map((path) => {
+      const tex = textureLoader.load(path);
+      tex.flipY = false;
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    });
+
+    let currentTexIndex = -1;
+
     fetchAndParse(0);
 
-    // 7. Animation Loop with autonomous weightless deep space floating
+    // 7. Animation Loop with autonomous weightless deep space floating & automatic Desktop texture cycling
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
       const delta = clock.getDelta();
@@ -268,6 +294,28 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
         loadedModel.position.y = -0.18 + Math.sin(elapsedTime * 1.2) * 0.12;
         loadedModel.position.x = positionX;
         loadedModel.rotation.set(0, 0, 0);
+
+        // Automatic Desktop texture morphing / cycling every 2.8s
+        if (loadedTextures.length > 0) {
+          const texIdx = Math.floor(elapsedTime / 2.8) % loadedTextures.length;
+          if (texIdx !== currentTexIndex) {
+            currentTexIndex = texIdx;
+            const activeTex = loadedTextures[texIdx];
+            loadedModel.traverse((child) => {
+              if ((child as THREE.Mesh).isMesh) {
+                const mesh = child as THREE.Mesh;
+                if (mesh.material) {
+                  const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+                  mats.forEach((m) => {
+                    const stdMat = m as THREE.MeshStandardMaterial;
+                    stdMat.map = activeTex;
+                    stdMat.needsUpdate = true;
+                  });
+                }
+              }
+            });
+          }
+        }
       }
 
       controls.update();
