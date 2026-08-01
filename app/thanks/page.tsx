@@ -194,10 +194,10 @@ export default function ThanksPage() {
       </div>
 
       {/* TOP HEADER BAR */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", zIndex: 30 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", zIndex: 30, flexWrap: "wrap", gap: "8px" }}>
         {/* LOGO */}
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none", color: "#0f111a", fontSize: "clamp(16px, 4.5vw, 22px)", fontWeight: "900" }}>
-          <svg width="22" height="18" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "6px", textDecoration: "none", color: "#0f111a", fontSize: "clamp(14px, 3.8vw, 20px)", fontWeight: "900", flexShrink: 0 }}>
+          <svg width="20" height="16" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="7" y="1" width="8" height="10" fill="#0f111a"/>
             <rect x="0" y="13" width="16" height="7" fill="#0f111a"/>
             <rect x="10" y="13" width="15" height="7" fill="#4f46e5"/>
@@ -205,7 +205,7 @@ export default function ThanksPage() {
           <span>{lang === "AR" ? "حيدر محمد" : "Haider Mohamed"}</span>
         </Link>
 
-        {/* CENTER PILL NAV */}
+        {/* CENTER PILL NAV - HIDDEN ON MOBILE */}
         <div
           className="desktop-header-nav"
           style={{
@@ -246,7 +246,7 @@ export default function ThanksPage() {
         </div>
 
         {/* RIGHT TOP ACTIONS */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
           <button
             onClick={handleLangSwitch}
             className="awsmd-btn-glow"
@@ -254,9 +254,9 @@ export default function ThanksPage() {
               background: "#ffffff",
               border: "1.5px solid #e2e8f0",
               color: "#0f111a",
-              padding: "8px 14px",
+              padding: "7px 12px",
               borderRadius: "50px",
-              fontSize: "12.5px",
+              fontSize: "clamp(11px, 2.8vw, 12.5px)",
               fontWeight: "800",
               cursor: "pointer"
             }}
