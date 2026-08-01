@@ -14,6 +14,11 @@ export default function ThanksPage() {
   const [matMode, setMatMode] = useState<"solid" | "glass" | "wireframe">("solid");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
+  // Circular Language Transition Ripple State
+  const [isLangAnimating, setIsLangAnimating] = useState(false);
+  const [langOrigin, setLangOrigin] = useState({ x: 0, y: 0 });
+  const [circleActive, setCircleActive] = useState(false);
+
   // Client Drawer Tab State
   const [isClientDrawerOpen, setIsClientDrawerOpen] = useState(false);
   const [isClientDrawerClosing, setIsClientDrawerClosing] = useState(false);
