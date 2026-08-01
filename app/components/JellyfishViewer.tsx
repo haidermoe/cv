@@ -295,27 +295,40 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
         loadedModel.position.x = positionX;
         loadedModel.rotation.set(0, 0, 0);
 
-        // Automatic Desktop texture morphing / cycling every 2.8s
-        if (loadedTextures.length > 0) {
-          const texIdx = Math.floor(elapsedTime / 2.8) % loadedTextures.length;
-          if (texIdx !== currentTexIndex) {
-            currentTexIndex = texIdx;
-            const activeTex = loadedTextures[texIdx];
-            loadedModel.traverse((child) => {
-              if ((child as THREE.Mesh).isMesh) {
-                const mesh = child as THREE.Mesh;
-                if (mesh.material) {
-                  const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-                  mats.forEach((m) => {
-                    const stdMat = m as THREE.MeshStandardMaterial;
-                    stdMat.map = activeTex;
-                    stdMat.needsUpdate = true;
-                  });
+        // Dynamic bioluminescent color spectrums
+        const NEON_PALETTES = [
+          "#ff007f", "#00f0ff", "#a855f7", "#2563eb", "#10b981", "#f59e0b", "#ef4444"
+        ];
+
+        // Smooth color morphing synced with contraction pulses
+        const totalColors = NEON_PALETTES.length;
+        const colorProgress = (elapsedTime * 0.22) % totalColors;
+        const index1 = Math.floor(colorProgress);
+        const index2 = (index1 + 1) % totalColors;
+        const factor = colorProgress - index1;
+
+        const c1 = new THREE.Color(NEON_PALETTES[index1]);
+        const c2 = new THREE.Color(NEON_PALETTES[index2]);
+        const currentColor = c1.clone().lerp(c2, factor);
+
+        const pulse = Math.sin(elapsedTime * 1.2);
+
+        // Preserve original textures with full cap line details intact, while morphing glowing emissive colors
+        loadedModel.traverse((child) => {
+          if ((child as THREE.Mesh).isMesh) {
+            const mesh = child as THREE.Mesh;
+            if (mesh.material) {
+              const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+              mats.forEach((m) => {
+                const stdMat = m as THREE.MeshStandardMaterial;
+                if (stdMat.emissive) {
+                  stdMat.emissive.copy(currentColor);
+                  stdMat.emissiveIntensity = 0.45 + Math.abs(pulse) * 0.2;
                 }
-              }
-            });
+              });
+            }
           }
-        }
+        });
       }
 
       controls.update();
