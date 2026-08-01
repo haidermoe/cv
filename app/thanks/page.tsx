@@ -14,10 +14,40 @@ export default function ThanksPage() {
   const [matMode, setMatMode] = useState<"solid" | "glass" | "wireframe">("solid");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  // Circular Language Transition Ripple State
-  const [isLangAnimating, setIsLangAnimating] = useState(false);
-  const [langOrigin, setLangOrigin] = useState({ x: 0, y: 0 });
-  const [circleActive, setCircleActive] = useState(false);
+  // Client Drawer Tab State
+  const [isClientDrawerOpen, setIsClientDrawerOpen] = useState(false);
+  const [isClientDrawerClosing, setIsClientDrawerClosing] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const closeClientDrawer = () => {
+    setIsClientDrawerClosing(true);
+    setTimeout(() => {
+      setIsClientDrawerOpen(false);
+      setIsClientDrawerClosing(false);
+    }, 450);
+  };
+
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+      method: "POST",
+      body: formData,
+      headers: { Accept: "application/json" }
+    })
+      .then((res) => {
+        if (res.ok) {
+          setFormSubmitted(true);
+        } else {
+          form.submit();
+        }
+      })
+      .catch(() => {
+        form.submit();
+      });
+  };
 
   const handleLangSwitch = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (isLangAnimating) return;
@@ -219,14 +249,18 @@ export default function ThanksPage() {
             {lang === "AR" ? "EN" : "عربي"} ∨
           </button>
 
-          <Link href="/" className="awsmd-royal-client-btn">
+          <button
+            onClick={() => setIsClientDrawerOpen(true)}
+            className="awsmd-royal-client-btn"
+            style={{ background: "transparent", border: "none", cursor: "pointer", padding: 0 }}
+          >
             <span className="flip-box">
               <span className="flip-wrapper">
                 <span className="flip-text-primary">+ {lang === "AR" ? "كن عميلاً" : "Become a Client"}</span>
                 <span className="flip-text-secondary">+ {lang === "AR" ? "كن عميلاً" : "Become a Client"}</span>
               </span>
             </span>
-          </Link>
+          </button>
         </div>
       </div>
 
@@ -359,6 +393,208 @@ export default function ThanksPage() {
           </a>
         </div>
       </div>
+
+      {/* BECOME A CLIENT SLIDING DRAWER TAB MODAL */}
+      {(isClientDrawerOpen || isClientDrawerClosing) && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 2000,
+            display: "flex",
+            justifyContent: lang === "AR" ? "flex-start" : "flex-end"
+          }}
+        >
+          {/* BACKDROP OVERLAY */}
+          <div
+            onClick={closeClientDrawer}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(15, 17, 26, 0.6)",
+              backdropFilter: "blur(8px)",
+              opacity: isClientDrawerClosing ? 0 : 1,
+              transition: "opacity 0.45s ease"
+            }}
+          />
+
+          {/* SLIDING PANEL */}
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              maxWidth: "540px",
+              height: "100dvh",
+              background: "#ffffff",
+              color: "#0f111a",
+              padding: "45px 35px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              boxShadow: lang === "AR" ? "-20px 0 50px rgba(0,0,0,0.3)" : "20px 0 50px rgba(0,0,0,0.3)",
+              zIndex: 2001,
+              overflowY: "auto",
+              transform: isClientDrawerClosing
+                ? lang === "AR" ? "translateX(-100%)" : "translateX(100%)"
+                : "translateX(0)",
+              transition: "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
+              fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif"
+            }}
+          >
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "30px" }}>
+                <div>
+                  <h2 style={{ fontSize: "32px", fontWeight: "900", color: "#0f111a", lineHeight: "1.2" }}>
+                    {lang === "AR" ? "مرحباً! أخبرنا بكل التفاصيل" : "Hey! Tell us all the things"}
+                  </h2>
+                  <p style={{ color: "#64748b", fontSize: "14.5px", marginTop: "8px", fontWeight: "600" }}>
+                    {lang === "AR" ? "يسعدنا التعاون معك لبناء وتطوير حلول برمجية وبيانات استثنائية." : "We'd love to hear about your project and build something amazing together."}
+                  </p>
+                </div>
+
+                <button
+                  onClick={closeClientDrawer}
+                  style={{
+                    background: "#f1f5f9",
+                    border: "none",
+                    width: "42px",
+                    height: "42px",
+                    borderRadius: "50%",
+                    cursor: "pointer",
+                    fontSize: "20px",
+                    fontWeight: "900",
+                    color: "#0f111a",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    transition: "background 0.2s ease",
+                    flexShrink: 0
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+
+              {formSubmitted ? (
+                <div style={{ padding: "40px 20px", textAlign: "center", background: "#f0fdf4", borderRadius: "20px", border: "1px solid #bbf7d0", marginTop: "40px" }}>
+                  <span style={{ fontSize: "48px", display: "block", marginBottom: "15px" }}>🎉</span>
+                  <h3 style={{ fontSize: "24px", fontWeight: "900", color: "#166534" }}>
+                    {lang === "AR" ? "تم إرسال طلبك بنجاح!" : "Request Submitted Successfully!"}
+                  </h3>
+                  <p style={{ color: "#15803d", fontSize: "16px", marginTop: "8px", fontWeight: "600" }}>
+                    {lang === "AR" ? "سنقوم بالتواصل معك في أسرع وقت ممكن." : "We will get back to you as soon as possible."}
+                  </p>
+                </div>
+              ) : (
+                <form
+                  action="https://formsubmit.co/haider.m.shwkat@outlook.com"
+                  method="POST"
+                  onSubmit={handleFormSubmit}
+                  style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+                >
+                  <input type="hidden" name="_subject" value="📩 طلب عمل جديد من صفحة الـ 3D!" />
+                  <input type="hidden" name="_captcha" value="false" />
+                  <input type="hidden" name="_template" value="table" />
+
+                  <div>
+                    <label style={{ display: "block", fontSize: "14px", fontWeight: "800", marginBottom: "8px", color: "#0f111a" }}>
+                      {lang === "AR" ? "الاسم والشركة" : "Name & Company"}
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      name="الاسم والشركة / Client Name"
+                      placeholder={lang === "AR" ? "حيدر من تكنو ستور" : "Haider from Techno Store"}
+                      style={{
+                        width: "100%",
+                        padding: "15px 18px",
+                        borderRadius: "14px",
+                        border: "1px solid #e2e8f0",
+                        background: "#f8fafc",
+                        fontSize: "15px",
+                        color: "#0f111a",
+                        outline: "none"
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: "block", fontSize: "14px", fontWeight: "800", marginBottom: "8px", color: "#0f111a" }}>
+                      {lang === "AR" ? "البريد الإلكتروني" : "Your Email"}
+                    </label>
+                    <input
+                      required
+                      type="email"
+                      name="البريد الإلكتروني / Client Email"
+                      placeholder="haider@example.com"
+                      style={{
+                        width: "100%",
+                        padding: "15px 18px",
+                        borderRadius: "14px",
+                        border: "1px solid #e2e8f0",
+                        background: "#f8fafc",
+                        fontSize: "15px",
+                        color: "#0f111a",
+                        outline: "none"
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: "block", fontSize: "14px", fontWeight: "800", marginBottom: "8px", color: "#0f111a" }}>
+                      {lang === "AR" ? "أخبرنا المزيد عن مشروعك" : "Tell us more about your project"}
+                    </label>
+                    <textarea
+                      required
+                      rows={4}
+                      name="تفاصيل المشروع / Project Details"
+                      placeholder={lang === "AR" ? "اكتب تفاصيل مشروعك أو فكرتك المميزة هنا..." : "Write your project details or great ideas here..."}
+                      style={{
+                        width: "100%",
+                        padding: "15px 18px",
+                        borderRadius: "14px",
+                        border: "1px solid #e2e8f0",
+                        background: "#f8fafc",
+                        fontSize: "15px",
+                        color: "#0f111a",
+                        outline: "none",
+                        resize: "none"
+                      }}
+                    ></textarea>
+                  </div>
+
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #f1f5f9", paddingTop: "20px", marginTop: "10px" }}>
+                    <span style={{ fontSize: "13px", color: "#64748b", fontWeight: "700" }}>
+                      haider.m.shwkat@outlook.com
+                    </span>
+
+                    <button
+                      type="submit"
+                      className="awsmd-btn-glow"
+                      style={{
+                        background: "#0f111a",
+                        color: "#ffffff",
+                        padding: "14px 28px",
+                        borderRadius: "50px",
+                        border: "none",
+                        fontWeight: "800",
+                        fontSize: "14.5px",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px"
+                      }}
+                    >
+                      <span>{lang === "AR" ? "إرسال الطلب" : "Submit Request"}</span>
+                      <span style={{ fontSize: "18px" }}>←</span>
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
