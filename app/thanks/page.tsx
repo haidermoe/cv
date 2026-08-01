@@ -13,6 +13,16 @@ export default function ThanksPage() {
   const [jellyColor, setJellyColor] = useState<string | null>("#ff007f"); // Default to Neon Pink matching Noomo Labs screenshot!
   const [matMode, setMatMode] = useState<"solid" | "glass" | "wireframe">("solid");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  React.useEffect(() => {
+    const handleCheckDesktop = () => {
+      setIsDesktop(window.innerWidth > 960);
+    };
+    handleCheckDesktop();
+    window.addEventListener("resize", handleCheckDesktop);
+    return () => window.removeEventListener("resize", handleCheckDesktop);
+  }, []);
 
   // Circular Language Transition Ripple State
   const [isLangAnimating, setIsLangAnimating] = useState(false);
@@ -285,63 +295,69 @@ export default function ThanksPage() {
         }}
       >
         <div style={{ width: "100%", height: "100%", pointerEvents: "auto" }}>
-          <JellyfishViewer customColor={jellyColor} materialMode={matMode} />
+          <JellyfishViewer
+            customColor={jellyColor}
+            materialMode={matMode}
+            positionX={isDesktop ? (lang === "AR" ? 1.5 : -1.5) : 0}
+          />
         </div>
       </div>
 
-      {/* NOOMO LABS SIGNATURE CENTER HERO: GIANT TYPOGRAPHY BEHIND 3D JELLYFISH */}
+      {/* NOOMO LABS SIGNATURE SPLIT SIDE-BY-SIDE HERO LAYOUT */}
       <div
         style={{
           position: "relative",
           width: "100%",
-          minHeight: "68dvh",
+          minHeight: "72dvh",
           display: "flex",
-          flexDirection: "column",
+          flexDirection: isDesktop ? (lang === "AR" ? "row-reverse" : "row") : "column",
           alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
+          justifyContent: isDesktop ? "space-between" : "center",
           margin: "auto 0"
         }}
       >
-        {/* GIANT BACKGROUND TITLE (BEHIND JELLYFISH - Z-INDEX 1) */}
-        <h1
-          className="noomo-giant-title-float"
-          style={{
-            position: "absolute",
-            top: "42%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            fontSize: "clamp(44px, 12vw, 210px)",
-            fontWeight: "900",
-            color: "#0f111a",
-            letterSpacing: "-0.04em",
-            whiteSpace: "nowrap",
-            margin: 0,
-            lineHeight: "0.9",
-            zIndex: 1,
-            pointerEvents: "none",
-            userSelect: "none",
-            opacity: 0.95
-          }}
-        >
-          {lang === "AR" ? "شكراً لك !" : "THANK YOU !"}
-        </h1>
+        {/* LEFT COLUMN SPACER FOR 3D JELLYFISH MODEL (DESKTOP) */}
+        {isDesktop && <div style={{ flex: "1 1 45%", minHeight: "100px" }} />}
 
-        {/* FOREGROUND SUB-CONTENT & CTA BUTTON (IN FRONT - Z-INDEX 20) */}
+        {/* RIGHT COLUMN CONTENT: GIANT TYPOGRAPHY & SUBTEXT (BEHIND & FOREGROUND) */}
         <div
           className="noomo-content-float"
           style={{
             position: "relative",
             zIndex: 20,
-            marginTop: "min(34vh, 320px)",
-            maxWidth: "640px",
-            marginRight: "auto",
-            marginLeft: "auto"
+            flex: isDesktop ? "1 1 55%" : "1 1 100%",
+            maxWidth: isDesktop ? "650px" : "640px",
+            textAlign: isDesktop ? (lang === "AR" ? "right" : "left") : "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: isDesktop ? (lang === "AR" ? "flex-end" : "flex-start") : "center",
+            paddingRight: isDesktop && lang === "EN" ? "20px" : "0",
+            paddingLeft: isDesktop && lang === "AR" ? "20px" : "0",
+            marginTop: isDesktop ? "0" : "min(34vh, 320px)"
           }}
         >
+          {/* GIANT TITLE */}
+          <h1
+            className="noomo-giant-title-float"
+            style={{
+              fontSize: isDesktop ? "clamp(48px, 6.5vw, 115px)" : "clamp(44px, 12vw, 210px)",
+              fontWeight: "900",
+              color: "#0f111a",
+              letterSpacing: "-0.04em",
+              whiteSpace: "nowrap",
+              margin: "0 0 16px 0",
+              lineHeight: "0.95",
+              zIndex: 1,
+              userSelect: "none",
+              opacity: 0.95
+            }}
+          >
+            {lang === "AR" ? "شكراً لك !" : "THANK YOU !"}
+          </h1>
+
           <p
             style={{
-              fontSize: "clamp(20px, 3vw, 28px)",
+              fontSize: "clamp(20px, 2.5vw, 26px)",
               fontWeight: "800",
               color: "#0f111a",
               marginBottom: "12px",
@@ -353,11 +369,12 @@ export default function ThanksPage() {
 
           <p
             style={{
-              fontSize: "clamp(15px, 1.8vw, 18px)",
+              fontSize: "clamp(15px, 1.5vw, 17.5px)",
               color: "#64748b",
               lineHeight: "1.6",
               fontWeight: "600",
-              marginBottom: "28px"
+              marginBottom: "32px",
+              maxWidth: "520px"
             }}
           >
             {lang === "AR"
@@ -371,7 +388,7 @@ export default function ThanksPage() {
             style={{
               background: "#2563eb",
               color: "#ffffff",
-              padding: "16px 36px",
+              padding: "16px 38px",
               borderRadius: "50px",
               fontSize: "15.5px",
               fontWeight: "800",
@@ -380,7 +397,7 @@ export default function ThanksPage() {
               display: "inline-block"
             }}
           >
-            ← {lang === "AR" ? "تصفح بقية الأقسام" : "Explore Portfolio"}
+            {lang === "AR" ? "← تصفح بقية الأقسام" : "Explore Portfolio →"}
           </Link>
         </div>
       </div>
