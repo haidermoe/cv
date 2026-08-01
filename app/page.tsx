@@ -190,6 +190,35 @@ export default function Home() {
   const [isNavMenuClosing, setIsNavMenuClosing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  // Circular Language Transition Ripple State
+  const [isLangAnimating, setIsLangAnimating] = useState(false);
+  const [langOrigin, setLangOrigin] = useState({ x: 0, y: 0 });
+  const [circleActive, setCircleActive] = useState(false);
+
+  const handleLangSwitch = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (isLangAnimating) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    setLangOrigin({ x, y });
+    setIsLangAnimating(true);
+
+    requestAnimationFrame(() => {
+      setCircleActive(true);
+    });
+
+    // Slow, smooth cinematic expansion (700ms)
+    setTimeout(() => {
+      setLang((prev) => (prev === "AR" ? "EN" : "AR"));
+      setCircleActive(false);
+
+      // Slow, smooth contraction back to tab (700ms)
+      setTimeout(() => {
+        setIsLangAnimating(false);
+      }, 700);
+    }, 700);
+  };
+
   const t = translations[lang];
 
   const closeNavMenu = (targetHref?: string) => {
@@ -318,7 +347,7 @@ export default function Home() {
 
         {/* BORDERED LANGUAGE SELECTOR PILL */}
         <button
-          onClick={toggleLanguage}
+          onClick={handleLangSwitch}
           style={{
             background: "#ffffff",
             border: "1.5px solid #4f46e5",
@@ -1105,6 +1134,23 @@ export default function Home() {
           animation: tickerMoveLoop 20s linear infinite !important;
         }
       `}</style>
+
+      {/* CIRCULAR LANGUAGE RIPPLE TRANSITION OVERLAY */}
+      {isLangAnimating && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            pointerEvents: "none",
+            background: "#0f111a",
+            clipPath: circleActive
+              ? `circle(150vmax at ${langOrigin.x}px ${langOrigin.y}px)`
+              : `circle(0px at ${langOrigin.x}px ${langOrigin.y}px)`,
+            transition: "clip-path 0.7s cubic-bezier(0.76, 0, 0.24, 1)"
+          }}
+        />
+      )}
     </div>
   );
 }
