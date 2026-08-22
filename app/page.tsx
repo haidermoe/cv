@@ -616,7 +616,7 @@ export default function Home() {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "25px" }}>
             <a
-              href="https://tekno-tool.streamlit.app"
+              href="https://excelhid.streamlit.app/"
               target="_blank"
               rel="noopener noreferrer"
               className="awsmd-dark-card"
