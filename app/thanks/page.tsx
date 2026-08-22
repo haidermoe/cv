@@ -326,7 +326,7 @@ export default function ThanksPage() {
           <JellyfishViewer
             customColor={jellyColor}
             materialMode={matMode}
-            positionX={isDesktop ? (lang === "AR" ? 1.5 : -1.5) : 0}
+            positionX={isDesktop ? (lang === "AR" ? 1.5 : 0) : 0}
             positionY={isDesktop ? -0.18 : 0}
             scaleMultiplier={isDesktop ? 1.15 : 1.05}
           />
