@@ -30,15 +30,21 @@ st.markdown("""
         text-align: center;
         font-size: 2.2rem;
         font-weight: 800;
-        color: #1E293B;
+        color: #60A5FA;
         margin-bottom: 0.5rem;
     }
     
     .sub-title {
         text-align: center;
         font-size: 1.1rem;
-        color: #64748B;
+        color: #94A3B8;
         margin-bottom: 2rem;
+    }
+
+    div[data-testid="stFileUploader"] section button {
+        font-size: 0.85rem !important;
+        padding: 0.3rem 0.6rem !important;
+        white-space: nowrap !important;
     }
 
     .stButton>button {
