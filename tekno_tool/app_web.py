@@ -15,55 +15,108 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom Arabic Styling
+# Custom Styling matching thanks/page.tsx theme
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Outfit:wght@500;700;800;900&display=swap');
     
-    html, body, [class*="css"], div, span, p, h1, h2, h3, label {
-        font-family: 'Cairo', sans-serif !important;
+    /* Main Background */
+    .stApp {
+        background-color: #f2f1f6 !important;
+        font-family: 'Tajawal', sans-serif !important;
         direction: rtl;
         text-align: right;
     }
     
-    .main-title {
+    html, body, [class*="css"], div, span, p, h1, h2, h3, label {
+        font-family: 'Tajawal', sans-serif !important;
+        direction: rtl;
+        text-align: right;
+    }
+
+    /* Main Title Styling */
+    .main-header-box {
+        background: #ffffff;
+        padding: 35px 40px;
+        border-radius: 24px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.04);
+        border: 1px solid rgba(15, 17, 26, 0.06);
         text-align: center;
-        font-size: 2.2rem;
-        font-weight: 800;
-        color: #60A5FA;
-        margin-bottom: 0.5rem;
+        margin-bottom: 25px;
+    }
+    
+    .main-title {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #0f111a;
+        margin-bottom: 0.4rem;
+        letter-spacing: -0.02em;
     }
     
     .sub-title {
-        text-align: center;
-        font-size: 1.1rem;
-        color: #94A3B8;
-        margin-bottom: 2rem;
+        font-size: 1.15rem;
+        color: #475569;
+        font-weight: 600;
+    }
+
+    /* File Uploader styling */
+    div[data-testid="stFileUploader"] {
+        background: #f8fafc;
+        border: 1.5px dashed #cbd5e1;
+        border-radius: 16px;
+        padding: 12px;
     }
 
     div[data-testid="stFileUploader"] section button {
+        background-color: #0f111a !important;
+        color: white !important;
+        border-radius: 50px !important;
+        font-weight: 800 !important;
         font-size: 0.85rem !important;
-        padding: 0.3rem 0.6rem !important;
+        padding: 0.4rem 1rem !important;
         white-space: nowrap !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
     }
 
+    /* Primary Action Buttons */
     .stButton>button {
         width: 100%;
-        background-color: #2563EB;
-        color: white;
-        font-weight: bold;
-        font-size: 1.1rem;
-        border-radius: 8px;
-        padding: 0.6rem;
+        background-color: #2563eb !important;
+        color: white !important;
+        font-weight: 800 !important;
+        font-size: 1.15rem !important;
+        border-radius: 50px !important;
+        padding: 0.75rem 1.5rem !important;
+        box-shadow: 0 12px 35px rgba(37, 99, 235, 0.35) !important;
+        border: none !important;
+        transition: transform 0.2s ease, background 0.2s ease !important;
     }
+    
     .stButton>button:hover {
-        background-color: #1D4ED8;
+        background-color: #1d4ed8 !important;
+        transform: translateY(-2px) !important;
+    }
+
+    /* Sidebar Styling */
+    section[data-testid="stSidebar"] {
+        background-color: #ffffff !important;
+        border-left: 1px solid rgba(15, 17, 26, 0.08) !important;
+        box-shadow: -5px 0 25px rgba(0,0,0,0.02) !important;
+    }
+
+    section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3 {
+        color: #0f111a !important;
+        font-weight: 900 !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="main-title">⚡ أداة تكنو (Tekno Tool)</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">أداة مقارنة وسحب بيانات الإكسل الذكية للمتاجر الإلكترونية والمخازن</div>', unsafe_allow_html=True)
+st.markdown("""
+<div class="main-header-box">
+    <div class="main-title">⚡ أداة تكنو (Tekno Tool)</div>
+    <div class="sub-title">أداة مقارنة وسحب بيانات الإكسل الذكية للمتاجر الإلكترونية والمخازن</div>
+</div>
+""", unsafe_allow_html=True)
 
 # Sidebar Options
 st.sidebar.header("⚙️ إعدادات النمط والخيارات")
