@@ -26,6 +26,8 @@ export const metadata: Metadata = {
   keywords: ["حيدر محمد", "تحليل البيانات", "التجارة الإلكترونية", "FTTH", "SQL", "Python", "العراق", "بغداد"],
 };
 
+import VisitorTracker from "./components/VisitorTracker";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -48,6 +50,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="bg-[#0e0d15] text-slate-100 min-h-screen antialiased selection:bg-blue-500 selection:text-white" style={{ fontFamily: "'Tajawal', 'Outfit', sans-serif" }}>
+        <VisitorTracker />
         {children}
       </body>
     </html>
