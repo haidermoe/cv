@@ -372,7 +372,7 @@ export default function ThanksPage() {
           <h1
             className="noomo-giant-title-float"
             style={{
-              fontSize: isDesktop ? "clamp(48px, 6.5vw, 115px)" : "clamp(32px, 8.8vw, 52px)",
+              fontSize: isDesktop ? "clamp(48px, 6.5vw, 120px)" : "clamp(32px, 8.8vw, 52px)",
               fontWeight: "900",
               color: "#0f111a",
               letterSpacing: "-0.03em",
