@@ -3,10 +3,43 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
+// REUSABLE FLIP-TEXT LINK COMPONENT (MATCHING PAGE.TSX)
+function FlipLink({ children, href, style, color = "#0f111a", hoverColor = "#2563eb" }: { children: React.ReactNode; href: string; style?: React.CSSProperties; color?: string; hoverColor?: string }) {
+  return (
+    <a
+      href={href}
+      style={{
+        fontSize: "14.5px",
+        fontWeight: "800",
+        fontFamily: "'Tajawal', 'Outfit', sans-serif",
+        padding: "0 4px",
+        textDecoration: "none",
+        ...style
+      }}
+      className="flip-link-group"
+    >
+      <span className="flip-wrapper">
+        <span className="flip-text-primary" style={{ color: color }}>{children}</span>
+        <span className="flip-text-secondary" style={{ color: hoverColor }}>{children}</span>
+      </span>
+    </a>
+  );
+}
+
 export default function TeknoPage() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isDesktop, setIsDesktop] = useState(false);
+
+  // Language ripple state
+  const [isLangAnimating, setIsLangAnimating] = useState(false);
+  const [langOrigin, setLangOrigin] = useState({ x: 0, y: 0 });
+  const [circleActive, setCircleActive] = useState(false);
+
+  // Client Drawer Tab State
+  const [isClientDrawerOpen, setIsClientDrawerOpen] = useState(false);
+  const [isClientDrawerClosing, setIsClientDrawerClosing] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   // File states
   const [fileOld, setFileOld] = useState<File | null>(null);
@@ -27,6 +60,35 @@ export default function TeknoPage() {
     window.addEventListener("resize", handleCheckDesktop);
     return () => window.removeEventListener("resize", handleCheckDesktop);
   }, []);
+
+  const handleLangSwitch = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (isLangAnimating) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    setLangOrigin({ x, y });
+    setIsLangAnimating(true);
+
+    requestAnimationFrame(() => {
+      setCircleActive(true);
+    });
+
+    setTimeout(() => {
+      setLang((prev) => (prev === "AR" ? "EN" : "AR"));
+      setCircleActive(false);
+      setTimeout(() => {
+        setIsLangAnimating(false);
+      }, 700);
+    }, 700);
+  };
+
+  const closeClientDrawer = () => {
+    setIsClientDrawerClosing(true);
+    setTimeout(() => {
+      setIsClientDrawerOpen(false);
+      setIsClientDrawerClosing(false);
+    }, 450);
+  };
 
   useEffect(() => {
     let animationFrameId: number;
@@ -72,7 +134,8 @@ export default function TeknoPage() {
       formData.append("ignore_punct", String(ignorePunct));
       formData.append("filter_keywords", filterKeywords);
 
-      const res = await fetch("/api/tekno", {
+      // Call Vercel Python API route running comparator.py!
+      const res = await fetch("/api/compare", {
         method: "POST",
         body: formData,
       });
@@ -94,7 +157,7 @@ export default function TeknoPage() {
 
       setSuccess(true);
     } catch (err: any) {
-      setErrorMessage(err.message || "حدث خطأ أثناء المعالجة");
+      setErrorMessage(err.message || "حدث خطأ أثناء المعالجة بواسطة برنامج بايثون");
     } finally {
       setLoading(false);
     }
@@ -116,6 +179,38 @@ export default function TeknoPage() {
         overflowX: "hidden",
       }}
     >
+      {/* CIRCULAR LANGUAGE RIPPLE TRANSITION OVERLAY */}
+      {isLangAnimating && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            pointerEvents: "none",
+            background: "#0f111a",
+            clipPath: circleActive
+              ? `circle(150vmax at ${langOrigin.x}px ${langOrigin.y}px)`
+              : `circle(0px at ${langOrigin.x}px ${langOrigin.y}px)`,
+            transition: "clip-path 0.7s cubic-bezier(0.76, 0, 0.24, 1)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span
+            style={{
+              color: "#ffffff",
+              fontSize: "clamp(28px, 5vw, 42px)",
+              fontWeight: "900",
+              letterSpacing: "0.08em",
+              fontFamily: "'Outfit', sans-serif",
+            }}
+          >
+            {lang === "AR" ? "ENGLISH" : "العربية"}
+          </span>
+        </div>
+      )}
+
       {/* 3D CONCAVE DOT GRID BACKGROUND LAYER */}
       <div
         style={{
@@ -175,7 +270,7 @@ export default function TeknoPage() {
           <span>{lang === "AR" ? "حيدر محمد" : "Haider Mohamed"}</span>
         </Link>
 
-        {/* CENTER PILL NAV */}
+        {/* CENTER PILL NAV WITH FLIP LINK ANIMATIONS */}
         <div
           className="desktop-header-nav"
           style={{
@@ -189,24 +284,24 @@ export default function TeknoPage() {
             border: "1px solid rgba(15, 17, 26, 0.06)",
           }}
         >
-          <Link href="/#about" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14.5px" }}>
+          <FlipLink href="/#about" color="#475569" hoverColor="#2563eb">
             {lang === "AR" ? "النبذة" : "About Us"}
-          </Link>
-          <Link href="/#experience" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14.5px" }}>
+          </FlipLink>
+          <FlipLink href="/#experience" color="#475569" hoverColor="#2563eb">
             {lang === "AR" ? "الخبرات" : "Experience"}
-          </Link>
-          <Link href="/#education" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14.5px" }}>
+          </FlipLink>
+          <FlipLink href="/#education" color="#475569" hoverColor="#2563eb">
             {lang === "AR" ? "التعليم" : "Education"}
-          </Link>
-          <Link href="/#contact" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14.5px" }}>
+          </FlipLink>
+          <FlipLink href="/#contact" color="#475569" hoverColor="#2563eb">
             {lang === "AR" ? "تواصل معي" : "Contact Us"}
-          </Link>
+          </FlipLink>
         </div>
 
         {/* RIGHT TOP ACTIONS */}
         <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
           <button
-            onClick={() => setLang((prev) => (prev === "AR" ? "EN" : "AR"))}
+            onClick={handleLangSwitch}
             className="awsmd-btn-glow"
             style={{
               background: "#ffffff",
@@ -220,6 +315,28 @@ export default function TeknoPage() {
             }}
           >
             {lang === "AR" ? "EN" : "عربي"} ∨
+          </button>
+
+          <button
+            onClick={() => setIsClientDrawerOpen(true)}
+            className="awsmd-royal-client-btn"
+            style={{
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+            }}
+          >
+            <span className="flip-box">
+              <span className="flip-wrapper">
+                <span className="flip-text-primary">
+                  + {isDesktop ? (lang === "AR" ? "كن عميلاً" : "Become a Client") : (lang === "AR" ? "تواصل" : "Client")}
+                </span>
+                <span className="flip-text-secondary">
+                  + {isDesktop ? (lang === "AR" ? "كن عميلاً" : "Become a Client") : (lang === "AR" ? "تواصل" : "Client")}
+                </span>
+              </span>
+            </span>
           </button>
         </div>
       </header>
@@ -265,8 +382,8 @@ export default function TeknoPage() {
             }}
           >
             {lang === "AR"
-              ? "أداة مقارنة وسحب بيانات الإكسل الذكية للمتاجر الإلكترونية والمخازن"
-              : "Smart Excel comparison & data extraction tool for E-commerce & Warehouses"}
+              ? "أداة مقارنة وسحب بيانات الإكسل الذكية بالمحرك الأصلي لـ Python"
+              : "Smart Excel comparison & data extraction tool powered natively by Python"}
           </p>
         </div>
 
@@ -506,7 +623,7 @@ export default function TeknoPage() {
 
           {success && (
             <div style={{ padding: "14px 20px", background: "#f0fdf4", color: "#166534", borderRadius: "14px", border: "1px solid #bbf7d0", marginBottom: "20px", fontSize: "14.5px", fontWeight: "700" }}>
-              🎉 {lang === "AR" ? "تمت معالجة البيانات بنجاح! جاري تحميل التقرير النهائي..." : "Data processed successfully! Downloading final report..."}
+              🎉 {lang === "AR" ? "تمت معالجة البيانات بنجاح بمحرك بايثون! جاري تحميل التقرير النهائي..." : "Data processed successfully via Python engine! Downloading final report..."}
             </div>
           )}
 
@@ -533,9 +650,9 @@ export default function TeknoPage() {
             }}
           >
             {loading ? (
-              <span>⏳ {lang === "AR" ? "جاري معالجة وتوحيد البيانات ومقارنتها..." : "Processing & comparing data..."}</span>
+              <span>⏳ {lang === "AR" ? "جاري تشغيل برنامج بايثون لمعالجة وتوحيد البيانات..." : "Running Python engine to compare & process data..."}</span>
             ) : (
-              <span>🚀 {lang === "AR" ? "بدء معالجة الملفات والمقارنة" : "Start Processing & Compare"}</span>
+              <span>🚀 {lang === "AR" ? "بدء معالجة الملفات والمقارنة (بايثون)" : "Start Processing & Compare (Python)"}</span>
             )}
           </button>
         </div>
@@ -554,9 +671,67 @@ export default function TeknoPage() {
         }}
       >
         <span style={{ fontSize: "13px", color: "#64748b", fontWeight: "700" }}>
-          © {new Date().getFullYear()} Haider Mohamed Shwkat - Tekno Tool
+          © {new Date().getFullYear()} Haider Mohamed Shwkat - Tekno Tool (Python Engine)
         </span>
       </footer>
+
+      {/* BECOME A CLIENT DRAWER TAB MODAL */}
+      {(isClientDrawerOpen || isClientDrawerClosing) && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 2000,
+            display: "flex",
+            justifyContent: lang === "AR" ? "flex-start" : "flex-end",
+          }}
+        >
+          <div
+            onClick={closeClientDrawer}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(15, 17, 26, 0.6)",
+              backdropFilter: "blur(8px)",
+              opacity: isClientDrawerClosing ? 0 : 1,
+              transition: "opacity 0.45s ease",
+            }}
+          />
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              maxWidth: "540px",
+              height: "100dvh",
+              background: "#ffffff",
+              color: "#0f111a",
+              padding: isDesktop ? "45px 35px" : "30px 20px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              boxShadow: lang === "AR" ? "-20px 0 50px rgba(0,0,0,0.3)" : "20px 0 50px rgba(0,0,0,0.3)",
+              zIndex: 2001,
+              overflowY: "auto",
+              transform: isClientDrawerClosing
+                ? lang === "AR" ? "translateX(-100%)" : "translateX(100%)"
+                : "translateX(0)",
+              transition: "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
+              fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif",
+            }}
+          >
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "25px" }}>
+                <div>
+                  <h2 style={{ fontSize: isDesktop ? "30px" : "24px", fontWeight: "900", color: "#0f111a", lineHeight: "1.2" }}>
+                    {lang === "AR" ? "مرحباً! أخبرنا بكل التفاصيل" : "Hey! Tell us all the things"}
+                  </h2>
+                </div>
+                <button onClick={closeClientDrawer} style={{ background: "#f1f5f9", border: "none", width: "38px", height: "38px", borderRadius: "50%", cursor: "pointer" }}>✕</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
