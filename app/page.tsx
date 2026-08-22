@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import JellyfishViewer from "./components/JellyfishViewer";
 
 // REUSABLE FLIP-TEXT LINK COMPONENT
 function FlipLink({ children, href, download, target, style, color = "#0f111a", hoverColor = "#2563eb" }: { children: React.ReactNode; href: string; download?: string; target?: string; style?: React.CSSProperties; color?: string; hoverColor?: string }) {
@@ -615,70 +616,157 @@ export default function Home() {
             <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px" }}>{t.expTitle}</h2>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "25px" }}>
-            <Link
-              href="/tekno"
-              className="awsmd-dark-card"
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+              gap: "40px",
+              alignItems: "center",
+            }}
+          >
+            {/* 2x2 CARDS GRID CONTAINER */}
+            <div
               style={{
-                background: "#151624",
-                padding: "35px",
-                borderRadius: "24px",
-                border: "1.5px solid rgba(96, 165, 250, 0.35)",
-                display: "block",
-                textDecoration: "none",
-                color: "#ffffff",
-                cursor: "pointer",
-                transition: "all 0.3s ease",
-                boxShadow: "0 10px 30px rgba(37, 99, 235, 0.15)"
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+                gap: "20px",
               }}
             >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ background: "rgba(96, 165, 250, 0.15)", color: "#60a5fa", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.exp1Date}</span>
-                <span style={{ background: "#2563eb", color: "#ffffff", padding: "6px 14px", borderRadius: "20px", fontSize: "13px", fontWeight: "800", display: "inline-flex", alignItems: "center", gap: "5px" }}>
-                  <span>⚡ {lang === "AR" ? "تشغيل أداة تكنو" : "Launch Tekno Tool"}</span>
-                </span>
+              {/* CARD 1: TECHNO STORE */}
+              <Link
+                href="/tekno"
+                className="awsmd-dark-card"
+                style={{
+                  background: "#151624",
+                  padding: "26px 22px",
+                  borderRadius: "24px",
+                  border: "1.5px solid rgba(96, 165, 250, 0.35)",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  textDecoration: "none",
+                  color: "#ffffff",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 10px 30px rgba(37, 99, 235, 0.15)",
+                  minHeight: "250px",
+                }}
+              >
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                    <span style={{ background: "rgba(96, 165, 250, 0.15)", color: "#60a5fa", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800" }}>{t.exp1Date}</span>
+                    <span style={{ background: "#2563eb", color: "#ffffff", padding: "5px 12px", borderRadius: "20px", fontSize: "11.5px", fontWeight: "800", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                      <span>{lang === "AR" ? "تشغيل أداة تكنو" : "Launch Tekno Tool"}</span>
+                    </span>
+                  </div>
+                  <h3 style={{ fontSize: "21px", fontWeight: "800", color: "#ffffff", marginBottom: "4px" }}>{t.exp1Company}</h3>
+                  <p style={{ color: "#60a5fa", fontSize: "13.5px", fontWeight: "700", marginBottom: "12px" }}>{t.exp1Role}</p>
+                </div>
+                <ul style={{ color: "#94a3b8", fontSize: "13px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
+                  {t.exp1Bullets.map((b, i) => (
+                    <li key={i}>{b}</li>
+                  ))}
+                </ul>
+              </Link>
+
+              {/* CARD 2: LOCAL LIBRARY */}
+              <div
+                className="awsmd-dark-card"
+                style={{
+                  background: "#151624",
+                  padding: "26px 22px",
+                  borderRadius: "24px",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  minHeight: "250px",
+                }}
+              >
+                <div>
+                  <span style={{ background: "rgba(255, 255, 255, 0.08)", color: "#ffffff", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "12px" }}>{t.exp2Date}</span>
+                  <h3 style={{ fontSize: "21px", fontWeight: "800", color: "#ffffff", marginBottom: "4px" }}>{t.exp2Company}</h3>
+                  <p style={{ color: "#94a3b8", fontSize: "13.5px", fontWeight: "600", marginBottom: "12px" }}>{t.exp2Role}</p>
+                </div>
+                <ul style={{ color: "#64748b", fontSize: "13px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
+                  {t.exp2Bullets.map((b, i) => (
+                    <li key={i}>{b}</li>
+                  ))}
+                </ul>
               </div>
-              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "20px", color: "#ffffff" }}>{t.exp1Company}</h3>
-              <p style={{ color: "#60a5fa", fontSize: "15.5px", marginTop: "5px", fontWeight: "700" }}>{t.exp1Role}</p>
-              <ul style={{ color: "#94a3b8", fontSize: "15px", marginTop: "20px", paddingRight: lang === "AR" ? "20px" : "0", paddingLeft: lang === "EN" ? "20px" : "0", lineHeight: "1.8", fontWeight: "500" }}>
-                {t.exp1Bullets.map((b, i) => (
-                  <li key={i}>{b}</li>
-                ))}
-              </ul>
-            </Link>
 
-            <div className="awsmd-dark-card" style={{ background: "#151624", padding: "35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <span style={{ background: "rgba(255, 255, 255, 0.08)", color: "#ffffff", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.exp2Date}</span>
-              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "20px" }}>{t.exp2Company}</h3>
-              <p style={{ color: "#94a3b8", fontSize: "15.5px", marginTop: "5px", fontWeight: "600" }}>{t.exp2Role}</p>
-              <ul style={{ color: "#64748b", fontSize: "15px", marginTop: "20px", paddingRight: lang === "AR" ? "20px" : "0", paddingLeft: lang === "EN" ? "20px" : "0", lineHeight: "1.8", fontWeight: "500" }}>
-                {t.exp2Bullets.map((b, i) => (
-                  <li key={i}>{b}</li>
-                ))}
-              </ul>
+              {/* CARD 3: TEAM COORDINATOR */}
+              <div
+                className="awsmd-dark-card"
+                style={{
+                  background: "#151624",
+                  padding: "26px 22px",
+                  borderRadius: "24px",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  minHeight: "250px",
+                }}
+              >
+                <div>
+                  <span style={{ background: "rgba(255, 255, 255, 0.08)", color: "#ffffff", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "12px" }}>{t.exp3Date}</span>
+                  <h3 style={{ fontSize: "21px", fontWeight: "800", color: "#ffffff", marginBottom: "4px" }}>{t.exp3Company}</h3>
+                  <p style={{ color: "#94a3b8", fontSize: "13.5px", fontWeight: "600", marginBottom: "12px" }}>{t.exp3Role}</p>
+                </div>
+                <ul style={{ color: "#64748b", fontSize: "13px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
+                  {t.exp3Bullets.map((b, i) => (
+                    <li key={i}>{b}</li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* CARD 4: ISP COMPANY */}
+              <div
+                className="awsmd-dark-card"
+                style={{
+                  background: "#151624",
+                  padding: "26px 22px",
+                  borderRadius: "24px",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  minHeight: "250px",
+                }}
+              >
+                <div>
+                  <span style={{ background: "rgba(255, 255, 255, 0.08)", color: "#ffffff", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "12px" }}>{t.exp4Date}</span>
+                  <h3 style={{ fontSize: "21px", fontWeight: "800", color: "#ffffff", marginBottom: "4px" }}>{t.exp4Company}</h3>
+                  <p style={{ color: "#94a3b8", fontSize: "13.5px", fontWeight: "600", marginBottom: "12px" }}>{t.exp4Role}</p>
+                </div>
+                <ul style={{ color: "#64748b", fontSize: "13px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
+                  {t.exp4Bullets.map((b, i) => (
+                    <li key={i}>{b}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
-            <div className="awsmd-dark-card" style={{ background: "#151624", padding: "35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <span style={{ background: "rgba(255, 255, 255, 0.08)", color: "#ffffff", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.exp3Date}</span>
-              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "20px" }}>{t.exp3Company}</h3>
-              <p style={{ color: "#94a3b8", fontSize: "15.5px", marginTop: "5px", fontWeight: "600" }}>{t.exp3Role}</p>
-              <ul style={{ color: "#64748b", fontSize: "15px", marginTop: "20px", paddingRight: lang === "AR" ? "20px" : "0", paddingLeft: lang === "EN" ? "20px" : "0", lineHeight: "1.8", fontWeight: "500" }}>
-                {t.exp3Bullets.map((b, i) => (
-                  <li key={i}>{b}</li>
-                ))}
-              </ul>
+            {/* 3D JELLYFISH MODEL CONTAINER ON THE OTHER SIDE */}
+            <div
+              style={{
+                position: "relative",
+                width: "100%",
+                height: "530px",
+                borderRadius: "32px",
+                background: "radial-gradient(ellipse at center, rgba(37, 99, 235, 0.18) 0%, rgba(13, 15, 25, 0.95) 75%)",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                overflow: "hidden",
+                boxShadow: "0 25px 60px rgba(0, 0, 0, 0.5)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <JellyfishViewer size={520} />
             </div>
 
-            <div className="awsmd-dark-card" style={{ background: "#151624", padding: "35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <span style={{ background: "rgba(255, 255, 255, 0.08)", color: "#ffffff", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.exp4Date}</span>
-              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "20px" }}>{t.exp4Company}</h3>
-              <p style={{ color: "#94a3b8", fontSize: "15.5px", marginTop: "5px", fontWeight: "600" }}>{t.exp4Role}</p>
-              <ul style={{ color: "#64748b", fontSize: "15px", marginTop: "20px", paddingRight: lang === "AR" ? "20px" : "0", paddingLeft: lang === "EN" ? "20px" : "0", lineHeight: "1.8", fontWeight: "500" }}>
-                {t.exp4Bullets.map((b, i) => (
-                  <li key={i}>{b}</li>
-                ))}
-              </ul>
-            </div>
           </div>
         </div>
       </section>
