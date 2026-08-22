@@ -84,15 +84,15 @@ const translations = {
     ],
     eduTag: "03 — التعليم والشهادات",
     eduTitle: "المؤهلات الأكاديمية والتدريب المستمر",
-    edu1Year: "2026 (المتوقع)",
+    edu1Year: "2026",
     edu1School: "جامعة دجلة – بغداد",
     edu1Degree: "بكالوريوس في علوم الحاسوب",
     edu2Year: "2019 - 2021",
     edu2School: "معهد التكنولوجيا – بغداد",
     edu2Degree: "دبلوم في الصناعات الكيميائية",
-    cert1: "🏆 شهادة في السلامة المهنية",
-    cert2: "🏆 شهادة المبيعات - إيرثلنك",
-    cert3: "🏆 تدريب صيفي CCNA 1",
+    cert1: "شهادة في السلامة المهنية",
+    cert2: "شهادة المبيعات - إيرثلنك",
+    cert3: "تدريب صيفي CCNA 1",
     footerSubtitle: "جاهز لمساعدتك في بناء وإدارة أفضل نظام بيانات وتجارة إلكترونية.",
     drawerTitle: "مرحباً! أخبرنا بكل التفاصيل",
     drawerSubtitle: "يسعدنا التعاون معك لبناء وتطوير حلول برمجية وبيانات استثنائية.",
@@ -114,7 +114,7 @@ const translations = {
     navExperience: "Experience",
     navEducation: "Education",
     navContact: "Contact Us",
-    downloadCV: "Download PDF 📥",
+    downloadCV: "Download PDF",
     becomeClient: "Become a Client",
     heroLine1: "WE CREATE",
     heroLine2: "AWESOME",
@@ -160,15 +160,15 @@ const translations = {
     ],
     eduTag: "03 — EDUCATION & CERTIFICATES",
     eduTitle: "Academic Qualifications & Training",
-    edu1Year: "2026 (Expected)",
+    edu1Year: "2026",
     edu1School: "Dijlah University College – Baghdad",
     edu1Degree: "B.Sc. in Computer Science",
     edu2Year: "2019 - 2021",
     edu2School: "Institute of Technology – Baghdad",
     edu2Degree: "Diploma in Chemical Industries",
-    cert1: "🏆 Occupational Safety Cert",
-    cert2: "🏆 Sales Cert - Earthlink",
-    cert3: "🏆 CCNA 1 Summer Training",
+    cert1: "Occupational Safety Cert",
+    cert2: "Sales Cert - Earthlink",
+    cert3: "CCNA 1 Summer Training",
     footerSubtitle: "Ready to help you build and scale data-driven software & e-commerce systems.",
     drawerTitle: "Hey! Tell us all the things",
     drawerSubtitle: "We’d love to hear about your project and build something amazing together.",
@@ -531,7 +531,6 @@ export default function Home() {
                   gap: "10px"
                 }}
               >
-                <span>📥</span>
                 <span>{t.downloadCV}</span>
               </a>
             </div>
@@ -814,7 +813,6 @@ export default function Home() {
             <div className="awsmd-dark-card" style={{ background: "#151624", padding: "35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)", position: "relative", overflow: "hidden" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span style={{ background: "rgba(96, 165, 250, 0.15)", color: "#60a5fa", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.edu1Year}</span>
-                <span style={{ fontSize: "24px" }}>🎓</span>
               </div>
               <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "16px", color: "#ffffff" }}>{t.edu1School}</h3>
               <p style={{ color: "#94a3b8", fontSize: "16.5px", marginTop: "8px", fontWeight: "500" }}>{t.edu1Degree}</p>
@@ -823,7 +821,6 @@ export default function Home() {
             <div className="awsmd-dark-card" style={{ background: "#151624", padding: "35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)", position: "relative", overflow: "hidden" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span style={{ background: "rgba(255, 255, 255, 0.08)", color: "#ffffff", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.edu2Year}</span>
-                <span style={{ fontSize: "24px" }}>🏆</span>
               </div>
               <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "16px", color: "#ffffff" }}>{t.edu2School}</h3>
               <p style={{ color: "#94a3b8", fontSize: "16.5px", marginTop: "8px", fontWeight: "500" }}>{t.edu2Degree}</p>
@@ -831,9 +828,9 @@ export default function Home() {
           </div>
 
           <div style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
-            <span className="awsmd-cert-pill" style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px" }}><span>📜</span> <span>{t.cert1}</span></span>
-            <span className="awsmd-cert-pill" style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px" }}><span>🌐</span> <span>{t.cert2}</span></span>
-            <span className="awsmd-cert-pill" style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px" }}><span>⚡</span> <span>{t.cert3}</span></span>
+            <span className="awsmd-cert-pill" style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px" }}><span>{t.cert1}</span></span>
+            <span className="awsmd-cert-pill" style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px" }}><span>{t.cert2}</span></span>
+            <span className="awsmd-cert-pill" style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px" }}><span>{t.cert3}</span></span>
           </div>
         </div>
       </section>
