@@ -70,8 +70,10 @@ class handler(BaseHTTPRequestHandler):
                 output_path = tmp_out.name
 
             # Read options
-            key_old = form.getfirst('key_col_old', 'Row-by-Row')
-            key_new = form.getfirst('key_col_new', 'Row-by-Row')
+            key_old = form.getfirst('key_col_old', '')
+            key_new = form.getfirst('key_col_new', '')
+            comp_old = form.getfirst('comp_col_old', '')
+            comp_new = form.getfirst('comp_col_new', '')
             ignore_punct = form.getfirst('ignore_punct', 'true').lower() == 'true'
             filter_keywords = form.getfirst('filter_keywords', '')
             mode = form.getfirst('mode', 'compare')
@@ -80,6 +82,7 @@ class handler(BaseHTTPRequestHandler):
             compare_excel_files(
                 tmp_old_path, tmp_new_path, output_path,
                 key_col_old=key_old, key_col_new=key_new,
+                comp_col_old=comp_old, comp_col_new=comp_new,
                 ignore_punct=ignore_punct,
                 use_ai=False, ai_api_key="",
                 mode=mode,

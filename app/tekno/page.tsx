@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
-// REUSABLE FLIP-TEXT LINK COMPONENT (MATCHING PAGE.TSX)
+// REUSABLE FLIP-TEXT LINK COMPONENT
 function FlipLink({ children, href, style, color = "#0f111a", hoverColor = "#2563eb" }: { children: React.ReactNode; href: string; style?: React.CSSProperties; color?: string; hoverColor?: string }) {
   return (
     <a
@@ -36,15 +36,20 @@ export default function TeknoPage() {
   const [langOrigin, setLangOrigin] = useState({ x: 0, y: 0 });
   const [circleActive, setCircleActive] = useState(false);
 
-  // Client Drawer Tab State
-  const [isClientDrawerOpen, setIsClientDrawerOpen] = useState(false);
-  const [isClientDrawerClosing, setIsClientDrawerClosing] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
   // File states
   const [fileOld, setFileOld] = useState<File | null>(null);
   const [fileNew, setFileNew] = useState<File | null>(null);
   const [fileRef, setFileRef] = useState<File | null>(null);
+
+  // Column Headers state
+  const [oldHeaders, setOldHeaders] = useState<string[]>([]);
+  const [newHeaders, setNewHeaders] = useState<string[]>([]);
+
+  // Selected Columns
+  const [keyColOld, setKeyColOld] = useState<string>("");
+  const [keyColNew, setKeyColNew] = useState<string>("");
+  const [compColOld, setCompColOld] = useState<string>("Compare All Columns");
+  const [compColNew, setCompColNew] = useState<string>("Compare All Columns");
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -82,14 +87,6 @@ export default function TeknoPage() {
     }, 700);
   };
 
-  const closeClientDrawer = () => {
-    setIsClientDrawerClosing(true);
-    setTimeout(() => {
-      setIsClientDrawerOpen(false);
-      setIsClientDrawerClosing(false);
-    }, 450);
-  };
-
   useEffect(() => {
     let animationFrameId: number;
     let targetX = 0, targetY = 0;
@@ -116,6 +113,56 @@ export default function TeknoPage() {
     };
   }, []);
 
+  // Auto-fetch headers when Old File selected
+  useEffect(() => {
+    if (!fileOld) {
+      setOldHeaders([]);
+      setKeyColOld("");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", fileOld);
+    fetch("/api/tekno/headers", { method: "POST", body: formData })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.headers && data.headers.length > 0) {
+          setOldHeaders(data.headers);
+          // Default to column matching 'sku' or 'c ('
+          const defaultKey = data.headers.find((h: string) => h.toLowerCase().includes("sku") || h.startsWith("C ")) || data.headers[0];
+          setKeyColOld(defaultKey);
+
+          const defaultComp = data.headers.find((h: string) => h.toLowerCase().includes("qty") || h.toLowerCase().includes("رصيد")) || "Compare All Columns";
+          setCompColOld(defaultComp);
+        }
+      })
+      .catch(() => {});
+  }, [fileOld]);
+
+  // Auto-fetch headers when New File selected
+  useEffect(() => {
+    if (!fileNew) {
+      setNewHeaders([]);
+      setKeyColNew("");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", fileNew);
+    fetch("/api/tekno/headers", { method: "POST", body: formData })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.headers && data.headers.length > 0) {
+          setNewHeaders(data.headers);
+          // Default to column matching 'الاسم' or 'c ('
+          const defaultKey = data.headers.find((h: string) => h.includes("الاسم") || h.toLowerCase().includes("name") || h.startsWith("C ")) || data.headers[0];
+          setKeyColNew(defaultKey);
+
+          const defaultComp = data.headers.find((h: string) => h.includes("الرصيد") || h.toLowerCase().includes("qty") || h.startsWith("D ")) || "Compare All Columns";
+          setCompColNew(defaultComp);
+        }
+      })
+      .catch(() => {});
+  }, [fileNew]);
+
   const handleProcessFiles = async () => {
     if (!fileOld || !fileNew) {
       setErrorMessage(lang === "AR" ? "يرجى اختيار ملف الموقع وملف المخزن للبدء" : "Please select website file and warehouse file to start");
@@ -131,10 +178,14 @@ export default function TeknoPage() {
       formData.append("file_new", fileNew);
       if (fileRef) formData.append("file_ref", fileRef);
 
+      formData.append("key_col_old", keyColOld);
+      formData.append("key_col_new", keyColNew);
+      formData.append("comp_col_old", compColOld);
+      formData.append("comp_col_new", compColNew);
+
       formData.append("ignore_punct", String(ignorePunct));
       formData.append("filter_keywords", filterKeywords);
 
-      // Call Vercel Python API route running comparator.py!
       const res = await fetch("/api/compare", {
         method: "POST",
         body: formData,
@@ -316,28 +367,6 @@ export default function TeknoPage() {
           >
             {lang === "AR" ? "EN" : "عربي"} ∨
           </button>
-
-          <button
-            onClick={() => setIsClientDrawerOpen(true)}
-            className="awsmd-royal-client-btn"
-            style={{
-              background: "transparent",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-            }}
-          >
-            <span className="flip-box">
-              <span className="flip-wrapper">
-                <span className="flip-text-primary">
-                  + {isDesktop ? (lang === "AR" ? "كن عميلاً" : "Become a Client") : (lang === "AR" ? "تواصل" : "Client")}
-                </span>
-                <span className="flip-text-secondary">
-                  + {isDesktop ? (lang === "AR" ? "كن عميلاً" : "Become a Client") : (lang === "AR" ? "تواصل" : "Client")}
-                </span>
-              </span>
-            </span>
-          </button>
         </div>
       </header>
 
@@ -382,8 +411,8 @@ export default function TeknoPage() {
             }}
           >
             {lang === "AR"
-              ? "أداة مقارنة وسحب بيانات الإكسل الذكية بالمحرك الأصلي لـ Python"
-              : "Smart Excel comparison & data extraction tool powered natively by Python"}
+              ? "أداة مقارنة وسحب بيانات الإكسل الذكية بالمحرك الأصلي الكامل لـ Python"
+              : "Full smart Excel comparison & data extraction powered by Python Engine"}
           </p>
         </div>
 
@@ -459,6 +488,32 @@ export default function TeknoPage() {
                 {fileOld ? fileOld.name : (lang === "AR" ? "رفع الملف" : "Upload File")}
               </span>
             </label>
+
+            {oldHeaders.length > 0 && (
+              <div style={{ marginTop: "16px" }}>
+                <label style={{ fontSize: "12.5px", fontWeight: "800", color: "#475569", display: "block", marginBottom: "4px" }}>
+                  {lang === "AR" ? "عمود الربط (الاسم) في ملف الموقع:" : "Key Column (Name/SKU):"}
+                </label>
+                <select
+                  value={keyColOld}
+                  onChange={(e) => setKeyColOld(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "8px 12px",
+                    borderRadius: "10px",
+                    border: "1px solid #cbd5e1",
+                    fontSize: "13px",
+                    fontWeight: "700",
+                    background: "#ffffff",
+                  }}
+                >
+                  <option value="Row-by-Row">Row-by-Row</option>
+                  {oldHeaders.map((h, i) => (
+                    <option key={i} value={h}>{h}</option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
 
           {/* CARD 2: WAREHOUSE FILE */}
@@ -524,6 +579,32 @@ export default function TeknoPage() {
                 {fileNew ? fileNew.name : (lang === "AR" ? "رفع الملف" : "Upload File")}
               </span>
             </label>
+
+            {newHeaders.length > 0 && (
+              <div style={{ marginTop: "16px" }}>
+                <label style={{ fontSize: "12.5px", fontWeight: "800", color: "#475569", display: "block", marginBottom: "4px" }}>
+                  {lang === "AR" ? "عمود الربط (الاسم) في ملف المخزن:" : "Key Column (Name/SKU):"}
+                </label>
+                <select
+                  value={keyColNew}
+                  onChange={(e) => setKeyColNew(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "8px 12px",
+                    borderRadius: "10px",
+                    border: "1px solid #cbd5e1",
+                    fontSize: "13px",
+                    fontWeight: "700",
+                    background: "#ffffff",
+                  }}
+                >
+                  <option value="Row-by-Row">Row-by-Row</option>
+                  {newHeaders.map((h, i) => (
+                    <option key={i} value={h}>{h}</option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
 
           {/* CARD 3: REFERENCE / CORRECTION FILE */}
@@ -674,64 +755,6 @@ export default function TeknoPage() {
           © {new Date().getFullYear()} Haider Mohamed Shwkat - Tekno Tool (Python Engine)
         </span>
       </footer>
-
-      {/* BECOME A CLIENT DRAWER TAB MODAL */}
-      {(isClientDrawerOpen || isClientDrawerClosing) && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 2000,
-            display: "flex",
-            justifyContent: lang === "AR" ? "flex-start" : "flex-end",
-          }}
-        >
-          <div
-            onClick={closeClientDrawer}
-            style={{
-              position: "fixed",
-              inset: 0,
-              background: "rgba(15, 17, 26, 0.6)",
-              backdropFilter: "blur(8px)",
-              opacity: isClientDrawerClosing ? 0 : 1,
-              transition: "opacity 0.45s ease",
-            }}
-          />
-          <div
-            style={{
-              position: "relative",
-              width: "100%",
-              maxWidth: "540px",
-              height: "100dvh",
-              background: "#ffffff",
-              color: "#0f111a",
-              padding: isDesktop ? "45px 35px" : "30px 20px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              boxShadow: lang === "AR" ? "-20px 0 50px rgba(0,0,0,0.3)" : "20px 0 50px rgba(0,0,0,0.3)",
-              zIndex: 2001,
-              overflowY: "auto",
-              transform: isClientDrawerClosing
-                ? lang === "AR" ? "translateX(-100%)" : "translateX(100%)"
-                : "translateX(0)",
-              transition: "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
-              fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif",
-            }}
-          >
-            <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "25px" }}>
-                <div>
-                  <h2 style={{ fontSize: isDesktop ? "30px" : "24px", fontWeight: "900", color: "#0f111a", lineHeight: "1.2" }}>
-                    {lang === "AR" ? "مرحباً! أخبرنا بكل التفاصيل" : "Hey! Tell us all the things"}
-                  </h2>
-                </div>
-                <button onClick={closeClientDrawer} style={{ background: "#f1f5f9", border: "none", width: "38px", height: "38px", borderRadius: "50%", cursor: "pointer" }}>✕</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
