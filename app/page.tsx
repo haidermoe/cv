@@ -615,16 +615,38 @@ export default function Home() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "25px" }}>
-            <div className="awsmd-dark-card" style={{ background: "#151624", padding: "35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <span style={{ background: "rgba(96, 165, 250, 0.15)", color: "#60a5fa", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.exp1Date}</span>
-              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "20px" }}>{t.exp1Company}</h3>
-              <p style={{ color: "#94a3b8", fontSize: "15.5px", marginTop: "5px", fontWeight: "600" }}>{t.exp1Role}</p>
-              <ul style={{ color: "#64748b", fontSize: "15px", marginTop: "20px", paddingRight: lang === "AR" ? "20px" : "0", paddingLeft: lang === "EN" ? "20px" : "0", lineHeight: "1.8", fontWeight: "500" }}>
+            <a
+              href="https://tekno-tool.streamlit.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="awsmd-dark-card"
+              style={{
+                background: "#151624",
+                padding: "35px",
+                borderRadius: "24px",
+                border: "1.5px solid rgba(96, 165, 250, 0.35)",
+                display: "block",
+                textDecoration: "none",
+                color: "#ffffff",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+                boxShadow: "0 10px 30px rgba(37, 99, 235, 0.15)"
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span style={{ background: "rgba(96, 165, 250, 0.15)", color: "#60a5fa", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.exp1Date}</span>
+                <span style={{ background: "#2563eb", color: "#ffffff", padding: "6px 14px", borderRadius: "20px", fontSize: "13px", fontWeight: "800", display: "inline-flex", alignItems: "center", gap: "5px" }}>
+                  <span>⚡ {lang === "AR" ? "تشغيل أداة تكنو" : "Launch Tekno Tool"}</span>
+                </span>
+              </div>
+              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "20px", color: "#ffffff" }}>{t.exp1Company}</h3>
+              <p style={{ color: "#60a5fa", fontSize: "15.5px", marginTop: "5px", fontWeight: "700" }}>{t.exp1Role}</p>
+              <ul style={{ color: "#94a3b8", fontSize: "15px", marginTop: "20px", paddingRight: lang === "AR" ? "20px" : "0", paddingLeft: lang === "EN" ? "20px" : "0", lineHeight: "1.8", fontWeight: "500" }}>
                 {t.exp1Bullets.map((b, i) => (
                   <li key={i}>{b}</li>
                 ))}
               </ul>
-            </div>
+            </a>
 
             <div className="awsmd-dark-card" style={{ background: "#151624", padding: "35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)" }}>
               <span style={{ background: "rgba(255, 255, 255, 0.08)", color: "#ffffff", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.exp2Date}</span>
