@@ -609,8 +609,41 @@ export default function Home() {
       </section>
 
       {/* Experience Section */}
-      <section className="section" id="experience" style={{ padding: "110px 40px", background: "radial-gradient(ellipse at 25% 50%, rgba(37, 99, 235, 0.18) 0%, rgba(15, 23, 42, 0.6) 50%, #0d0f19 85%)", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", position: "relative", overflow: "hidden" }}>
-        <div style={{ maxWidth: "1300px", margin: "0 auto" }}>
+      <section className="section" id="experience" style={{ padding: "110px 40px", background: "#0d0f19", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", position: "relative", overflow: "hidden" }}>
+        {/* VIDEO BACKGROUND */}
+        <video
+          src="/media/experience-bg.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          disablePictureInPicture
+          controlsList="nodownload nofullscreen noremoteplayback"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            opacity: 0.45,
+            pointerEvents: "none",
+            zIndex: 0,
+            filter: "brightness(0.7) contrast(1.1)",
+          }}
+        />
+
+        {/* GRADIENT OVERLAY FOR DEEP BLENDING & TEXT READABILITY */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "radial-gradient(ellipse at 25% 50%, rgba(13, 15, 25, 0.4) 0%, rgba(13, 15, 25, 0.85) 75%, #0d0f19 100%)",
+            pointerEvents: "none",
+            zIndex: 1,
+          }}
+        />
+
+        <div style={{ maxWidth: "1300px", margin: "0 auto", position: "relative", zIndex: 2 }}>
           <div style={{ marginBottom: "60px", textAlign: lang === "AR" ? "right" : "left" }}>
             <span style={{ color: "#60a5fa", fontSize: "15px", fontWeight: "800", textTransform: "uppercase" }}>{t.expTag}</span>
             <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px" }}>{t.expTitle}</h2>
