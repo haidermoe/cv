@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import * as XLSX from "xlsx";
 
 // REUSABLE FLIP-TEXT LINK COMPONENT
 function FlipLink({ children, href, style, color = "#0f111a", hoverColor = "#2563eb" }: { children: React.ReactNode; href: string; style?: React.CSSProperties; color?: string; hoverColor?: string }) {
@@ -27,36 +26,6 @@ function FlipLink({ children, href, style, color = "#0f111a", hoverColor = "#256
   );
 }
 
-// Client-side Excel & CSV Header Parser (Instant 0ms, No Server 404s!)
-const parseHeadersFromFile = async (file: File): Promise<string[]> => {
-  try {
-    const arrayBuffer = await file.arrayBuffer();
-    const wb = XLSX.read(arrayBuffer, { type: "array" });
-    const firstSheetName = wb.SheetNames[0];
-    if (!firstSheetName) return [];
-    const ws = wb.Sheets[firstSheetName];
-    const data: any[][] = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
-    const firstRow = data[0] || [];
-
-    const numToColStr = (n: number): string => {
-      let s = "";
-      while (n >= 0) {
-        s = String.fromCharCode((n % 26) + 65) + s;
-        n = Math.floor(n / 26) - 1;
-      }
-      return s;
-    };
-
-    return firstRow.map((val, idx) => {
-      const colLetter = numToColStr(idx);
-      const strVal = String(val).trim();
-      return strVal ? `${colLetter} (${strVal})` : `${colLetter}`;
-    });
-  } catch (err) {
-    return [];
-  }
-};
-
 export default function TeknoPage() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -75,7 +44,7 @@ export default function TeknoPage() {
   const [fileNew, setFileNew] = useState<File | null>(null);
   const [fileRef, setFileRef] = useState<File | null>(null);
 
-  // Column Headers state
+  // Column Headers state (Read 100% by Python Backend!)
   const [oldHeaders, setOldHeaders] = useState<string[]>([]);
   const [newHeaders, setNewHeaders] = useState<string[]>([]);
 
@@ -93,6 +62,7 @@ export default function TeknoPage() {
   const [filterKeywords, setFilterKeywords] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState("");
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -150,42 +120,52 @@ export default function TeknoPage() {
     };
   }, []);
 
-  // Instant 0ms Header parsing for Old File
+  // Send Old File to Python API Backend to read headers natively using Python comparator.py get_headers
   useEffect(() => {
     if (!fileOld) {
       setOldHeaders([]);
       setKeyColOld("");
       return;
     }
-    parseHeadersFromFile(fileOld).then((headers) => {
-      if (headers.length > 0) {
-        setOldHeaders(headers);
-        const defaultKey = headers.find((h) => h.toLowerCase().includes("sku") || h.startsWith("C ")) || headers[0];
-        setKeyColOld(defaultKey);
+    const formData = new FormData();
+    formData.append("file", fileOld);
+    fetch("/api/tekno/headers", { method: "POST", body: formData })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.headers && data.headers.length > 0) {
+          setOldHeaders(data.headers);
+          const defaultKey = data.headers.find((h: string) => h.toLowerCase().includes("sku") || h.startsWith("C ")) || data.headers[0];
+          setKeyColOld(defaultKey);
 
-        const defaultComp = headers.find((h) => h.toLowerCase().includes("qty") || h.toLowerCase().includes("رصيد") || h.startsWith("E ")) || "Compare All Columns";
-        setCompColOld(defaultComp);
-      }
-    });
+          const defaultComp = data.headers.find((h: string) => h.toLowerCase().includes("qty") || h.toLowerCase().includes("رصيد") || h.startsWith("E ")) || "Compare All Columns";
+          setCompColOld(defaultComp);
+        }
+      })
+      .catch(() => {});
   }, [fileOld]);
 
-  // Instant 0ms Header parsing for New File
+  // Send New File to Python API Backend to read headers natively using Python comparator.py get_headers
   useEffect(() => {
     if (!fileNew) {
       setNewHeaders([]);
       setKeyColNew("");
       return;
     }
-    parseHeadersFromFile(fileNew).then((headers) => {
-      if (headers.length > 0) {
-        setNewHeaders(headers);
-        const defaultKey = headers.find((h) => h.includes("الاسم") || h.toLowerCase().includes("name") || h.startsWith("C ")) || headers[0];
-        setKeyColNew(defaultKey);
+    const formData = new FormData();
+    formData.append("file", fileNew);
+    fetch("/api/tekno/headers", { method: "POST", body: formData })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.headers && data.headers.length > 0) {
+          setNewHeaders(data.headers);
+          const defaultKey = data.headers.find((h: string) => h.includes("الاسم") || h.toLowerCase().includes("name") || h.startsWith("C ")) || data.headers[0];
+          setKeyColNew(defaultKey);
 
-        const defaultComp = headers.find((h) => h.includes("الرصيد") || h.toLowerCase().includes("qty") || h.startsWith("D ")) || "Compare All Columns";
-        setCompColNew(defaultComp);
-      }
-    });
+          const defaultComp = data.headers.find((h: string) => h.includes("الرصيد") || h.toLowerCase().includes("qty") || h.startsWith("D ")) || "Compare All Columns";
+          setCompColNew(defaultComp);
+        }
+      })
+      .catch(() => {});
   }, [fileNew]);
 
   const handleProcessFiles = async () => {
@@ -195,6 +175,7 @@ export default function TeknoPage() {
     }
     setErrorMessage("");
     setLoading(true);
+    setLoadingStep(lang === "AR" ? "جاري رفع الملفات إلى سيرفر بايثون..." : "Uploading files to Python server...");
     setSuccess(false);
 
     try {
@@ -214,6 +195,10 @@ export default function TeknoPage() {
       formData.append("similarity_threshold", String(enableFuzzy ? simThresh : 101));
       formData.append("filter_keywords", filterKeywords);
 
+      setTimeout(() => {
+        setLoadingStep(lang === "AR" ? "جاري تنفيذ دالة المقارنة وتلوين الشيتات بلغة Python..." : "Executing Python comparator logic & coloring sheets...");
+      }, 1500);
+
       const res = await fetch("/api/compare", {
         method: "POST",
         body: formData,
@@ -221,8 +206,10 @@ export default function TeknoPage() {
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || "حدث خطأ أثناء معالجة الملفات");
+        throw new Error(errData.error || "حدث خطأ أثناء معالجة الملفات في سيرفر بايثون");
       }
+
+      setLoadingStep(lang === "AR" ? "تمت المعالجة! جاري تنزيل التقرير..." : "Done! Downloading Excel report...");
 
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
@@ -236,9 +223,10 @@ export default function TeknoPage() {
 
       setSuccess(true);
     } catch (err: any) {
-      setErrorMessage(err.message || "حدث خطأ أثناء المعالجة بواسطة برنامج بايثون");
+      setErrorMessage(err.message || "حدث خطأ أثناء المعالجة بواسطة سيرفر بايثون");
     } finally {
       setLoading(false);
+      setLoadingStep("");
     }
   };
 
@@ -440,8 +428,8 @@ export default function TeknoPage() {
             }}
           >
             {lang === "AR"
-              ? "أداة مقارنة وسحب بيانات الإكسل الذكية بالمحرك الأصلي لـ Python"
-              : "Full smart Excel comparison & data extraction powered by Python Engine"}
+              ? "واجهة عرض مخصصة متصلة مباشرة بسيرفر Python للمعالجة الشاملة 100%"
+              : "Custom Display UI connected directly to Python Server for 100% full processing"}
           </p>
 
           {/* MODE TOGGLE PILLS */}
@@ -695,7 +683,7 @@ export default function TeknoPage() {
           </div>
         </div>
 
-        {/* COLUMN SELECTION SECTION (WHEN FILES ARE UPLOADED) */}
+        {/* COLUMN SELECTION SECTION (POPULATED BY PYTHON BACKEND GET_HEADERS) */}
         {(fileOld || fileNew) && (
           <div
             style={{
@@ -708,7 +696,7 @@ export default function TeknoPage() {
             }}
           >
             <h3 style={{ fontSize: "20px", fontWeight: "900", color: "#0f111a", marginBottom: "20px" }}>
-              📋 {lang === "AR" ? "تحديد أعمدة الربط والمقارنة" : "Select Key & Comparison Columns"}
+              📋 {lang === "AR" ? "تحديد أعمدة الربط والمقارنة (مقروءة بسيرفر Python)" : "Select Key & Comparison Columns (Read by Python)"}
             </h3>
 
             {/* KEY COLUMNS ROW */}
@@ -920,6 +908,13 @@ export default function TeknoPage() {
             </div>
           </div>
 
+          {loadingStep && (
+            <div style={{ padding: "14px 20px", background: "#eff6ff", color: "#1d4ed8", borderRadius: "14px", border: "1px solid #bfdbfe", marginBottom: "20px", fontSize: "14.5px", fontWeight: "700", display: "flex", alignItems: "center", gap: "10px" }}>
+              <span className="spinner" style={{ display: "inline-block", width: "16px", height: "16px", border: "2.5px solid #1d4ed8", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+              <span>{loadingStep}</span>
+            </div>
+          )}
+
           {errorMessage && (
             <div style={{ padding: "14px 20px", background: "#fef2f2", color: "#991b1b", borderRadius: "14px", border: "1px solid #fecaca", marginBottom: "20px", fontSize: "14.5px", fontWeight: "700" }}>
               ⚠️ {errorMessage}
@@ -981,6 +976,13 @@ export default function TeknoPage() {
           © {new Date().getFullYear()} Haider Mohamed Shwkat - Tekno Tool (Python Engine)
         </span>
       </footer>
+
+      <style jsx global>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
