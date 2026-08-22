@@ -127,7 +127,7 @@ export default function ThanksPage() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        padding: isDesktop ? "20px clamp(16px, 5vw, 80px)" : "16px 20px 24px",
+        padding: isDesktop ? "20px clamp(16px, 5vw, 80px)" : "16px 16px 24px",
         position: "relative",
         fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif",
         overflowX: "hidden",
@@ -199,7 +199,7 @@ export default function ThanksPage() {
           alignItems: "center",
           width: "100%",
           zIndex: 30,
-          gap: "12px",
+          gap: "8px",
         }}
       >
         {/* LOGO */}
@@ -208,15 +208,15 @@ export default function ThanksPage() {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "8px",
+            gap: "6px",
             textDecoration: "none",
             color: "#0f111a",
-            fontSize: "clamp(16px, 4vw, 20px)",
+            fontSize: "clamp(15px, 3.6vw, 20px)",
             fontWeight: "900",
             flexShrink: 0,
           }}
         >
-          <svg width="22" height="18" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="20" height="16" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="7" y="1" width="8" height="10" fill="#0f111a" />
             <rect x="0" y="13" width="16" height="7" fill="#0f111a" />
             <rect x="10" y="13" width="15" height="7" fill="#4f46e5" />
@@ -265,7 +265,7 @@ export default function ThanksPage() {
         </div>
 
         {/* RIGHT TOP ACTIONS */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
           <button
             onClick={handleLangSwitch}
             className="awsmd-btn-glow"
@@ -273,9 +273,9 @@ export default function ThanksPage() {
               background: "#ffffff",
               border: "1.5px solid #e2e8f0",
               color: "#0f111a",
-              padding: "7px 14px",
+              padding: "6px 11px",
               borderRadius: "50px",
-              fontSize: "12.5px",
+              fontSize: "11.5px",
               fontWeight: "800",
               cursor: "pointer",
             }}
@@ -303,70 +303,48 @@ export default function ThanksPage() {
         </div>
       </header>
 
-      {/* DESKTOP 3D JELLYFISH FIXED FULLPAGE OVERLAY */}
-      {isDesktop && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            width: "100dvw",
-            height: "100dvh",
-            zIndex: 10,
-            pointerEvents: "none",
-            overflow: "visible",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div style={{ width: "100%", height: "100%", pointerEvents: "auto" }}>
-            <JellyfishViewer
-              customColor={jellyColor}
-              materialMode={matMode}
-              positionX={lang === "AR" ? 1.5 : -1.5}
-              positionY={-0.18}
-              scaleMultiplier={1.0}
-            />
-          </div>
+      {/* 3D JELLYFISH FIXED FULLPAGE OVERLAY (FLOATS MAJESTICALLY & INTERACTIVELY ACROSS ALL SCREENS) */}
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          width: "100dvw",
+          height: "100dvh",
+          zIndex: 10,
+          pointerEvents: "none",
+          overflow: "visible",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <div style={{ width: "100%", height: "100%", pointerEvents: "auto" }}>
+          <JellyfishViewer
+            customColor={jellyColor}
+            materialMode={matMode}
+            positionX={isDesktop ? (lang === "AR" ? 1.5 : -1.5) : 0}
+            positionY={isDesktop ? -0.18 : 0.42}
+            scaleMultiplier={isDesktop ? 1.15 : 1.38}
+          />
         </div>
-      )}
+      </div>
 
       {/* HERO SECTION CONTAINER */}
       <main
         style={{
           position: "relative",
           width: "100%",
+          minHeight: "72dvh",
           display: "flex",
           flexDirection: isDesktop ? (lang === "AR" ? "row-reverse" : "row") : "column",
           alignItems: "center",
           justifyContent: isDesktop ? "space-between" : "center",
-          margin: isDesktop ? "auto 0" : "10px 0 20px",
+          margin: "auto 0",
           zIndex: 20,
         }}
       >
         {/* DESKTOP LEFT COLUMN SPACER FOR 3D JELLYFISH */}
         {isDesktop && <div style={{ flex: "1 1 45%", minHeight: "100px" }} />}
-
-        {/* MOBILE 3D JELLYFISH DEDICATED HERO BANNER */}
-        {!isDesktop && (
-          <div
-            style={{
-              width: "100%",
-              height: "clamp(220px, 32vh, 290px)",
-              position: "relative",
-              margin: "0 0 10px 0",
-              zIndex: 10,
-            }}
-          >
-            <JellyfishViewer
-              customColor={jellyColor}
-              materialMode={matMode}
-              positionX={0}
-              positionY={-0.08}
-              scaleMultiplier={0.88}
-            />
-          </div>
-        )}
 
         {/* CONTENT COLUMN: GIANT TYPOGRAPHY & SUBTEXT */}
         <div
@@ -375,7 +353,7 @@ export default function ThanksPage() {
             position: "relative",
             zIndex: 20,
             flex: isDesktop ? "1 1 55%" : "1 1 100%",
-            maxWidth: isDesktop ? "650px" : "100%",
+            maxWidth: isDesktop ? "650px" : "640px",
             width: "100%",
             textAlign: isDesktop ? (lang === "AR" ? "right" : "left") : "center",
             display: "flex",
@@ -383,19 +361,22 @@ export default function ThanksPage() {
             alignItems: isDesktop ? (lang === "AR" ? "flex-end" : "flex-start") : "center",
             paddingRight: isDesktop && lang === "EN" ? "20px" : "0",
             paddingLeft: isDesktop && lang === "AR" ? "20px" : "0",
+            marginTop: isDesktop ? "0" : "min(36vh, 320px)",
           }}
         >
           {/* GIANT TITLE */}
           <h1
+            className="noomo-giant-title-float"
             style={{
-              fontSize: isDesktop ? "clamp(48px, 6.5vw, 115px)" : "clamp(34px, 10vw, 56px)",
+              fontSize: isDesktop ? "clamp(48px, 6.5vw, 115px)" : "clamp(38px, 11vw, 70px)",
               fontWeight: "900",
               color: "#0f111a",
-              letterSpacing: "-0.03em",
+              letterSpacing: "-0.04em",
               margin: "0 0 12px 0",
-              lineHeight: "1.05",
+              lineHeight: "1.0",
               zIndex: 1,
               userSelect: "none",
+              textShadow: "0 2px 24px rgba(242, 241, 246, 0.95), 0 0 40px rgba(255, 255, 255, 0.8)",
             }}
           >
             {lang === "AR" ? "شكراً لك !" : "THANK YOU !"}
@@ -404,11 +385,12 @@ export default function ThanksPage() {
           {/* SUBTITLE */}
           <p
             style={{
-              fontSize: isDesktop ? "clamp(20px, 2.5vw, 26px)" : "clamp(17px, 4.5vw, 21px)",
+              fontSize: isDesktop ? "clamp(20px, 2.5vw, 26px)" : "clamp(17px, 4.5vw, 22px)",
               fontWeight: "800",
               color: "#0f111a",
               marginBottom: "10px",
               lineHeight: "1.3",
+              textShadow: "0 2px 16px rgba(242, 241, 246, 0.9)",
             }}
           >
             {lang === "AR" ? "تم إرسال طلبك بنجاح 🚀" : "Your request has been successfully sent 🚀"}
@@ -418,11 +400,12 @@ export default function ThanksPage() {
           <p
             style={{
               fontSize: isDesktop ? "clamp(15px, 1.5vw, 17.5px)" : "14.5px",
-              color: "#64748b",
+              color: "#475569",
               lineHeight: "1.6",
               fontWeight: "600",
               marginBottom: isDesktop ? "32px" : "24px",
               maxWidth: "500px",
+              textShadow: "0 1px 12px rgba(242, 241, 246, 0.9)",
             }}
           >
             {lang === "AR"
@@ -437,7 +420,7 @@ export default function ThanksPage() {
             style={{
               background: "#2563eb",
               color: "#ffffff",
-              padding: isDesktop ? "16px 38px" : "14px 32px",
+              padding: isDesktop ? "16px 38px" : "14px 34px",
               borderRadius: "50px",
               fontSize: isDesktop ? "15.5px" : "15px",
               fontWeight: "800",

@@ -60,11 +60,12 @@ export default function JellyfishViewer({
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera with dynamic aspect ratio
+    // 2. Camera with dynamic aspect ratio & responsive mobile framing
     const initialWidth = container.clientWidth || window.innerWidth;
     const initialHeight = container.clientHeight || window.innerHeight;
-    const camera = new THREE.PerspectiveCamera(42, initialWidth / initialHeight, 0.1, 1000);
-    camera.position.set(0, 0, 5.8);
+    const aspect = initialWidth / initialHeight;
+    const camera = new THREE.PerspectiveCamera(40, aspect, 0.1, 1000);
+    camera.position.set(0, 0, 5.0);
 
     // 3. Renderer with transparent background
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
