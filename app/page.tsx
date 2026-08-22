@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 // REUSABLE FLIP-TEXT LINK COMPONENT
 function FlipLink({ children, href, download, target, style, color = "#0f111a", hoverColor = "#2563eb" }: { children: React.ReactNode; href: string; download?: string; target?: string; style?: React.CSSProperties; color?: string; hoverColor?: string }) {
@@ -615,10 +616,8 @@ export default function Home() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "25px" }}>
-            <a
-              href="https://excelhid.streamlit.app/"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/tekno"
               className="awsmd-dark-card"
               style={{
                 background: "#151624",
@@ -646,7 +645,7 @@ export default function Home() {
                   <li key={i}>{b}</li>
                 ))}
               </ul>
-            </a>
+            </Link>
 
             <div className="awsmd-dark-card" style={{ background: "#151624", padding: "35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)" }}>
               <span style={{ background: "rgba(255, 255, 255, 0.08)", color: "#ffffff", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.exp2Date}</span>
