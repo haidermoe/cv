@@ -603,6 +603,10 @@ def compare_excel_files(old_path, new_path, output_path, key_col_old="", key_col
                     matched_by_fuzzy[ok] = best_match
                     
             new_col_idx = old_max_c + 1
+            fill_increase = PatternFill(start_color="CCFFCC", end_color="CCFFCC", fill_type="solid") # Light Green
+            fill_decrease = PatternFill(start_color="FFCCCC", end_color="FFCCCC", fill_type="solid") # Light Red
+            header_fill = PatternFill(start_color="DBEAFE", end_color="DBEAFE", fill_type="solid")   # Soft Blue
+
             for r in range(1, old_max_r + 1):
                 key = row_to_key_old.get(r)
                 base_key = base_key_to_row_old.get(r)
@@ -612,7 +616,7 @@ def compare_excel_files(old_path, new_path, output_path, key_col_old="", key_col
                     
                 if r == 1:
                     out_sheet.cell(row=r, column=new_col_idx).value = new_col_name
-                    out_sheet.cell(row=r, column=new_col_idx).fill = fill_new
+                    out_sheet.cell(row=r, column=new_col_idx).fill = header_fill
                 else:
                     target_nk = None
                     if base_key and base_key in new_by_key:
@@ -624,16 +628,32 @@ def compare_excel_files(old_path, new_path, output_path, key_col_old="", key_col
                     elif base_key and base_key in matched_by_fuzzy:
                         target_nk = matched_by_fuzzy[base_key]
                         
+                    old_val_raw = old_data.get((r, comp_col_idx_old)) if comp_col_idx_old else None
+                    try:
+                        old_num = float(str(old_val_raw).strip()) if old_val_raw is not None and str(old_val_raw).strip() != "" else 0.0
+                    except:
+                        old_num = 0.0
+
                     if target_nk and target_nk in new_by_key:
                         pulled_val = new_by_key[target_nk].get(comp_col_idx_new)
                         if pulled_val is not None and str(pulled_val).strip() != "":
                             out_sheet.cell(row=r, column=new_col_idx).value = pulled_val
+                            try:
+                                pulled_num = float(str(pulled_val).strip())
+                            except:
+                                pulled_num = 0.0
                         else:
                             out_sheet.cell(row=r, column=new_col_idx).value = 0
-                        if (key and key in matched_by_fuzzy) or (base_key and base_key in matched_by_fuzzy):
-                            out_sheet.cell(row=r, column=new_col_idx).fill = fill_new
+                            pulled_num = 0.0
+
+                        if pulled_num > old_num:
+                            out_sheet.cell(row=r, column=new_col_idx).fill = fill_increase
+                        elif pulled_num < old_num:
+                            out_sheet.cell(row=r, column=new_col_idx).fill = fill_decrease
                     else:
                         out_sheet.cell(row=r, column=new_col_idx).value = 0
+                        if old_num > 0:
+                            out_sheet.cell(row=r, column=new_col_idx).fill = fill_decrease
             continue
             
         mod_r = 1
