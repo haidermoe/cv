@@ -609,7 +609,7 @@ export default function Home() {
       </section>
 
       {/* Experience Section */}
-      <section className="section" id="experience" style={{ padding: "110px 40px", background: "#0d0f19", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+      <section className="section" id="experience" style={{ padding: "110px 40px", background: "radial-gradient(ellipse at 25% 50%, rgba(37, 99, 235, 0.18) 0%, rgba(15, 23, 42, 0.6) 50%, #0d0f19 85%)", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", position: "relative", overflow: "hidden" }}>
         <div style={{ maxWidth: "1300px", margin: "0 auto" }}>
           <div style={{ marginBottom: "60px", textAlign: lang === "AR" ? "right" : "left" }}>
             <span style={{ color: "#60a5fa", fontSize: "15px", fontWeight: "800", textTransform: "uppercase" }}>{t.expTag}</span>
@@ -748,23 +748,20 @@ export default function Home() {
               </div>
             </div>
 
-            {/* 3D JELLYFISH MODEL CONTAINER ON THE OTHER SIDE */}
+            {/* 3D JELLYFISH FLOATING FREELY IN DEEP SPACE/OCEAN */}
             <div
               style={{
                 position: "relative",
                 width: "100%",
-                height: "530px",
-                borderRadius: "32px",
-                background: "radial-gradient(ellipse at center, rgba(37, 99, 235, 0.18) 0%, rgba(13, 15, 25, 0.95) 75%)",
-                border: "1px solid rgba(255, 255, 255, 0.12)",
-                overflow: "hidden",
-                boxShadow: "0 25px 60px rgba(0, 0, 0, 0.5)",
+                height: "560px",
+                background: "transparent",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                overflow: "visible",
               }}
             >
-              <JellyfishViewer size={520} />
+              <JellyfishViewer size={560} scaleMultiplier={1.2} />
             </div>
 
           </div>
