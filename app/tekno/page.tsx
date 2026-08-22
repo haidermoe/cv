@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import * as XLSX from "xlsx";
 
 // REUSABLE FLIP-TEXT LINK COMPONENT
 function FlipLink({ children, href, style, color = "#0f111a", hoverColor = "#2563eb" }: { children: React.ReactNode; href: string; style?: React.CSSProperties; color?: string; hoverColor?: string }) {
@@ -25,6 +26,36 @@ function FlipLink({ children, href, style, color = "#0f111a", hoverColor = "#256
     </a>
   );
 }
+
+// Client-side Excel & CSV Header Parser (Instant 0ms, No Server 404s!)
+const parseHeadersFromFile = async (file: File): Promise<string[]> => {
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const wb = XLSX.read(arrayBuffer, { type: "array" });
+    const firstSheetName = wb.SheetNames[0];
+    if (!firstSheetName) return [];
+    const ws = wb.Sheets[firstSheetName];
+    const data: any[][] = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
+    const firstRow = data[0] || [];
+
+    const numToColStr = (n: number): string => {
+      let s = "";
+      while (n >= 0) {
+        s = String.fromCharCode((n % 26) + 65) + s;
+        n = Math.floor(n / 26) - 1;
+      }
+      return s;
+    };
+
+    return firstRow.map((val, idx) => {
+      const colLetter = numToColStr(idx);
+      const strVal = String(val).trim();
+      return strVal ? `${colLetter} (${strVal})` : `${colLetter}`;
+    });
+  } catch (err) {
+    return [];
+  }
+};
 
 export default function TeknoPage() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
@@ -119,52 +150,42 @@ export default function TeknoPage() {
     };
   }, []);
 
-  // Auto-fetch headers when Old File selected
+  // Instant 0ms Header parsing for Old File
   useEffect(() => {
     if (!fileOld) {
       setOldHeaders([]);
       setKeyColOld("");
       return;
     }
-    const formData = new FormData();
-    formData.append("file", fileOld);
-    fetch("/api/tekno/headers", { method: "POST", body: formData })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.headers && data.headers.length > 0) {
-          setOldHeaders(data.headers);
-          const defaultKey = data.headers.find((h: string) => h.toLowerCase().includes("sku") || h.startsWith("C ")) || data.headers[0];
-          setKeyColOld(defaultKey);
+    parseHeadersFromFile(fileOld).then((headers) => {
+      if (headers.length > 0) {
+        setOldHeaders(headers);
+        const defaultKey = headers.find((h) => h.toLowerCase().includes("sku") || h.startsWith("C ")) || headers[0];
+        setKeyColOld(defaultKey);
 
-          const defaultComp = data.headers.find((h: string) => h.toLowerCase().includes("qty") || h.toLowerCase().includes("رصيد") || h.startsWith("E ")) || "Compare All Columns";
-          setCompColOld(defaultComp);
-        }
-      })
-      .catch(() => {});
+        const defaultComp = headers.find((h) => h.toLowerCase().includes("qty") || h.toLowerCase().includes("رصيد") || h.startsWith("E ")) || "Compare All Columns";
+        setCompColOld(defaultComp);
+      }
+    });
   }, [fileOld]);
 
-  // Auto-fetch headers when New File selected
+  // Instant 0ms Header parsing for New File
   useEffect(() => {
     if (!fileNew) {
       setNewHeaders([]);
       setKeyColNew("");
       return;
     }
-    const formData = new FormData();
-    formData.append("file", fileNew);
-    fetch("/api/tekno/headers", { method: "POST", body: formData })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.headers && data.headers.length > 0) {
-          setNewHeaders(data.headers);
-          const defaultKey = data.headers.find((h: string) => h.includes("الاسم") || h.toLowerCase().includes("name") || h.startsWith("C ")) || data.headers[0];
-          setKeyColNew(defaultKey);
+    parseHeadersFromFile(fileNew).then((headers) => {
+      if (headers.length > 0) {
+        setNewHeaders(headers);
+        const defaultKey = headers.find((h) => h.includes("الاسم") || h.toLowerCase().includes("name") || h.startsWith("C ")) || headers[0];
+        setKeyColNew(defaultKey);
 
-          const defaultComp = data.headers.find((h: string) => h.includes("الرصيد") || h.toLowerCase().includes("qty") || h.startsWith("D ")) || "Compare All Columns";
-          setCompColNew(defaultComp);
-        }
-      })
-      .catch(() => {});
+        const defaultComp = headers.find((h) => h.includes("الرصيد") || h.toLowerCase().includes("qty") || h.startsWith("D ")) || "Compare All Columns";
+        setCompColNew(defaultComp);
+      }
+    });
   }, [fileNew]);
 
   const handleProcessFiles = async () => {
