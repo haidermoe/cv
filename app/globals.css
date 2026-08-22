@@ -1567,16 +1567,16 @@ ul {
 /* NOOMO LABS SPACE FLOATING WEIGHTLESS ANIMATIONS */
 @keyframes spatialFloatSlow {
   0% {
-    transform: translate(-50%, -50%) translateY(0px) rotate(0deg);
+    transform: translateY(0px) rotate(0deg);
   }
   33% {
-    transform: translate(-50%, -50%) translateY(-14px) rotate(0.6deg);
+    transform: translateY(-10px) rotate(0.4deg);
   }
   66% {
-    transform: translate(-50%, -50%) translateY(8px) rotate(-0.5deg);
+    transform: translateY(6px) rotate(-0.3deg);
   }
   100% {
-    transform: translate(-50%, -50%) translateY(0px) rotate(0deg);
+    transform: translateY(0px) rotate(0deg);
   }
 }
 

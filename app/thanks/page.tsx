@@ -372,11 +372,13 @@ export default function ThanksPage() {
           <h1
             className="noomo-giant-title-float"
             style={{
-              fontSize: isDesktop ? "clamp(48px, 6.5vw, 120px)" : "clamp(32px, 8.8vw, 60px)",
+              fontSize: isDesktop ? "clamp(48px, 6.5vw, 120px)" : "clamp(34px, 9.2vw, 56px)",
               fontWeight: "900",
               color: "#0f111a",
               letterSpacing: "-0.03em",
-              margin: "0 0 10px 0",
+              margin: "0 auto 10px",
+              textAlign: isDesktop ? (lang === "AR" ? "right" : "left") : "center",
+              width: "100%",
               lineHeight: "1.05",
               zIndex: 1,
               userSelect: "none",
@@ -393,6 +395,8 @@ export default function ThanksPage() {
               fontWeight: "800",
               color: "#0f111a",
               marginBottom: "8px",
+              textAlign: isDesktop ? (lang === "AR" ? "right" : "left") : "center",
+              width: "100%",
               lineHeight: "1.3",
               textShadow: "0 2px 16px rgba(242, 241, 246, 0.9)",
             }}
@@ -408,7 +412,9 @@ export default function ThanksPage() {
               lineHeight: "1.6",
               fontWeight: "600",
               marginBottom: isDesktop ? "32px" : "22px",
+              textAlign: isDesktop ? (lang === "AR" ? "right" : "left") : "center",
               maxWidth: "460px",
+              width: "100%",
               textShadow: "0 1px 12px rgba(242, 241, 246, 0.9)",
             }}
           >
@@ -433,6 +439,7 @@ export default function ThanksPage() {
               display: "inline-flex",
               alignItems: "center",
               gap: "8px",
+              margin: isDesktop ? "0" : "0 auto",
             }}
           >
             {lang === "AR" ? "← تصفح بقية الأقسام" : "Explore Portfolio →"}
