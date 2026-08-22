@@ -69,14 +69,21 @@ class handler(BaseHTTPRequestHandler):
             with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp_out:
                 output_path = tmp_out.name
 
-            # Read options
+            # Read all parameters
             key_old = form.getfirst('key_col_old', '')
             key_new = form.getfirst('key_col_new', '')
             comp_old = form.getfirst('comp_col_old', '')
             comp_new = form.getfirst('comp_col_new', '')
-            ignore_punct = form.getfirst('ignore_punct', 'true').lower() == 'true'
-            filter_keywords = form.getfirst('filter_keywords', '')
             mode = form.getfirst('mode', 'compare')
+            new_col_name = form.getfirst('new_col_name', 'المخزون الساحب')
+            ignore_punct = form.getfirst('ignore_punct', 'true').lower() == 'true'
+            
+            try:
+                similarity_threshold = float(form.getfirst('similarity_threshold', '70'))
+            except:
+                similarity_threshold = 70.0
+
+            filter_keywords = form.getfirst('filter_keywords', '')
 
             # Run exact Python comparator engine
             compare_excel_files(
@@ -84,8 +91,10 @@ class handler(BaseHTTPRequestHandler):
                 key_col_old=key_old, key_col_new=key_new,
                 comp_col_old=comp_old, comp_col_new=comp_new,
                 ignore_punct=ignore_punct,
+                similarity_threshold=similarity_threshold,
                 use_ai=False, ai_api_key="",
                 mode=mode,
+                new_col_name=new_col_name,
                 filter_keywords=filter_keywords,
                 ref_filepath=tmp_ref_path
             )
