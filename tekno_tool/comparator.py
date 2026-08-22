@@ -740,12 +740,17 @@ def compare_excel_files(old_path, new_path, output_path, key_col_old="", key_col
                 for c, (val, fill) in enumerate(cells, start=1):
                     if val is not None:
                         mod_sheet.cell(row=mod_r, column=c).value = val
-                        new_sheet.cell(row=new_r, column=c).value = val
                         del_sheet.cell(row=del_r, column=c).value = val
                     if fill is not None:
                         mod_sheet.cell(row=mod_r, column=c).fill = fill
-                        new_sheet.cell(row=new_r, column=c).fill = fill
                         del_sheet.cell(row=del_r, column=c).fill = fill
+
+                # Headers for _New sheet ALWAYS take 100% exact structure/headers of the Warehouse File (new_data)
+                for c in range(1, new_max_c + 1):
+                    h_val = new_data.get((1, c))
+                    if h_val is not None:
+                        new_sheet.cell(row=new_r, column=c).value = h_val
+                    new_sheet.cell(row=new_r, column=c).fill = fill_new
                 
                 # Add extra headers to _Mod
                 status_col = len(cells) + 1
