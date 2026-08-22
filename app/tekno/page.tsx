@@ -4,8 +4,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import * as XLSX from "xlsx";
 
-const STREAMLIT_BASE_URL = "https://excelhid.streamlit.app";
-
 // REUSABLE FLIP-TEXT LINK COMPONENT
 function FlipLink({ children, href, style, color = "#0f111a", hoverColor = "#2563eb" }: { children: React.ReactNode; href: string; style?: React.CSSProperties; color?: string; hoverColor?: string }) {
   return (
@@ -29,7 +27,7 @@ function FlipLink({ children, href, style, color = "#0f111a", hoverColor = "#256
   );
 }
 
-// Client-side Fallback Parser
+// Client-side Fallback Header Parser (0ms instant)
 const parseHeadersClientSide = async (file: File): Promise<string[]> => {
   try {
     const arrayBuffer = await file.arrayBuffer();
@@ -188,7 +186,7 @@ export default function TeknoPage() {
     };
   }, []);
 
-  // Fetch headers for Old File directly from Streamlit Python Cloud https://excelhid.streamlit.app
+  // Fetch headers for Old File
   useEffect(() => {
     if (!fileOld) {
       setOldHeaders([]);
@@ -209,30 +207,24 @@ export default function TeknoPage() {
       }
     };
 
-    // 1. Try Streamlit Python Cloud Endpoint first
-    fetch(`${STREAMLIT_BASE_URL}/api/python/headers`, { method: "POST", body: formData })
+    fetch("/api/headers", { method: "POST", body: formData })
       .then((res) => {
-        if (!res.ok) throw new Error("Streamlit endpoint unavailable");
+        if (!res.ok) throw new Error("API error");
         return res.json();
       })
       .then((data) => {
         if (data.headers && data.headers.length > 0) {
           applyHeaders(data.headers);
         } else {
-          // 2. Try Vercel headers route as backup
-          fetch("/api/headers", { method: "POST", body: formData })
-            .then(r => r.json())
-            .then(d => d.headers?.length ? applyHeaders(d.headers) : parseHeadersClientSide(fileOld).then(applyHeaders))
-            .catch(() => parseHeadersClientSide(fileOld).then(applyHeaders));
+          parseHeadersClientSide(fileOld).then(applyHeaders);
         }
       })
       .catch(() => {
-        // Fallback to client-side parsing if Streamlit is sleeping
         parseHeadersClientSide(fileOld).then(applyHeaders);
       });
   }, [fileOld]);
 
-  // Fetch headers for New File directly from Streamlit Python Cloud https://excelhid.streamlit.app
+  // Fetch headers for New File
   useEffect(() => {
     if (!fileNew) {
       setNewHeaders([]);
@@ -253,25 +245,19 @@ export default function TeknoPage() {
       }
     };
 
-    // 1. Try Streamlit Python Cloud Endpoint first
-    fetch(`${STREAMLIT_BASE_URL}/api/python/headers`, { method: "POST", body: formData })
+    fetch("/api/headers", { method: "POST", body: formData })
       .then((res) => {
-        if (!res.ok) throw new Error("Streamlit endpoint unavailable");
+        if (!res.ok) throw new Error("API error");
         return res.json();
       })
       .then((data) => {
         if (data.headers && data.headers.length > 0) {
           applyHeaders(data.headers);
         } else {
-          // 2. Try Vercel headers route as backup
-          fetch("/api/headers", { method: "POST", body: formData })
-            .then(r => r.json())
-            .then(d => d.headers?.length ? applyHeaders(d.headers) : parseHeadersClientSide(fileNew).then(applyHeaders))
-            .catch(() => parseHeadersClientSide(fileNew).then(applyHeaders));
+          parseHeadersClientSide(fileNew).then(applyHeaders);
         }
       })
       .catch(() => {
-        // Fallback to client-side parsing if Streamlit is sleeping
         parseHeadersClientSide(fileNew).then(applyHeaders);
       });
   }, [fileNew]);
@@ -283,7 +269,7 @@ export default function TeknoPage() {
     }
     setErrorMessage("");
     setLoading(true);
-    setLoadingStep(lang === "AR" ? "جاري رفع الملفات إلى سيرفر Streamlit بايثون الرسمي (excelhid.streamlit.app)..." : "Uploading files to official Streamlit Python server (excelhid.streamlit.app)...");
+    setLoadingStep(lang === "AR" ? "جاري رفع الملفات إلى سيرفر بايثون..." : "Uploading files to Python engine...");
     setSuccess(false);
 
     try {
@@ -304,29 +290,20 @@ export default function TeknoPage() {
       formData.append("filter_keywords", filterKeywords);
 
       setTimeout(() => {
-        setLoadingStep(lang === "AR" ? "جاري معالجة وتلوين البيانات في سيرفر Streamlit (excelhid.streamlit.app)..." : "Executing comparison engine on Streamlit Python Cloud...");
+        setLoadingStep(lang === "AR" ? "جاري معالجة وتلوين البيانات بمحرك بايثون الأصلي (comparator.py)..." : "Executing Python comparator engine logic...");
       }, 1500);
 
-      // Try Streamlit Python Cloud first
-      let res = await fetch(`${STREAMLIT_BASE_URL}/api/python/compare`, {
+      const res = await fetch("/api/compare", {
         method: "POST",
         body: formData,
-      }).catch(() => null);
-
-      // Backup: try local Vercel Python runtime if Streamlit is sleeping
-      if (!res || !res.ok) {
-        res = await fetch("/api/compare", {
-          method: "POST",
-          body: formData,
-        });
-      }
+      });
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
         throw new Error(errData.error || "حدث خطأ أثناء معالجة الملفات في سيرفر بايثون");
       }
 
-      setLoadingStep(lang === "AR" ? "تمت المعالجة! جاري تنزيل التقرير الصادر من Streamlit..." : "Done! Downloading Excel report from Streamlit...");
+      setLoadingStep(lang === "AR" ? "تمت المعالجة! جاري تنزيل التقرير..." : "Done! Downloading Excel report...");
 
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
@@ -340,7 +317,7 @@ export default function TeknoPage() {
 
       setSuccess(true);
     } catch (err: any) {
-      setErrorMessage(err.message || "حدث خطأ أثناء المعالجة بواسطة سيرفر بايثون في Streamlit");
+      setErrorMessage(err.message || "حدث خطأ أثناء المعالجة بواسطة سيرفر بايثون");
     } finally {
       setLoading(false);
       setLoadingStep("");
@@ -567,8 +544,8 @@ export default function TeknoPage() {
             }}
           >
             {lang === "AR"
-              ? "متصل مباشرة بمحرك بايثون الرسمي (excelhid.streamlit.app) للمعالجة الشاملة"
-              : "Connected directly to Streamlit Python Cloud (excelhid.streamlit.app) for processing"}
+              ? "واجهة عرض مخصصة متصلة بمحرك بايثون الأصلي للمعالجة الشاملة 100%"
+              : "Custom Display UI connected to Python Server for 100% full processing"}
           </p>
 
           {/* MODE TOGGLE PILLS */}
@@ -822,7 +799,7 @@ export default function TeknoPage() {
           </div>
         </div>
 
-        {/* COLUMN SELECTION SECTION (POPULATED BY STREAMLIT PYTHON CLOUD GET_HEADERS) */}
+        {/* COLUMN SELECTION SECTION */}
         {(fileOld || fileNew) && (
           <div
             style={{
@@ -835,7 +812,7 @@ export default function TeknoPage() {
             }}
           >
             <h3 style={{ fontSize: "20px", fontWeight: "900", color: "#0f111a", marginBottom: "20px" }}>
-              📋 {lang === "AR" ? "تحديد أعمدة الربط والمقارنة (من excelhid.streamlit.app)" : "Select Key & Comparison Columns (From Streamlit)"}
+              📋 {lang === "AR" ? "تحديد أعمدة الربط والمقارنة" : "Select Key & Comparison Columns"}
             </h3>
 
             {/* KEY COLUMNS ROW */}
@@ -1062,7 +1039,7 @@ export default function TeknoPage() {
 
           {success && (
             <div style={{ padding: "14px 20px", background: "#f0fdf4", color: "#166534", borderRadius: "14px", border: "1px solid #bbf7d0", marginBottom: "20px", fontSize: "14.5px", fontWeight: "700" }}>
-              🎉 {lang === "AR" ? "تمت معالجة البيانات بنجاح في سيرفر Streamlit! جاري تحميل التقرير النهائي..." : "Data processed successfully via Streamlit Python engine! Downloading final report..."}
+              🎉 {lang === "AR" ? "تمت معالجة البيانات بنجاح بمحرك بايثون! جاري تحميل التقرير النهائي..." : "Data processed successfully via Python engine! Downloading final report..."}
             </div>
           )}
 
@@ -1089,10 +1066,10 @@ export default function TeknoPage() {
             }}
           >
             {loading ? (
-              <span>⏳ {lang === "AR" ? "جاري تشغيل سيرفر Streamlit (excelhid.streamlit.app) للمعالجة..." : "Running Streamlit engine (excelhid.streamlit.app) to process data..."}</span>
+              <span>⏳ {lang === "AR" ? "جاري تشغيل محرك بايثون لمعالجة وتوحيد البيانات..." : "Running Python engine to compare & process data..."}</span>
             ) : (
               <span>
-                🚀 {mode === "pull" ? (lang === "AR" ? "بدء سحب البيانات (Streamlit Python)" : "Start Pulling Data (Streamlit Python)") : (lang === "AR" ? "بدء معالجة الملفات والمقارنة (Streamlit Python)" : "Start Compare (Streamlit Python)")}
+                🚀 {mode === "pull" ? (lang === "AR" ? "بدء سحب البيانات (بايثون)" : "Start Pulling Data (Python)") : (lang === "AR" ? "بدء معالجة الملفات والمقارنة (بايثون)" : "Start Compare (Python)")}
               </span>
             )}
           </button>
@@ -1112,7 +1089,7 @@ export default function TeknoPage() {
         }}
       >
         <span style={{ fontSize: "13px", color: "#64748b", fontWeight: "700" }}>
-          © {new Date().getFullYear()} Haider Mohamed Shwkat - Tekno Tool (Connected to excelhid.streamlit.app)
+          © {new Date().getFullYear()} Haider Mohamed Shwkat - Tekno Tool (Python Engine)
         </span>
       </footer>
 
