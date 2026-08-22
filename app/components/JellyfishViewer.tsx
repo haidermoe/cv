@@ -89,11 +89,16 @@ export default function JellyfishViewer({
     container.innerHTML = "";
     container.appendChild(renderer.domElement);
 
-    // 4. OrbitControls
+    // 4. OrbitControls with strict mobile centering & smooth rotation bounds
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.minAzimuthAngle = -Math.PI / 6;
+    controls.maxAzimuthAngle = Math.PI / 6;
+    controls.minPolarAngle = Math.PI / 2 - 0.25;
+    controls.maxPolarAngle = Math.PI / 2 + 0.25;
 
     // 5. Balanced Studio Lighting for Rich Deep Textures
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);

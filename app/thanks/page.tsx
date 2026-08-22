@@ -127,7 +127,7 @@ export default function ThanksPage() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        padding: isDesktop ? "20px clamp(16px, 5vw, 80px)" : "16px 16px 24px",
+        padding: isDesktop ? "20px clamp(16px, 5vw, 80px)" : "16px 14px 20px",
         position: "relative",
         fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif",
         overflowX: "hidden",
@@ -211,7 +211,7 @@ export default function ThanksPage() {
             gap: "6px",
             textDecoration: "none",
             color: "#0f111a",
-            fontSize: "clamp(15px, 3.6vw, 20px)",
+            fontSize: "clamp(14px, 3.6vw, 20px)",
             fontWeight: "900",
             flexShrink: 0,
           }}
@@ -273,9 +273,9 @@ export default function ThanksPage() {
               background: "#ffffff",
               border: "1.5px solid #e2e8f0",
               color: "#0f111a",
-              padding: "6px 11px",
+              padding: isDesktop ? "7px 14px" : "6px 10px",
               borderRadius: "50px",
-              fontSize: "11.5px",
+              fontSize: isDesktop ? "12px" : "11px",
               fontWeight: "800",
               cursor: "pointer",
             }}
@@ -295,15 +295,19 @@ export default function ThanksPage() {
           >
             <span className="flip-box">
               <span className="flip-wrapper">
-                <span className="flip-text-primary">+ {lang === "AR" ? "كن عميلاً" : "Become a Client"}</span>
-                <span className="flip-text-secondary">+ {lang === "AR" ? "كن عميلاً" : "Become a Client"}</span>
+                <span className="flip-text-primary">
+                  + {isDesktop ? (lang === "AR" ? "كن عميلاً" : "Become a Client") : (lang === "AR" ? "تواصل" : "Client")}
+                </span>
+                <span className="flip-text-secondary">
+                  + {isDesktop ? (lang === "AR" ? "كن عميلاً" : "Become a Client") : (lang === "AR" ? "تواصل" : "Client")}
+                </span>
               </span>
             </span>
           </button>
         </div>
       </header>
 
-      {/* 3D JELLYFISH FIXED FULLPAGE OVERLAY (FLOATS MAJESTICALLY & INTERACTIVELY ACROSS ALL SCREENS) */}
+      {/* 3D JELLYFISH FIXED FULLPAGE OVERLAY (PERFECTLY CENTERED & ELEVATED ON MOBILE) */}
       <div
         style={{
           position: "fixed",
@@ -312,7 +316,7 @@ export default function ThanksPage() {
           height: "100dvh",
           zIndex: 10,
           pointerEvents: "none",
-          overflow: "visible",
+          overflow: "hidden",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -323,8 +327,8 @@ export default function ThanksPage() {
             customColor={jellyColor}
             materialMode={matMode}
             positionX={isDesktop ? (lang === "AR" ? 1.5 : -1.5) : 0}
-            positionY={isDesktop ? -0.18 : 0.42}
-            scaleMultiplier={isDesktop ? 1.15 : 1.38}
+            positionY={isDesktop ? -0.18 : 0.78}
+            scaleMultiplier={isDesktop ? 1.15 : 1.05}
           />
         </div>
       </div>
@@ -353,7 +357,7 @@ export default function ThanksPage() {
             position: "relative",
             zIndex: 20,
             flex: isDesktop ? "1 1 55%" : "1 1 100%",
-            maxWidth: isDesktop ? "650px" : "640px",
+            maxWidth: isDesktop ? "650px" : "100%",
             width: "100%",
             textAlign: isDesktop ? (lang === "AR" ? "right" : "left") : "center",
             display: "flex",
@@ -361,19 +365,19 @@ export default function ThanksPage() {
             alignItems: isDesktop ? (lang === "AR" ? "flex-end" : "flex-start") : "center",
             paddingRight: isDesktop && lang === "EN" ? "20px" : "0",
             paddingLeft: isDesktop && lang === "AR" ? "20px" : "0",
-            marginTop: isDesktop ? "0" : "min(36vh, 320px)",
+            marginTop: isDesktop ? "0" : "min(40vh, 370px)",
           }}
         >
           {/* GIANT TITLE */}
           <h1
             className="noomo-giant-title-float"
             style={{
-              fontSize: isDesktop ? "clamp(48px, 6.5vw, 115px)" : "clamp(38px, 11vw, 70px)",
+              fontSize: isDesktop ? "clamp(48px, 6.5vw, 115px)" : "clamp(32px, 8.8vw, 52px)",
               fontWeight: "900",
               color: "#0f111a",
-              letterSpacing: "-0.04em",
-              margin: "0 0 12px 0",
-              lineHeight: "1.0",
+              letterSpacing: "-0.03em",
+              margin: "0 0 10px 0",
+              lineHeight: "1.05",
               zIndex: 1,
               userSelect: "none",
               textShadow: "0 2px 24px rgba(242, 241, 246, 0.95), 0 0 40px rgba(255, 255, 255, 0.8)",
@@ -385,10 +389,10 @@ export default function ThanksPage() {
           {/* SUBTITLE */}
           <p
             style={{
-              fontSize: isDesktop ? "clamp(20px, 2.5vw, 26px)" : "clamp(17px, 4.5vw, 22px)",
+              fontSize: isDesktop ? "clamp(20px, 2.5vw, 26px)" : "clamp(16px, 4.4vw, 20px)",
               fontWeight: "800",
               color: "#0f111a",
-              marginBottom: "10px",
+              marginBottom: "8px",
               lineHeight: "1.3",
               textShadow: "0 2px 16px rgba(242, 241, 246, 0.9)",
             }}
@@ -399,12 +403,12 @@ export default function ThanksPage() {
           {/* DESCRIPTION */}
           <p
             style={{
-              fontSize: isDesktop ? "clamp(15px, 1.5vw, 17.5px)" : "14.5px",
+              fontSize: isDesktop ? "clamp(15px, 1.5vw, 17.5px)" : "14px",
               color: "#475569",
               lineHeight: "1.6",
               fontWeight: "600",
-              marginBottom: isDesktop ? "32px" : "24px",
-              maxWidth: "500px",
+              marginBottom: isDesktop ? "32px" : "22px",
+              maxWidth: "460px",
               textShadow: "0 1px 12px rgba(242, 241, 246, 0.9)",
             }}
           >
@@ -420,9 +424,9 @@ export default function ThanksPage() {
             style={{
               background: "#2563eb",
               color: "#ffffff",
-              padding: isDesktop ? "16px 38px" : "14px 34px",
+              padding: isDesktop ? "16px 38px" : "13px 30px",
               borderRadius: "50px",
-              fontSize: isDesktop ? "15.5px" : "15px",
+              fontSize: isDesktop ? "15.5px" : "14.5px",
               fontWeight: "800",
               textDecoration: "none",
               boxShadow: "0 12px 35px rgba(37, 99, 235, 0.4)",
@@ -445,22 +449,22 @@ export default function ThanksPage() {
           alignItems: isDesktop ? "flex-end" : "center",
           width: "100%",
           zIndex: 30,
-          paddingTop: "20px",
-          gap: isDesktop ? "0" : "12px",
+          paddingTop: "16px",
+          gap: isDesktop ? "0" : "10px",
           textAlign: isDesktop ? (lang === "AR" ? "left" : "right") : "center",
         }}
       >
-        <span style={{ fontSize: "13.5px", color: "#64748b", fontWeight: "700" }}>
+        <span style={{ fontSize: "13px", color: "#64748b", fontWeight: "700" }}>
           © 2026 Haider Mohamed Shwkat
         </span>
 
         <div>
-          <span style={{ fontSize: "11.5px", color: "#94a3b8", display: "block", fontWeight: "700", marginBottom: "2px" }}>
+          <span style={{ fontSize: "11px", color: "#94a3b8", display: "block", fontWeight: "700", marginBottom: "2px" }}>
             Stay In Touch
           </span>
           <a
             href="mailto:haider.m.shwkat@outlook.com"
-            style={{ fontSize: "13.5px", color: "#0f111a", fontWeight: "800", textDecoration: "none" }}
+            style={{ fontSize: "13px", color: "#0f111a", fontWeight: "800", textDecoration: "none" }}
           >
             haider.m.shwkat@outlook.com
           </a>
