@@ -1135,15 +1135,14 @@ export default function TeknoPage() {
         </span>
       </footer>
 
-      {/* BECOME A CLIENT DRAWER TAB MODAL (+ كُن عميلاً) WITH SILKY SMOOTH SLIDING ANIMATION */}
+      {/* BECOME A CLIENT DRAWER TAB MODAL (+ كُن عميلاً) WITH CORRECT RTL/LTR SLIDING DIRECTIONS */}
       {(isClientDrawerOpen || isClientDrawerClosing) && (
         <div
           style={{
             position: "fixed",
             inset: 0,
             zIndex: 2000,
-            display: "flex",
-            justifyContent: lang === "AR" ? "flex-start" : "flex-end",
+            pointerEvents: "auto",
           }}
         >
           {/* BACKDROP OVERLAY WITH FADE IN/OUT */}
@@ -1159,10 +1158,13 @@ export default function TeknoPage() {
             }}
           />
 
-          {/* SLIDING PANEL WITH SILKY SMOOTH ENTER/EXIT TRANSITION */}
+          {/* SLIDING PANEL WITH ACCURATE DIRECTION: ARABIC (SLIDES RIGHT), ENGLISH (SLIDES LEFT) */}
           <div
             style={{
-              position: "relative",
+              position: "fixed",
+              top: 0,
+              bottom: 0,
+              ...(lang === "AR" ? { right: 0 } : { left: 0 }),
               width: "100%",
               maxWidth: "540px",
               height: "100dvh",
@@ -1177,7 +1179,7 @@ export default function TeknoPage() {
               overflowY: "auto",
               transform: isClientDrawerActive && !isClientDrawerClosing
                 ? "translateX(0)"
-                : (lang === "AR" ? "translateX(-100%)" : "translateX(100%)"),
+                : (lang === "AR" ? "translateX(100%)" : "translateX(-100%)"),
               transition: "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
               fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif",
             }}
