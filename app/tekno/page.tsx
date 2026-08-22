@@ -75,6 +75,10 @@ export default function TeknoPage() {
   // Operation Mode: "compare" | "pull"
   const [mode, setMode] = useState<"compare" | "pull">("compare");
 
+  // Dynamic Theme Colors based on selected mode
+  const activeColor = mode === "pull" ? "#16a34a" : "#2563eb";
+  const activeGlow = mode === "pull" ? "0 12px 35px rgba(22, 163, 74, 0.35)" : "0 12px 35px rgba(37, 99, 235, 0.35)";
+
   // File states
   const [fileOld, setFileOld] = useState<File | null>(null);
   const [fileNew, setFileNew] = useState<File | null>(null);
@@ -445,16 +449,16 @@ export default function TeknoPage() {
             border: "1px solid rgba(15, 17, 26, 0.06)",
           }}
         >
-          <FlipLink href="/#about" color="#475569" hoverColor="#2563eb">
+          <FlipLink href="/#about" color="#475569" hoverColor={activeColor}>
             {lang === "AR" ? "النبذة" : "About Us"}
           </FlipLink>
-          <FlipLink href="/#experience" color="#475569" hoverColor="#2563eb">
+          <FlipLink href="/#experience" color="#475569" hoverColor={activeColor}>
             {lang === "AR" ? "الخبرات" : "Experience"}
           </FlipLink>
-          <FlipLink href="/#education" color="#475569" hoverColor="#2563eb">
+          <FlipLink href="/#education" color="#475569" hoverColor={activeColor}>
             {lang === "AR" ? "التعليم" : "Education"}
           </FlipLink>
-          <FlipLink href="/#contact" color="#475569" hoverColor="#2563eb">
+          <FlipLink href="/#contact" color="#475569" hoverColor={activeColor}>
             {lang === "AR" ? "تواصل معي" : "Contact Us"}
           </FlipLink>
         </div>
@@ -570,7 +574,7 @@ export default function TeknoPage() {
                 fontSize: "14px",
                 fontWeight: "800",
                 cursor: "pointer",
-                transition: "all 0.2s ease",
+                transition: "all 0.3s ease",
               }}
             >
               {lang === "AR" ? "وضع المقارنة (Compare Mode)" : "Compare Mode"}
@@ -586,7 +590,7 @@ export default function TeknoPage() {
                 fontSize: "14px",
                 fontWeight: "800",
                 cursor: "pointer",
-                transition: "all 0.2s ease",
+                transition: "all 0.3s ease",
               }}
             >
               {lang === "AR" ? "وضع سحب البيانات (Pull Data Mode)" : "Pull Data Mode"}
@@ -620,7 +624,7 @@ export default function TeknoPage() {
               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
                 <span
                   style={{
-                    background: "#2563eb",
+                    background: activeColor,
                     color: "#ffffff",
                     width: "26px",
                     height: "26px",
@@ -630,6 +634,7 @@ export default function TeknoPage() {
                     justifyContent: "center",
                     fontWeight: "900",
                     fontSize: "13px",
+                    transition: "background 0.3s ease",
                   }}
                 >
                   1
@@ -651,7 +656,7 @@ export default function TeknoPage() {
                 padding: "22px 14px",
                 textAlign: "center",
                 cursor: "pointer",
-                transition: "border-color 0.2s ease",
+                transition: "border-color 0.3s ease",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -664,7 +669,7 @@ export default function TeknoPage() {
                 onChange={(e) => setFileOld(e.target.files?.[0] || null)}
                 style={{ display: "none" }}
               />
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={activeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.3s ease" }}>
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                 <polyline points="14 2 14 8 20 8"></polyline>
                 <line x1="12" y1="18" x2="12" y2="12"></line>
@@ -693,7 +698,7 @@ export default function TeknoPage() {
               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
                 <span
                   style={{
-                    background: "#2563eb",
+                    background: activeColor,
                     color: "#ffffff",
                     width: "26px",
                     height: "26px",
@@ -703,6 +708,7 @@ export default function TeknoPage() {
                     justifyContent: "center",
                     fontWeight: "900",
                     fontSize: "13px",
+                    transition: "background 0.3s ease",
                   }}
                 >
                   2
@@ -724,7 +730,7 @@ export default function TeknoPage() {
                 padding: "22px 14px",
                 textAlign: "center",
                 cursor: "pointer",
-                transition: "border-color 0.2s ease",
+                transition: "border-color 0.3s ease",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -737,7 +743,7 @@ export default function TeknoPage() {
                 onChange={(e) => setFileNew(e.target.files?.[0] || null)}
                 style={{ display: "none" }}
               />
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={activeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "stroke 0.3s ease" }}>
                 <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                 <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
                 <line x1="12" y1="22.08" x2="12" y2="12"></line>
@@ -796,7 +802,7 @@ export default function TeknoPage() {
                 padding: "22px 14px",
                 textAlign: "center",
                 cursor: "pointer",
-                transition: "border-color 0.2s ease",
+                transition: "border-color 0.3s ease",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -992,7 +998,7 @@ export default function TeknoPage() {
                 type="checkbox"
                 checked={ignorePunct}
                 onChange={(e) => setIgnorePunct(e.target.checked)}
-                style={{ width: "18px", height: "18px", accentColor: "#2563eb" }}
+                style={{ width: "18px", height: "18px", accentColor: activeColor }}
               />
               <span>{lang === "AR" ? "تجاهل الفواصل والرموز الخاصة أثناء مطابقة المعرفات" : "Ignore symbols and punctuation during key matching"}</span>
             </label>
@@ -1003,7 +1009,7 @@ export default function TeknoPage() {
                   type="checkbox"
                   checked={enableFuzzy}
                   onChange={(e) => setEnableFuzzy(e.target.checked)}
-                  style={{ width: "18px", height: "18px", accentColor: "#2563eb" }}
+                  style={{ width: "18px", height: "18px", accentColor: activeColor }}
                 />
                 <span>{lang === "AR" ? "تفعيل نظام الاقتراحات والتشابه الذكي (Fuzzy Matching)" : "Enable Fuzzy Matching"}</span>
               </label>
@@ -1019,7 +1025,7 @@ export default function TeknoPage() {
                     max="100"
                     value={simThresh}
                     onChange={(e) => setSimThresh(Number(e.target.value))}
-                    style={{ flex: 1, accentColor: "#2563eb" }}
+                    style={{ flex: 1, accentColor: activeColor }}
                   />
                 </div>
               )}
@@ -1049,8 +1055,8 @@ export default function TeknoPage() {
           </div>
 
           {loadingStep && (
-            <div style={{ padding: "14px 20px", background: "#eff6ff", color: "#1d4ed8", borderRadius: "14px", border: "1px solid #bfdbfe", marginBottom: "20px", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", gap: "10px" }}>
-              <span className="spinner" style={{ display: "inline-block", width: "16px", height: "16px", border: "2.5px solid #1d4ed8", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+            <div style={{ padding: "14px 20px", background: "#eff6ff", color: activeColor, borderRadius: "14px", border: `1px solid ${activeColor}40`, marginBottom: "20px", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", gap: "10px" }}>
+              <span className="spinner" style={{ display: "inline-block", width: "16px", height: "16px", border: `2.5px solid ${activeColor}`, borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
               <span>{loadingStep}</span>
             </div>
           )}
@@ -1073,7 +1079,7 @@ export default function TeknoPage() {
             className="awsmd-btn-glow"
             style={{
               width: "100%",
-              background: loading ? "#94a3b8" : (mode === "pull" ? "#16a34a" : "#2563eb"),
+              background: loading ? "#94a3b8" : activeColor,
               color: "#ffffff",
               padding: "18px 30px",
               borderRadius: "50px",
@@ -1081,12 +1087,12 @@ export default function TeknoPage() {
               fontWeight: "900",
               border: "none",
               cursor: loading ? "wait" : "pointer",
-              boxShadow: mode === "pull" ? "0 12px 35px rgba(22, 163, 74, 0.35)" : "0 12px 35px rgba(37, 99, 235, 0.35)",
+              boxShadow: activeGlow,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               gap: "10px",
-              transition: "all 0.2s ease",
+              transition: "all 0.3s ease",
             }}
           >
             {loading ? (
