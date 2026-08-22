@@ -67,8 +67,9 @@ export default function TeknoPage() {
   const [langOrigin, setLangOrigin] = useState({ x: 0, y: 0 });
   const [circleActive, setCircleActive] = useState(false);
 
-  // Client Drawer Tab State (+ كُن عميلاً)
+  // Client Drawer Tab State (+ كُن عميلاً) with smooth enter/exit animation states
   const [isClientDrawerOpen, setIsClientDrawerOpen] = useState(false);
+  const [isClientDrawerActive, setIsClientDrawerActive] = useState(false);
   const [isClientDrawerClosing, setIsClientDrawerClosing] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -113,7 +114,18 @@ export default function TeknoPage() {
     return () => window.removeEventListener("resize", handleCheckDesktop);
   }, []);
 
+  const openClientDrawer = () => {
+    setIsClientDrawerOpen(true);
+    setIsClientDrawerClosing(false);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setIsClientDrawerActive(true);
+      });
+    });
+  };
+
   const closeClientDrawer = () => {
+    setIsClientDrawerActive(false);
     setIsClientDrawerClosing(true);
     setTimeout(() => {
       setIsClientDrawerOpen(false);
@@ -483,7 +495,7 @@ export default function TeknoPage() {
           </button>
 
           <button
-            onClick={() => setIsClientDrawerOpen(true)}
+            onClick={openClientDrawer}
             className="awsmd-royal-client-btn"
             style={{
               background: "transparent",
@@ -1123,7 +1135,7 @@ export default function TeknoPage() {
         </span>
       </footer>
 
-      {/* BECOME A CLIENT DRAWER TAB MODAL (+ كُن عميلاً) */}
+      {/* BECOME A CLIENT DRAWER TAB MODAL (+ كُن عميلاً) WITH SILKY SMOOTH SLIDING ANIMATION */}
       {(isClientDrawerOpen || isClientDrawerClosing) && (
         <div
           style={{
@@ -1134,6 +1146,7 @@ export default function TeknoPage() {
             justifyContent: lang === "AR" ? "flex-start" : "flex-end",
           }}
         >
+          {/* BACKDROP OVERLAY WITH FADE IN/OUT */}
           <div
             onClick={closeClientDrawer}
             style={{
@@ -1141,12 +1154,12 @@ export default function TeknoPage() {
               inset: 0,
               background: "rgba(15, 17, 26, 0.6)",
               backdropFilter: "blur(8px)",
-              opacity: isClientDrawerClosing ? 0 : 1,
+              opacity: isClientDrawerActive && !isClientDrawerClosing ? 1 : 0,
               transition: "opacity 0.45s ease",
             }}
           />
 
-          {/* SLIDING PANEL */}
+          {/* SLIDING PANEL WITH SILKY SMOOTH ENTER/EXIT TRANSITION */}
           <div
             style={{
               position: "relative",
@@ -1162,9 +1175,9 @@ export default function TeknoPage() {
               boxShadow: lang === "AR" ? "-20px 0 50px rgba(0,0,0,0.3)" : "20px 0 50px rgba(0,0,0,0.3)",
               zIndex: 2001,
               overflowY: "auto",
-              transform: isClientDrawerClosing
-                ? lang === "AR" ? "translateX(-100%)" : "translateX(100%)"
-                : "translateX(0)",
+              transform: isClientDrawerActive && !isClientDrawerClosing
+                ? "translateX(0)"
+                : (lang === "AR" ? "translateX(-100%)" : "translateX(100%)"),
               transition: "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
               fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif",
             }}
