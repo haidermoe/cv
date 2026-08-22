@@ -264,12 +264,12 @@ export default function TeknoPage() {
 
   const handleProcessFiles = async () => {
     if (!fileOld || !fileNew) {
-      setErrorMessage(lang === "AR" ? "يرجى اختيار ملف الموقع وملف المخزن للبدء" : "Please select website file and warehouse file to start");
+      setErrorMessage(lang === "AR" ? "يرجى تحديد ملف الموقع وملف المخزن للبدء" : "Please select website file and warehouse file to start");
       return;
     }
     setErrorMessage("");
     setLoading(true);
-    setLoadingStep(lang === "AR" ? "جاري رفع الملفات إلى سيرفر بايثون..." : "Uploading files to Python engine...");
+    setLoadingStep(lang === "AR" ? "جاري رفع وتدقيق الملفات..." : "Uploading and validating files...");
     setSuccess(false);
 
     try {
@@ -290,7 +290,7 @@ export default function TeknoPage() {
       formData.append("filter_keywords", filterKeywords);
 
       setTimeout(() => {
-        setLoadingStep(lang === "AR" ? "جاري معالجة وتلوين البيانات بمحرك بايثون الأصلي (comparator.py)..." : "Executing Python comparator engine logic...");
+        setLoadingStep(lang === "AR" ? "جاري تحليل البيانات ومطابقة السجلات..." : "Analyzing data & matching records...");
       }, 1500);
 
       const res = await fetch("/api/compare", {
@@ -300,10 +300,10 @@ export default function TeknoPage() {
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || "حدث خطأ أثناء معالجة الملفات في سيرفر بايثون");
+        throw new Error(errData.error || "حدث خطأ أثناء معالجة البيانات");
       }
 
-      setLoadingStep(lang === "AR" ? "تمت المعالجة! جاري تنزيل التقرير..." : "Done! Downloading Excel report...");
+      setLoadingStep(lang === "AR" ? "اكتملت المعالجة. جاري تنزيل التقرير النهائي..." : "Processing complete. Downloading final report...");
 
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
@@ -317,7 +317,7 @@ export default function TeknoPage() {
 
       setSuccess(true);
     } catch (err: any) {
-      setErrorMessage(err.message || "حدث خطأ أثناء المعالجة بواسطة سيرفر بايثون");
+      setErrorMessage(err.message || "حدث خطأ أثناء معالجة البيانات");
     } finally {
       setLoading(false);
       setLoadingStep("");
@@ -526,26 +526,26 @@ export default function TeknoPage() {
         >
           <h1
             style={{
-              fontSize: isDesktop ? "42px" : "28px",
+              fontSize: isDesktop ? "38px" : "26px",
               fontWeight: "900",
               color: "#0f111a",
               marginBottom: "8px",
               letterSpacing: "-0.02em",
             }}
           >
-            ⚡ {lang === "AR" ? "أداة تكنو (Tekno Tool)" : "Tekno Tool"}
+            {lang === "AR" ? "أداة تكنو لإدارة وتحليل البيانات (Tekno Tool)" : "Tekno Tool (Data Management & Analysis)"}
           </h1>
           <p
             style={{
-              fontSize: isDesktop ? "16px" : "14px",
+              fontSize: isDesktop ? "15px" : "13.5px",
               color: "#475569",
               fontWeight: "600",
               marginBottom: "24px",
             }}
           >
             {lang === "AR"
-              ? "واجهة عرض مخصصة متصلة بمحرك بايثون الأصلي للمعالجة الشاملة 100%"
-              : "Custom Display UI connected to Python Server for 100% full processing"}
+              ? "منظومة احترافية لمطابقة ومعالجة بيانات المنتجات والمخزون للمتاجر الإلكترونية والمخازن"
+              : "Enterprise data matching and inventory management platform"}
           </p>
 
           {/* MODE TOGGLE PILLS */}
@@ -567,13 +567,13 @@ export default function TeknoPage() {
                 border: "none",
                 padding: "10px 24px",
                 borderRadius: "50px",
-                fontSize: "14.5px",
+                fontSize: "14px",
                 fontWeight: "800",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
               }}
             >
-              📊 {lang === "AR" ? "وضع المقارنة (Compare)" : "Compare Mode"}
+              {lang === "AR" ? "وضع المقارنة (Compare Mode)" : "Compare Mode"}
             </button>
             <button
               onClick={() => setMode("pull")}
@@ -583,13 +583,13 @@ export default function TeknoPage() {
                 border: "none",
                 padding: "10px 24px",
                 borderRadius: "50px",
-                fontSize: "14.5px",
+                fontSize: "14px",
                 fontWeight: "800",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
               }}
             >
-              📥 {lang === "AR" ? "وضع سحب البيانات (Pull Data)" : "Pull Data Mode"}
+              {lang === "AR" ? "وضع سحب البيانات (Pull Data Mode)" : "Pull Data Mode"}
             </button>
           </div>
         </div>
@@ -622,19 +622,19 @@ export default function TeknoPage() {
                   style={{
                     background: "#2563eb",
                     color: "#ffffff",
-                    width: "28px",
-                    height: "28px",
+                    width: "26px",
+                    height: "26px",
                     borderRadius: "50%",
                     display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: "900",
-                    fontSize: "14px",
+                    fontSize: "13px",
                   }}
                 >
                   1
                 </span>
-                <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0f111a" }}>
+                <h3 style={{ fontSize: "17px", fontWeight: "800", color: "#0f111a" }}>
                   {lang === "AR" ? "ملف الموقع الإلكتروني" : "Website File"}
                 </h3>
               </div>
@@ -648,11 +648,14 @@ export default function TeknoPage() {
                 background: "#f8fafc",
                 border: "2px dashed #cbd5e1",
                 borderRadius: "18px",
-                padding: "20px 14px",
+                padding: "22px 14px",
                 textAlign: "center",
                 cursor: "pointer",
                 transition: "border-color 0.2s ease",
-                display: "block",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "8px",
               }}
             >
               <input
@@ -661,9 +664,14 @@ export default function TeknoPage() {
                 onChange={(e) => setFileOld(e.target.files?.[0] || null)}
                 style={{ display: "none" }}
               />
-              <span style={{ fontSize: "28px", display: "block", marginBottom: "6px" }}>📂</span>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="12" y1="18" x2="12" y2="12"></line>
+                <polyline points="9 15 12 12 15 15"></polyline>
+              </svg>
               <span style={{ fontSize: "13.5px", fontWeight: "700", color: fileOld ? "#166534" : "#475569" }}>
-                {fileOld ? fileOld.name : (lang === "AR" ? "رفع الملف" : "Upload File")}
+                {fileOld ? fileOld.name : (lang === "AR" ? "تحميل الملف" : "Upload File")}
               </span>
             </label>
           </div>
@@ -687,19 +695,19 @@ export default function TeknoPage() {
                   style={{
                     background: "#2563eb",
                     color: "#ffffff",
-                    width: "28px",
-                    height: "28px",
+                    width: "26px",
+                    height: "26px",
                     borderRadius: "50%",
                     display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: "900",
-                    fontSize: "14px",
+                    fontSize: "13px",
                   }}
                 >
                   2
                 </span>
-                <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0f111a" }}>
+                <h3 style={{ fontSize: "17px", fontWeight: "800", color: "#0f111a" }}>
                   {lang === "AR" ? "ملف جرد المخزن" : "Warehouse File"}
                 </h3>
               </div>
@@ -713,11 +721,14 @@ export default function TeknoPage() {
                 background: "#f8fafc",
                 border: "2px dashed #cbd5e1",
                 borderRadius: "18px",
-                padding: "20px 14px",
+                padding: "22px 14px",
                 textAlign: "center",
                 cursor: "pointer",
                 transition: "border-color 0.2s ease",
-                display: "block",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "8px",
               }}
             >
               <input
@@ -726,9 +737,13 @@ export default function TeknoPage() {
                 onChange={(e) => setFileNew(e.target.files?.[0] || null)}
                 style={{ display: "none" }}
               />
-              <span style={{ fontSize: "28px", display: "block", marginBottom: "6px" }}>📦</span>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
               <span style={{ fontSize: "13.5px", fontWeight: "700", color: fileNew ? "#166534" : "#475569" }}>
-                {fileNew ? fileNew.name : (lang === "AR" ? "رفع الملف" : "Upload File")}
+                {fileNew ? fileNew.name : (lang === "AR" ? "تحميل الملف" : "Upload File")}
               </span>
             </label>
           </div>
@@ -752,24 +767,24 @@ export default function TeknoPage() {
                   style={{
                     background: "#64748b",
                     color: "#ffffff",
-                    width: "28px",
-                    height: "28px",
+                    width: "26px",
+                    height: "26px",
                     borderRadius: "50%",
                     display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: "900",
-                    fontSize: "14px",
+                    fontSize: "13px",
                   }}
                 >
                   3
                 </span>
-                <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0f111a" }}>
-                  {lang === "AR" ? "ملف التصحيح (اختياري)" : "Correction File (Optional)"}
+                <h3 style={{ fontSize: "17px", fontWeight: "800", color: "#0f111a" }}>
+                  {lang === "AR" ? "ملف التصحيح والجدول المرجعي" : "Reference Mapping File"}
                 </h3>
               </div>
               <p style={{ fontSize: "13px", color: "#64748b", fontWeight: "600", marginBottom: "16px" }}>
-                {lang === "AR" ? "اختر ملف التوافق والمراجع (Excel أو CSV)" : "Select Reference mapping file (Excel or CSV)"}
+                {lang === "AR" ? "اختر ملف التوافق والمراجع (اختياري)" : "Select Reference mapping file (Optional)"}
               </p>
             </div>
 
@@ -778,11 +793,14 @@ export default function TeknoPage() {
                 background: "#f8fafc",
                 border: "2px dashed #cbd5e1",
                 borderRadius: "18px",
-                padding: "20px 14px",
+                padding: "22px 14px",
                 textAlign: "center",
                 cursor: "pointer",
                 transition: "border-color 0.2s ease",
-                display: "block",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "8px",
               }}
             >
               <input
@@ -791,9 +809,15 @@ export default function TeknoPage() {
                 onChange={(e) => setFileRef(e.target.files?.[0] || null)}
                 style={{ display: "none" }}
               />
-              <span style={{ fontSize: "28px", display: "block", marginBottom: "6px" }}>📝</span>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
               <span style={{ fontSize: "13.5px", fontWeight: "700", color: fileRef ? "#166534" : "#475569" }}>
-                {fileRef ? fileRef.name : (lang === "AR" ? "رفع ملف التصحيح" : "Upload Reference File")}
+                {fileRef ? fileRef.name : (lang === "AR" ? "تحميل ملف المرجع" : "Upload Reference File")}
               </span>
             </label>
           </div>
@@ -811,15 +835,15 @@ export default function TeknoPage() {
               marginBottom: "30px",
             }}
           >
-            <h3 style={{ fontSize: "20px", fontWeight: "900", color: "#0f111a", marginBottom: "20px" }}>
-              📋 {lang === "AR" ? "تحديد أعمدة الربط والمقارنة" : "Select Key & Comparison Columns"}
+            <h3 style={{ fontSize: "19px", fontWeight: "900", color: "#0f111a", marginBottom: "20px" }}>
+              {lang === "AR" ? "تحديد أعمدة الربط والمقارنة" : "Select Key & Comparison Columns"}
             </h3>
 
             {/* KEY COLUMNS ROW */}
             <div style={{ display: "grid", gridTemplateColumns: isDesktop ? "1fr 1fr" : "1fr", gap: "20px", marginBottom: "20px" }}>
               <div>
-                <label style={{ fontSize: "14px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
-                  🔑 {lang === "AR" ? "عمود الربط (الاسم) في ملف الموقع:" : "Website Key Column (Name/SKU):"}
+                <label style={{ fontSize: "13.5px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
+                  {lang === "AR" ? "عمود المعرف الأساسي في ملف الموقع:" : "Website Key Column (SKU/Name):"}
                 </label>
                 <select
                   value={keyColOld}
@@ -835,7 +859,7 @@ export default function TeknoPage() {
                     color: "#0f111a",
                   }}
                 >
-                  <option value="Row-by-Row">Row-by-Row</option>
+                  <option value="Row-by-Row">Row-by-Row (سطر بسطر)</option>
                   {oldHeaders.map((h, i) => (
                     <option key={i} value={h}>{h}</option>
                   ))}
@@ -843,8 +867,8 @@ export default function TeknoPage() {
               </div>
 
               <div>
-                <label style={{ fontSize: "14px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
-                  🔑 {lang === "AR" ? "عمود الربط (الاسم) في ملف المخزن:" : "Warehouse Key Column (Name/SKU):"}
+                <label style={{ fontSize: "13.5px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
+                  {lang === "AR" ? "عمود المعرف الأساسي في ملف المخزن:" : "Warehouse Key Column (SKU/Name):"}
                 </label>
                 <select
                   value={keyColNew}
@@ -860,7 +884,7 @@ export default function TeknoPage() {
                     color: "#0f111a",
                   }}
                 >
-                  <option value="Row-by-Row">Row-by-Row</option>
+                  <option value="Row-by-Row">Row-by-Row (سطر بسطر)</option>
                   {newHeaders.map((h, i) => (
                     <option key={i} value={h}>{h}</option>
                   ))}
@@ -871,8 +895,8 @@ export default function TeknoPage() {
             {/* COMPARISON COLUMNS ROW */}
             <div style={{ display: "grid", gridTemplateColumns: isDesktop ? "1fr 1fr" : "1fr", gap: "20px", marginBottom: "20px" }}>
               <div>
-                <label style={{ fontSize: "14px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
-                  ⚖️ {lang === "AR" ? "عمود المقارنة في ملف الموقع:" : "Website Comparison Column:"}
+                <label style={{ fontSize: "13.5px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
+                  {lang === "AR" ? "عمود المقارنة المستهدف في ملف الموقع:" : "Website Comparison Column:"}
                 </label>
                 <select
                   value={compColOld}
@@ -888,7 +912,7 @@ export default function TeknoPage() {
                     color: "#0f111a",
                   }}
                 >
-                  <option value="Compare All Columns">Compare All Columns (كل الأعمدة)</option>
+                  <option value="Compare All Columns">Compare All Columns (مقارنة كافة الأعمدة)</option>
                   {oldHeaders.map((h, i) => (
                     <option key={i} value={h}>{h}</option>
                   ))}
@@ -896,8 +920,8 @@ export default function TeknoPage() {
               </div>
 
               <div>
-                <label style={{ fontSize: "14px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
-                  {mode === "pull" ? "📥 العمود المراد سحبه من ملف المخزن:" : "⚖️ عمود المقارنة في ملف المخزن:"}
+                <label style={{ fontSize: "13.5px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
+                  {mode === "pull" ? (lang === "AR" ? "العمود المراد سحبه من ملف المخزن:" : "Target Column to Pull:") : (lang === "AR" ? "عمود المقارنة المستهدف في ملف المخزن:" : "Warehouse Comparison Column:")}
                 </label>
                 <select
                   value={compColNew}
@@ -913,7 +937,7 @@ export default function TeknoPage() {
                     color: "#0f111a",
                   }}
                 >
-                  <option value="Compare All Columns">Compare All Columns (كل الأعمدة)</option>
+                  <option value="Compare All Columns">Compare All Columns (مقارنة كافة الأعمدة)</option>
                   {newHeaders.map((h, i) => (
                     <option key={i} value={h}>{h}</option>
                   ))}
@@ -924,8 +948,8 @@ export default function TeknoPage() {
             {/* PULL MODE EXTRA FIELD */}
             {mode === "pull" && (
               <div style={{ marginTop: "15px" }}>
-                <label style={{ fontSize: "14px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
-                  ✏️ {lang === "AR" ? "اسم العمود الجديد القادم من المخزن:" : "New Column Name:"}
+                <label style={{ fontSize: "13.5px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
+                  {lang === "AR" ? "عنوان العمود الساحب الجديد:" : "New Pulled Column Name:"}
                 </label>
                 <input
                   type="text"
@@ -958,30 +982,30 @@ export default function TeknoPage() {
             marginBottom: "30px",
           }}
         >
-          <h3 style={{ fontSize: "20px", fontWeight: "900", color: "#0f111a", marginBottom: "20px" }}>
-            ⚙️ {lang === "AR" ? "إعدادات النمط والخيارات" : "Advanced Options"}
+          <h3 style={{ fontSize: "19px", fontWeight: "900", color: "#0f111a", marginBottom: "20px" }}>
+            {lang === "AR" ? "خيارات وإعدادات المطابقة المتقدمة" : "Advanced Matching Options"}
           </h3>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginBottom: "24px" }}>
-            <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", fontWeight: "700", fontSize: "14.5px" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", fontWeight: "700", fontSize: "14px" }}>
               <input
                 type="checkbox"
                 checked={ignorePunct}
                 onChange={(e) => setIgnorePunct(e.target.checked)}
                 style={{ width: "18px", height: "18px", accentColor: "#2563eb" }}
               />
-              <span>{lang === "AR" ? "تجاهل الفواصل والرموز على عمود المعرف" : "Ignore punctuation and symbols on key column"}</span>
+              <span>{lang === "AR" ? "تجاهل الفواصل والرموز الخاصة أثناء مطابقة المعرفات" : "Ignore symbols and punctuation during key matching"}</span>
             </label>
 
             <div>
-              <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", fontWeight: "700", fontSize: "14.5px", marginBottom: "10px" }}>
+              <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", fontWeight: "700", fontSize: "14px", marginBottom: "10px" }}>
                 <input
                   type="checkbox"
                   checked={enableFuzzy}
                   onChange={(e) => setEnableFuzzy(e.target.checked)}
                   style={{ width: "18px", height: "18px", accentColor: "#2563eb" }}
                 />
-                <span>{lang === "AR" ? "تفعيل اقتراحات التشابه (Fuzzy Matching)" : "Enable Fuzzy Matching"}</span>
+                <span>{lang === "AR" ? "تفعيل نظام الاقتراحات والتشابه الذكي (Fuzzy Matching)" : "Enable Fuzzy Matching"}</span>
               </label>
 
               {enableFuzzy && (
@@ -1002,8 +1026,8 @@ export default function TeknoPage() {
             </div>
 
             <div>
-              <label style={{ fontSize: "14px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
-                🔍 {lang === "AR" ? "كلمات مفتاحية للفلترة (مفصولة بفاصلة):" : "Filter Keywords (comma separated):"}
+              <label style={{ fontSize: "13.5px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
+                {lang === "AR" ? "تصفية الفئات حسب كلمات مفتاحية (مفصولة بفاصلة):" : "Filter Keywords (comma separated):"}
               </label>
               <input
                 type="text"
@@ -1025,21 +1049,21 @@ export default function TeknoPage() {
           </div>
 
           {loadingStep && (
-            <div style={{ padding: "14px 20px", background: "#eff6ff", color: "#1d4ed8", borderRadius: "14px", border: "1px solid #bfdbfe", marginBottom: "20px", fontSize: "14.5px", fontWeight: "700", display: "flex", alignItems: "center", gap: "10px" }}>
+            <div style={{ padding: "14px 20px", background: "#eff6ff", color: "#1d4ed8", borderRadius: "14px", border: "1px solid #bfdbfe", marginBottom: "20px", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", gap: "10px" }}>
               <span className="spinner" style={{ display: "inline-block", width: "16px", height: "16px", border: "2.5px solid #1d4ed8", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
               <span>{loadingStep}</span>
             </div>
           )}
 
           {errorMessage && (
-            <div style={{ padding: "14px 20px", background: "#fef2f2", color: "#991b1b", borderRadius: "14px", border: "1px solid #fecaca", marginBottom: "20px", fontSize: "14.5px", fontWeight: "700" }}>
-              ⚠️ {errorMessage}
+            <div style={{ padding: "14px 20px", background: "#fef2f2", color: "#991b1b", borderRadius: "14px", border: "1px solid #fecaca", marginBottom: "20px", fontSize: "14px", fontWeight: "700" }}>
+              {errorMessage}
             </div>
           )}
 
           {success && (
-            <div style={{ padding: "14px 20px", background: "#f0fdf4", color: "#166534", borderRadius: "14px", border: "1px solid #bbf7d0", marginBottom: "20px", fontSize: "14.5px", fontWeight: "700" }}>
-              🎉 {lang === "AR" ? "تمت معالجة البيانات بنجاح بمحرك بايثون! جاري تحميل التقرير النهائي..." : "Data processed successfully via Python engine! Downloading final report..."}
+            <div style={{ padding: "14px 20px", background: "#f0fdf4", color: "#166534", borderRadius: "14px", border: "1px solid #bbf7d0", marginBottom: "20px", fontSize: "14px", fontWeight: "700" }}>
+              {lang === "AR" ? "اكتملت معالجة البيانات بنجاح! جاري تحميل التقرير النهائي..." : "Data processed successfully! Downloading final report..."}
             </div>
           )}
 
@@ -1053,7 +1077,7 @@ export default function TeknoPage() {
               color: "#ffffff",
               padding: "18px 30px",
               borderRadius: "50px",
-              fontSize: "17px",
+              fontSize: "16.5px",
               fontWeight: "900",
               border: "none",
               cursor: loading ? "wait" : "pointer",
@@ -1066,10 +1090,10 @@ export default function TeknoPage() {
             }}
           >
             {loading ? (
-              <span>⏳ {lang === "AR" ? "جاري تشغيل محرك بايثون لمعالجة وتوحيد البيانات..." : "Running Python engine to compare & process data..."}</span>
+              <span>{lang === "AR" ? "جاري معالجة وتوحيد البيانات..." : "Processing & matching data..."}</span>
             ) : (
               <span>
-                🚀 {mode === "pull" ? (lang === "AR" ? "بدء سحب البيانات (بايثون)" : "Start Pulling Data (Python)") : (lang === "AR" ? "بدء معالجة الملفات والمقارنة (بايثون)" : "Start Compare (Python)")}
+                {mode === "pull" ? (lang === "AR" ? "بدء سحب ومعالجة البيانات" : "Start Pulling Data") : (lang === "AR" ? "بدء معالجة ومطابقة البيانات" : "Start Comparison")}
               </span>
             )}
           </button>
@@ -1089,7 +1113,7 @@ export default function TeknoPage() {
         }}
       >
         <span style={{ fontSize: "13px", color: "#64748b", fontWeight: "700" }}>
-          © {new Date().getFullYear()} Haider Mohamed Shwkat - Tekno Tool (Python Engine)
+          © {new Date().getFullYear()} Haider Mohamed Shwkat - Tekno Tool
         </span>
       </footer>
 
@@ -1175,7 +1199,6 @@ export default function TeknoPage() {
 
               {formSubmitted ? (
                 <div style={{ padding: "35px 20px", textAlign: "center", background: "#f0fdf4", borderRadius: "20px", border: "1px solid #bbf7d0", marginTop: "30px" }}>
-                  <span style={{ fontSize: "42px", display: "block", marginBottom: "12px" }}>🎉</span>
                   <h3 style={{ fontSize: "22px", fontWeight: "900", color: "#166534" }}>
                     {lang === "AR" ? "تم إرسال طلبك بنجاح!" : "Request Submitted Successfully!"}
                   </h3>
