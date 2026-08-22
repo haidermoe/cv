@@ -759,9 +759,10 @@ export default function Home() {
                 alignItems: "center",
                 justifyContent: "center",
                 overflow: "visible",
+                transform: "translateY(45px)",
               }}
             >
-              <JellyfishViewer size={560} scaleMultiplier={1.2} />
+              <JellyfishViewer size={560} scaleMultiplier={1.2} positionY={-0.40} />
             </div>
 
           </div>
