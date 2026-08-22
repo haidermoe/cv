@@ -36,34 +36,9 @@ export default function TeknoPage() {
   const [langOrigin, setLangOrigin] = useState({ x: 0, y: 0 });
   const [circleActive, setCircleActive] = useState(false);
 
-  // Operation Mode: "compare" | "pull"
-  const [mode, setMode] = useState<"compare" | "pull">("compare");
-
-  // File states
-  const [fileOld, setFileOld] = useState<File | null>(null);
-  const [fileNew, setFileNew] = useState<File | null>(null);
-  const [fileRef, setFileRef] = useState<File | null>(null);
-
-  // Column Headers state
-  const [oldHeaders, setOldHeaders] = useState<string[]>([]);
-  const [newHeaders, setNewHeaders] = useState<string[]>([]);
-
-  // Selected Columns
-  const [keyColOld, setKeyColOld] = useState<string>("");
-  const [keyColNew, setKeyColNew] = useState<string>("");
-  const [compColOld, setCompColOld] = useState<string>("Compare All Columns");
-  const [compColNew, setCompColNew] = useState<string>("Compare All Columns");
-  const [newColName, setNewColName] = useState<string>("المخزون الساحب");
-
-  // Options
-  const [ignorePunct, setIgnorePunct] = useState(true);
-  const [enableFuzzy, setEnableFuzzy] = useState(true);
-  const [simThresh, setSimThresh] = useState<number>(70);
-  const [filterKeywords, setFilterKeywords] = useState("");
-
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  // Client Drawer Tab State
+  const [isClientDrawerOpen, setIsClientDrawerOpen] = useState(false);
+  const [isClientDrawerClosing, setIsClientDrawerClosing] = useState(false);
 
   useEffect(() => {
     const handleCheckDesktop = () => setIsDesktop(window.innerWidth > 960);
@@ -93,6 +68,14 @@ export default function TeknoPage() {
     }, 700);
   };
 
+  const closeClientDrawer = () => {
+    setIsClientDrawerClosing(true);
+    setTimeout(() => {
+      setIsClientDrawerOpen(false);
+      setIsClientDrawerClosing(false);
+    }, 450);
+  };
+
   useEffect(() => {
     let animationFrameId: number;
     let targetX = 0, targetY = 0;
@@ -118,108 +101,6 @@ export default function TeknoPage() {
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
-
-  // Auto-fetch headers when Old File selected
-  useEffect(() => {
-    if (!fileOld) {
-      setOldHeaders([]);
-      setKeyColOld("");
-      return;
-    }
-    const formData = new FormData();
-    formData.append("file", fileOld);
-    fetch("/api/tekno/headers", { method: "POST", body: formData })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.headers && data.headers.length > 0) {
-          setOldHeaders(data.headers);
-          const defaultKey = data.headers.find((h: string) => h.toLowerCase().includes("sku") || h.startsWith("C ")) || data.headers[0];
-          setKeyColOld(defaultKey);
-
-          const defaultComp = data.headers.find((h: string) => h.toLowerCase().includes("qty") || h.toLowerCase().includes("رصيد") || h.startsWith("E ")) || "Compare All Columns";
-          setCompColOld(defaultComp);
-        }
-      })
-      .catch(() => {});
-  }, [fileOld]);
-
-  // Auto-fetch headers when New File selected
-  useEffect(() => {
-    if (!fileNew) {
-      setNewHeaders([]);
-      setKeyColNew("");
-      return;
-    }
-    const formData = new FormData();
-    formData.append("file", fileNew);
-    fetch("/api/tekno/headers", { method: "POST", body: formData })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.headers && data.headers.length > 0) {
-          setNewHeaders(data.headers);
-          const defaultKey = data.headers.find((h: string) => h.includes("الاسم") || h.toLowerCase().includes("name") || h.startsWith("C ")) || data.headers[0];
-          setKeyColNew(defaultKey);
-
-          const defaultComp = data.headers.find((h: string) => h.includes("الرصيد") || h.toLowerCase().includes("qty") || h.startsWith("D ")) || "Compare All Columns";
-          setCompColNew(defaultComp);
-        }
-      })
-      .catch(() => {});
-  }, [fileNew]);
-
-  const handleProcessFiles = async () => {
-    if (!fileOld || !fileNew) {
-      setErrorMessage(lang === "AR" ? "يرجى اختيار ملف الموقع وملف المخزن للبدء" : "Please select website file and warehouse file to start");
-      return;
-    }
-    setErrorMessage("");
-    setLoading(true);
-    setSuccess(false);
-
-    try {
-      const formData = new FormData();
-      formData.append("file_old", fileOld);
-      formData.append("file_new", fileNew);
-      if (fileRef) formData.append("file_ref", fileRef);
-
-      formData.append("mode", mode);
-      formData.append("key_col_old", keyColOld);
-      formData.append("key_col_new", keyColNew);
-      formData.append("comp_col_old", compColOld);
-      formData.append("comp_col_new", compColNew);
-      formData.append("new_col_name", newColName);
-
-      formData.append("ignore_punct", String(ignorePunct));
-      formData.append("similarity_threshold", String(enableFuzzy ? simThresh : 101));
-      formData.append("filter_keywords", filterKeywords);
-
-      const res = await fetch("/api/compare", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || "حدث خطأ أثناء معالجة الملفات");
-      }
-
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "Tekno_Data_Report.xlsx";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-
-      setSuccess(true);
-    } catch (err: any) {
-      setErrorMessage(err.message || "حدث خطأ أثناء المعالجة بواسطة برنامج بايثون");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div
@@ -304,6 +185,7 @@ export default function TeknoPage() {
           width: "100%",
           zIndex: 30,
           gap: "8px",
+          marginBottom: "16px",
         }}
       >
         {/* LOGO */}
@@ -374,574 +256,57 @@ export default function TeknoPage() {
           >
             {lang === "AR" ? "EN" : "عربي"} ∨
           </button>
+
+          <button
+            onClick={() => setIsClientDrawerOpen(true)}
+            className="awsmd-royal-client-btn"
+            style={{
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+            }}
+          >
+            <span className="flip-box">
+              <span className="flip-wrapper">
+                <span className="flip-text-primary">
+                  + {isDesktop ? (lang === "AR" ? "كن عميلاً" : "Become a Client") : (lang === "AR" ? "تواصل" : "Client")}
+                </span>
+                <span className="flip-text-secondary">
+                  + {isDesktop ? (lang === "AR" ? "كن عميلاً" : "Become a Client") : (lang === "AR" ? "تواصل" : "Client")}
+                </span>
+              </span>
+            </span>
+          </button>
         </div>
       </header>
 
-      {/* MAIN TOOL CONTENT */}
+      {/* MAIN STREAMLIT PYTHON ENGINE EMBEDDED CONTAINER */}
       <main
         style={{
           position: "relative",
           zIndex: 20,
-          maxWidth: "1100px",
+          maxWidth: "1350px",
           width: "100%",
-          margin: "40px auto",
+          height: "calc(100vh - 110px)",
+          margin: "0 auto",
+          borderRadius: "28px",
+          overflow: "hidden",
+          boxShadow: "0 15px 50px rgba(0, 0, 0, 0.08)",
+          border: "1px solid rgba(15, 17, 26, 0.08)",
+          background: "#0e0d15",
         }}
       >
-        {/* HEADER TITLE CARD & MODE SWITCHER */}
-        <div
+        <iframe
+          src="https://excelhid.streamlit.app/?embed=true"
           style={{
-            background: "#ffffff",
-            padding: isDesktop ? "35px 40px" : "25px 20px",
+            width: "100%",
+            height: "100%",
+            border: "none",
             borderRadius: "28px",
-            boxShadow: "0 10px 40px rgba(0, 0, 0, 0.04)",
-            border: "1px solid rgba(15, 17, 26, 0.06)",
-            textAlign: "center",
-            marginBottom: "30px",
           }}
-        >
-          <h1
-            style={{
-              fontSize: isDesktop ? "42px" : "28px",
-              fontWeight: "900",
-              color: "#0f111a",
-              marginBottom: "8px",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            ⚡ {lang === "AR" ? "أداة تكنو (Tekno Tool)" : "Tekno Tool"}
-          </h1>
-          <p
-            style={{
-              fontSize: isDesktop ? "16px" : "14px",
-              color: "#475569",
-              fontWeight: "600",
-              marginBottom: "24px",
-            }}
-          >
-            {lang === "AR"
-              ? "أداة مقارنة وسحب بيانات الإكسل الذكية بالمحرك الأصلي لـ Python"
-              : "Full smart Excel comparison & data extraction powered by Python Engine"}
-          </p>
-
-          {/* MODE TOGGLE PILLS */}
-          <div
-            style={{
-              display: "inline-flex",
-              background: "#f1f5f9",
-              padding: "5px",
-              borderRadius: "50px",
-              border: "1px solid #e2e8f0",
-              gap: "6px",
-            }}
-          >
-            <button
-              onClick={() => setMode("compare")}
-              style={{
-                background: mode === "compare" ? "#2563eb" : "transparent",
-                color: mode === "compare" ? "#ffffff" : "#475569",
-                border: "none",
-                padding: "10px 24px",
-                borderRadius: "50px",
-                fontSize: "14.5px",
-                fontWeight: "800",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-            >
-              📊 {lang === "AR" ? "وضع المقارنة (Compare)" : "Compare Mode"}
-            </button>
-            <button
-              onClick={() => setMode("pull")}
-              style={{
-                background: mode === "pull" ? "#16a34a" : "transparent",
-                color: mode === "pull" ? "#ffffff" : "#475569",
-                border: "none",
-                padding: "10px 24px",
-                borderRadius: "50px",
-                fontSize: "14.5px",
-                fontWeight: "800",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-            >
-              📥 {lang === "AR" ? "وضع سحب البيانات (Pull Data)" : "Pull Data Mode"}
-            </button>
-          </div>
-        </div>
-
-        {/* 3 FILE UPLOAD CARDS GRID */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: isDesktop ? "repeat(3, 1fr)" : "1fr",
-            gap: "20px",
-            marginBottom: "30px",
-          }}
-        >
-          {/* CARD 1: WEBSITE FILE */}
-          <div
-            style={{
-              background: "#ffffff",
-              padding: "26px 22px",
-              borderRadius: "24px",
-              boxShadow: "0 6px 25px rgba(0, 0, 0, 0.03)",
-              border: "1px solid rgba(15, 17, 26, 0.06)",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
-                <span
-                  style={{
-                    background: "#2563eb",
-                    color: "#ffffff",
-                    width: "28px",
-                    height: "28px",
-                    borderRadius: "50%",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: "900",
-                    fontSize: "14px",
-                  }}
-                >
-                  1
-                </span>
-                <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0f111a" }}>
-                  {lang === "AR" ? "ملف الموقع الإلكتروني" : "Website File"}
-                </h3>
-              </div>
-              <p style={{ fontSize: "13px", color: "#64748b", fontWeight: "600", marginBottom: "16px" }}>
-                {lang === "AR" ? "اختر ملف الموقع (Excel أو CSV)" : "Select Website file (Excel or CSV)"}
-              </p>
-            </div>
-
-            <label
-              style={{
-                background: "#f8fafc",
-                border: "2px dashed #cbd5e1",
-                borderRadius: "18px",
-                padding: "20px 14px",
-                textAlign: "center",
-                cursor: "pointer",
-                transition: "border-color 0.2s ease",
-                display: "block",
-              }}
-            >
-              <input
-                type="file"
-                accept=".xlsx,.xls,.csv"
-                onChange={(e) => setFileOld(e.target.files?.[0] || null)}
-                style={{ display: "none" }}
-              />
-              <span style={{ fontSize: "28px", display: "block", marginBottom: "6px" }}>📂</span>
-              <span style={{ fontSize: "13.5px", fontWeight: "700", color: fileOld ? "#166534" : "#475569" }}>
-                {fileOld ? fileOld.name : (lang === "AR" ? "رفع الملف" : "Upload File")}
-              </span>
-            </label>
-          </div>
-
-          {/* CARD 2: WAREHOUSE FILE */}
-          <div
-            style={{
-              background: "#ffffff",
-              padding: "26px 22px",
-              borderRadius: "24px",
-              boxShadow: "0 6px 25px rgba(0, 0, 0, 0.03)",
-              border: "1px solid rgba(15, 17, 26, 0.06)",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
-                <span
-                  style={{
-                    background: "#2563eb",
-                    color: "#ffffff",
-                    width: "28px",
-                    height: "28px",
-                    borderRadius: "50%",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: "900",
-                    fontSize: "14px",
-                  }}
-                >
-                  2
-                </span>
-                <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0f111a" }}>
-                  {lang === "AR" ? "ملف جرد المخزن" : "Warehouse File"}
-                </h3>
-              </div>
-              <p style={{ fontSize: "13px", color: "#64748b", fontWeight: "600", marginBottom: "16px" }}>
-                {lang === "AR" ? "اختر ملف المخزن (Excel أو CSV)" : "Select Warehouse file (Excel or CSV)"}
-              </p>
-            </div>
-
-            <label
-              style={{
-                background: "#f8fafc",
-                border: "2px dashed #cbd5e1",
-                borderRadius: "18px",
-                padding: "20px 14px",
-                textAlign: "center",
-                cursor: "pointer",
-                transition: "border-color 0.2s ease",
-                display: "block",
-              }}
-            >
-              <input
-                type="file"
-                accept=".xlsx,.xls,.csv"
-                onChange={(e) => setFileNew(e.target.files?.[0] || null)}
-                style={{ display: "none" }}
-              />
-              <span style={{ fontSize: "28px", display: "block", marginBottom: "6px" }}>📦</span>
-              <span style={{ fontSize: "13.5px", fontWeight: "700", color: fileNew ? "#166534" : "#475569" }}>
-                {fileNew ? fileNew.name : (lang === "AR" ? "رفع الملف" : "Upload File")}
-              </span>
-            </label>
-          </div>
-
-          {/* CARD 3: REFERENCE / CORRECTION FILE */}
-          <div
-            style={{
-              background: "#ffffff",
-              padding: "26px 22px",
-              borderRadius: "24px",
-              boxShadow: "0 6px 25px rgba(0, 0, 0, 0.03)",
-              border: "1px solid rgba(15, 17, 26, 0.06)",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
-                <span
-                  style={{
-                    background: "#64748b",
-                    color: "#ffffff",
-                    width: "28px",
-                    height: "28px",
-                    borderRadius: "50%",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: "900",
-                    fontSize: "14px",
-                  }}
-                >
-                  3
-                </span>
-                <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0f111a" }}>
-                  {lang === "AR" ? "ملف التصحيح (اختياري)" : "Correction File (Optional)"}
-                </h3>
-              </div>
-              <p style={{ fontSize: "13px", color: "#64748b", fontWeight: "600", marginBottom: "16px" }}>
-                {lang === "AR" ? "اختر ملف التوافق والمراجع (Excel أو CSV)" : "Select Reference mapping file (Excel or CSV)"}
-              </p>
-            </div>
-
-            <label
-              style={{
-                background: "#f8fafc",
-                border: "2px dashed #cbd5e1",
-                borderRadius: "18px",
-                padding: "20px 14px",
-                textAlign: "center",
-                cursor: "pointer",
-                transition: "border-color 0.2s ease",
-                display: "block",
-              }}
-            >
-              <input
-                type="file"
-                accept=".xlsx,.xls,.csv"
-                onChange={(e) => setFileRef(e.target.files?.[0] || null)}
-                style={{ display: "none" }}
-              />
-              <span style={{ fontSize: "28px", display: "block", marginBottom: "6px" }}>📝</span>
-              <span style={{ fontSize: "13.5px", fontWeight: "700", color: fileRef ? "#166534" : "#475569" }}>
-                {fileRef ? fileRef.name : (lang === "AR" ? "رفع ملف التصحيح" : "Upload Reference File")}
-              </span>
-            </label>
-          </div>
-        </div>
-
-        {/* COLUMN SELECTION SECTION (WHEN FILES ARE UPLOADED) */}
-        {(fileOld || fileNew) && (
-          <div
-            style={{
-              background: "#ffffff",
-              padding: "30px",
-              borderRadius: "24px",
-              boxShadow: "0 10px 40px rgba(0, 0, 0, 0.04)",
-              border: "1px solid rgba(15, 17, 26, 0.06)",
-              marginBottom: "30px",
-            }}
-          >
-            <h3 style={{ fontSize: "20px", fontWeight: "900", color: "#0f111a", marginBottom: "20px" }}>
-              📋 {lang === "AR" ? "تحديد أعمدة الربط والمقارنة" : "Select Key & Comparison Columns"}
-            </h3>
-
-            {/* KEY COLUMNS ROW */}
-            <div style={{ display: "grid", gridTemplateColumns: isDesktop ? "1fr 1fr" : "1fr", gap: "20px", marginBottom: "20px" }}>
-              <div>
-                <label style={{ fontSize: "14px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
-                  🔑 {lang === "AR" ? "عمود الربط (الاسم) في ملف الموقع:" : "Website Key Column (Name/SKU):"}
-                </label>
-                <select
-                  value={keyColOld}
-                  onChange={(e) => setKeyColOld(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "12px 14px",
-                    borderRadius: "12px",
-                    border: "1px solid #cbd5e1",
-                    fontSize: "14px",
-                    fontWeight: "700",
-                    background: "#f8fafc",
-                    color: "#0f111a",
-                  }}
-                >
-                  <option value="Row-by-Row">Row-by-Row</option>
-                  {oldHeaders.map((h, i) => (
-                    <option key={i} value={h}>{h}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label style={{ fontSize: "14px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
-                  🔑 {lang === "AR" ? "عمود الربط (الاسم) في ملف المخزن:" : "Warehouse Key Column (Name/SKU):"}
-                </label>
-                <select
-                  value={keyColNew}
-                  onChange={(e) => setKeyColNew(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "12px 14px",
-                    borderRadius: "12px",
-                    border: "1px solid #cbd5e1",
-                    fontSize: "14px",
-                    fontWeight: "700",
-                    background: "#f8fafc",
-                    color: "#0f111a",
-                  }}
-                >
-                  <option value="Row-by-Row">Row-by-Row</option>
-                  {newHeaders.map((h, i) => (
-                    <option key={i} value={h}>{h}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* COMPARISON COLUMNS ROW */}
-            <div style={{ display: "grid", gridTemplateColumns: isDesktop ? "1fr 1fr" : "1fr", gap: "20px", marginBottom: "20px" }}>
-              <div>
-                <label style={{ fontSize: "14px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
-                  ⚖️ {lang === "AR" ? "عمود المقارنة في ملف الموقع:" : "Website Comparison Column:"}
-                </label>
-                <select
-                  value={compColOld}
-                  onChange={(e) => setCompColOld(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "12px 14px",
-                    borderRadius: "12px",
-                    border: "1px solid #cbd5e1",
-                    fontSize: "14px",
-                    fontWeight: "700",
-                    background: "#f8fafc",
-                    color: "#0f111a",
-                  }}
-                >
-                  <option value="Compare All Columns">Compare All Columns (كل الأعمدة)</option>
-                  {oldHeaders.map((h, i) => (
-                    <option key={i} value={h}>{h}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label style={{ fontSize: "14px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
-                  {mode === "pull" ? "📥 العمود المراد سحبه من ملف المخزن:" : "⚖️ عمود المقارنة في ملف المخزن:"}
-                </label>
-                <select
-                  value={compColNew}
-                  onChange={(e) => setCompColNew(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "12px 14px",
-                    borderRadius: "12px",
-                    border: "1px solid #cbd5e1",
-                    fontSize: "14px",
-                    fontWeight: "700",
-                    background: "#f8fafc",
-                    color: "#0f111a",
-                  }}
-                >
-                  <option value="Compare All Columns">Compare All Columns (كل الأعمدة)</option>
-                  {newHeaders.map((h, i) => (
-                    <option key={i} value={h}>{h}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* PULL MODE EXTRA FIELD */}
-            {mode === "pull" && (
-              <div style={{ marginTop: "15px" }}>
-                <label style={{ fontSize: "14px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
-                  ✏️ {lang === "AR" ? "اسم العمود الجديد القادم من المخزن:" : "New Column Name:"}
-                </label>
-                <input
-                  type="text"
-                  value={newColName}
-                  onChange={(e) => setNewColName(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "12px 14px",
-                    borderRadius: "12px",
-                    border: "1px solid #cbd5e1",
-                    fontSize: "14px",
-                    fontWeight: "700",
-                    background: "#f8fafc",
-                    color: "#0f111a",
-                  }}
-                />
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* OPTIONS & PROCESS CARD */}
-        <div
-          style={{
-            background: "#ffffff",
-            padding: "30px",
-            borderRadius: "24px",
-            boxShadow: "0 10px 40px rgba(0, 0, 0, 0.04)",
-            border: "1px solid rgba(15, 17, 26, 0.06)",
-            marginBottom: "30px",
-          }}
-        >
-          <h3 style={{ fontSize: "20px", fontWeight: "900", color: "#0f111a", marginBottom: "20px" }}>
-            ⚙️ {lang === "AR" ? "إعدادات النمط والخيارات" : "Advanced Options"}
-          </h3>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginBottom: "24px" }}>
-            <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", fontWeight: "700", fontSize: "14.5px" }}>
-              <input
-                type="checkbox"
-                checked={ignorePunct}
-                onChange={(e) => setIgnorePunct(e.target.checked)}
-                style={{ width: "18px", height: "18px", accentColor: "#2563eb" }}
-              />
-              <span>{lang === "AR" ? "تجاهل الفواصل والرموز على عمود المعرف" : "Ignore punctuation and symbols on key column"}</span>
-            </label>
-
-            <div>
-              <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", fontWeight: "700", fontSize: "14.5px", marginBottom: "10px" }}>
-                <input
-                  type="checkbox"
-                  checked={enableFuzzy}
-                  onChange={(e) => setEnableFuzzy(e.target.checked)}
-                  style={{ width: "18px", height: "18px", accentColor: "#2563eb" }}
-                />
-                <span>{lang === "AR" ? "تفعيل اقتراحات التشابه (Fuzzy Matching)" : "Enable Fuzzy Matching"}</span>
-              </label>
-
-              {enableFuzzy && (
-                <div style={{ paddingRight: "28px", display: "flex", alignItems: "center", gap: "15px" }}>
-                  <span style={{ fontSize: "13.5px", fontWeight: "700", color: "#475569" }}>
-                    {lang === "AR" ? "نسبة التشابه المطلوبة:" : "Similarity Threshold:"} <b>{simThresh}%</b>
-                  </span>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={simThresh}
-                    onChange={(e) => setSimThresh(Number(e.target.value))}
-                    style={{ flex: 1, accentColor: "#2563eb" }}
-                  />
-                </div>
-              )}
-            </div>
-
-            <div>
-              <label style={{ fontSize: "14px", fontWeight: "800", color: "#0f111a", display: "block", marginBottom: "6px" }}>
-                🔍 {lang === "AR" ? "كلمات مفتاحية للفلترة (مفصولة بفاصلة):" : "Filter Keywords (comma separated):"}
-              </label>
-              <input
-                type="text"
-                value={filterKeywords}
-                onChange={(e) => setFilterKeywords(e.target.value)}
-                placeholder={lang === "AR" ? "مثال: ps5, ps4, ns" : "e.g. ps5, ps4, ns"}
-                style={{
-                  width: "100%",
-                  padding: "12px 14px",
-                  borderRadius: "12px",
-                  border: "1px solid #cbd5e1",
-                  fontSize: "14px",
-                  fontWeight: "700",
-                  background: "#f8fafc",
-                  color: "#0f111a",
-                }}
-              />
-            </div>
-          </div>
-
-          {errorMessage && (
-            <div style={{ padding: "14px 20px", background: "#fef2f2", color: "#991b1b", borderRadius: "14px", border: "1px solid #fecaca", marginBottom: "20px", fontSize: "14.5px", fontWeight: "700" }}>
-              ⚠️ {errorMessage}
-            </div>
-          )}
-
-          {success && (
-            <div style={{ padding: "14px 20px", background: "#f0fdf4", color: "#166534", borderRadius: "14px", border: "1px solid #bbf7d0", marginBottom: "20px", fontSize: "14.5px", fontWeight: "700" }}>
-              🎉 {lang === "AR" ? "تمت معالجة البيانات بنجاح بمحرك بايثون! جاري تحميل التقرير النهائي..." : "Data processed successfully via Python engine! Downloading final report..."}
-            </div>
-          )}
-
-          <button
-            onClick={handleProcessFiles}
-            disabled={loading}
-            className="awsmd-btn-glow"
-            style={{
-              width: "100%",
-              background: loading ? "#94a3b8" : (mode === "pull" ? "#16a34a" : "#2563eb"),
-              color: "#ffffff",
-              padding: "18px 30px",
-              borderRadius: "50px",
-              fontSize: "17px",
-              fontWeight: "900",
-              border: "none",
-              cursor: loading ? "wait" : "pointer",
-              boxShadow: mode === "pull" ? "0 12px 35px rgba(22, 163, 74, 0.35)" : "0 12px 35px rgba(37, 99, 235, 0.35)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px",
-              transition: "all 0.2s ease",
-            }}
-          >
-            {loading ? (
-              <span>⏳ {lang === "AR" ? "جاري تشغيل برنامج بايثون لمعالجة وتوحيد البيانات..." : "Running Python engine to compare & process data..."}</span>
-            ) : (
-              <span>
-                🚀 {mode === "pull" ? (lang === "AR" ? "بدء سحب البيانات (بايثون)" : "Start Pulling Data (Python)") : (lang === "AR" ? "بدء معالجة الملفات والمقارنة (بايثون)" : "Start Compare (Python)")}
-              </span>
-            )}
-          </button>
-        </div>
+          title="أداة تكنو لمقارنة وسحب البيانات"
+        />
       </main>
 
       {/* FOOTER */}
@@ -952,14 +317,71 @@ export default function TeknoPage() {
           alignItems: "center",
           width: "100%",
           zIndex: 30,
-          paddingTop: "16px",
-          borderTop: "1px solid rgba(15, 17, 26, 0.06)",
+          paddingTop: "10px",
         }}
       >
         <span style={{ fontSize: "13px", color: "#64748b", fontWeight: "700" }}>
           © {new Date().getFullYear()} Haider Mohamed Shwkat - Tekno Tool (Python Engine)
         </span>
       </footer>
+
+      {/* BECOME A CLIENT DRAWER TAB MODAL */}
+      {(isClientDrawerOpen || isClientDrawerClosing) && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 2000,
+            display: "flex",
+            justifyContent: lang === "AR" ? "flex-start" : "flex-end",
+          }}
+        >
+          <div
+            onClick={closeClientDrawer}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(15, 17, 26, 0.6)",
+              backdropFilter: "blur(8px)",
+              opacity: isClientDrawerClosing ? 0 : 1,
+              transition: "opacity 0.45s ease",
+            }}
+          />
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              maxWidth: "540px",
+              height: "100dvh",
+              background: "#ffffff",
+              color: "#0f111a",
+              padding: isDesktop ? "45px 35px" : "30px 20px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              boxShadow: lang === "AR" ? "-20px 0 50px rgba(0,0,0,0.3)" : "20px 0 50px rgba(0,0,0,0.3)",
+              zIndex: 2001,
+              overflowY: "auto",
+              transform: isClientDrawerClosing
+                ? lang === "AR" ? "translateX(-100%)" : "translateX(100%)"
+                : "translateX(0)",
+              transition: "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
+              fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif",
+            }}
+          >
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "25px" }}>
+                <div>
+                  <h2 style={{ fontSize: isDesktop ? "30px" : "24px", fontWeight: "900", color: "#0f111a", lineHeight: "1.2" }}>
+                    {lang === "AR" ? "مرحباً! أخبرنا بكل التفاصيل" : "Hey! Tell us all the things"}
+                  </h2>
+                </div>
+                <button onClick={closeClientDrawer} style={{ background: "#f1f5f9", border: "none", width: "38px", height: "38px", borderRadius: "50%", cursor: "pointer" }}>✕</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
