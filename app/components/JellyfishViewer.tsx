@@ -10,9 +10,18 @@ interface JellyfishViewerProps {
   customColor?: string | null;
   materialMode?: "solid" | "glass" | "wireframe";
   positionX?: number;
+  positionY?: number;
+  scaleMultiplier?: number;
 }
 
-export default function JellyfishViewer({ size = 320, customColor = null, materialMode = "solid", positionX = 0 }: JellyfishViewerProps) {
+export default function JellyfishViewer({
+  size = 320,
+  customColor = null,
+  materialMode = "solid",
+  positionX = 0,
+  positionY = -0.18,
+  scaleMultiplier = 1.0,
+}: JellyfishViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const loadedModelRef = useRef<THREE.Group | null>(null);
@@ -217,7 +226,7 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
 
                 const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
                 if (isFinite(maxDim) && maxDim > 0) {
-                  const scale = 2.9 / maxDim; // Perfectly sized without any edge truncation!
+                  const scale = (2.9 / maxDim) * scaleMultiplier;
                   loadedModel.scale.setScalar(scale);
                 }
 
@@ -291,7 +300,7 @@ export default function JellyfishViewer({ size = 320, customColor = null, materi
 
       if (loadedModel) {
         // Pure vertical floating motion - 100% straight & upright (0 degree tilt)
-        loadedModel.position.y = -0.18 + Math.sin(elapsedTime * 1.2) * 0.12;
+        loadedModel.position.y = positionY + Math.sin(elapsedTime * 1.2) * 0.12;
         loadedModel.position.x = positionX;
         loadedModel.rotation.set(0, 0, 0);
 
