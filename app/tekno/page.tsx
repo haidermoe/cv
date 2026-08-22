@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import * as XLSX from "xlsx";
 
 // REUSABLE FLIP-TEXT LINK COMPONENT
 function FlipLink({ children, href, style, color = "#0f111a", hoverColor = "#2563eb" }: { children: React.ReactNode; href: string; style?: React.CSSProperties; color?: string; hoverColor?: string }) {
@@ -26,6 +27,36 @@ function FlipLink({ children, href, style, color = "#0f111a", hoverColor = "#256
   );
 }
 
+// Client-side Fallback Parser
+const parseHeadersClientSide = async (file: File): Promise<string[]> => {
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const wb = XLSX.read(arrayBuffer, { type: "array" });
+    const firstSheetName = wb.SheetNames[0];
+    if (!firstSheetName) return [];
+    const ws = wb.Sheets[firstSheetName];
+    const data: any[][] = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
+    const firstRow = data[0] || [];
+
+    const numToColStr = (n: number): string => {
+      let s = "";
+      while (n >= 0) {
+        s = String.fromCharCode((n % 26) + 65) + s;
+        n = Math.floor(n / 26) - 1;
+      }
+      return s;
+    };
+
+    return firstRow.map((val, idx) => {
+      const colLetter = numToColStr(idx);
+      const strVal = String(val).trim();
+      return strVal ? `${colLetter} (${strVal})` : `${colLetter}`;
+    });
+  } catch (err) {
+    return [];
+  }
+};
+
 export default function TeknoPage() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -49,7 +80,7 @@ export default function TeknoPage() {
   const [fileNew, setFileNew] = useState<File | null>(null);
   const [fileRef, setFileRef] = useState<File | null>(null);
 
-  // Column Headers state (Read 100% by Python Backend!)
+  // Column Headers state
   const [oldHeaders, setOldHeaders] = useState<string[]>([]);
   const [newHeaders, setNewHeaders] = useState<string[]>([]);
 
@@ -155,7 +186,7 @@ export default function TeknoPage() {
     };
   }, []);
 
-  // Send Old File to Python API Backend to read headers natively using Python comparator.py get_headers
+  // Fetch headers for Old File via /api/headers with client-side fallback
   useEffect(() => {
     if (!fileOld) {
       setOldHeaders([]);
@@ -164,22 +195,36 @@ export default function TeknoPage() {
     }
     const formData = new FormData();
     formData.append("file", fileOld);
-    fetch("/api/tekno/headers", { method: "POST", body: formData })
-      .then((res) => res.json())
+
+    const applyHeaders = (headers: string[]) => {
+      if (headers && headers.length > 0) {
+        setOldHeaders(headers);
+        const defaultKey = headers.find((h: string) => h.toLowerCase().includes("sku") || h.startsWith("C ")) || headers[0];
+        setKeyColOld(defaultKey);
+
+        const defaultComp = headers.find((h: string) => h.toLowerCase().includes("qty") || h.toLowerCase().includes("رصيد") || h.startsWith("E ")) || "Compare All Columns";
+        setCompColOld(defaultComp);
+      }
+    };
+
+    fetch("/api/headers", { method: "POST", body: formData, cache: "no-store" })
+      .then((res) => {
+        if (!res.ok) throw new Error("API error");
+        return res.json();
+      })
       .then((data) => {
         if (data.headers && data.headers.length > 0) {
-          setOldHeaders(data.headers);
-          const defaultKey = data.headers.find((h: string) => h.toLowerCase().includes("sku") || h.startsWith("C ")) || data.headers[0];
-          setKeyColOld(defaultKey);
-
-          const defaultComp = data.headers.find((h: string) => h.toLowerCase().includes("qty") || h.toLowerCase().includes("رصيد") || h.startsWith("E ")) || "Compare All Columns";
-          setCompColOld(defaultComp);
+          applyHeaders(data.headers);
+        } else {
+          parseHeadersClientSide(fileOld).then(applyHeaders);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        parseHeadersClientSide(fileOld).then(applyHeaders);
+      });
   }, [fileOld]);
 
-  // Send New File to Python API Backend to read headers natively using Python comparator.py get_headers
+  // Fetch headers for New File via /api/headers with client-side fallback
   useEffect(() => {
     if (!fileNew) {
       setNewHeaders([]);
@@ -188,19 +233,33 @@ export default function TeknoPage() {
     }
     const formData = new FormData();
     formData.append("file", fileNew);
-    fetch("/api/tekno/headers", { method: "POST", body: formData })
-      .then((res) => res.json())
+
+    const applyHeaders = (headers: string[]) => {
+      if (headers && headers.length > 0) {
+        setNewHeaders(headers);
+        const defaultKey = headers.find((h: string) => h.includes("الاسم") || h.toLowerCase().includes("name") || h.startsWith("C ")) || headers[0];
+        setKeyColNew(defaultKey);
+
+        const defaultComp = headers.find((h: string) => h.includes("الرصيد") || h.toLowerCase().includes("qty") || h.startsWith("D ")) || "Compare All Columns";
+        setCompColNew(defaultComp);
+      }
+    };
+
+    fetch("/api/headers", { method: "POST", body: formData, cache: "no-store" })
+      .then((res) => {
+        if (!res.ok) throw new Error("API error");
+        return res.json();
+      })
       .then((data) => {
         if (data.headers && data.headers.length > 0) {
-          setNewHeaders(data.headers);
-          const defaultKey = data.headers.find((h: string) => h.includes("الاسم") || h.toLowerCase().includes("name") || h.startsWith("C ")) || data.headers[0];
-          setKeyColNew(defaultKey);
-
-          const defaultComp = data.headers.find((h: string) => h.includes("الرصيد") || h.toLowerCase().includes("qty") || h.startsWith("D ")) || "Compare All Columns";
-          setCompColNew(defaultComp);
+          applyHeaders(data.headers);
+        } else {
+          parseHeadersClientSide(fileNew).then(applyHeaders);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        parseHeadersClientSide(fileNew).then(applyHeaders);
+      });
   }, [fileNew]);
 
   const handleProcessFiles = async () => {
@@ -237,6 +296,7 @@ export default function TeknoPage() {
       const res = await fetch("/api/compare", {
         method: "POST",
         body: formData,
+        cache: "no-store",
       });
 
       if (!res.ok) {
