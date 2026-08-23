@@ -666,7 +666,7 @@ export default function ImageDownloaderPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {itemsData.slice(0, 100).map((item, idx) => (
+                    {itemsData.map((item, idx) => (
                       <tr key={idx} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
                         <td style={{ padding: "14px 20px", color: "#64748b", fontWeight: "700" }}>{idx + 1}</td>
                         <td style={{ padding: "14px 20px", color: "#ffffff", fontWeight: "700" }}>{item.name}</td>
@@ -683,11 +683,6 @@ export default function ImageDownloaderPage() {
                   </tbody>
                 </table>
               </div>
-              {itemsData.length > 100 && (
-                <div style={{ padding: "12px 20px", background: "#0d0f1a", color: "#64748b", fontSize: "12.5px", textAlign: "center", fontWeight: "600" }}>
-                  Showing first 100 of {itemsData.length} items. All items will be downloaded in the ZIP archive.
-                </div>
-              )}
             </div>
           </div>
         )}
