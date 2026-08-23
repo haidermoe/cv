@@ -596,10 +596,15 @@ export default function ImageDownloaderPage() {
           direction: "ltr"
         }}
       >
-        {/* ENLARGED ROYAL BLUE SIDE FILL & FLIP TEXT BUTTON */}
+        {/* ENLARGED DYNAMIC SIDE FILL & FLIP TEXT BUTTON */}
         <button
           onClick={openClientDrawer}
           className="awsmd-royal-client-btn"
+          style={{
+            background: isFinished ? "#16a34a" : "#2563eb",
+            boxShadow: isFinished ? "0 12px 35px rgba(22, 163, 74, 0.35)" : "0 12px 35px rgba(37, 99, 235, 0.35)",
+            transition: "all 0.35s ease"
+          }}
         >
           <span className="flip-box">
             <span className="flip-wrapper">
@@ -609,13 +614,13 @@ export default function ImageDownloaderPage() {
           </span>
         </button>
 
-        {/* BORDERED LANGUAGE SELECTOR PILL */}
+        {/* DYNAMIC BORDERED LANGUAGE SELECTOR PILL */}
         <button
           onClick={handleLangSwitch}
           style={{
             background: "#ffffff",
-            border: "1.5px solid #4f46e5",
-            color: "#4f46e5",
+            border: `1.5px solid ${isFinished ? "#16a34a" : "#4f46e5"}`,
+            color: isFinished ? "#16a34a" : "#4f46e5",
             padding: "8px 18px",
             borderRadius: "50px",
             fontSize: "13.5px",
@@ -625,8 +630,8 @@ export default function ImageDownloaderPage() {
             gap: "6px",
             cursor: "pointer",
             fontFamily: "'Outfit', sans-serif",
-            boxShadow: "0 4px 15px rgba(0,0,0,0.06)",
-            transition: "all 0.3s ease"
+            boxShadow: `0 4px 15px ${isFinished ? "rgba(22, 163, 74, 0.15)" : "rgba(37, 99, 235, 0.15)"}`,
+            transition: "all 0.35s ease"
           }}
         >
           <span>{lang === "AR" ? "EN" : "عربي"}</span>
@@ -706,18 +711,19 @@ export default function ImageDownloaderPage() {
           background: "#ffffff",
           padding: "8px 24px",
           borderRadius: "50px",
-          boxShadow: "0 15px 35px rgba(0,0,0,0.12)",
-          border: "1px solid rgba(15, 17, 26, 0.08)"
+          boxShadow: `0 15px 35px ${isFinished ? "rgba(22, 163, 74, 0.12)" : "rgba(37, 99, 235, 0.12)"}`,
+          border: `1.5px solid ${isFinished ? "rgba(22, 163, 74, 0.25)" : "rgba(37, 99, 235, 0.2)"}`,
+          transition: "all 0.35s ease"
         }}
       >
         <nav style={{ display: "flex", alignItems: "center", gap: "18px" }}>
-          <FlipLink href="/" color="#0f111a" hoverColor="#2563eb">{t.navHome}</FlipLink>
-          <FlipLink href="/#stats" color="#475569" hoverColor="#2563eb">{t.navStats}</FlipLink>
-          <FlipLink href="/#about" color="#475569" hoverColor="#2563eb">{t.navAbout}</FlipLink>
-          <FlipLink href="/#experience" color="#475569" hoverColor="#2563eb">{t.navExperience}</FlipLink>
-          <FlipLink href="/#tools" color="#475569" hoverColor="#2563eb">{t.navTools}</FlipLink>
-          <FlipLink href="/#education" color="#475569" hoverColor="#2563eb">{t.navEducation}</FlipLink>
-          <FlipLink href="/#contact" color="#475569" hoverColor="#2563eb">{t.navContact}</FlipLink>
+          <FlipLink href="/" color="#0f111a" hoverColor={isFinished ? "#16a34a" : "#2563eb"}>{t.navHome}</FlipLink>
+          <FlipLink href="/#stats" color="#475569" hoverColor={isFinished ? "#16a34a" : "#2563eb"}>{t.navStats}</FlipLink>
+          <FlipLink href="/#about" color="#475569" hoverColor={isFinished ? "#16a34a" : "#2563eb"}>{t.navAbout}</FlipLink>
+          <FlipLink href="/#experience" color="#475569" hoverColor={isFinished ? "#16a34a" : "#2563eb"}>{t.navExperience}</FlipLink>
+          <FlipLink href="/#tools" color="#475569" hoverColor={isFinished ? "#16a34a" : "#2563eb"}>{t.navTools}</FlipLink>
+          <FlipLink href="/#education" color="#475569" hoverColor={isFinished ? "#16a34a" : "#2563eb"}>{t.navEducation}</FlipLink>
+          <FlipLink href="/#contact" color="#475569" hoverColor={isFinished ? "#16a34a" : "#2563eb"}>{t.navContact}</FlipLink>
         </nav>
 
         <a
