@@ -81,7 +81,27 @@ const translations = {
       "بناء شبكات FTTH لأكثر من 2000 مستخدم.",
       "إدارة الدعم الفني لأكثر من 3000 مشترك نشط."
     ],
-    eduTag: "03 — التعليم والشهادات",
+    navTools: "الأدوات",
+    toolsTag: "03 — الأدوات والنظم التفاعلية",
+    toolsTitle: "أدوات وحلول برمجية طوّرتها خصيصاً لتسريع العمل",
+    toolsSubtitle: "أدوات حية صممتها لمعالجة ملفات الإكسل الضخمة، أتمتة التجارة الإلكترونية، وحسابات شبكات الـ FTTH.",
+    tool1Badge: "أداة حية تفاعلية • 0ms",
+    tool1Title: "مقارنة وتحديث أسعار إكسل (Tekno Diff)",
+    tool1Desc: "أداة ويب فائقة السرعة لمقارنة وتدقيق شيتات الإكسل الكبيرة، كشف فروقات الأسعار والمخزون، وتحديث آلاف المنتجات بنقرة زر.",
+    tool1Action: "تشغيل الأداة مباشرة 🚀",
+    tool2Badge: "قوالب Google Sheets & Excel",
+    tool2Title: "داشبورد إدارة المخزون وحساب الأرباح",
+    tool2Desc: "قوالب إكسل وشيتات احترافية متقدمة لحساب هوامش الأرباح التلقائية، تنبيهات نفاد المخزون، وتحليل المبيعات اليومية.",
+    tool2Action: "استعراض القوالب 📊",
+    tool3Badge: "حسابات الألياف الضوئية",
+    tool3Title: "حاسبة ميزانية الضوء لشبكات FTTH",
+    tool3Desc: "أداة دقيقة لحساب الفقد البصري (Optical Loss Budget) ونسب توزيع الـ Splitters ومستويات الإشارة (dBm) في الشبكات.",
+    tool3Action: "تجربة الحاسبة ⚡",
+    tool4Badge: "أتمتة ومعالجة البيانات",
+    tool4Title: "منسق ومنظف بيانات المنتجات والباركود",
+    tool4Desc: "أداة بايثون لمعالجة نصوص المنتجات الضخمة، توحيد الباركود، وتنظيف البيانات لتجهيزها للرفع المباشر على منصات المتاجر.",
+    tool4Action: "استعراض الأداة 🛠️",
+    eduTag: "04 — التعليم والشهادات",
     eduTitle: "المؤهلات الأكاديمية والتدريب المستمر",
     edu1Year: "2026",
     edu1School: "جامعة دجلة – بغداد",
@@ -111,6 +131,7 @@ const translations = {
     navStats: "Stats & Skills",
     navAbout: "About",
     navExperience: "Experience",
+    navTools: "Tools",
     navEducation: "Education",
     navContact: "Contact Us",
     downloadCV: "Download PDF",
@@ -157,7 +178,26 @@ const translations = {
       "Deployed FTTH fiber networks for 2,000+ users.",
       "Managed technical support for 3,000+ active subscribers."
     ],
-    eduTag: "03 — EDUCATION & CERTIFICATES",
+    toolsTag: "03 — INTERACTIVE TOOLS & SYSTEMS",
+    toolsTitle: "Custom-Built Software Tools & Automation",
+    toolsSubtitle: "Live interactive tools built for large-scale Excel processing, e-commerce automation, and FTTH network calculations.",
+    tool1Badge: "Live Tool • 0ms Engine",
+    tool1Title: "Tekno Excel Diff & Price Matcher",
+    tool1Desc: "High-performance browser tool to compare massive Excel sheets, detect price & inventory discrepancies, and sync data instantly.",
+    tool1Action: "Launch Tool Live 🚀",
+    tool2Badge: "Google Sheets & Excel Templates",
+    tool2Title: "Smart Inventory & Profit Dashboard",
+    tool2Desc: "Automated spreadsheet models featuring real-time profit margin formulas, low-stock triggers, and daily sales metrics.",
+    tool2Action: "Explore Templates 📊",
+    tool3Badge: "Fiber Optics & Networks",
+    tool3Title: "FTTH Optical Link Budget Calculator",
+    tool3Desc: "Precision calculation tool for optical power loss (dBm), splitter attenuation stages, and PON network link validation.",
+    tool3Action: "Open Calculator ⚡",
+    tool4Badge: "Data Automation & Python",
+    tool4Title: "Product Data & Barcode Sanitizer",
+    tool4Desc: "Automated script engine to clean bulk product descriptions, standardize barcodes, and format catalogs for rapid e-commerce sync.",
+    tool4Action: "Explore Tool 🛠️",
+    eduTag: "04 — EDUCATION & CERTIFICATES",
     eduTitle: "Academic Qualifications & Training",
     edu1Year: "2026",
     edu1School: "Dijlah University College – Baghdad",
@@ -427,6 +467,7 @@ export default function Home() {
           <FlipLink href="#stats" color="#475569" hoverColor="#2563eb">{t.navStats}</FlipLink>
           <FlipLink href="#about" color="#475569" hoverColor="#2563eb">{t.navAbout}</FlipLink>
           <FlipLink href="#experience" color="#475569" hoverColor="#2563eb">{t.navExperience}</FlipLink>
+          <FlipLink href="#tools" color="#475569" hoverColor="#2563eb">{t.navTools}</FlipLink>
           <FlipLink href="#education" color="#475569" hoverColor="#2563eb">{t.navEducation}</FlipLink>
           <FlipLink href="#contact" color="#475569" hoverColor="#2563eb">{t.navContact}</FlipLink>
         </nav>
@@ -745,6 +786,235 @@ export default function Home() {
                 ))}
               </ul>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Interactive Tools Section */}
+      <section className="section" id="tools" style={{ padding: "110px 40px", background: "#0a0b12", borderBottom: "1px solid rgba(255,255,255,0.06)", position: "relative", overflow: "hidden" }}>
+        <div style={{ maxWidth: "1300px", margin: "0 auto", position: "relative", zIndex: 2 }}>
+          <div style={{ marginBottom: "60px", textAlign: lang === "AR" ? "right" : "left" }}>
+            <span style={{ color: "#8b5cf6", fontSize: "15px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "1px" }}>{t.toolsTag}</span>
+            <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: "#ffffff" }}>{t.toolsTitle}</h2>
+            <p style={{ color: "#94a3b8", fontSize: "16.5px", marginTop: "12px", maxWidth: "680px", lineHeight: "1.6", fontWeight: "500" }}>{t.toolsSubtitle}</p>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "24px",
+            }}
+          >
+            {/* TOOL 1: TEKNO EXCEL DIFF */}
+            <div
+              className="awsmd-dark-card"
+              style={{
+                background: "linear-gradient(145deg, #151728 0%, #0f1120 100%)",
+                padding: "32px 26px",
+                borderRadius: "26px",
+                border: "1.5px solid rgba(96, 165, 250, 0.4)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                boxShadow: "0 15px 35px rgba(37, 99, 235, 0.15)",
+                position: "relative",
+                overflow: "hidden",
+                minHeight: "320px",
+              }}
+            >
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                  <span style={{ background: "rgba(96, 165, 250, 0.15)", color: "#60a5fa", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
+                    {t.tool1Badge}
+                  </span>
+                  <span style={{ fontSize: "24px" }}>📊</span>
+                </div>
+                <h3 style={{ fontSize: "23px", fontWeight: "800", color: "#ffffff", marginBottom: "10px" }}>{t.tool1Title}</h3>
+                <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: "1.7", fontWeight: "500", margin: 0 }}>
+                  {t.tool1Desc}
+                </p>
+              </div>
+
+              <div style={{ marginTop: "24px" }}>
+                <Link
+                  href="/tekno"
+                  className="awsmd-btn-glow"
+                  style={{
+                    background: "#2563eb",
+                    color: "#ffffff",
+                    padding: "12px 24px",
+                    borderRadius: "50px",
+                    fontSize: "14px",
+                    fontWeight: "800",
+                    textDecoration: "none",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    boxShadow: "0 8px 25px rgba(37, 99, 235, 0.4)",
+                  }}
+                >
+                  <span>{t.tool1Action}</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* TOOL 2: SMART INVENTORY & PROFIT DASHBOARD */}
+            <div
+              className="awsmd-dark-card"
+              style={{
+                background: "linear-gradient(145deg, #151728 0%, #0f1120 100%)",
+                padding: "32px 26px",
+                borderRadius: "26px",
+                border: "1px solid rgba(255,255,255,0.08)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                position: "relative",
+                overflow: "hidden",
+                minHeight: "320px",
+              }}
+            >
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                  <span style={{ background: "rgba(16, 185, 129, 0.15)", color: "#34d399", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
+                    {t.tool2Badge}
+                  </span>
+                  <span style={{ fontSize: "24px" }}>📈</span>
+                </div>
+                <h3 style={{ fontSize: "23px", fontWeight: "800", color: "#ffffff", marginBottom: "10px" }}>{t.tool2Title}</h3>
+                <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: "1.7", fontWeight: "500", margin: 0 }}>
+                  {t.tool2Desc}
+                </p>
+              </div>
+
+              <div style={{ marginTop: "24px" }}>
+                <a
+                  href="mailto:haider.m.shwkat@outlook.com?subject=Requesting%20Excel%20Inventory%20Template"
+                  className="awsmd-btn-glow"
+                  style={{
+                    background: "#1e293b",
+                    color: "#f8fafc",
+                    padding: "12px 24px",
+                    borderRadius: "50px",
+                    fontSize: "14px",
+                    fontWeight: "800",
+                    textDecoration: "none",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <span>{t.tool2Action}</span>
+                </a>
+              </div>
+            </div>
+
+            {/* TOOL 3: FTTH OPTICAL LINK CALCULATOR */}
+            <div
+              className="awsmd-dark-card"
+              style={{
+                background: "linear-gradient(145deg, #151728 0%, #0f1120 100%)",
+                padding: "32px 26px",
+                borderRadius: "26px",
+                border: "1px solid rgba(255,255,255,0.08)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                position: "relative",
+                overflow: "hidden",
+                minHeight: "320px",
+              }}
+            >
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                  <span style={{ background: "rgba(168, 85, 247, 0.15)", color: "#c084fc", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
+                    {t.tool3Badge}
+                  </span>
+                  <span style={{ fontSize: "24px" }}>⚡</span>
+                </div>
+                <h3 style={{ fontSize: "23px", fontWeight: "800", color: "#ffffff", marginBottom: "10px" }}>{t.tool3Title}</h3>
+                <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: "1.7", fontWeight: "500", margin: 0 }}>
+                  {t.tool3Desc}
+                </p>
+              </div>
+
+              <div style={{ marginTop: "24px" }}>
+                <a
+                  href="mailto:haider.m.shwkat@outlook.com?subject=FTTH%20Network%20Calculations"
+                  className="awsmd-btn-glow"
+                  style={{
+                    background: "#1e293b",
+                    color: "#f8fafc",
+                    padding: "12px 24px",
+                    borderRadius: "50px",
+                    fontSize: "14px",
+                    fontWeight: "800",
+                    textDecoration: "none",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <span>{t.tool3Action}</span>
+                </a>
+              </div>
+            </div>
+
+            {/* TOOL 4: PRODUCT DATA CLEANER */}
+            <div
+              className="awsmd-dark-card"
+              style={{
+                background: "linear-gradient(145deg, #151728 0%, #0f1120 100%)",
+                padding: "32px 26px",
+                borderRadius: "26px",
+                border: "1px solid rgba(255,255,255,0.08)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                position: "relative",
+                overflow: "hidden",
+                minHeight: "320px",
+              }}
+            >
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                  <span style={{ background: "rgba(245, 158, 11, 0.15)", color: "#fbbf24", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
+                    {t.tool4Badge}
+                  </span>
+                  <span style={{ fontSize: "24px" }}>🛠️</span>
+                </div>
+                <h3 style={{ fontSize: "23px", fontWeight: "800", color: "#ffffff", marginBottom: "10px" }}>{t.tool4Title}</h3>
+                <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: "1.7", fontWeight: "500", margin: 0 }}>
+                  {t.tool4Desc}
+                </p>
+              </div>
+
+              <div style={{ marginTop: "24px" }}>
+                <a
+                  href="mailto:haider.m.shwkat@outlook.com?subject=Data%20Sanitizer%20Inquiry"
+                  className="awsmd-btn-glow"
+                  style={{
+                    background: "#1e293b",
+                    color: "#f8fafc",
+                    padding: "12px 24px",
+                    borderRadius: "50px",
+                    fontSize: "14px",
+                    fontWeight: "800",
+                    textDecoration: "none",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <span>{t.tool4Action}</span>
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -1139,8 +1409,9 @@ export default function Home() {
               { num: "02", label: t.navStats, href: "#stats" },
               { num: "03", label: t.navAbout, href: "#about" },
               { num: "04", label: t.navExperience, href: "#experience" },
-              { num: "05", label: t.navEducation, href: "#education" },
-              { num: "06", label: t.navContact, href: "#contact" }
+              { num: "05", label: t.navTools, href: "#tools" },
+              { num: "06", label: t.navEducation, href: "#education" },
+              { num: "07", label: t.navContact, href: "#contact" }
             ].map((item, index) => (
               <a
                 key={index}
