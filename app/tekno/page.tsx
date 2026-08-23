@@ -88,13 +88,16 @@ export default function TeknoPage() {
 
   // Operation Mode: "compare" | "pull"
   const [mode, setMode] = useState<"compare" | "pull">("compare");
-  const [isMorphing, setIsMorphing] = useState(false);
+  const [stretchDir, setStretchDir] = useState<"stretch-left" | "stretch-right">("stretch-left");
 
   const switchMode = (newMode: "compare" | "pull") => {
     if (newMode === mode) return;
-    setIsMorphing(true);
+    if (lang === "AR") {
+      setStretchDir(newMode === "pull" ? "stretch-left" : "stretch-right");
+    } else {
+      setStretchDir(newMode === "pull" ? "stretch-right" : "stretch-left");
+    }
     setMode(newMode);
-    setTimeout(() => setIsMorphing(false), 520);
   };
 
   // Dynamic Theme Colors based on selected mode
@@ -862,21 +865,22 @@ export default function TeknoPage() {
               minWidth: isDesktop ? "500px" : "100%",
             }}
           >
-            {/* LIQUID GLASS SLIDING PILL */}
+            {/* LIQUID GLASS ASYMMETRIC STRETCH PILL */}
             <div
-              className="liquid-glass-pill"
+              className={`liquid-glass-pill ${stretchDir}`}
               style={{
-                left: lang === "AR" ? "auto" : "6px",
-                right: lang === "AR" ? "6px" : "auto",
+                left: lang === "AR"
+                  ? (mode === "compare" ? "calc(50% + 3px)" : "6px")
+                  : (mode === "compare" ? "6px" : "calc(50% + 3px)"),
+                right: lang === "AR"
+                  ? (mode === "compare" ? "6px" : "calc(50% + 3px)")
+                  : (mode === "compare" ? "calc(50% + 3px)" : "6px"),
                 background: mode === "compare"
                   ? "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
                   : "linear-gradient(135deg, #16a34a 0%, #15803d 100%)",
                 boxShadow: mode === "compare"
                   ? "0 10px 25px rgba(37, 99, 235, 0.4), inset 0 1.5px 2px rgba(255, 255, 255, 0.6), inset 0 -1.5px 2px rgba(0, 0, 0, 0.15)"
                   : "0 10px 25px rgba(22, 163, 74, 0.4), inset 0 1.5px 2px rgba(255, 255, 255, 0.6), inset 0 -1.5px 2px rgba(0, 0, 0, 0.15)",
-                transform: mode === "compare"
-                  ? "translateX(0%)"
-                  : (lang === "AR" ? "translateX(-100%)" : "translateX(100%)"),
               }}
             />
 

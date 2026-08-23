@@ -56,15 +56,18 @@ export default function ImageDownloaderPage() {
 
   // Operation Mode: "download" (From Excel) | "upload" (Images to Links & Excel)
   const [mode, setMode] = useState<"download" | "upload">("download");
-  const [isMorphing, setIsMorphing] = useState(false);
+  const [stretchDir, setStretchDir] = useState<"stretch-left" | "stretch-right">("stretch-left");
   const activeColor = mode === "download" ? "#2563eb" : "#dc2626";
   const activeGlow = mode === "download" ? "0 12px 35px rgba(37, 99, 235, 0.35)" : "0 12px 35px rgba(220, 38, 38, 0.35)";
 
   const switchMode = (newMode: "download" | "upload") => {
     if (newMode === mode) return;
-    setIsMorphing(true);
+    if (lang === "AR") {
+      setStretchDir(newMode === "upload" ? "stretch-left" : "stretch-right");
+    } else {
+      setStretchDir(newMode === "upload" ? "stretch-right" : "stretch-left");
+    }
     setMode(newMode);
-    setTimeout(() => setIsMorphing(false), 520);
   };
 
   // Language ripple state
@@ -1173,21 +1176,22 @@ export default function ImageDownloaderPage() {
               minWidth: isDesktop ? "500px" : "100%",
             }}
           >
-            {/* LIQUID GLASS SLIDING PILL */}
+            {/* LIQUID GLASS ASYMMETRIC STRETCH PILL */}
             <div
-              className="liquid-glass-pill"
+              className={`liquid-glass-pill ${stretchDir}`}
               style={{
-                left: lang === "AR" ? "auto" : "6px",
-                right: lang === "AR" ? "6px" : "auto",
+                left: lang === "AR"
+                  ? (mode === "download" ? "calc(50% + 3px)" : "6px")
+                  : (mode === "download" ? "6px" : "calc(50% + 3px)"),
+                right: lang === "AR"
+                  ? (mode === "download" ? "6px" : "calc(50% + 3px)")
+                  : (mode === "download" ? "calc(50% + 3px)" : "6px"),
                 background: mode === "download"
                   ? "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
                   : "linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)",
                 boxShadow: mode === "download"
                   ? "0 10px 25px rgba(37, 99, 235, 0.4), inset 0 1.5px 2px rgba(255, 255, 255, 0.6), inset 0 -1.5px 2px rgba(0, 0, 0, 0.15)"
                   : "0 10px 25px rgba(220, 38, 38, 0.4), inset 0 1.5px 2px rgba(255, 255, 255, 0.6), inset 0 -1.5px 2px rgba(0, 0, 0, 0.15)",
-                transform: mode === "download"
-                  ? "translateX(0%)"
-                  : (lang === "AR" ? "translateX(-100%)" : "translateX(100%)"),
               }}
             />
 

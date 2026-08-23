@@ -1238,18 +1238,29 @@ ul {
   user-select: none !important;
 }
 
+/* TRUE DUAL-EDGE ASYMMETRIC LIQUID GLASS STRETCH */
 .liquid-glass-pill {
   position: absolute !important;
   top: 6px !important;
   bottom: 6px !important;
-  width: calc(50% - 6px) !important;
   border-radius: 50px !important;
   z-index: 1 !important;
   pointer-events: none !important;
-  transition: transform 0.48s cubic-bezier(0.34, 1.35, 0.64, 1),
+  will-change: left, right !important;
+}
+
+.liquid-glass-pill.stretch-left {
+  transition: left 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              right 0.38s 0.1s cubic-bezier(0.34, 1.4, 0.64, 1),
               background 0.35s ease,
               box-shadow 0.35s ease !important;
-  will-change: transform !important;
+}
+
+.liquid-glass-pill.stretch-right {
+  transition: right 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              left 0.38s 0.1s cubic-bezier(0.34, 1.4, 0.64, 1),
+              background 0.35s ease,
+              box-shadow 0.35s ease !important;
 }
 
 /* 100% BULLETPROOF NON-STOP TICKER ANIMATION */
