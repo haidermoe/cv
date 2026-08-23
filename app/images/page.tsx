@@ -56,8 +56,8 @@ export default function ImageDownloaderPage() {
 
   // Operation Mode: "download" (From Excel) | "upload" (Images to Links & Excel)
   const [mode, setMode] = useState<"download" | "upload">("download");
-  const activeColor = mode === "download" ? "#2563eb" : "#059669";
-  const activeGlow = mode === "download" ? "0 12px 35px rgba(37, 99, 235, 0.35)" : "0 12px 35px rgba(5, 150, 105, 0.35)";
+  const activeColor = mode === "download" ? "#2563eb" : "#dc2626";
+  const activeGlow = mode === "download" ? "0 12px 35px rgba(37, 99, 235, 0.35)" : "0 12px 35px rgba(220, 38, 38, 0.35)";
 
   // Language ripple state
   const [isLangAnimating, setIsLangAnimating] = useState(false);
@@ -758,7 +758,7 @@ export default function ImageDownloaderPage() {
           onClick={openClientDrawer}
           className="awsmd-royal-client-btn"
           style={{
-            ["--client-btn-gradient" as any]: mode === "upload" ? "linear-gradient(90deg, #059669 0%, #047857 100%)" : "linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%)",
+            ["--client-btn-gradient" as any]: mode === "upload" ? "linear-gradient(90deg, #dc2626 0%, #b91c1c 100%)" : "linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%)",
             ["--client-btn-color" as any]: activeColor,
             ["--client-btn-shadow" as any]: activeGlow,
           }}
@@ -787,7 +787,7 @@ export default function ImageDownloaderPage() {
             gap: "6px",
             cursor: "pointer",
             fontFamily: "'Outfit', sans-serif",
-            boxShadow: `0 4px 15px ${mode === "upload" ? "rgba(5, 150, 105, 0.15)" : "rgba(37, 99, 235, 0.15)"}`,
+            boxShadow: `0 4px 15px ${mode === "upload" ? "rgba(220, 38, 38, 0.15)" : "rgba(37, 99, 235, 0.15)"}`,
             transition: "all 0.35s ease"
           }}
         >
@@ -868,8 +868,8 @@ export default function ImageDownloaderPage() {
           background: "#ffffff",
           padding: "8px 24px",
           borderRadius: "50px",
-          boxShadow: `0 15px 35px ${mode === "upload" ? "rgba(5, 150, 105, 0.12)" : "rgba(37, 99, 235, 0.12)"}`,
-          border: `1.5px solid ${mode === "upload" ? "rgba(5, 150, 105, 0.25)" : "rgba(37, 99, 235, 0.2)"}`,
+          boxShadow: `0 15px 35px ${mode === "upload" ? "rgba(220, 38, 38, 0.12)" : "rgba(37, 99, 235, 0.12)"}`,
+          border: `1.5px solid ${mode === "upload" ? "rgba(220, 38, 38, 0.25)" : "rgba(37, 99, 235, 0.2)"}`,
           transition: "all 0.35s ease"
         }}
       >
@@ -1187,7 +1187,7 @@ export default function ImageDownloaderPage() {
             <button
               onClick={() => setMode("upload")}
               style={{
-                background: mode === "upload" ? "#059669" : "transparent",
+                background: mode === "upload" ? "#dc2626" : "transparent",
                 color: mode === "upload" ? "#ffffff" : "#475569",
                 border: "none",
                 padding: "10px 24px",
@@ -1387,8 +1387,8 @@ export default function ImageDownloaderPage() {
           >
             <label
               style={{
-                background: "#f0fdf4",
-                border: "2px dashed #86efac",
+                background: "#fef2f2",
+                border: "2px dashed #fca5a5",
                 borderRadius: "24px",
                 padding: isDesktop ? "50px 30px" : "35px 20px",
                 textAlign: "center",
@@ -1407,7 +1407,7 @@ export default function ImageDownloaderPage() {
                 onChange={(e) => handleUploadFilesSelected(e.target.files)}
                 style={{ display: "none" }}
               />
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="17 8 12 3 7 8"></polyline>
                 <line x1="12" y1="3" x2="12" y2="15"></line>
@@ -1425,7 +1425,7 @@ export default function ImageDownloaderPage() {
               <div style={{ marginTop: "25px", paddingTop: "20px", borderTop: "1px solid #f1f5f9" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "15px", marginBottom: "20px" }}>
                   <div>
-                    <span style={{ fontSize: "14px", fontWeight: "800", color: "#059669" }}>
+                    <span style={{ fontSize: "14px", fontWeight: "800", color: "#dc2626" }}>
                       {t.selectedImagesCount} {uploadFiles.length}
                     </span>
                     <span style={{ fontSize: "13px", fontWeight: "600", color: "#64748b", marginInlineStart: "12px" }}>
@@ -1456,7 +1456,7 @@ export default function ImageDownloaderPage() {
                     onClick={handleStartBulkUpload}
                     style={{
                       width: "100%",
-                      background: "#059669",
+                      background: "#dc2626",
                       color: "#ffffff",
                       border: "none",
                       padding: "16px",
@@ -1464,7 +1464,7 @@ export default function ImageDownloaderPage() {
                       fontSize: "16px",
                       fontWeight: "900",
                       cursor: "pointer",
-                      boxShadow: "0 10px 25px rgba(5, 150, 105, 0.35)",
+                      boxShadow: "0 10px 25px rgba(220, 38, 38, 0.35)",
                       transition: "all 0.3s ease",
                     }}
                   >
@@ -1476,7 +1476,7 @@ export default function ImageDownloaderPage() {
                 {isUploading && (
                   <div style={{ background: "#f8fafc", padding: "20px", borderRadius: "18px", border: "1px solid #e2e8f0", marginTop: "15px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px", fontWeight: "800", marginBottom: "8px" }}>
-                      <span style={{ color: "#059669" }}>{t.uploading}</span>
+                      <span style={{ color: "#dc2626" }}>{t.uploading}</span>
                       <span style={{ color: "#0f111a" }}>{uploadProgress}%</span>
                     </div>
                     <div style={{ width: "100%", height: "10px", background: "#e2e8f0", borderRadius: "10px", overflow: "hidden" }}>
@@ -1484,7 +1484,7 @@ export default function ImageDownloaderPage() {
                         style={{
                           width: `${uploadProgress}%`,
                           height: "100%",
-                          background: "linear-gradient(90deg, #059669, #10b981)",
+                          background: "linear-gradient(90deg, #dc2626, #ef4444)",
                           borderRadius: "10px",
                           transition: "width 0.3s ease",
                         }}
@@ -1515,7 +1515,7 @@ export default function ImageDownloaderPage() {
             {/* SUCCESS BANNER & ACTION BUTTONS */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "15px", marginBottom: "25px" }}>
               <div>
-                <h3 style={{ fontSize: "20px", fontWeight: "900", color: "#059669", margin: 0 }}>
+                <h3 style={{ fontSize: "20px", fontWeight: "900", color: "#dc2626", margin: 0 }}>
                   ✓ {t.uploadSuccessTitle}
                 </h3>
                 <span style={{ fontSize: "13.5px", fontWeight: "700", color: "#475569", marginTop: "4px", display: "block" }}>
@@ -1527,7 +1527,7 @@ export default function ImageDownloaderPage() {
                 <button
                   onClick={handleCopyAllUrls}
                   style={{
-                    background: copiedAll ? "#059669" : "#f1f5f9",
+                    background: copiedAll ? "#dc2626" : "#f1f5f9",
                     color: copiedAll ? "#ffffff" : "#0f111a",
                     border: "1px solid #cbd5e1",
                     padding: "10px 20px",
@@ -1544,7 +1544,7 @@ export default function ImageDownloaderPage() {
                 <button
                   onClick={handleExportUploadedExcel}
                   style={{
-                    background: "#059669",
+                    background: "#dc2626",
                     color: "#ffffff",
                     border: "none",
                     padding: "10px 22px",
@@ -1552,7 +1552,7 @@ export default function ImageDownloaderPage() {
                     fontSize: "13.5px",
                     fontWeight: "800",
                     cursor: "pointer",
-                    boxShadow: "0 4px 15px rgba(5, 150, 105, 0.3)",
+                    boxShadow: "0 4px 15px rgba(220, 38, 38, 0.3)",
                     transition: "all 0.2s ease",
                   }}
                 >
@@ -1586,8 +1586,8 @@ export default function ImageDownloaderPage() {
                         />
                       </td>
                       <td style={{ padding: "12px 18px", fontWeight: "800", color: "#0f111a" }}>{item.name}</td>
-                      <td style={{ padding: "12px 18px", color: "#059669", fontWeight: "700", maxWidth: "380px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        <a href={item.direct_url} target="_blank" rel="noopener noreferrer" style={{ color: "#059669", textDecoration: "none" }}>
+                      <td style={{ padding: "12px 18px", color: "#dc2626", fontWeight: "700", maxWidth: "380px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        <a href={item.direct_url} target="_blank" rel="noopener noreferrer" style={{ color: "#dc2626", textDecoration: "none" }}>
                           {item.direct_url}
                         </a>
                       </td>
@@ -1595,7 +1595,7 @@ export default function ImageDownloaderPage() {
                         <button
                           onClick={() => handleCopySingleUrl(item.direct_url, idx)}
                           style={{
-                            background: copiedIndex === idx ? "#059669" : "#f1f5f9",
+                            background: copiedIndex === idx ? "#dc2626" : "#f1f5f9",
                             color: copiedIndex === idx ? "#ffffff" : "#475569",
                             border: "1px solid #cbd5e1",
                             padding: "5px 12px",
