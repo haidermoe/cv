@@ -37,7 +37,7 @@ const translations = {
     navExperience: "الخبرات",
     navEducation: "التعليم",
     navContact: "تواصل معي",
-    downloadCV: "تحميل PDF 📥",
+    downloadCV: "تحميل ملف السيرة PDF",
     becomeClient: "كُن عميلاً",
     heroLine1: "نصنع أفضل",
     heroLine2: "النتائج",
@@ -88,7 +88,7 @@ const translations = {
     tool1Badge: "أداة حية تفاعلية • 0ms Engine",
     tool1Title: "أداة مقارنة وتحديث أسعار إكسل (Tekno Diff)",
     tool1Desc: "أداة ويب تفاعلية فائقة السرعة تعمل داخل المتصفح مباشرة، لمقارنة ملفات الإكسل الكبيرة، كشف فروقات الأسعار والمخزون، وتحديث آلاف المنتجات بنقرة زر بدون أي تأخير.",
-    tool1Action: "تشغيل أداة مقارنة الإكسل مباشرة 🚀",
+    tool1Action: "تشغيل أداة مقارنة الإكسل مباشرة",
     eduTag: "04 — التعليم والشهادات",
     eduTitle: "المؤهلات الأكاديمية والتدريب المستمر",
     edu1Year: "2026",
@@ -172,7 +172,7 @@ const translations = {
     tool1Badge: "Live Interactive Tool • 0ms Engine",
     tool1Title: "Tekno Excel Diff & Price Matcher",
     tool1Desc: "Instant client-side web tool to compare massive Excel sheets, detect price & inventory discrepancies, and sync thousands of products in milliseconds.",
-    tool1Action: "Launch Excel Diff Tool Live 🚀",
+    tool1Action: "Launch Excel Diff Tool Live",
     eduTag: "04 — EDUCATION & CERTIFICATES",
     eduTitle: "Academic Qualifications & Training",
     edu1Year: "2026",
@@ -298,7 +298,7 @@ export default function Home() {
           "الاسم والشركة / Client Name": formData.get("الاسم والشركة / Client Name"),
           "البريد الإلكتروني / Client Email": formData.get("البريد الإلكتروني / Client Email"),
           "تفاصيل المشروع / Project Details": formData.get("تفاصيل المشروع / Project Details"),
-          "_subject": "📩 طلب عمل جديد من موقعك الشخصي!"
+          "_subject": "طلب عمل جديد من موقعك الشخصي"
         })
       });
     } catch (err) {
@@ -790,9 +790,8 @@ export default function Home() {
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", flexWrap: "wrap", gap: "12px" }}>
-                <span style={{ background: "rgba(96, 165, 250, 0.15)", color: "#60a5fa", padding: "6px 16px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800", display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                  <span>⚡</span>
-                  <span>{t.tool1Badge}</span>
+                <span style={{ background: "rgba(96, 165, 250, 0.15)", color: "#60a5fa", padding: "6px 16px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800", display: "inline-flex", alignItems: "center" }}>
+                  {t.tool1Badge}
                 </span>
                 <span style={{ background: "rgba(255,255,255,0.06)", color: "#94a3b8", padding: "4px 12px", borderRadius: "16px", fontSize: "12.5px", fontWeight: "700" }}>
                   XLSX / XLS / CSV Supported
