@@ -1695,6 +1695,104 @@ ul {
   }
 }
 
+/* ================== TECH MATRIX GRID & LINE EFFECTS ================== */
+.tech-grid-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.tech-grid-pattern {
+  position: absolute;
+  inset: -20%;
+  width: 140%;
+  height: 140%;
+  background-image: 
+    linear-gradient(to right, rgba(96, 165, 250, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(96, 165, 250, 0.07) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, #000 35%, transparent 95%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, #000 35%, transparent 95%);
+  transform: perspective(600px) rotateX(12deg);
+  transform-origin: center center;
+}
+
+.tech-ambient-glow-1 {
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.16) 0%, rgba(37, 99, 235, 0.02) 60%, transparent 80%);
+  filter: blur(50px);
+  border-radius: 50%;
+  animation: techPulseSlow 8s ease-in-out infinite alternate;
+}
+
+.tech-ambient-glow-2 {
+  position: absolute;
+  bottom: 10%;
+  right: 10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.14) 0%, rgba(139, 92, 246, 0.02) 60%, transparent 80%);
+  filter: blur(60px);
+  border-radius: 50%;
+  animation: techPulseSlow 10s ease-in-out infinite alternate-reverse;
+}
+
+.tech-light-beam-1 {
+  position: absolute;
+  top: 30%;
+  left: -100%;
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.6), #ffffff, rgba(96, 165, 250, 0.6), transparent);
+  box-shadow: 0 0 12px rgba(96, 165, 250, 0.8);
+  animation: techBeamHorizontal 7s ease-in-out infinite;
+}
+
+.tech-light-beam-2 {
+  position: absolute;
+  top: 75%;
+  left: -100%;
+  width: 45%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.6), #ffffff, rgba(168, 85, 247, 0.6), transparent);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.8);
+  animation: techBeamHorizontal 9s ease-in-out infinite 3.5s;
+}
+
+@keyframes techPulseSlow {
+  0% {
+    transform: scale(0.9) translate(0, 0);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.15) translate(20px, -15px);
+    opacity: 1;
+  }
+}
+
+@keyframes techBeamHorizontal {
+  0% {
+    left: -60%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    left: 120%;
+    opacity: 0;
+  }
+}
+
 
 
 

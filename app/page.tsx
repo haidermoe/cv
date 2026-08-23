@@ -607,7 +607,16 @@ export default function Home() {
       </section>
 
       {/* Experience Section */}
-      <section className="section" id="experience" style={{ padding: "110px 40px", background: "#0d0f19", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", position: "relative", overflow: "hidden" }}>
+      <section className="section" id="experience" style={{ padding: "110px 40px", background: "#0c0d18", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", position: "relative", overflow: "hidden" }}>
+        {/* TECH MATRIX GRID & AMBIENT GLOW LINES */}
+        <div className="tech-grid-container">
+          <div className="tech-grid-pattern" />
+          <div className="tech-ambient-glow-1" />
+          <div className="tech-ambient-glow-2" />
+          <div className="tech-light-beam-1" />
+          <div className="tech-light-beam-2" />
+        </div>
+
         <div style={{ maxWidth: "1300px", margin: "0 auto", position: "relative", zIndex: 2 }}>
           <div style={{ marginBottom: "60px", textAlign: lang === "AR" ? "right" : "left" }}>
             <span style={{ color: "#60a5fa", fontSize: "15px", fontWeight: "800", textTransform: "uppercase" }}>{t.expTag}</span>
