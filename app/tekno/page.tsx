@@ -446,15 +446,20 @@ export default function TeknoPage() {
           onClick={openClientDrawer}
           className="awsmd-royal-client-btn"
           style={{
-            background: activeColor,
+            ["--client-btn-gradient" as any]: mode === "pull" ? "linear-gradient(90deg, #16a34a 0%, #15803d 100%)" : "linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%)",
+            ["--client-btn-color" as any]: activeColor,
+            ["--client-btn-shadow" as any]: activeGlow,
+            background: mode === "pull" ? "linear-gradient(90deg, #16a34a 0%, #15803d 100%)" : "linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%)",
+            borderColor: activeColor,
+            color: "#ffffff",
             boxShadow: activeGlow,
             transition: "all 0.35s ease"
           }}
         >
           <span className="flip-box">
             <span className="flip-wrapper">
-              <span className="flip-text-primary">+ {lang === "AR" ? "كن عميلاً" : "Become a Client"}</span>
-              <span className="flip-text-secondary">+ {lang === "AR" ? "كن عميلاً" : "Become a Client"}</span>
+              <span className="flip-text-primary" style={{ color: "#ffffff" }}>+ {lang === "AR" ? "كن عميلاً" : "Become a Client"}</span>
+              <span className="flip-text-secondary" style={{ color: "#ffffff" }}>+ {lang === "AR" ? "كن عميلاً" : "Become a Client"}</span>
             </span>
           </span>
         </button>

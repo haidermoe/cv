@@ -601,15 +601,20 @@ export default function ImageDownloaderPage() {
           onClick={openClientDrawer}
           className="awsmd-royal-client-btn"
           style={{
-            background: isFinished ? "#16a34a" : "#2563eb",
+            ["--client-btn-gradient" as any]: isFinished ? "linear-gradient(90deg, #16a34a 0%, #15803d 100%)" : "linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%)",
+            ["--client-btn-color" as any]: isFinished ? "#16a34a" : "#2563eb",
+            ["--client-btn-shadow" as any]: isFinished ? "rgba(22, 163, 74, 0.4)" : "rgba(37, 99, 235, 0.4)",
+            background: isFinished ? "linear-gradient(90deg, #16a34a 0%, #15803d 100%)" : "linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%)",
+            borderColor: isFinished ? "#16a34a" : "#2563eb",
+            color: "#ffffff",
             boxShadow: isFinished ? "0 12px 35px rgba(22, 163, 74, 0.35)" : "0 12px 35px rgba(37, 99, 235, 0.35)",
             transition: "all 0.35s ease"
           }}
         >
           <span className="flip-box">
             <span className="flip-wrapper">
-              <span className="flip-text-primary">+ {t.becomeClient}</span>
-              <span className="flip-text-secondary">+ {t.becomeClient}</span>
+              <span className="flip-text-primary" style={{ color: "#ffffff" }}>+ {t.becomeClient}</span>
+              <span className="flip-text-secondary" style={{ color: "#ffffff" }}>+ {t.becomeClient}</span>
             </span>
           </span>
         </button>
