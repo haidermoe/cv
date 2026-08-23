@@ -83,12 +83,16 @@ const translations = {
     ],
     navTools: "الأدوات",
     toolsTag: "03 — الأدوات والنظم التفاعلية",
-    toolsTitle: "أدوات برمجية طوّرتها خصيصاً لتسريع العمل",
-    toolsSubtitle: "أداة ويب فورية وسريعة (0ms) صممتها لمعالجة وتدقيق ملفات الإكسل الضخمة وتحديث أسعار ومخزون المنتجات.",
+    toolsTitle: "أدوات برمجية طوّرتها لتسريع وأتمتة العمليات",
+    toolsSubtitle: "حلول ويب وأتمتة سريعة صممتها لمعالجة ملفات الإكسل الضخمة وتنزيل الصور وتحديث الأسعار والمخزون.",
     tool1Badge: "أداة حية تفاعلية • 0ms Engine",
-    tool1Title: "أداة مقارنة وتحديث أسعار إكسل (Tekno Diff)",
+    tool1Title: "مقارنة وتحديث أسعار إكسل (Tekno Diff)",
     tool1Desc: "أداة ويب تفاعلية فائقة السرعة تعمل داخل المتصفح مباشرة، لمقارنة ملفات الإكسل الكبيرة، كشف فروقات الأسعار والمخزون، وتحديث آلاف المنتجات بنقرة زر بدون أي تأخير.",
     tool1Action: "تشغيل أداة مقارنة الإكسل مباشرة",
+    tool2Badge: "أتمتة سريعة • Bulk Downloader",
+    tool2Title: "تنزيل وتسمية الصور من الإكسل (Image Downloader)",
+    tool2Desc: "أداة لاستخراج روابط الصور من ملفات الإكسل والـ CSV، تنزيلها بالتوازي وتسميتها بأسماء المنتجات الصحيحة، وضغطها في ملف ZIP بضغطة زر واحدة.",
+    tool2Action: "تشغيل أداة تنزيل الصور مباشرة",
     eduTag: "04 — التعليم والشهادات",
     eduTitle: "المؤهلات الأكاديمية والتدريب المستمر",
     edu1Year: "2026",
@@ -168,11 +172,15 @@ const translations = {
     ],
     toolsTag: "03 — INTERACTIVE TOOLS",
     toolsTitle: "Custom-Built Software Tools & Automation",
-    toolsSubtitle: "High-performance browser-based tool built for large-scale Excel processing and instant product price syncing.",
+    toolsSubtitle: "High-performance browser-based tools built for large-scale Excel processing, bulk image downloads, and data syncing.",
     tool1Badge: "Live Interactive Tool • 0ms Engine",
     tool1Title: "Tekno Excel Diff & Price Matcher",
     tool1Desc: "Instant client-side web tool to compare massive Excel sheets, detect price & inventory discrepancies, and sync thousands of products in milliseconds.",
     tool1Action: "Launch Excel Diff Tool Live",
+    tool2Badge: "Fast Automation • Bulk Downloader",
+    tool2Title: "Bulk Excel Image Downloader & Renamer",
+    tool2Desc: "Extract image URLs from Excel or CSV catalogs, download concurrently, rename by product names, and package into a ZIP archive instantly.",
+    tool2Action: "Launch Image Downloader Live",
     eduTag: "04 — EDUCATION & CERTIFICATES",
     eduTitle: "Academic Qualifications & Training",
     edu1Year: "2026",
@@ -775,57 +783,124 @@ export default function Home() {
             <p style={{ color: "#94a3b8", fontSize: "16.5px", marginTop: "12px", maxWidth: "680px", lineHeight: "1.6", fontWeight: "500" }}>{t.toolsSubtitle}</p>
           </div>
 
-          {/* SINGLE FEATURED TOOL: TEKNO EXCEL DIFF */}
-          <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+          {/* 2 TOOLS RESPONSIVE GRID */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+              gap: "28px",
+            }}
+          >
+            {/* TOOL 1: TEKNO EXCEL DIFF */}
             <div
               className="awsmd-dark-card"
               style={{
                 background: "linear-gradient(145deg, #151728 0%, #0d0f1a 100%)",
-                padding: "40px 36px",
+                padding: "36px 30px",
                 borderRadius: "28px",
                 border: "1.5px solid rgba(96, 165, 250, 0.4)",
-                boxShadow: "0 20px 45px rgba(37, 99, 235, 0.18)",
-                position: "relative",
-                overflow: "hidden",
+                boxShadow: "0 20px 45px rgba(37, 99, 235, 0.15)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                minHeight: "340px",
               }}
             >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", flexWrap: "wrap", gap: "12px" }}>
-                <span style={{ background: "rgba(96, 165, 250, 0.15)", color: "#60a5fa", padding: "6px 16px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800", display: "inline-flex", alignItems: "center" }}>
-                  {t.tool1Badge}
-                </span>
-                <span style={{ background: "rgba(255,255,255,0.06)", color: "#94a3b8", padding: "4px 12px", borderRadius: "16px", fontSize: "12.5px", fontWeight: "700" }}>
-                  XLSX / XLS / CSV Supported
-                </span>
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px", flexWrap: "wrap", gap: "10px" }}>
+                  <span style={{ background: "rgba(96, 165, 250, 0.15)", color: "#60a5fa", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
+                    {t.tool1Badge}
+                  </span>
+                  <span style={{ background: "rgba(255,255,255,0.06)", color: "#94a3b8", padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
+                    XLSX / XLS / CSV
+                  </span>
+                </div>
+
+                <h3 style={{ fontSize: "24px", fontWeight: "900", color: "#ffffff", marginBottom: "12px" }}>{t.tool1Title}</h3>
+                
+                <p style={{ color: "#94a3b8", fontSize: "15px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
+                  {t.tool1Desc}
+                </p>
               </div>
 
-              <h3 style={{ fontSize: "28px", fontWeight: "900", color: "#ffffff", marginBottom: "14px" }}>{t.tool1Title}</h3>
-              
-              <p style={{ color: "#94a3b8", fontSize: "16px", lineHeight: "1.8", fontWeight: "500", marginBottom: "28px" }}>
-                {t.tool1Desc}
-              </p>
-
-              <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", alignItems: "center" }}>
+              <div style={{ marginTop: "28px" }}>
                 <Link
                   href="/tekno"
                   className="awsmd-btn-glow"
                   style={{
                     background: "#2563eb",
                     color: "#ffffff",
-                    padding: "14px 32px",
+                    padding: "12px 28px",
                     borderRadius: "50px",
-                    fontSize: "15.5px",
+                    fontSize: "14.5px",
                     fontWeight: "800",
                     textDecoration: "none",
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "10px",
-                    boxShadow: "0 10px 30px rgba(37, 99, 235, 0.45)",
+                    gap: "8px",
+                    boxShadow: "0 8px 25px rgba(37, 99, 235, 0.4)",
                   }}
                 >
                   <span>{t.tool1Action}</span>
                 </Link>
               </div>
             </div>
+
+            {/* TOOL 2: BULK IMAGE DOWNLOADER */}
+            <div
+              className="awsmd-dark-card"
+              style={{
+                background: "linear-gradient(145deg, #151728 0%, #0d0f1a 100%)",
+                padding: "36px 30px",
+                borderRadius: "28px",
+                border: "1.5px solid rgba(139, 92, 246, 0.4)",
+                boxShadow: "0 20px 45px rgba(139, 92, 246, 0.15)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                minHeight: "340px",
+              }}
+            >
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px", flexWrap: "wrap", gap: "10px" }}>
+                  <span style={{ background: "rgba(139, 92, 246, 0.15)", color: "#a78bfa", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
+                    {t.tool2Badge}
+                  </span>
+                  <span style={{ background: "rgba(255,255,255,0.06)", color: "#94a3b8", padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
+                    Multi-threading / ZIP
+                  </span>
+                </div>
+
+                <h3 style={{ fontSize: "24px", fontWeight: "900", color: "#ffffff", marginBottom: "12px" }}>{t.tool2Title}</h3>
+                
+                <p style={{ color: "#94a3b8", fontSize: "15px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
+                  {t.tool2Desc}
+                </p>
+              </div>
+
+              <div style={{ marginTop: "28px" }}>
+                <Link
+                  href="/images"
+                  className="awsmd-btn-glow"
+                  style={{
+                    background: "#7c3aed",
+                    color: "#ffffff",
+                    padding: "12px 28px",
+                    borderRadius: "50px",
+                    fontSize: "14.5px",
+                    fontWeight: "800",
+                    textDecoration: "none",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    boxShadow: "0 8px 25px rgba(124, 58, 237, 0.4)",
+                  }}
+                >
+                  <span>{t.tool2Action}</span>
+                </Link>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
