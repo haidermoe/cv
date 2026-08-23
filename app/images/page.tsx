@@ -118,6 +118,10 @@ export default function ImageDownloaderPage() {
   const [copiedAll, setCopiedAll] = useState(false);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
+    }
     const handleCheckDesktop = () => setIsDesktop(window.innerWidth > 960);
     handleCheckDesktop();
     window.addEventListener("resize", handleCheckDesktop);
