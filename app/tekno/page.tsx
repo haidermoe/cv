@@ -850,7 +850,8 @@ export default function TeknoPage() {
           <div
             style={{
               position: "relative",
-              display: "inline-flex",
+              display: "inline-grid",
+              gridTemplateColumns: "1fr 1fr",
               background: "rgba(241, 245, 249, 0.85)",
               backdropFilter: "blur(16px)",
               WebkitBackdropFilter: "blur(16px)",
@@ -858,6 +859,8 @@ export default function TeknoPage() {
               borderRadius: "50px",
               border: "1.5px solid rgba(226, 232, 240, 0.9)",
               boxShadow: "inset 0 2px 6px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.04)",
+              width: "fit-content",
+              minWidth: isDesktop ? "480px" : "100%",
             }}
           >
             {/* LIQUID GLASS SLIDING PILL */}
@@ -866,9 +869,9 @@ export default function TeknoPage() {
                 position: "absolute",
                 top: "5px",
                 bottom: "5px",
+                left: lang === "AR" ? "auto" : "5px",
+                right: lang === "AR" ? "5px" : "auto",
                 width: "calc(50% - 5px)",
-                left: lang === "AR" ? (mode === "compare" ? "auto" : "5px") : (mode === "compare" ? "5px" : "auto"),
-                right: lang === "AR" ? (mode === "compare" ? "5px" : "auto") : (mode === "compare" ? "auto" : "5px"),
                 borderRadius: "50px",
                 background: mode === "compare"
                   ? "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
@@ -876,8 +879,12 @@ export default function TeknoPage() {
                 boxShadow: mode === "compare"
                   ? "0 8px 25px rgba(37, 99, 235, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.5)"
                   : "0 8px 25px rgba(22, 163, 74, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.5)",
-                transition: "all 0.45s cubic-bezier(0.34, 1.4, 0.64, 1)",
+                transform: mode === "compare"
+                  ? "translateX(0%)"
+                  : (lang === "AR" ? "translateX(-100%)" : "translateX(100%)"),
+                transition: "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.35s ease, box-shadow 0.35s ease",
                 zIndex: 1,
+                pointerEvents: "none",
               }}
             />
 
@@ -889,12 +896,14 @@ export default function TeknoPage() {
                 background: "transparent",
                 color: mode === "compare" ? "#ffffff" : "#475569",
                 border: "none",
-                padding: "10px 24px",
+                padding: "11px 24px",
                 borderRadius: "50px",
                 fontSize: "14px",
                 fontWeight: "800",
                 cursor: "pointer",
-                transition: "color 0.3s ease",
+                transition: "color 0.25s ease",
+                textAlign: "center",
+                whiteSpace: "nowrap",
               }}
             >
               {lang === "AR" ? "وضع المقارنة (Compare Mode)" : "Compare Mode"}
@@ -907,12 +916,14 @@ export default function TeknoPage() {
                 background: "transparent",
                 color: mode === "pull" ? "#ffffff" : "#475569",
                 border: "none",
-                padding: "10px 24px",
+                padding: "11px 24px",
                 borderRadius: "50px",
                 fontSize: "14px",
                 fontWeight: "800",
                 cursor: "pointer",
-                transition: "color 0.3s ease",
+                transition: "color 0.25s ease",
+                textAlign: "center",
+                whiteSpace: "nowrap",
               }}
             >
               {lang === "AR" ? "وضع سحب البيانات (Pull Data Mode)" : "Pull Data Mode"}

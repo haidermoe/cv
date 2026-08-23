@@ -1160,7 +1160,8 @@ export default function ImageDownloaderPage() {
           <div
             style={{
               position: "relative",
-              display: "inline-flex",
+              display: "inline-grid",
+              gridTemplateColumns: "1fr 1fr",
               background: "rgba(241, 245, 249, 0.85)",
               backdropFilter: "blur(16px)",
               WebkitBackdropFilter: "blur(16px)",
@@ -1169,6 +1170,8 @@ export default function ImageDownloaderPage() {
               border: "1.5px solid rgba(226, 232, 240, 0.9)",
               boxShadow: "inset 0 2px 6px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.04)",
               marginBottom: mode === "download" ? "15px" : "0",
+              width: "fit-content",
+              minWidth: isDesktop ? "480px" : "100%",
             }}
           >
             {/* LIQUID GLASS SLIDING PILL */}
@@ -1177,9 +1180,9 @@ export default function ImageDownloaderPage() {
                 position: "absolute",
                 top: "5px",
                 bottom: "5px",
+                left: lang === "AR" ? "auto" : "5px",
+                right: lang === "AR" ? "5px" : "auto",
                 width: "calc(50% - 5px)",
-                left: lang === "AR" ? (mode === "download" ? "auto" : "5px") : (mode === "download" ? "5px" : "auto"),
-                right: lang === "AR" ? (mode === "download" ? "5px" : "auto") : (mode === "download" ? "auto" : "5px"),
                 borderRadius: "50px",
                 background: mode === "download"
                   ? "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
@@ -1187,8 +1190,12 @@ export default function ImageDownloaderPage() {
                 boxShadow: mode === "download"
                   ? "0 8px 25px rgba(37, 99, 235, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.5)"
                   : "0 8px 25px rgba(220, 38, 38, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.5)",
-                transition: "all 0.45s cubic-bezier(0.34, 1.4, 0.64, 1)",
+                transform: mode === "download"
+                  ? "translateX(0%)"
+                  : (lang === "AR" ? "translateX(-100%)" : "translateX(100%)"),
+                transition: "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.35s ease, box-shadow 0.35s ease",
                 zIndex: 1,
+                pointerEvents: "none",
               }}
             />
 
@@ -1200,12 +1207,14 @@ export default function ImageDownloaderPage() {
                 background: "transparent",
                 color: mode === "download" ? "#ffffff" : "#475569",
                 border: "none",
-                padding: "10px 24px",
+                padding: "11px 24px",
                 borderRadius: "50px",
                 fontSize: "14px",
                 fontWeight: "800",
                 cursor: "pointer",
-                transition: "color 0.3s ease",
+                transition: "color 0.25s ease",
+                textAlign: "center",
+                whiteSpace: "nowrap",
               }}
             >
               {t.modeDownload}
@@ -1218,12 +1227,14 @@ export default function ImageDownloaderPage() {
                 background: "transparent",
                 color: mode === "upload" ? "#ffffff" : "#475569",
                 border: "none",
-                padding: "10px 24px",
+                padding: "11px 24px",
                 borderRadius: "50px",
                 fontSize: "14px",
                 fontWeight: "800",
                 cursor: "pointer",
-                transition: "color 0.3s ease",
+                transition: "color 0.25s ease",
+                textAlign: "center",
+                whiteSpace: "nowrap",
               }}
             >
               {t.modeUpload}
