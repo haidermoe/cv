@@ -63,6 +63,7 @@ export default function ImageDownloaderPage() {
   const [isClientDrawerOpen, setIsClientDrawerOpen] = useState(false);
   const [isClientDrawerActive, setIsClientDrawerActive] = useState(false);
   const [isClientDrawerClosing, setIsClientDrawerClosing] = useState(false);
+  const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   // File states
@@ -164,12 +165,16 @@ export default function ImageDownloaderPage() {
 
   const t = {
     AR: {
+      logo: "حيدر محمد",
       brandName: "حيدر محمد",
       navHome: "الرئيسية",
+      navStats: "الإحصائيات والمهارات",
       navAbout: "النبذة",
       navExperience: "الخبرات",
+      navTools: "الأدوات",
       navEducation: "التعليم",
       navContact: "تواصل معي",
+      downloadCV: "تحميل ملف السيرة PDF",
       becomeClient: "كن عميلاً",
       title: "أداة تنزيل وتسمية الصور من الإكسل (Image Downloader)",
       subtitle: "منظومة سريعة لمعالجة ملفات الإكسل وسحب روابط الصور وتنزيلها وتسميتها بأسماء المنتجات وضغطها بملف ZIP تلقائياً",
@@ -201,12 +206,16 @@ export default function ImageDownloaderPage() {
       submittedSuccess: "تم إرسال طلبك بنجاح! سنتواصل معك قريباً.",
     },
     EN: {
+      logo: "Haider Mohamed",
       brandName: "Haider Mohamed",
       navHome: "Home",
+      navStats: "Stats & Skills",
       navAbout: "About Us",
       navExperience: "Experience",
+      navTools: "Tools",
       navEducation: "Education",
       navContact: "Contact Us",
+      downloadCV: "Download PDF",
       becomeClient: "Become a Client",
       title: "Bulk Excel Image Downloader & Renamer",
       subtitle: "High-speed engine to parse Excel catalogs, download product images concurrently, rename them automatically, and package into a ZIP archive",
@@ -561,112 +570,244 @@ export default function ImageDownloaderPage() {
         />
       </div>
 
-      {/* TOP HEADER BAR MATCHING TEKNO */}
-      <header
+      {/* Top Fixed Floating Buttons (Top Right) */}
+      <div
+        className="awsmd-top-actions"
         style={{
+          position: "fixed",
+          top: "24px",
+          right: "32px",
+          zIndex: 1000,
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
-          width: "100%",
-          zIndex: 30,
-          gap: "8px",
+          gap: "10px",
+          direction: "ltr"
         }}
       >
-        {/* LOGO */}
-        <Link
-          href="/"
+        {/* ENLARGED ROYAL BLUE SIDE FILL & FLIP TEXT BUTTON */}
+        <button
+          onClick={openClientDrawer}
+          className="awsmd-royal-client-btn"
+        >
+          <span className="flip-box">
+            <span className="flip-wrapper">
+              <span className="flip-text-primary">+ {t.becomeClient}</span>
+              <span className="flip-text-secondary">+ {t.becomeClient}</span>
+            </span>
+          </span>
+        </button>
+
+        {/* BORDERED LANGUAGE SELECTOR PILL */}
+        <button
+          onClick={handleLangSwitch}
           style={{
-            display: "flex",
+            background: "#ffffff",
+            border: "1.5px solid #4f46e5",
+            color: "#4f46e5",
+            padding: "8px 18px",
+            borderRadius: "50px",
+            fontSize: "13.5px",
+            fontWeight: "800",
+            display: "inline-flex",
             alignItems: "center",
             gap: "6px",
-            textDecoration: "none",
-            color: "#0f111a",
-            fontSize: "clamp(14px, 3.6vw, 20px)",
-            fontWeight: "900",
-            flexShrink: 0,
+            cursor: "pointer",
+            fontFamily: "'Outfit', sans-serif",
+            boxShadow: "0 4px 15px rgba(0,0,0,0.06)",
+            transition: "all 0.3s ease"
           }}
         >
-          <svg width="20" height="16" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="7" y="1" width="8" height="10" fill="#0f111a" />
-            <rect x="0" y="13" width="16" height="7" fill="#0f111a" />
-            <rect x="10" y="13" width="15" height="7" fill="#2563eb" />
-          </svg>
-          <span>{t.brandName}</span>
-        </Link>
+          <span>{lang === "AR" ? "EN" : "عربي"}</span>
+          <span style={{ fontSize: "10px", opacity: 0.8 }}>∨</span>
+        </button>
 
-        {/* CENTER PILL NAV WITH FLIP LINK ANIMATIONS */}
-        <div
-          className="desktop-header-nav"
+        {/* GREY CIRCULAR MENU BUTTON */}
+        <button
+          onClick={() => setIsNavMenuOpen(true)}
           style={{
-            display: isDesktop ? "flex" : "none",
+            width: "42px",
+            height: "42px",
+            borderRadius: "50%",
+            background: "#e2e8f0",
+            border: "none",
+            display: "flex",
             alignItems: "center",
-            gap: "28px",
-            background: "#ffffff",
-            padding: "10px 28px",
-            borderRadius: "50px",
-            boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
-            border: "1px solid rgba(15, 17, 26, 0.06)",
+            justifyContent: "center",
+            cursor: "pointer",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+            transition: "transform 0.2s ease, background 0.2s ease"
           }}
         >
-          <FlipLink href="/" color="#475569" hoverColor="#2563eb">
-            {t.navHome}
-          </FlipLink>
-          <FlipLink href="/tekno" color="#475569" hoverColor="#2563eb">
-            {lang === "AR" ? "أداة تكنو (Excel Diff)" : "Tekno Tool"}
-          </FlipLink>
-          <FlipLink href="/#about" color="#475569" hoverColor="#2563eb">
-            {t.navAbout}
-          </FlipLink>
-          <FlipLink href="/#experience" color="#475569" hoverColor="#2563eb">
-            {t.navExperience}
-          </FlipLink>
-          <FlipLink href="/#contact" color="#475569" hoverColor="#2563eb">
-            {t.navContact}
-          </FlipLink>
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="18" height="2.5" rx="1.25" fill="#475569"/>
+            <rect y="6.5" width="13" height="2.5" rx="1.25" fill="#475569"/>
+          </svg>
+        </button>
+      </div>
+
+      {/* Floating Pill Header Navigation */}
+      <header
+        className="desktop-header-nav"
+        style={{
+          position: "fixed",
+          top: "24px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 1000,
+          display: "flex",
+          alignItems: "center",
+          gap: "24px",
+          background: "#ffffff",
+          padding: "8px 24px",
+          borderRadius: "50px",
+          boxShadow: "0 15px 35px rgba(0,0,0,0.12)",
+          border: "1px solid rgba(15, 17, 26, 0.08)"
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "16px", fontWeight: "900", color: "#0f111a", paddingLeft: lang === "AR" ? "10px" : "0", paddingRight: lang === "EN" ? "10px" : "0", borderLeft: lang === "AR" ? "1px solid #e2e8f0" : "none", borderRight: lang === "EN" ? "1px solid #e2e8f0" : "none" }}>
+          <svg width="20" height="16" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="7" y="1" width="8" height="10" fill="#0f111a"/>
+            <rect x="0" y="13" width="16" height="7" fill="#0f111a"/>
+            <rect x="10" y="13" width="15" height="7" fill="#64748b"/>
+          </svg>
+          <Link href="/" style={{ textDecoration: "none", color: "#0f111a" }}>
+            {t.logo}
+          </Link>
         </div>
 
-        {/* RIGHT TOP ACTIONS (+ كُن عميلاً & EN/عربي BUTTONS MATCHING TEKNO) */}
-        <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
-          <button
-            onClick={handleLangSwitch}
-            className="awsmd-btn-glow"
-            style={{
-              background: "#ffffff",
-              border: "1.5px solid #e2e8f0",
-              color: "#0f111a",
-              padding: isDesktop ? "7px 14px" : "6px 10px",
-              borderRadius: "50px",
-              fontSize: isDesktop ? "12px" : "11px",
-              fontWeight: "800",
-              cursor: "pointer",
-            }}
-          >
-            {lang === "AR" ? "EN" : "عربي"} ∨
-          </button>
+        <nav style={{ display: "flex", alignItems: "center", gap: "18px" }}>
+          <FlipLink href="/" color="#0f111a" hoverColor="#2563eb">{t.navHome}</FlipLink>
+          <FlipLink href="/#stats" color="#475569" hoverColor="#2563eb">{t.navStats}</FlipLink>
+          <FlipLink href="/#about" color="#475569" hoverColor="#2563eb">{t.navAbout}</FlipLink>
+          <FlipLink href="/#experience" color="#475569" hoverColor="#2563eb">{t.navExperience}</FlipLink>
+          <FlipLink href="/#tools" color="#475569" hoverColor="#2563eb">{t.navTools}</FlipLink>
+          <FlipLink href="/#education" color="#475569" hoverColor="#2563eb">{t.navEducation}</FlipLink>
+          <FlipLink href="/#contact" color="#475569" hoverColor="#2563eb">{t.navContact}</FlipLink>
+        </nav>
 
-          <button
-            onClick={openClientDrawer}
-            className="awsmd-royal-client-btn"
-            style={{
-              background: "transparent",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-            }}
-          >
-            <span className="flip-box">
-              <span className="flip-wrapper">
-                <span className="flip-text-primary">
-                  + {isDesktop ? (lang === "AR" ? "كن عميلاً" : "Become a Client") : (lang === "AR" ? "تواصل" : "Client")}
-                </span>
-                <span className="flip-text-secondary">
-                  + {isDesktop ? (lang === "AR" ? "كن عميلاً" : "Become a Client") : (lang === "AR" ? "تواصل" : "Client")}
-                </span>
-              </span>
-            </span>
-          </button>
-        </div>
+        <a
+          href="/HAIDER-MOHAMED-SHWKAT-CV.pdf"
+          download="HAIDER-MOHAMED-SHWKAT-CV.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="awsmd-btn-glow"
+          style={{
+            background: "#0f111a",
+            color: "#ffffff",
+            padding: "8px 20px",
+            borderRadius: "30px",
+            fontSize: "13px",
+            fontWeight: "800",
+            textDecoration: "none",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            transition: "transform 0.3s ease, background 0.3s ease"
+          }}
+        >
+          <span>{t.downloadCV}</span>
+        </a>
       </header>
+
+      {/* Mobile Drawer Menu */}
+      {isNavMenuOpen && (
+        <div
+          className="mobile-drawer-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0, 0, 0, 0.4)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            zIndex: 2000,
+            display: "flex",
+            justifyContent: lang === "AR" ? "flex-end" : "flex-start",
+          }}
+          onClick={() => setIsNavMenuOpen(false)}
+        >
+          <div
+            className={lang === "AR" ? "mobile-drawer-content-ar" : "mobile-drawer-content-en"}
+            style={{
+              width: "300px",
+              height: "100vh",
+              background: "#ffffff",
+              color: "#0f111a",
+              padding: "40px 25px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              boxShadow: lang === "AR" ? "-10px 0 30px rgba(0,0,0,0.15)" : "10px 0 30px rgba(0,0,0,0.15)",
+              overflowY: "auto",
+              fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif"
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "16px", fontWeight: "900", color: "#0f111a" }}>
+                  <svg width="20" height="16" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="7" y="1" width="8" height="10" fill="#0f111a"/>
+                    <rect x="0" y="13" width="16" height="7" fill="#0f111a"/>
+                    <rect x="10" y="13" width="15" height="7" fill="#64748b"/>
+                  </svg>
+                  <span>{t.logo}</span>
+                </div>
+                <button
+                  onClick={() => setIsNavMenuOpen(false)}
+                  style={{
+                    background: "#f1f5f9",
+                    border: "none",
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "50%",
+                    fontSize: "16px",
+                    fontWeight: "900",
+                    cursor: "pointer",
+                    color: "#475569"
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+
+              <nav style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+                <a href="/" onClick={() => setIsNavMenuOpen(false)} style={{ fontSize: "17px", fontWeight: "800", color: "#0f111a", textDecoration: "none" }}>{t.navHome}</a>
+                <a href="/#stats" onClick={() => setIsNavMenuOpen(false)} style={{ fontSize: "17px", fontWeight: "800", color: "#475569", textDecoration: "none" }}>{t.navStats}</a>
+                <a href="/#about" onClick={() => setIsNavMenuOpen(false)} style={{ fontSize: "17px", fontWeight: "800", color: "#475569", textDecoration: "none" }}>{t.navAbout}</a>
+                <a href="/#experience" onClick={() => setIsNavMenuOpen(false)} style={{ fontSize: "17px", fontWeight: "800", color: "#475569", textDecoration: "none" }}>{t.navExperience}</a>
+                <a href="/#tools" onClick={() => setIsNavMenuOpen(false)} style={{ fontSize: "17px", fontWeight: "800", color: "#475569", textDecoration: "none" }}>{t.navTools}</a>
+                <a href="/#education" onClick={() => setIsNavMenuOpen(false)} style={{ fontSize: "17px", fontWeight: "800", color: "#475569", textDecoration: "none" }}>{t.navEducation}</a>
+                <a href="/#contact" onClick={() => setIsNavMenuOpen(false)} style={{ fontSize: "17px", fontWeight: "800", color: "#475569", textDecoration: "none" }}>{t.navContact}</a>
+              </nav>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "30px" }}>
+              <a
+                href="/HAIDER-MOHAMED-SHWKAT-CV.pdf"
+                download="HAIDER-MOHAMED-SHWKAT-CV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  background: "#0f111a",
+                  color: "#ffffff",
+                  padding: "12px 20px",
+                  borderRadius: "30px",
+                  fontSize: "14px",
+                  fontWeight: "800",
+                  textDecoration: "none",
+                  textAlign: "center"
+                }}
+              >
+                {t.downloadCV}
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* MAIN TOOL CONTENT */}
       <main
@@ -675,7 +816,9 @@ export default function ImageDownloaderPage() {
           zIndex: 20,
           maxWidth: "1100px",
           width: "100%",
-          margin: "40px auto",
+          margin: "0 auto",
+          paddingTop: "90px",
+          paddingBottom: "40px",
         }}
       >
         {/* HEADER TITLE CARD */}
