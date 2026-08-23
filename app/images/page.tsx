@@ -56,8 +56,16 @@ export default function ImageDownloaderPage() {
 
   // Operation Mode: "download" (From Excel) | "upload" (Images to Links & Excel)
   const [mode, setMode] = useState<"download" | "upload">("download");
+  const [isMorphing, setIsMorphing] = useState(false);
   const activeColor = mode === "download" ? "#2563eb" : "#dc2626";
   const activeGlow = mode === "download" ? "0 12px 35px rgba(37, 99, 235, 0.35)" : "0 12px 35px rgba(220, 38, 38, 0.35)";
+
+  const switchMode = (newMode: "download" | "upload") => {
+    if (newMode === mode) return;
+    setIsMorphing(true);
+    setMode(newMode);
+    setTimeout(() => setIsMorphing(false), 520);
+  };
 
   // Language ripple state
   const [isLangAnimating, setIsLangAnimating] = useState(false);
@@ -1156,47 +1164,40 @@ export default function ImageDownloaderPage() {
             {mode === "download" ? t.subtitleDownload : t.subtitleUpload}
           </p>
 
-          {/* LIQUID MERCURY FLUID MODE TOGGLE PILLS */}
+          {/* LIQUID GLASS SWITCHER (MATCHING TUTORIAL) */}
           <div
-            className="awsmd-liquid-pill-track"
+            className="liquid-glass-switcher-track"
             style={{
               marginBottom: mode === "download" ? "15px" : "0",
               width: "fit-content",
               minWidth: isDesktop ? "500px" : "100%",
             }}
           >
-            {/* NATURAL WATER FLOW SLIDING PILL */}
+            {/* LIQUID GLASS SLIDING PILL WITH MORPH STRETCH */}
             <div
+              className={isMorphing ? "liquid-glass-pill morphing" : "liquid-glass-pill"}
               style={{
-                position: "absolute",
-                top: "5px",
-                bottom: "5px",
-                left: lang === "AR" ? "auto" : "5px",
-                right: lang === "AR" ? "5px" : "auto",
-                width: "calc(50% - 5px)",
-                borderRadius: "50px",
+                left: lang === "AR" ? "auto" : "6px",
+                right: lang === "AR" ? "6px" : "auto",
                 background: mode === "download"
-                  ? "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)"
-                  : "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
+                  ? "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
+                  : "linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)",
                 boxShadow: mode === "download"
-                  ? "0 8px 22px rgba(37, 99, 235, 0.32), inset 0 1px 2px rgba(255, 255, 255, 0.45)"
-                  : "0 8px 22px rgba(220, 38, 38, 0.32), inset 0 1px 2px rgba(255, 255, 255, 0.45)",
+                  ? "0 10px 25px rgba(37, 99, 235, 0.4), inset 0 1.5px 2px rgba(255, 255, 255, 0.6), inset 0 -1.5px 2px rgba(0, 0, 0, 0.15)"
+                  : "0 10px 25px rgba(220, 38, 38, 0.4), inset 0 1.5px 2px rgba(255, 255, 255, 0.6), inset 0 -1.5px 2px rgba(0, 0, 0, 0.15)",
                 transform: mode === "download"
                   ? "translateX(0%)"
                   : (lang === "AR" ? "translateX(-100%)" : "translateX(100%)"),
-                transition: "transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), background 0.35s ease, box-shadow 0.35s ease",
-                zIndex: 1,
-                pointerEvents: "none",
               }}
             />
 
             <button
-              onClick={() => setMode("download")}
+              onClick={() => switchMode("download")}
               style={{
                 position: "relative",
                 zIndex: 2,
                 background: "transparent",
-                color: mode === "download" ? "#ffffff" : "#475569",
+                color: mode === "download" ? "#ffffff" : "#334155",
                 border: "none",
                 padding: "11px 24px",
                 borderRadius: "50px",
@@ -1211,12 +1212,12 @@ export default function ImageDownloaderPage() {
               {t.modeDownload}
             </button>
             <button
-              onClick={() => setMode("upload")}
+              onClick={() => switchMode("upload")}
               style={{
                 position: "relative",
                 zIndex: 2,
                 background: "transparent",
-                color: mode === "upload" ? "#ffffff" : "#475569",
+                color: mode === "upload" ? "#ffffff" : "#334155",
                 border: "none",
                 padding: "11px 24px",
                 borderRadius: "50px",

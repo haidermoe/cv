@@ -88,6 +88,14 @@ export default function TeknoPage() {
 
   // Operation Mode: "compare" | "pull"
   const [mode, setMode] = useState<"compare" | "pull">("compare");
+  const [isMorphing, setIsMorphing] = useState(false);
+
+  const switchMode = (newMode: "compare" | "pull") => {
+    if (newMode === mode) return;
+    setIsMorphing(true);
+    setMode(newMode);
+    setTimeout(() => setIsMorphing(false), 520);
+  };
 
   // Dynamic Theme Colors based on selected mode
   const activeColor = mode === "pull" ? "#16a34a" : "#2563eb";
@@ -846,46 +854,39 @@ export default function TeknoPage() {
               : "Enterprise data matching and inventory management platform"}
           </p>
 
-          {/* LIQUID MERCURY FLUID MODE TOGGLE PILLS */}
+          {/* LIQUID GLASS SWITCHER (MATCHING TUTORIAL) */}
           <div
-            className="awsmd-liquid-pill-track"
+            className="liquid-glass-switcher-track"
             style={{
               width: "fit-content",
               minWidth: isDesktop ? "500px" : "100%",
             }}
           >
-            {/* NATURAL WATER FLOW SLIDING PILL */}
+            {/* LIQUID GLASS SLIDING PILL WITH MORPH STRETCH */}
             <div
+              className={isMorphing ? "liquid-glass-pill morphing" : "liquid-glass-pill"}
               style={{
-                position: "absolute",
-                top: "5px",
-                bottom: "5px",
-                left: lang === "AR" ? "auto" : "5px",
-                right: lang === "AR" ? "5px" : "auto",
-                width: "calc(50% - 5px)",
-                borderRadius: "50px",
+                left: lang === "AR" ? "auto" : "6px",
+                right: lang === "AR" ? "6px" : "auto",
                 background: mode === "compare"
-                  ? "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)"
-                  : "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
+                  ? "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
+                  : "linear-gradient(135deg, #16a34a 0%, #15803d 100%)",
                 boxShadow: mode === "compare"
-                  ? "0 8px 22px rgba(37, 99, 235, 0.32), inset 0 1px 2px rgba(255, 255, 255, 0.45)"
-                  : "0 8px 22px rgba(22, 163, 74, 0.32), inset 0 1px 2px rgba(255, 255, 255, 0.45)",
+                  ? "0 10px 25px rgba(37, 99, 235, 0.4), inset 0 1.5px 2px rgba(255, 255, 255, 0.6), inset 0 -1.5px 2px rgba(0, 0, 0, 0.15)"
+                  : "0 10px 25px rgba(22, 163, 74, 0.4), inset 0 1.5px 2px rgba(255, 255, 255, 0.6), inset 0 -1.5px 2px rgba(0, 0, 0, 0.15)",
                 transform: mode === "compare"
                   ? "translateX(0%)"
                   : (lang === "AR" ? "translateX(-100%)" : "translateX(100%)"),
-                transition: "transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), background 0.35s ease, box-shadow 0.35s ease",
-                zIndex: 1,
-                pointerEvents: "none",
               }}
             />
 
             <button
-              onClick={() => setMode("compare")}
+              onClick={() => switchMode("compare")}
               style={{
                 position: "relative",
                 zIndex: 2,
                 background: "transparent",
-                color: mode === "compare" ? "#ffffff" : "#475569",
+                color: mode === "compare" ? "#ffffff" : "#334155",
                 border: "none",
                 padding: "11px 24px",
                 borderRadius: "50px",
@@ -900,12 +901,12 @@ export default function TeknoPage() {
               {lang === "AR" ? "وضع المقارنة (Compare Mode)" : "Compare Mode"}
             </button>
             <button
-              onClick={() => setMode("pull")}
+              onClick={() => switchMode("pull")}
               style={{
                 position: "relative",
                 zIndex: 2,
                 background: "transparent",
-                color: mode === "pull" ? "#ffffff" : "#475569",
+                color: mode === "pull" ? "#ffffff" : "#334155",
                 border: "none",
                 padding: "11px 24px",
                 borderRadius: "50px",
