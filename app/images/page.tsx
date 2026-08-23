@@ -832,14 +832,7 @@ export default function ImageDownloaderPage() {
 
       {/* INDEPENDENT FLOATING BRAND LOGO / NAME (TOP LEFT) */}
       <div
-        style={{
-          position: "fixed",
-          top: "28px",
-          left: "32px",
-          zIndex: 1000,
-          display: "flex",
-          alignItems: "center",
-        }}
+        className="awsmd-brand-logo"
       >
         <Link
           href="/"
