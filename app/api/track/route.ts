@@ -51,6 +51,8 @@ export async function POST(req: NextRequest) {
       language = "",
       timezone = "",
       searchParams = "",
+      hash = "",
+      href = "",
     } = body;
 
     // Extract Client IP
@@ -110,6 +112,18 @@ export async function POST(req: NextRequest) {
     const flag = getCountryFlag(country);
     const { browser, os, device } = parseUserAgent(ua);
 
+    // Smart Campaign / Ref Tag Extraction from URL, searchParams, and hash
+    let customCampaign = "";
+    const fullUrlStr = `${href} ${searchParams} ${hash}`.toLowerCase();
+    
+    if (fullUrlStr.includes("linkedin")) customCampaign = "LinkedIn 💼";
+    else if (fullUrlStr.includes("github")) customCampaign = "GitHub 🐙";
+    else if (fullUrlStr.includes("telegram") || fullUrlStr.includes("t.me")) customCampaign = "Telegram ✈️";
+    else if (fullUrlStr.includes("instagram")) customCampaign = "Instagram 📸";
+    else if (fullUrlStr.includes("facebook")) customCampaign = "Facebook 📘";
+    else if (fullUrlStr.includes("twitter") || fullUrlStr.includes("x.com")) customCampaign = "X (Twitter) 🐦";
+    else if (fullUrlStr.includes("cv") || fullUrlStr.includes("resume")) customCampaign = "ملف السيرة الذاتية (CV)";
+
     // Source / Referrer Beautification
     let referrerLabel = "دخول مباشر (Direct / Bookmark)";
     if (referrer) {
@@ -135,6 +149,8 @@ export async function POST(req: NextRequest) {
       } catch {
         referrerLabel = `🔗 ${referrer}`;
       }
+    } else if (customCampaign) {
+      referrerLabel = `🎯 رابط مخصص: ${customCampaign}`;
     }
 
     // Format local Baghdad/Iraq time or UTC
@@ -153,8 +169,9 @@ export async function POST(req: NextRequest) {
       `━━━━━━━━━━━━━━━━━━`,
       `🕒 <b>الوقت:</b> ${baghdadTime}`,
       `🔗 <b>المصدر (Referrer):</b> ${referrerLabel}`,
+      ...(customCampaign ? [`🎯 <b>الحملة / الرابط المخصص:</b> <code>${customCampaign}</code>`] : []),
       ...(referrer ? [`🌐 <b>الرابط الكامل:</b> <code>${referrer}</code>`] : []),
-      `📄 <b>الصفحة:</b> <code>${pathname}${searchParams ? `?${searchParams}` : ""}</code>`,
+      `📄 <b>الصفحة المستهدفة:</b> <code>${pathname}${searchParams ? `?${searchParams}` : ""}${hash ? `${hash}` : ""}</code>`,
       `📍 <b>الموقع التقديري:</b> ${flag} ${locationText}`,
       ...(isp ? [`🏢 <b>شبكة الإنترنت:</b> ${isp}`] : []),
       `📱 <b>نوع الجهاز:</b> ${device}`,

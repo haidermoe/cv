@@ -26,6 +26,8 @@ export default function VisitorTracker() {
       referrer: currentReferrer,
       pathname: window.location.pathname,
       searchParams: window.location.search,
+      hash: window.location.hash,
+      href: window.location.href,
       screen: `${window.screen.width}x${window.screen.height}`,
       language: navigator.language || (navigator.languages && navigator.languages[0]) || "",
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
