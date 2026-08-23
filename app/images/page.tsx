@@ -54,6 +54,11 @@ export default function ImageDownloaderPage() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isDesktop, setIsDesktop] = useState(false);
 
+  // Operation Mode: "download" (From Excel) | "upload" (Images to Links & Excel)
+  const [mode, setMode] = useState<"download" | "upload">("download");
+  const activeColor = mode === "download" ? "#2563eb" : "#059669";
+  const activeGlow = mode === "download" ? "0 12px 35px rgba(37, 99, 235, 0.35)" : "0 12px 35px rgba(5, 150, 105, 0.35)";
+
   // Language ripple state
   const [isLangAnimating, setIsLangAnimating] = useState(false);
   const [langOrigin, setLangOrigin] = useState({ x: 0, y: 0 });
@@ -78,21 +83,28 @@ export default function ImageDownloaderPage() {
     }, 750);
   };
 
-  // File states
+  // --- MODE 1: DOWNLOAD FROM EXCEL STATES ---
   const [file, setFile] = useState<File | null>(null);
   const [columns, setColumns] = useState<string[]>([]);
   const [nameCol, setNameCol] = useState<number>(0);
   const [selectedUrlCols, setSelectedUrlCols] = useState<number[]>([]);
-  
-  // Parsed items data
   const [itemsData, setItemsData] = useState<{ name: string; urls: string[] }[]>([]);
   
-  // Progress states
+  // Progress states for download
   const [isProcessing, setIsProcessing] = useState(false);
   const [progressPercent, setProgressPercent] = useState(0);
   const [currentProgressText, setCurrentProgressText] = useState("");
   const [downloadStats, setDownloadStats] = useState<{ total: number; downloaded: number; failed: number } | null>(null);
   const [isFinished, setIsFinished] = useState(false);
+
+  // --- MODE 2: UPLOAD IMAGES TO LINKS STATES ---
+  const [uploadFiles, setUploadFiles] = useState<File[]>([]);
+  const [uploadedResults, setUploadedResults] = useState<{ name: string; url: string; direct_url: string; size: number }[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [currentUploadText, setCurrentUploadText] = useState("");
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [copiedAll, setCopiedAll] = useState(false);
 
   useEffect(() => {
     const handleCheckDesktop = () => setIsDesktop(window.innerWidth > 960);
@@ -164,7 +176,7 @@ export default function ImageDownloaderPage() {
         "الاسم والشركة / Client Name": formData.get("client_name"),
         "البريد الإلكتروني / Client Email": formData.get("client_email"),
         "تفاصيل المشروع / Project Details": formData.get("project_details"),
-        _subject: "طلب عمل جديد من صفحة أداة تنزيل الصور!",
+        _subject: "طلب عمل جديد من صفحة أداة الصور!",
       }),
     }).catch(console.error);
 
@@ -188,8 +200,12 @@ export default function ImageDownloaderPage() {
       navContact: "تواصل معي",
       downloadCV: "تحميل ملف السيرة PDF",
       becomeClient: "كن عميلاً",
-      title: "أداة تنزيل وتسمية الصور من الإكسل (Image Downloader)",
-      subtitle: "منظومة سريعة لمعالجة ملفات الإكسل وسحب روابط الصور وتنزيلها وتسميتها بأسماء المنتجات وضغطها بملف ZIP تلقائياً",
+      titleDownload: "أداة تنزيل وتسمية الصور من الإكسل (Image Downloader)",
+      subtitleDownload: "منظومة سريعة لمعالجة ملفات الإكسل وسحب روابط الصور وتنزيلها وتسميتها بأسماء المنتجات وضغطها بملف ZIP تلقائياً",
+      titleUpload: "أداة رفع الصور وتوليد روابط الإكسل (Image to URL & Excel)",
+      subtitleUpload: "رفع سريع ومباشر للصور إلى السحابة، وتوليد روابط إنترنت مباشرة وفورية وتصديرها بملف Excel بضغطة زر",
+      modeDownload: "وضع تنزيل الصور من الإكسل (Download Mode)",
+      modeUpload: "وضع رفع الصور وتوليد الروابط (Upload to Links Mode)",
       dropTitle: "اختر ملف الإكسل (Excel أو CSV) أو اسحبه إلى هنا",
       dropHint: "يدعم ملفات .xlsx, .xls, .csv بكافة الأحجام",
       activeFile: "الملف الحالي:",
@@ -209,6 +225,20 @@ export default function ImageDownloaderPage() {
       finishedTitle: "تم اكتمال التنزيل وضغط الصور بنجاح!",
       downloadAgain: "إعادة تحميل ملف الـ ZIP",
       downloadSample: "تحميل ملف إكسل تجريبي",
+      dropImagesTitle: "اختر أو اسحب الصور المراد رفعها إلى هنا",
+      dropImagesHint: "يدعم صيغ JPG, PNG, WEBP, GIF, SVG - اسحب حتى مئات الصور دفعة واحدة",
+      selectedImagesCount: "عدد الصور المحددة:",
+      totalUploadSize: "الحجم الإجمالي:",
+      startUploadBtn: "بدء رفع الصور وتوليد الروابط",
+      uploading: "جاري رفع الصور إلى السحابة بالتوازي...",
+      uploadSuccessTitle: "تم رفع جميع الصور وتوليد الروابط بنجاح!",
+      copyAllBtn: "نسخ جميع الروابط",
+      copiedAllMsg: "تم نسخ كافة الروابط!",
+      exportExcelBtn: "تصدير وتنزيل ملف Excel",
+      uploadResultsTitle: "روابط الصور المرفوعة",
+      colThumb: "المعاينة",
+      colDirectUrl: "الرابط المباشر",
+      colCopy: "نسخ",
       drawerTitle: "مرحباً! أخبرنا بكل التفاصيل",
       drawerSubtitle: "يسعدنا التعاون معك لبناء وتطوير حلول برمجية وبيانات استثنائية.",
       nameLabel: "الاسم والشركة",
@@ -229,8 +259,12 @@ export default function ImageDownloaderPage() {
       navContact: "Contact Us",
       downloadCV: "Download PDF",
       becomeClient: "Become a Client",
-      title: "Bulk Excel Image Downloader & Renamer",
-      subtitle: "High-speed engine to parse Excel catalogs, download product images concurrently, rename them automatically, and package into a ZIP archive",
+      titleDownload: "Bulk Excel Image Downloader & Renamer",
+      subtitleDownload: "High-speed engine to parse Excel catalogs, download product images concurrently, rename them automatically, and package into a ZIP archive",
+      titleUpload: "Bulk Image Uploader & Excel Link Generator",
+      subtitleUpload: "Fast cloud upload engine to convert your product images into direct CDN URLs and export ready Excel spreadsheets instantly",
+      modeDownload: "Download Mode (From Excel)",
+      modeUpload: "Upload Mode (Images to Links)",
       dropTitle: "Click to select Excel/CSV file or drag & drop here",
       dropHint: "Supports .xlsx, .xls, .csv files of any size",
       activeFile: "Active File:",
@@ -250,6 +284,20 @@ export default function ImageDownloaderPage() {
       finishedTitle: "Download & Packaging Completed Successfully!",
       downloadAgain: "Download ZIP Archive Again",
       downloadSample: "Download Sample Excel File",
+      dropImagesTitle: "Select or drop image files here",
+      dropImagesHint: "Supports JPG, PNG, WEBP, GIF, SVG - drop hundreds of images at once",
+      selectedImagesCount: "Selected Images:",
+      totalUploadSize: "Total Size:",
+      startUploadBtn: "Start Upload & Generate Links",
+      uploading: "Uploading images concurrently to cloud...",
+      uploadSuccessTitle: "All Images Uploaded & Links Generated Successfully!",
+      copyAllBtn: "Copy All URLs",
+      copiedAllMsg: "All URLs Copied!",
+      exportExcelBtn: "Download Excel Spreadsheet",
+      uploadResultsTitle: "Uploaded Image Links",
+      colThumb: "Preview",
+      colDirectUrl: "Direct CDN URL",
+      colCopy: "Copy",
       drawerTitle: "Hey! Tell us all the things",
       drawerSubtitle: "We’d love to hear about your project and build something amazing together.",
       nameLabel: "Name & Company",
@@ -260,131 +308,137 @@ export default function ImageDownloaderPage() {
     }
   }[lang];
 
-  const numToColStr = (n: number): string => {
-    let s = "";
-    while (n >= 0) {
-      s = String.fromCharCode((n % 26) + 65) + s;
-      n = Math.floor(n / 26) - 1;
-    }
-    return s;
-  };
-
-  const handleFileUpload = async (uploadedFile: File) => {
+  // --- MODE 1: EXCEL PARSING HANDLERS ---
+  const handleFileUpload = (uploadedFile: File) => {
     setFile(uploadedFile);
     setIsFinished(false);
     setDownloadStats(null);
     setProgressPercent(0);
 
-    try {
-      const arrayBuffer = await uploadedFile.arrayBuffer();
-      const wb = XLSX.read(arrayBuffer, { type: "array" });
-      const firstSheet = wb.SheetNames[0];
-      if (!firstSheet) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target?.result as ArrayBuffer);
+      const workbook = XLSX.read(data, { type: "array" });
+      const firstSheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheetName];
+      const json: any[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-      const ws = wb.Sheets[firstSheet];
-      const data: any[][] = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
-      if (data.length === 0) return;
+      if (json.length > 0) {
+        const rawHeaders = json[0] || [];
+        const headerStrings = rawHeaders.map((h, i) => (h ? String(h).trim() : `Column ${i + 1}`));
+        setColumns(headerStrings);
 
-      const firstRow = data[0] || [];
-      const cols = firstRow.map((val, idx) => {
-        const colLetter = numToColStr(idx);
-        const strVal = String(val).trim();
-        return strVal ? `${colLetter} (${strVal})` : `${colLetter}`;
-      });
-
-      setColumns(cols);
-
-      const nameKeywords = ["name", "title", "item", "sku", "product", "اسم", "عنوان", "منتج", "مادة"];
-      let detectedNameIdx = 0;
-      for (let i = 0; i < cols.length; i++) {
-        if (nameKeywords.some(k => cols[i].toLowerCase().includes(k))) {
-          detectedNameIdx = i;
-          break;
+        // Auto-detect name column
+        let foundNameIdx = 0;
+        const nameKeywords = ["name", "product", "item", "title", "sku", "اسم", "المنتج", "العنصر", "المادة"];
+        for (let i = 0; i < headerStrings.length; i++) {
+          const lower = headerStrings[i].toLowerCase();
+          if (nameKeywords.some(k => lower.includes(k))) {
+            foundNameIdx = i;
+            break;
+          }
         }
-      }
-      setNameCol(detectedNameIdx);
+        setNameCol(foundNameIdx);
 
-      const urlKeywords = ["url", "image", "img", "link", "photo", "pic", "صورة", "صوره", "رابط"];
-      const detectedUrlCols: number[] = [];
-      for (let i = 0; i < cols.length; i++) {
-        if (urlKeywords.some(k => cols[i].toLowerCase().includes(k))) {
-          detectedUrlCols.push(i);
+        // Auto-detect image URL columns
+        const detectedUrlCols: number[] = [];
+        const urlKeywords = ["image", "img", "photo", "pic", "link", "url", "صورة", "رابط", "صور"];
+        for (let i = 0; i < headerStrings.length; i++) {
+          if (i === foundNameIdx) continue;
+          const lower = headerStrings[i].toLowerCase();
+          if (urlKeywords.some(k => lower.includes(k))) {
+            detectedUrlCols.push(i);
+          }
         }
-      }
 
-      if (detectedUrlCols.length === 0) {
-        for (let colIdx = 0; colIdx < cols.length; colIdx++) {
-          for (let rowIdx = 1; rowIdx < Math.min(data.length, 10); rowIdx++) {
-            const val = String(data[rowIdx]?.[colIdx] || "").trim();
-            if (val.startsWith("http://") || val.startsWith("https://")) {
-              detectedUrlCols.push(colIdx);
+        if (detectedUrlCols.length === 0) {
+          for (let i = 0; i < headerStrings.length; i++) {
+            if (i !== foundNameIdx) {
+              detectedUrlCols.push(i);
               break;
             }
           }
         }
+        setSelectedUrlCols(detectedUrlCols);
+
+        extractItems(json, foundNameIdx, detectedUrlCols);
       }
-
-      const finalUrlCols = detectedUrlCols.length > 0 ? detectedUrlCols : (cols.length > 1 ? [1] : [0]);
-      setSelectedUrlCols(finalUrlCols);
-
-      extractItems(data, detectedNameIdx, finalUrlCols);
-    } catch (err) {
-      console.error("Error reading file:", err);
-    }
+    };
+    reader.readAsArrayBuffer(uploadedFile);
   };
 
-  const extractItems = (data: any[][], nameIdx: number, urlColsIdx: number[]) => {
-    const items: { name: string; urls: string[] }[] = [];
-    for (let r = 1; r < data.length; r++) {
-      const row = data[r];
+  const extractItems = (rows: any[][], nameIdx: number, urlIndices: number[]) => {
+    const extracted: { name: string; urls: string[] }[] = [];
+    const urlPattern = /(https?:\/\/[^\s,;"'<>]+)/gi;
+
+    for (let r = 1; r < rows.length; r++) {
+      const row = rows[r];
       if (!row || row.length === 0) continue;
 
-      const itemName = String(row[nameIdx] || "").trim();
-      if (!itemName) continue;
+      const rawName = row[nameIdx] ? String(row[nameIdx]).trim() : `Item_${r}`;
+      const foundUrls: string[] = [];
 
-      const urls: string[] = [];
-      for (const colIdx of urlColsIdx) {
-        const val = String(row[colIdx] || "").trim();
-        if (val.startsWith("http://") || val.startsWith("https://")) {
-          const splitUrls = val.split(/[\s,;]+/).filter(u => u.startsWith("http://") || u.startsWith("https://"));
-          urls.push(...splitUrls);
+      urlIndices.forEach(colIdx => {
+        const cellValue = row[colIdx];
+        if (cellValue) {
+          const strVal = String(cellValue).trim();
+          const matches = strVal.match(urlPattern);
+          if (matches) {
+            matches.forEach(u => {
+              if (!foundUrls.includes(u.trim())) {
+                foundUrls.push(u.trim());
+              }
+            });
+          } else if (strVal.startsWith("http://") || strVal.startsWith("https://")) {
+            if (!foundUrls.includes(strVal)) {
+              foundUrls.push(strVal);
+            }
+          }
         }
+      });
+
+      if (foundUrls.length > 0) {
+        extracted.push({ name: rawName, urls: foundUrls });
       }
-
-      if (urls.length > 0) {
-        items.push({ name: itemName, urls });
-      }
     }
-    setItemsData(items);
+
+    setItemsData(extracted);
   };
 
-  const handleNameColChange = (newIdx: number) => {
-    setNameCol(newIdx);
+  const handleNameColChange = (idx: number) => {
+    setNameCol(idx);
     if (file) {
-      reparseWithSettings(newIdx, selectedUrlCols);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = new Uint8Array(e.target?.result as ArrayBuffer);
+        const workbook = XLSX.read(data, { type: "array" });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const json: any[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        extractItems(json, idx, selectedUrlCols);
+      };
+      reader.readAsArrayBuffer(file);
     }
   };
 
-  const handleUrlColToggle = (colIdx: number) => {
-    const next = selectedUrlCols.includes(colIdx)
-      ? selectedUrlCols.filter(i => i !== colIdx)
-      : [...selectedUrlCols, colIdx];
-    setSelectedUrlCols(next);
+  const handleUrlColToggle = (idx: number) => {
+    let updated: number[];
+    if (selectedUrlCols.includes(idx)) {
+      updated = selectedUrlCols.filter(i => i !== idx);
+    } else {
+      updated = [...selectedUrlCols, idx];
+    }
+    setSelectedUrlCols(updated);
+
     if (file) {
-      reparseWithSettings(nameCol, next);
-    }
-  };
-
-  const reparseWithSettings = async (nameIdx: number, urlColsIdx: number[]) => {
-    if (!file) return;
-    try {
-      const arrayBuffer = await file.arrayBuffer();
-      const wb = XLSX.read(arrayBuffer, { type: "array" });
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const data: any[][] = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
-      extractItems(data, nameIdx, urlColsIdx);
-    } catch (err) {
-      console.error(err);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = new Uint8Array(e.target?.result as ArrayBuffer);
+        const workbook = XLSX.read(data, { type: "array" });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const json: any[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        extractItems(json, nameCol, updated);
+      };
+      reader.readAsArrayBuffer(file);
     }
   };
 
@@ -394,10 +448,10 @@ export default function ImageDownloaderPage() {
     setIsProcessing(true);
     setIsFinished(false);
     setProgressPercent(0);
+    setCurrentProgressText(lang === "AR" ? "بدء المعالجة وتنزيل الصور..." : "Initializing download workers...");
 
     const zip = new JSZip();
-    let totalImagesCount = 0;
-    itemsData.forEach(item => totalImagesCount += item.urls.length);
+    const totalImagesCount = itemsData.reduce((acc, item) => acc + item.urls.length, 0);
 
     let downloadedCount = 0;
     let failedCount = 0;
@@ -412,9 +466,7 @@ export default function ImageDownloaderPage() {
           const contentType = res.headers.get("content-type") || "";
           return { buffer, contentType };
         }
-      } catch {
-        // Fallback
-      }
+      } catch {}
 
       try {
         const proxyRes = await fetch(`/api/images/proxy?url=${encodeURIComponent(url)}`);
@@ -423,9 +475,8 @@ export default function ImageDownloaderPage() {
           const contentType = proxyRes.headers.get("content-type") || "";
           return { buffer, contentType };
         }
-      } catch {
-        // Failed
-      }
+      } catch {}
+
       return null;
     };
 
@@ -503,6 +554,112 @@ export default function ImageDownloaderPage() {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Products");
     XLSX.writeFile(wb, "Sample_Products_Images.xlsx");
+  };
+
+  // --- MODE 2: UPLOAD IMAGES HANDLERS ---
+  const handleUploadFilesSelected = (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const newFiles = Array.from(files);
+    setUploadFiles(prev => [...prev, ...newFiles]);
+  };
+
+  const handleRemoveUploadFile = (index: number) => {
+    setUploadFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleStartBulkUpload = async () => {
+    if (uploadFiles.length === 0) return;
+
+    setIsUploading(true);
+    setUploadProgress(0);
+    setCurrentUploadText(lang === "AR" ? "بدء الرفع السحابي..." : "Starting cloud uploads...");
+
+    const results: { name: string; url: string; direct_url: string; size: number }[] = [];
+    const totalCount = uploadFiles.length;
+    let completedCount = 0;
+
+    const concurrency = 4;
+    let currentIndex = 0;
+
+    const uploadWorker = async () => {
+      while (currentIndex < uploadFiles.length) {
+        const idx = currentIndex++;
+        const currentFile = uploadFiles[idx];
+        if (!currentFile) break;
+
+        setCurrentUploadText(`${currentFile.name} (${idx + 1}/${totalCount})`);
+
+        try {
+          const form = new FormData();
+          form.append("image", currentFile);
+
+          const res = await fetch("/api/images/upload", {
+            method: "POST",
+            body: form,
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.url) {
+              results.push({
+                name: currentFile.name,
+                url: data.url,
+                direct_url: data.direct_url || data.url,
+                size: currentFile.size,
+              });
+            }
+          } else {
+            console.warn("Upload failed for:", currentFile.name);
+          }
+        } catch (err) {
+          console.error("Upload error:", err);
+        }
+
+        completedCount++;
+        setUploadProgress(Math.round((completedCount / totalCount) * 100));
+      }
+    };
+
+    const workers = Array.from({ length: Math.min(concurrency, uploadFiles.length) }, () => uploadWorker());
+    await Promise.all(workers);
+
+    setUploadedResults(results);
+    setIsUploading(false);
+  };
+
+  const handleCopySingleUrl = (url: string, index: number) => {
+    navigator.clipboard.writeText(url);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 2000);
+  };
+
+  const handleCopyAllUrls = () => {
+    const allText = uploadedResults.map(r => r.direct_url).join("\n");
+    navigator.clipboard.writeText(allText);
+    setCopiedAll(true);
+    setTimeout(() => setCopiedAll(false), 2500);
+  };
+
+  const handleExportUploadedExcel = () => {
+    if (uploadedResults.length === 0) return;
+
+    const header = [
+      lang === "AR" ? "اسم الصورة / المنتج" : "Image / Product Name",
+      lang === "AR" ? "الرابط المباشر للإنترنت (Direct URL)" : "Direct Image URL",
+      lang === "AR" ? "حجم الملف (KB)" : "File Size (KB)"
+    ];
+
+    const dataRows = uploadedResults.map(item => [
+      item.name,
+      item.direct_url,
+      Math.round(item.size / 1024)
+    ]);
+
+    const aoa = [header, ...dataRows];
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Uploaded_Images");
+    XLSX.writeFile(wb, `Uploaded_Image_Links_${new Date().toISOString().slice(0, 10)}.xlsx`);
   };
 
   const totalExtractedImages = itemsData.reduce((acc, item) => acc + item.urls.length, 0);
@@ -601,9 +758,9 @@ export default function ImageDownloaderPage() {
           onClick={openClientDrawer}
           className="awsmd-royal-client-btn"
           style={{
-            ["--client-btn-gradient" as any]: isFinished ? "linear-gradient(90deg, #16a34a 0%, #15803d 100%)" : "linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%)",
-            ["--client-btn-color" as any]: isFinished ? "#16a34a" : "#2563eb",
-            ["--client-btn-shadow" as any]: isFinished ? "rgba(22, 163, 74, 0.4)" : "rgba(37, 99, 235, 0.4)",
+            ["--client-btn-gradient" as any]: mode === "upload" ? "linear-gradient(90deg, #059669 0%, #047857 100%)" : "linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%)",
+            ["--client-btn-color" as any]: activeColor,
+            ["--client-btn-shadow" as any]: activeGlow,
           }}
         >
           <span className="flip-box">
@@ -619,8 +776,8 @@ export default function ImageDownloaderPage() {
           onClick={handleLangSwitch}
           style={{
             background: "#ffffff",
-            border: `1.5px solid ${isFinished ? "#16a34a" : "#4f46e5"}`,
-            color: isFinished ? "#16a34a" : "#4f46e5",
+            border: `1.5px solid ${activeColor}`,
+            color: activeColor,
             padding: "8px 18px",
             borderRadius: "50px",
             fontSize: "13.5px",
@@ -630,7 +787,7 @@ export default function ImageDownloaderPage() {
             gap: "6px",
             cursor: "pointer",
             fontFamily: "'Outfit', sans-serif",
-            boxShadow: `0 4px 15px ${isFinished ? "rgba(22, 163, 74, 0.15)" : "rgba(37, 99, 235, 0.15)"}`,
+            boxShadow: `0 4px 15px ${mode === "upload" ? "rgba(5, 150, 105, 0.15)" : "rgba(37, 99, 235, 0.15)"}`,
             transition: "all 0.35s ease"
           }}
         >
@@ -690,7 +847,7 @@ export default function ImageDownloaderPage() {
           <svg width="22" height="18" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="7" y="1" width="8" height="10" fill="#000000"/>
             <rect x="0" y="13" width="16" height="7" fill="#000000"/>
-            <rect x="10" y="13" width="15" height="7" fill={isFinished ? "#16a34a" : "#2563eb"} style={{ transition: "fill 0.3s ease" }}/>
+            <rect x="10" y="13" width="15" height="7" fill={activeColor} style={{ transition: "fill 0.3s ease" }}/>
           </svg>
           <span>{t.logo}</span>
         </Link>
@@ -711,19 +868,19 @@ export default function ImageDownloaderPage() {
           background: "#ffffff",
           padding: "8px 24px",
           borderRadius: "50px",
-          boxShadow: `0 15px 35px ${isFinished ? "rgba(22, 163, 74, 0.12)" : "rgba(37, 99, 235, 0.12)"}`,
-          border: `1.5px solid ${isFinished ? "rgba(22, 163, 74, 0.25)" : "rgba(37, 99, 235, 0.2)"}`,
+          boxShadow: `0 15px 35px ${mode === "upload" ? "rgba(5, 150, 105, 0.12)" : "rgba(37, 99, 235, 0.12)"}`,
+          border: `1.5px solid ${mode === "upload" ? "rgba(5, 150, 105, 0.25)" : "rgba(37, 99, 235, 0.2)"}`,
           transition: "all 0.35s ease"
         }}
       >
         <nav style={{ display: "flex", alignItems: "center", gap: "18px" }}>
-          <FlipLink href="/" color="#0f111a" hoverColor={isFinished ? "#16a34a" : "#2563eb"}>{t.navHome}</FlipLink>
-          <FlipLink href="/#stats" color="#475569" hoverColor={isFinished ? "#16a34a" : "#2563eb"}>{t.navStats}</FlipLink>
-          <FlipLink href="/#about" color="#475569" hoverColor={isFinished ? "#16a34a" : "#2563eb"}>{t.navAbout}</FlipLink>
-          <FlipLink href="/#experience" color="#475569" hoverColor={isFinished ? "#16a34a" : "#2563eb"}>{t.navExperience}</FlipLink>
-          <FlipLink href="/#tools" color="#475569" hoverColor={isFinished ? "#16a34a" : "#2563eb"}>{t.navTools}</FlipLink>
-          <FlipLink href="/#education" color="#475569" hoverColor={isFinished ? "#16a34a" : "#2563eb"}>{t.navEducation}</FlipLink>
-          <FlipLink href="/#contact" color="#475569" hoverColor={isFinished ? "#16a34a" : "#2563eb"}>{t.navContact}</FlipLink>
+          <FlipLink href="/" color="#0f111a" hoverColor={activeColor}>{t.navHome}</FlipLink>
+          <FlipLink href="/#stats" color="#475569" hoverColor={activeColor}>{t.navStats}</FlipLink>
+          <FlipLink href="/#about" color="#475569" hoverColor={activeColor}>{t.navAbout}</FlipLink>
+          <FlipLink href="/#experience" color="#475569" hoverColor={activeColor}>{t.navExperience}</FlipLink>
+          <FlipLink href="/#tools" color="#475569" hoverColor={activeColor}>{t.navTools}</FlipLink>
+          <FlipLink href="/#education" color="#475569" hoverColor={activeColor}>{t.navEducation}</FlipLink>
+          <FlipLink href="/#contact" color="#475569" hoverColor={activeColor}>{t.navContact}</FlipLink>
         </nav>
 
         <a
@@ -965,7 +1122,7 @@ export default function ImageDownloaderPage() {
           paddingBottom: "40px",
         }}
       >
-        {/* HEADER TITLE CARD */}
+        {/* HEADER TITLE & MODE SWITCHER CARD */}
         <div
           style={{
             background: "#ffffff",
@@ -979,62 +1136,259 @@ export default function ImageDownloaderPage() {
         >
           <h1
             style={{
-              fontSize: isDesktop ? "38px" : "26px",
+              fontSize: isDesktop ? "36px" : "24px",
               fontWeight: "900",
               color: "#0f111a",
               marginBottom: "8px",
               letterSpacing: "-0.02em",
             }}
           >
-            {t.title}
+            {mode === "download" ? t.titleDownload : t.titleUpload}
           </h1>
           <p
             style={{
               fontSize: isDesktop ? "15px" : "13.5px",
               color: "#475569",
               fontWeight: "600",
-              marginBottom: "20px",
+              marginBottom: "24px",
             }}
           >
-            {t.subtitle}
+            {mode === "download" ? t.subtitleDownload : t.subtitleUpload}
           </p>
 
-          <button
-            onClick={handleDownloadSample}
+          {/* MODE TOGGLE PILLS (MATCHING TEKNO) */}
+          <div
             style={{
-              background: "#f1f5f9",
-              border: "1px solid #cbd5e1",
-              color: "#2563eb",
-              padding: "8px 20px",
-              borderRadius: "50px",
-              fontSize: "13px",
-              fontWeight: "800",
-              cursor: "pointer",
               display: "inline-flex",
-              alignItems: "center",
+              background: "#f1f5f9",
+              padding: "5px",
+              borderRadius: "50px",
+              border: "1px solid #e2e8f0",
               gap: "6px",
+              marginBottom: mode === "download" ? "15px" : "0",
             }}
           >
-            {t.downloadSample}
-          </button>
+            <button
+              onClick={() => setMode("download")}
+              style={{
+                background: mode === "download" ? "#2563eb" : "transparent",
+                color: mode === "download" ? "#ffffff" : "#475569",
+                border: "none",
+                padding: "10px 24px",
+                borderRadius: "50px",
+                fontSize: "14px",
+                fontWeight: "800",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+              }}
+            >
+              {t.modeDownload}
+            </button>
+            <button
+              onClick={() => setMode("upload")}
+              style={{
+                background: mode === "upload" ? "#059669" : "transparent",
+                color: mode === "upload" ? "#ffffff" : "#475569",
+                border: "none",
+                padding: "10px 24px",
+                borderRadius: "50px",
+                fontSize: "14px",
+                fontWeight: "800",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+              }}
+            >
+              {t.modeUpload}
+            </button>
+          </div>
+
+          {mode === "download" && (
+            <div style={{ marginTop: "12px" }}>
+              <button
+                onClick={handleDownloadSample}
+                style={{
+                  background: "#f8fafc",
+                  border: "1px solid #cbd5e1",
+                  color: "#2563eb",
+                  padding: "7px 18px",
+                  borderRadius: "50px",
+                  fontSize: "12.5px",
+                  fontWeight: "800",
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                {t.downloadSample}
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* UPLOAD & SETTINGS CARD */}
-        <div
-          style={{
-            background: "#ffffff",
-            padding: isDesktop ? "35px 40px" : "25px 20px",
-            borderRadius: "28px",
-            boxShadow: "0 10px 40px rgba(0, 0, 0, 0.04)",
-            border: "1px solid rgba(15, 17, 26, 0.06)",
-            marginBottom: "30px",
-          }}
-        >
-          {!file ? (
+        {/* --- MODE 1 CONTENT: DOWNLOAD FROM EXCEL --- */}
+        {mode === "download" && (
+          <div
+            style={{
+              background: "#ffffff",
+              padding: isDesktop ? "35px 40px" : "25px 20px",
+              borderRadius: "28px",
+              boxShadow: "0 10px 40px rgba(0, 0, 0, 0.04)",
+              border: "1px solid rgba(15, 17, 26, 0.06)",
+              marginBottom: "30px",
+            }}
+          >
+            {!file ? (
+              <label
+                style={{
+                  background: "#f8fafc",
+                  border: "2px dashed #cbd5e1",
+                  borderRadius: "24px",
+                  padding: isDesktop ? "50px 30px" : "35px 20px",
+                  textAlign: "center",
+                  cursor: "pointer",
+                  transition: "border-color 0.3s ease",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+              >
+                <input
+                  type="file"
+                  accept=".xlsx,.xls,.csv"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      handleFileUpload(e.target.files[0]);
+                    }
+                  }}
+                  style={{ display: "none" }}
+                />
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+                <h3 style={{ fontSize: isDesktop ? "18px" : "15.5px", fontWeight: "800", color: "#0f111a", margin: 0 }}>
+                  {t.dropTitle}
+                </h3>
+                <span style={{ fontSize: "13px", fontWeight: "600", color: "#64748b" }}>
+                  {t.dropHint}
+                </span>
+              </label>
+            ) : (
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "15px", paddingBottom: "22px", borderBottom: "1px solid #f1f5f9" }}>
+                  <div>
+                    <span style={{ fontSize: "12px", fontWeight: "800", color: "#2563eb", textTransform: "uppercase" }}>{t.activeFile}</span>
+                    <h3 style={{ fontSize: "18px", fontWeight: "900", color: "#0f111a", marginTop: "2px" }}>{file.name}</h3>
+                  </div>
+                  <button
+                    onClick={() => { setFile(null); setColumns([]); setItemsData([]); }}
+                    style={{
+                      background: "#fee2e2",
+                      color: "#dc2626",
+                      border: "1px solid #fca5a5",
+                      padding: "7px 16px",
+                      borderRadius: "30px",
+                      fontSize: "12.5px",
+                      fontWeight: "800",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {t.changeFile}
+                  </button>
+                </div>
+
+                {/* COLUMN MAPPINGS */}
+                {columns.length > 0 && (
+                  <div style={{ marginTop: "25px" }}>
+                    <h4 style={{ fontSize: "17px", fontWeight: "900", color: "#0f111a", marginBottom: "16px" }}>
+                      {t.settingsTitle}
+                    </h4>
+
+                    {/* NAME COLUMN SELECTOR */}
+                    <div style={{ marginBottom: "20px" }}>
+                      <label style={{ display: "block", fontSize: "13.5px", fontWeight: "800", color: "#334155", marginBottom: "8px" }}>
+                        {t.nameColLabel}
+                      </label>
+                      <select
+                        value={nameCol}
+                        onChange={(e) => handleNameColChange(Number(e.target.value))}
+                        style={{
+                          width: "100%",
+                          maxWidth: "400px",
+                          background: "#f8fafc",
+                          color: "#0f111a",
+                          padding: "12px 16px",
+                          borderRadius: "14px",
+                          border: "1px solid #cbd5e1",
+                          fontSize: "14px",
+                          fontWeight: "700",
+                          outline: "none",
+                        }}
+                      >
+                        {columns.map((col, idx) => (
+                          <option key={idx} value={idx}>
+                            {col}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* URL COLUMNS CHECKBOXES */}
+                    <div>
+                      <label style={{ display: "block", fontSize: "13.5px", fontWeight: "800", color: "#334155", marginBottom: "10px" }}>
+                        {t.urlColsLabel}
+                      </label>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                        {columns.map((col, idx) => {
+                          const isSelected = selectedUrlCols.includes(idx);
+                          return (
+                            <button
+                              key={idx}
+                              onClick={() => handleUrlColToggle(idx)}
+                              style={{
+                                background: isSelected ? "#2563eb" : "#f1f5f9",
+                                color: isSelected ? "#ffffff" : "#475569",
+                                border: isSelected ? "1px solid #2563eb" : "1px solid #e2e8f0",
+                                padding: "8px 16px",
+                                borderRadius: "14px",
+                                fontSize: "13px",
+                                fontWeight: "700",
+                                cursor: "pointer",
+                                transition: "all 0.2s ease",
+                              }}
+                            >
+                              {isSelected ? "✓ " : ""}{col}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* --- MODE 2 CONTENT: UPLOAD IMAGES TO LINKS --- */}
+        {mode === "upload" && (
+          <div
+            style={{
+              background: "#ffffff",
+              padding: isDesktop ? "35px 40px" : "25px 20px",
+              borderRadius: "28px",
+              boxShadow: "0 10px 40px rgba(0, 0, 0, 0.04)",
+              border: "1px solid rgba(15, 17, 26, 0.06)",
+              marginBottom: "30px",
+            }}
+          >
             <label
               style={{
-                background: "#f8fafc",
-                border: "2px dashed #cbd5e1",
+                background: "#f0fdf4",
+                border: "2px dashed #86efac",
                 borderRadius: "24px",
                 padding: isDesktop ? "50px 30px" : "35px 20px",
                 textAlign: "center",
@@ -1048,200 +1402,106 @@ export default function ImageDownloaderPage() {
             >
               <input
                 type="file"
-                accept=".xlsx,.xls,.csv"
-                onChange={(e) => {
-                  if (e.target.files && e.target.files[0]) {
-                    handleFileUpload(e.target.files[0]);
-                  }
-                }}
+                multiple
+                accept="image/*"
+                onChange={(e) => handleUploadFilesSelected(e.target.files)}
                 style={{ display: "none" }}
               />
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
               </svg>
               <h3 style={{ fontSize: isDesktop ? "18px" : "15.5px", fontWeight: "800", color: "#0f111a", margin: 0 }}>
-                {t.dropTitle}
+                {t.dropImagesTitle}
               </h3>
               <span style={{ fontSize: "13px", fontWeight: "600", color: "#64748b" }}>
-                {t.dropHint}
+                {t.dropImagesHint}
               </span>
             </label>
-          ) : (
-            <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "15px", paddingBottom: "22px", borderBottom: "1px solid #f1f5f9" }}>
-                <div>
-                  <span style={{ fontSize: "12px", fontWeight: "800", color: "#2563eb", textTransform: "uppercase" }}>{t.activeFile}</span>
-                  <h3 style={{ fontSize: "18px", fontWeight: "900", color: "#0f111a", marginTop: "2px" }}>{file.name}</h3>
-                </div>
-                <button
-                  onClick={() => { setFile(null); setColumns([]); setItemsData([]); }}
-                  style={{
-                    background: "#fee2e2",
-                    color: "#dc2626",
-                    border: "1px solid #fca5a5",
-                    padding: "7px 16px",
-                    borderRadius: "30px",
-                    fontSize: "12.5px",
-                    fontWeight: "800",
-                    cursor: "pointer",
-                  }}
-                >
-                  {t.changeFile}
-                </button>
-              </div>
 
-              {/* COLUMN MAPPINGS */}
-              {columns.length > 0 && (
-                <div style={{ marginTop: "25px" }}>
-                  <h4 style={{ fontSize: "17px", fontWeight: "900", color: "#0f111a", marginBottom: "16px" }}>
-                    {t.settingsTitle}
-                  </h4>
-
-                  {/* NAME COLUMN SELECTOR */}
-                  <div style={{ marginBottom: "20px" }}>
-                    <label style={{ display: "block", fontSize: "13.5px", fontWeight: "800", color: "#334155", marginBottom: "8px" }}>
-                      {t.nameColLabel}
-                    </label>
-                    <select
-                      value={nameCol}
-                      onChange={(e) => handleNameColChange(Number(e.target.value))}
-                      style={{
-                        width: "100%",
-                        maxWidth: "400px",
-                        background: "#f8fafc",
-                        color: "#0f111a",
-                        padding: "12px 16px",
-                        borderRadius: "14px",
-                        border: "1px solid #cbd5e1",
-                        fontSize: "14px",
-                        fontWeight: "700",
-                        outline: "none",
-                      }}
-                    >
-                      {columns.map((col, idx) => (
-                        <option key={idx} value={idx}>
-                          {col}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* URL COLUMNS CHECKBOXES */}
+            {/* SELECTED FILES SUMMARY & ACTION */}
+            {uploadFiles.length > 0 && (
+              <div style={{ marginTop: "25px", paddingTop: "20px", borderTop: "1px solid #f1f5f9" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "15px", marginBottom: "20px" }}>
                   <div>
-                    <label style={{ display: "block", fontSize: "13.5px", fontWeight: "800", color: "#334155", marginBottom: "10px" }}>
-                      {t.urlColsLabel}
-                    </label>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                      {columns.map((col, idx) => {
-                        const isSelected = selectedUrlCols.includes(idx);
-                        return (
-                          <button
-                            key={idx}
-                            onClick={() => handleUrlColToggle(idx)}
-                            style={{
-                              background: isSelected ? "#2563eb" : "#f1f5f9",
-                              color: isSelected ? "#ffffff" : "#475569",
-                              border: isSelected ? "1px solid #2563eb" : "1px solid #e2e8f0",
-                              padding: "8px 16px",
-                              borderRadius: "14px",
-                              fontSize: "13px",
-                              fontWeight: "700",
-                              cursor: "pointer",
-                              display: "inline-flex",
-                              alignItems: "center",
-                              gap: "6px",
-                              transition: "all 0.2s ease",
-                            }}
-                          >
-                            <span>{isSelected ? "✓" : "+"}</span>
-                            <span>{col}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
+                    <span style={{ fontSize: "14px", fontWeight: "800", color: "#059669" }}>
+                      {t.selectedImagesCount} {uploadFiles.length}
+                    </span>
+                    <span style={{ fontSize: "13px", fontWeight: "600", color: "#64748b", marginInlineStart: "12px" }}>
+                      ({t.totalUploadSize} {(uploadFiles.reduce((acc, f) => acc + f.size, 0) / (1024 * 1024)).toFixed(2)} MB)
+                    </span>
                   </div>
+
+                  <button
+                    onClick={() => { setUploadFiles([]); setUploadedResults([]); }}
+                    style={{
+                      background: "#fee2e2",
+                      color: "#dc2626",
+                      border: "1px solid #fca5a5",
+                      padding: "6px 14px",
+                      borderRadius: "20px",
+                      fontSize: "12px",
+                      fontWeight: "800",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {lang === "AR" ? "إلغاء وتفريغ القائمة" : "Clear List"}
+                  </button>
                 </div>
-              )}
-            </div>
-          )}
-        </div>
 
-        {/* PROGRESS BAR */}
-        {isProcessing && (
-          <div
-            style={{
-              background: "#ffffff",
-              padding: "26px 30px",
-              borderRadius: "24px",
-              boxShadow: "0 10px 40px rgba(0, 0, 0, 0.04)",
-              border: "1.5px solid #93c5fd",
-              marginBottom: "30px",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
-              <span style={{ fontSize: "15.5px", fontWeight: "800", color: "#2563eb" }}>{t.processing}</span>
-              <span style={{ fontSize: "17px", fontWeight: "900", color: "#0f111a" }}>{progressPercent}%</span>
-            </div>
+                {/* START UPLOAD BUTTON */}
+                {!isUploading && uploadedResults.length === 0 && (
+                  <button
+                    onClick={handleStartBulkUpload}
+                    style={{
+                      width: "100%",
+                      background: "#059669",
+                      color: "#ffffff",
+                      border: "none",
+                      padding: "16px",
+                      borderRadius: "18px",
+                      fontSize: "16px",
+                      fontWeight: "900",
+                      cursor: "pointer",
+                      boxShadow: "0 10px 25px rgba(5, 150, 105, 0.35)",
+                      transition: "all 0.3s ease",
+                    }}
+                  >
+                    {t.startUploadBtn} ({uploadFiles.length})
+                  </button>
+                )}
 
-            <div style={{ width: "100%", height: "10px", background: "#e2e8f0", borderRadius: "20px", overflow: "hidden", marginBottom: "10px" }}>
-              <div style={{ width: `${progressPercent}%`, height: "100%", background: "#2563eb", transition: "width 0.2s ease" }} />
-            </div>
-
-            <div style={{ display: "flex", justifyContent: "space-between", color: "#64748b", fontSize: "13px", fontWeight: "600" }}>
-              <span>{currentProgressText}</span>
-              {downloadStats && (
-                <span>{downloadStats.downloaded} / {downloadStats.total}</span>
-              )}
-            </div>
+                {/* UPLOADING PROGRESS BAR */}
+                {isUploading && (
+                  <div style={{ background: "#f8fafc", padding: "20px", borderRadius: "18px", border: "1px solid #e2e8f0", marginTop: "15px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px", fontWeight: "800", marginBottom: "8px" }}>
+                      <span style={{ color: "#059669" }}>{t.uploading}</span>
+                      <span style={{ color: "#0f111a" }}>{uploadProgress}%</span>
+                    </div>
+                    <div style={{ width: "100%", height: "10px", background: "#e2e8f0", borderRadius: "10px", overflow: "hidden" }}>
+                      <div
+                        style={{
+                          width: `${uploadProgress}%`,
+                          height: "100%",
+                          background: "linear-gradient(90deg, #059669, #10b981)",
+                          borderRadius: "10px",
+                          transition: "width 0.3s ease",
+                        }}
+                      />
+                    </div>
+                    <p style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginTop: "8px", margin: 0 }}>
+                      {currentUploadText}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
-        {/* SUCCESS MESSAGE */}
-        {isFinished && downloadStats && (
-          <div
-            style={{
-              background: "#ecfdf5",
-              border: "1.5px solid #6ee7b7",
-              borderRadius: "24px",
-              padding: "22px 30px",
-              marginBottom: "30px",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexWrap: "wrap",
-              gap: "15px",
-            }}
-          >
-            <div>
-              <h4 style={{ fontSize: "17.5px", fontWeight: "900", color: "#065f46" }}>{t.finishedTitle}</h4>
-              <p style={{ color: "#047857", fontSize: "13.5px", marginTop: "2px", fontWeight: "600" }}>
-                {downloadStats.downloaded} files packaged into ZIP.
-              </p>
-            </div>
-
-            <button
-              onClick={handleStartDownload}
-              style={{
-                background: "#059669",
-                color: "#ffffff",
-                padding: "9px 22px",
-                borderRadius: "30px",
-                fontSize: "13.5px",
-                fontWeight: "800",
-                border: "none",
-                cursor: "pointer",
-                boxShadow: "0 4px 14px rgba(5, 150, 105, 0.3)",
-              }}
-            >
-              {t.downloadAgain}
-            </button>
-          </div>
-        )}
-
-        {/* ITEMS PREVIEW & ACTION TABLE */}
-        {itemsData.length > 0 && (
+        {/* --- MODE 2: UPLOADED RESULTS TABLE & EXPORT --- */}
+        {mode === "upload" && uploadedResults.length > 0 && (
           <div
             style={{
               background: "#ffffff",
@@ -1249,66 +1509,243 @@ export default function ImageDownloaderPage() {
               borderRadius: "28px",
               boxShadow: "0 10px 40px rgba(0, 0, 0, 0.04)",
               border: "1px solid rgba(15, 17, 26, 0.06)",
+              marginBottom: "30px",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", flexWrap: "wrap", gap: "15px" }}>
+            {/* SUCCESS BANNER & ACTION BUTTONS */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "15px", marginBottom: "25px" }}>
               <div>
-                <h3 style={{ fontSize: "19px", fontWeight: "900", color: "#0f111a" }}>{t.previewTitle}</h3>
-                <span style={{ color: "#64748b", fontSize: "13.5px", fontWeight: "600" }}>
-                  {t.totalItems} <strong style={{ color: "#0f111a" }}>{itemsData.length}</strong> • {t.totalImages} <strong style={{ color: "#2563eb" }}>{totalExtractedImages}</strong>
+                <h3 style={{ fontSize: "20px", fontWeight: "900", color: "#059669", margin: 0 }}>
+                  ✓ {t.uploadSuccessTitle}
+                </h3>
+                <span style={{ fontSize: "13.5px", fontWeight: "700", color: "#475569", marginTop: "4px", display: "block" }}>
+                  {lang === "AR" ? `تم رفع ${uploadedResults.length} صورة بنجاح والحصول على روابط مباشرة` : `Successfully uploaded ${uploadedResults.length} images`}
                 </span>
               </div>
 
-              <button
-                disabled={isProcessing || totalExtractedImages === 0}
-                onClick={handleStartDownload}
-                style={{
-                  background: isProcessing ? "#94a3b8" : "#2563eb",
-                  color: "#ffffff",
-                  padding: "13px 32px",
-                  borderRadius: "50px",
-                  fontSize: "14.5px",
-                  fontWeight: "800",
-                  border: "none",
-                  cursor: isProcessing ? "not-allowed" : "pointer",
-                  boxShadow: "0 8px 25px rgba(37, 99, 235, 0.35)",
-                  transition: "all 0.2s ease",
-                }}
-              >
-                {isProcessing ? t.processing : t.startBtn}
-              </button>
+              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                <button
+                  onClick={handleCopyAllUrls}
+                  style={{
+                    background: copiedAll ? "#059669" : "#f1f5f9",
+                    color: copiedAll ? "#ffffff" : "#0f111a",
+                    border: "1px solid #cbd5e1",
+                    padding: "10px 20px",
+                    borderRadius: "50px",
+                    fontSize: "13.5px",
+                    fontWeight: "800",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  {copiedAll ? t.copiedAllMsg : t.copyAllBtn}
+                </button>
+
+                <button
+                  onClick={handleExportUploadedExcel}
+                  style={{
+                    background: "#059669",
+                    color: "#ffffff",
+                    border: "none",
+                    padding: "10px 22px",
+                    borderRadius: "50px",
+                    fontSize: "13.5px",
+                    fontWeight: "800",
+                    cursor: "pointer",
+                    boxShadow: "0 4px 15px rgba(5, 150, 105, 0.3)",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  {t.exportExcelBtn}
+                </button>
+              </div>
             </div>
 
-            {/* FULL SCROLLABLE TABLE WITH ALL ROWS */}
-            <div style={{ borderRadius: "18px", overflow: "hidden", border: "1px solid #e2e8f0" }}>
-              <div style={{ maxHeight: "480px", overflowY: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse", textAlign: lang === "AR" ? "right" : "left", fontSize: "13.5px" }}>
-                  <thead>
-                    <tr style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0", color: "#475569", fontWeight: "800" }}>
-                      <th style={{ padding: "13px 18px", width: "60px" }}>{t.colIndex}</th>
-                      <th style={{ padding: "13px 18px" }}>{t.colName}</th>
-                      <th style={{ padding: "13px 18px", width: "110px" }}>{t.colCount}</th>
-                      <th style={{ padding: "13px 18px" }}>{t.colUrls}</th>
+            {/* RESULTS TABLE */}
+            <div style={{ overflowX: "auto", borderRadius: "18px", border: "1px solid #f1f5f9" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: lang === "AR" ? "right" : "left", fontSize: "13.5px" }}>
+                <thead>
+                  <tr style={{ background: "#f8fafc", color: "#475569", borderBottom: "1px solid #e2e8f0" }}>
+                    <th style={{ padding: "14px 18px", fontWeight: "800" }}>{t.colIndex}</th>
+                    <th style={{ padding: "14px 18px", fontWeight: "800" }}>{t.colThumb}</th>
+                    <th style={{ padding: "14px 18px", fontWeight: "800" }}>{t.colName}</th>
+                    <th style={{ padding: "14px 18px", fontWeight: "800" }}>{t.colDirectUrl}</th>
+                    <th style={{ padding: "14px 18px", fontWeight: "800", textAlign: "center" }}>{t.colCopy}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {uploadedResults.map((item, idx) => (
+                    <tr key={idx} style={{ borderBottom: "1px solid #f1f5f9", background: idx % 2 === 0 ? "#ffffff" : "#fbfcfe" }}>
+                      <td style={{ padding: "12px 18px", fontWeight: "700", color: "#94a3b8" }}>{idx + 1}</td>
+                      <td style={{ padding: "12px 18px" }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={item.direct_url}
+                          alt={item.name}
+                          style={{ width: "42px", height: "42px", objectFit: "cover", borderRadius: "8px", border: "1px solid #e2e8f0" }}
+                        />
+                      </td>
+                      <td style={{ padding: "12px 18px", fontWeight: "800", color: "#0f111a" }}>{item.name}</td>
+                      <td style={{ padding: "12px 18px", color: "#059669", fontWeight: "700", maxWidth: "380px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        <a href={item.direct_url} target="_blank" rel="noopener noreferrer" style={{ color: "#059669", textDecoration: "none" }}>
+                          {item.direct_url}
+                        </a>
+                      </td>
+                      <td style={{ padding: "12px 18px", textAlign: "center" }}>
+                        <button
+                          onClick={() => handleCopySingleUrl(item.direct_url, idx)}
+                          style={{
+                            background: copiedIndex === idx ? "#059669" : "#f1f5f9",
+                            color: copiedIndex === idx ? "#ffffff" : "#475569",
+                            border: "1px solid #cbd5e1",
+                            padding: "5px 12px",
+                            borderRadius: "12px",
+                            fontSize: "12px",
+                            fontWeight: "800",
+                            cursor: "pointer",
+                            transition: "all 0.2s ease",
+                          }}
+                        >
+                          {copiedIndex === idx ? (lang === "AR" ? "تم النسخ" : "Copied!") : (lang === "AR" ? "نسخ" : "Copy")}
+                        </button>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {itemsData.map((item, idx) => (
-                      <tr key={idx} style={{ borderBottom: "1px solid #f1f5f9", background: idx % 2 === 0 ? "#ffffff" : "#fcfcfd" }}>
-                        <td style={{ padding: "12px 18px", color: "#94a3b8", fontWeight: "700" }}>{idx + 1}</td>
-                        <td style={{ padding: "12px 18px", color: "#0f111a", fontWeight: "800" }}>{item.name}</td>
-                        <td style={{ padding: "12px 18px" }}>
-                          <span style={{ background: "#dbeafe", color: "#1d4ed8", padding: "4px 10px", borderRadius: "12px", fontSize: "12px", fontWeight: "800" }}>
-                            {item.urls.length}
-                          </span>
-                        </td>
-                        <td style={{ padding: "12px 18px", color: "#64748b", maxWidth: "420px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                          {item.urls.join(" , ")}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* --- MODE 1: DOWNLOAD PREVIEW & ACTION --- */}
+        {mode === "download" && itemsData.length > 0 && (
+          <div
+            style={{
+              background: "#ffffff",
+              padding: isDesktop ? "35px 40px" : "25px 20px",
+              borderRadius: "28px",
+              boxShadow: "0 10px 40px rgba(0, 0, 0, 0.04)",
+              border: "1px solid rgba(15, 17, 26, 0.06)",
+              marginBottom: "30px",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "15px", marginBottom: "20px" }}>
+              <div>
+                <h3 style={{ fontSize: "20px", fontWeight: "900", color: "#0f111a", margin: 0 }}>
+                  {t.previewTitle}
+                </h3>
+                <span style={{ fontSize: "13.5px", fontWeight: "700", color: "#475569", marginTop: "4px", display: "block" }}>
+                  {t.totalItems} <strong style={{ color: "#2563eb" }}>{itemsData.length}</strong> | {t.totalImages} <strong style={{ color: "#2563eb" }}>{totalExtractedImages}</strong>
+                </span>
               </div>
+
+              {!isProcessing && !isFinished && (
+                <button
+                  onClick={handleStartDownload}
+                  style={{
+                    background: "#2563eb",
+                    color: "#ffffff",
+                    border: "none",
+                    padding: "14px 32px",
+                    borderRadius: "50px",
+                    fontSize: "15px",
+                    fontWeight: "900",
+                    cursor: "pointer",
+                    boxShadow: "0 8px 25px rgba(37, 99, 235, 0.35)",
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  {t.startBtn} ({totalExtractedImages})
+                </button>
+              )}
+            </div>
+
+            {/* PROGRESS BAR */}
+            {isProcessing && (
+              <div style={{ background: "#f8fafc", padding: "20px", borderRadius: "18px", border: "1px solid #e2e8f0", marginBottom: "20px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px", fontWeight: "800", marginBottom: "8px" }}>
+                  <span style={{ color: "#2563eb" }}>{t.processing}</span>
+                  <span style={{ color: "#0f111a" }}>{progressPercent}%</span>
+                </div>
+                <div style={{ width: "100%", height: "10px", background: "#e2e8f0", borderRadius: "10px", overflow: "hidden" }}>
+                  <div
+                    style={{
+                      width: `${progressPercent}%`,
+                      height: "100%",
+                      background: "linear-gradient(90deg, #2563eb, #3b82f6)",
+                      borderRadius: "10px",
+                      transition: "width 0.3s ease",
+                    }}
+                  />
+                </div>
+                <p style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", marginTop: "8px", margin: 0 }}>
+                  {currentProgressText}
+                </p>
+              </div>
+            )}
+
+            {/* FINISHED BANNER */}
+            {isFinished && downloadStats && (
+              <div style={{ background: "#f0fdf4", padding: "22px", borderRadius: "18px", border: "1px solid #bbf7d0", marginBottom: "20px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
+                  <div>
+                    <h4 style={{ fontSize: "16px", fontWeight: "900", color: "#166534", margin: 0 }}>
+                      ✓ {t.finishedTitle}
+                    </h4>
+                    <span style={{ fontSize: "13px", fontWeight: "700", color: "#15803d", marginTop: "4px", display: "block" }}>
+                      {lang === "AR"
+                        ? `تم تنزيل ${downloadStats.downloaded} صورة بنجاح (فشل: ${downloadStats.failed}) من إجمالي ${downloadStats.total}`
+                        : `Downloaded ${downloadStats.downloaded} images (${downloadStats.failed} failed) of ${downloadStats.total}`}
+                    </span>
+                  </div>
+                  <button
+                    onClick={handleStartDownload}
+                    style={{
+                      background: "#16a34a",
+                      color: "#ffffff",
+                      border: "none",
+                      padding: "10px 22px",
+                      borderRadius: "30px",
+                      fontSize: "13px",
+                      fontWeight: "800",
+                      cursor: "pointer",
+                      boxShadow: "0 4px 12px rgba(22, 163, 74, 0.3)",
+                    }}
+                  >
+                    {t.downloadAgain}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* TABLE OF ITEMS (FULL DISPLAY) */}
+            <div style={{ overflowX: "auto", borderRadius: "18px", border: "1px solid #f1f5f9" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: lang === "AR" ? "right" : "left", fontSize: "13.5px" }}>
+                <thead>
+                  <tr style={{ background: "#f8fafc", color: "#475569", borderBottom: "1px solid #e2e8f0" }}>
+                    <th style={{ padding: "14px 18px", fontWeight: "800" }}>{t.colIndex}</th>
+                    <th style={{ padding: "14px 18px", fontWeight: "800" }}>{t.colName}</th>
+                    <th style={{ padding: "14px 18px", fontWeight: "800" }}>{t.colCount}</th>
+                    <th style={{ padding: "14px 18px", fontWeight: "800" }}>{t.colUrls}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {itemsData.map((item, idx) => (
+                    <tr key={idx} style={{ borderBottom: "1px solid #f1f5f9", background: idx % 2 === 0 ? "#ffffff" : "#fbfcfe" }}>
+                      <td style={{ padding: "12px 18px", fontWeight: "700", color: "#94a3b8" }}>{idx + 1}</td>
+                      <td style={{ padding: "12px 18px", fontWeight: "800", color: "#0f111a" }}>{item.name}</td>
+                      <td style={{ padding: "12px 18px" }}>
+                        <span style={{ background: "#dbeafe", color: "#1d4ed8", padding: "4px 10px", borderRadius: "12px", fontSize: "12px", fontWeight: "800" }}>
+                          {item.urls.length}
+                        </span>
+                      </td>
+                      <td style={{ padding: "12px 18px", color: "#64748b", maxWidth: "420px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {item.urls.join(" , ")}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         )}
@@ -1419,26 +1856,24 @@ export default function ImageDownloaderPage() {
                   </p>
                 </div>
               ) : (
-                <form
-                  onSubmit={handleDrawerFormSubmit}
-                  style={{ display: "flex", flexDirection: "column", gap: "18px" }}
-                >
+                <form onSubmit={handleDrawerFormSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                   <div>
-                    <label style={{ display: "block", fontSize: "13.5px", fontWeight: "800", marginBottom: "6px", color: "#0f111a" }}>
-                      {t.nameLabel}
+                    <label style={{ display: "block", fontSize: "14px", fontWeight: "800", color: "#334155", marginBottom: "8px" }}>
+                      {t.nameLabel} *
                     </label>
                     <input
                       required
                       type="text"
                       name="client_name"
-                      placeholder={lang === "AR" ? "حيدر من تكنو ستور" : "Haider from Techno Store"}
+                      placeholder={lang === "AR" ? "مثال: علي محمد - شركة النور" : "e.g. John Doe - Acme Corp"}
                       style={{
                         width: "100%",
-                        padding: "13px 16px",
-                        borderRadius: "12px",
-                        border: "1px solid #e2e8f0",
+                        padding: "14px 18px",
                         background: "#f8fafc",
+                        border: "1.5px solid #e2e8f0",
+                        borderRadius: "14px",
                         fontSize: "14.5px",
+                        fontWeight: "600",
                         color: "#0f111a",
                         outline: "none",
                       }}
@@ -1446,21 +1881,22 @@ export default function ImageDownloaderPage() {
                   </div>
 
                   <div>
-                    <label style={{ display: "block", fontSize: "13.5px", fontWeight: "800", marginBottom: "6px", color: "#0f111a" }}>
-                      {t.emailLabel}
+                    <label style={{ display: "block", fontSize: "14px", fontWeight: "800", color: "#334155", marginBottom: "8px" }}>
+                      {t.emailLabel} *
                     </label>
                     <input
                       required
                       type="email"
                       name="client_email"
-                      placeholder="haider@example.com"
+                      placeholder="name@company.com"
                       style={{
                         width: "100%",
-                        padding: "13px 16px",
-                        borderRadius: "12px",
-                        border: "1px solid #e2e8f0",
+                        padding: "14px 18px",
                         background: "#f8fafc",
+                        border: "1.5px solid #e2e8f0",
+                        borderRadius: "14px",
                         fontSize: "14.5px",
+                        fontWeight: "600",
                         color: "#0f111a",
                         outline: "none",
                       }}
@@ -1468,54 +1904,48 @@ export default function ImageDownloaderPage() {
                   </div>
 
                   <div>
-                    <label style={{ display: "block", fontSize: "13.5px", fontWeight: "800", marginBottom: "6px", color: "#0f111a" }}>
-                      {t.projectLabel}
+                    <label style={{ display: "block", fontSize: "14px", fontWeight: "800", color: "#334155", marginBottom: "8px" }}>
+                      {t.projectLabel} *
                     </label>
                     <textarea
                       required
-                      rows={4}
                       name="project_details"
-                      placeholder={lang === "AR" ? "اكتب تفاصيل مشروعك أو فكرتك المميزة هنا..." : "Write your project details or great ideas here..."}
+                      rows={4}
+                      placeholder={lang === "AR" ? "أخبرنا عن فكرة مشروعك والمهام المطلوبة..." : "Tell us about your project requirements..."}
                       style={{
                         width: "100%",
-                        padding: "13px 16px",
-                        borderRadius: "12px",
-                        border: "1px solid #e2e8f0",
+                        padding: "14px 18px",
                         background: "#f8fafc",
+                        border: "1.5px solid #e2e8f0",
+                        borderRadius: "14px",
                         fontSize: "14.5px",
+                        fontWeight: "600",
                         color: "#0f111a",
                         outline: "none",
-                        resize: "none",
+                        resize: "vertical",
                       }}
-                    ></textarea>
+                    />
                   </div>
 
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #f1f5f9", paddingTop: "16px", marginTop: "6px" }}>
-                    <span style={{ fontSize: "12.5px", color: "#64748b", fontWeight: "700" }}>
-                      haider.m.shwkat@outlook.com
-                    </span>
-
-                    <button
-                      type="submit"
-                      className="awsmd-btn-glow"
-                      style={{
-                        background: "#0f111a",
-                        color: "#ffffff",
-                        padding: "12px 24px",
-                        borderRadius: "50px",
-                        border: "none",
-                        fontWeight: "800",
-                        fontSize: "14px",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "6px",
-                      }}
-                    >
-                      <span>{t.submitBtn}</span>
-                      <span style={{ fontSize: "16px" }}>←</span>
-                    </button>
-                  </div>
+                  <button
+                    type="submit"
+                    style={{
+                      marginTop: "10px",
+                      width: "100%",
+                      padding: "16px",
+                      background: activeColor,
+                      color: "#ffffff",
+                      border: "none",
+                      borderRadius: "16px",
+                      fontSize: "16px",
+                      fontWeight: "900",
+                      cursor: "pointer",
+                      boxShadow: activeGlow,
+                      transition: "transform 0.2s ease, background 0.3s ease",
+                    }}
+                  >
+                    {t.submitBtn}
+                  </button>
                 </form>
               )}
             </div>
