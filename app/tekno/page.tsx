@@ -846,21 +846,47 @@ export default function TeknoPage() {
               : "Enterprise data matching and inventory management platform"}
           </p>
 
-          {/* MODE TOGGLE PILLS */}
+          {/* LIQUID GLASS MORPHING MODE TOGGLE PILLS */}
           <div
             style={{
+              position: "relative",
               display: "inline-flex",
-              background: "#f1f5f9",
+              background: "rgba(241, 245, 249, 0.85)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
               padding: "5px",
               borderRadius: "50px",
-              border: "1px solid #e2e8f0",
-              gap: "6px",
+              border: "1.5px solid rgba(226, 232, 240, 0.9)",
+              boxShadow: "inset 0 2px 6px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.04)",
             }}
           >
+            {/* LIQUID GLASS SLIDING PILL */}
+            <div
+              style={{
+                position: "absolute",
+                top: "5px",
+                bottom: "5px",
+                width: "calc(50% - 5px)",
+                left: lang === "AR" ? (mode === "compare" ? "auto" : "5px") : (mode === "compare" ? "5px" : "auto"),
+                right: lang === "AR" ? (mode === "compare" ? "5px" : "auto") : (mode === "compare" ? "auto" : "5px"),
+                borderRadius: "50px",
+                background: mode === "compare"
+                  ? "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
+                  : "linear-gradient(135deg, #16a34a 0%, #15803d 100%)",
+                boxShadow: mode === "compare"
+                  ? "0 8px 25px rgba(37, 99, 235, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.5)"
+                  : "0 8px 25px rgba(22, 163, 74, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.5)",
+                transition: "all 0.45s cubic-bezier(0.34, 1.4, 0.64, 1)",
+                zIndex: 1,
+              }}
+            />
+
             <button
               onClick={() => setMode("compare")}
               style={{
-                background: mode === "compare" ? "#2563eb" : "transparent",
+                position: "relative",
+                zIndex: 2,
+                background: "transparent",
                 color: mode === "compare" ? "#ffffff" : "#475569",
                 border: "none",
                 padding: "10px 24px",
@@ -868,7 +894,7 @@ export default function TeknoPage() {
                 fontSize: "14px",
                 fontWeight: "800",
                 cursor: "pointer",
-                transition: "all 0.3s ease",
+                transition: "color 0.3s ease",
               }}
             >
               {lang === "AR" ? "وضع المقارنة (Compare Mode)" : "Compare Mode"}
@@ -876,7 +902,9 @@ export default function TeknoPage() {
             <button
               onClick={() => setMode("pull")}
               style={{
-                background: mode === "pull" ? "#16a34a" : "transparent",
+                position: "relative",
+                zIndex: 2,
+                background: "transparent",
                 color: mode === "pull" ? "#ffffff" : "#475569",
                 border: "none",
                 padding: "10px 24px",
@@ -884,7 +912,7 @@ export default function TeknoPage() {
                 fontSize: "14px",
                 fontWeight: "800",
                 cursor: "pointer",
-                transition: "all 0.3s ease",
+                transition: "color 0.3s ease",
               }}
             >
               {lang === "AR" ? "وضع سحب البيانات (Pull Data Mode)" : "Pull Data Mode"}

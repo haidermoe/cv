@@ -1156,22 +1156,48 @@ export default function ImageDownloaderPage() {
             {mode === "download" ? t.subtitleDownload : t.subtitleUpload}
           </p>
 
-          {/* MODE TOGGLE PILLS (MATCHING TEKNO) */}
+          {/* LIQUID GLASS MORPHING MODE TOGGLE PILLS */}
           <div
             style={{
+              position: "relative",
               display: "inline-flex",
-              background: "#f1f5f9",
+              background: "rgba(241, 245, 249, 0.85)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
               padding: "5px",
               borderRadius: "50px",
-              border: "1px solid #e2e8f0",
-              gap: "6px",
+              border: "1.5px solid rgba(226, 232, 240, 0.9)",
+              boxShadow: "inset 0 2px 6px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.04)",
               marginBottom: mode === "download" ? "15px" : "0",
             }}
           >
+            {/* LIQUID GLASS SLIDING PILL */}
+            <div
+              style={{
+                position: "absolute",
+                top: "5px",
+                bottom: "5px",
+                width: "calc(50% - 5px)",
+                left: lang === "AR" ? (mode === "download" ? "auto" : "5px") : (mode === "download" ? "5px" : "auto"),
+                right: lang === "AR" ? (mode === "download" ? "5px" : "auto") : (mode === "download" ? "auto" : "5px"),
+                borderRadius: "50px",
+                background: mode === "download"
+                  ? "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
+                  : "linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)",
+                boxShadow: mode === "download"
+                  ? "0 8px 25px rgba(37, 99, 235, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.5)"
+                  : "0 8px 25px rgba(220, 38, 38, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.5)",
+                transition: "all 0.45s cubic-bezier(0.34, 1.4, 0.64, 1)",
+                zIndex: 1,
+              }}
+            />
+
             <button
               onClick={() => setMode("download")}
               style={{
-                background: mode === "download" ? "#2563eb" : "transparent",
+                position: "relative",
+                zIndex: 2,
+                background: "transparent",
                 color: mode === "download" ? "#ffffff" : "#475569",
                 border: "none",
                 padding: "10px 24px",
@@ -1179,7 +1205,7 @@ export default function ImageDownloaderPage() {
                 fontSize: "14px",
                 fontWeight: "800",
                 cursor: "pointer",
-                transition: "all 0.3s ease",
+                transition: "color 0.3s ease",
               }}
             >
               {t.modeDownload}
@@ -1187,7 +1213,9 @@ export default function ImageDownloaderPage() {
             <button
               onClick={() => setMode("upload")}
               style={{
-                background: mode === "upload" ? "#dc2626" : "transparent",
+                position: "relative",
+                zIndex: 2,
+                background: "transparent",
                 color: mode === "upload" ? "#ffffff" : "#475569",
                 border: "none",
                 padding: "10px 24px",
@@ -1195,7 +1223,7 @@ export default function ImageDownloaderPage() {
                 fontSize: "14px",
                 fontWeight: "800",
                 cursor: "pointer",
-                transition: "all 0.3s ease",
+                transition: "color 0.3s ease",
               }}
             >
               {t.modeUpload}
