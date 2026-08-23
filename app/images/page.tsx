@@ -657,7 +657,46 @@ export default function ImageDownloaderPage() {
         </button>
       </div>
 
-      {/* Floating Pill Header Navigation */}
+      {/* INDEPENDENT FLOATING BRAND LOGO / NAME (TOP LEFT) */}
+      <div
+        className="desktop-header-nav"
+        style={{
+          position: "fixed",
+          top: "24px",
+          left: "32px",
+          zIndex: 1000,
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          background: "#ffffff",
+          padding: "10px 22px",
+          borderRadius: "50px",
+          boxShadow: "0 15px 35px rgba(0,0,0,0.12)",
+          border: "1px solid rgba(15, 17, 26, 0.08)"
+        }}
+      >
+        <Link
+          href="/"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            fontSize: "16px",
+            fontWeight: "900",
+            color: "#0f111a",
+            textDecoration: "none"
+          }}
+        >
+          <svg width="20" height="16" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="7" y="1" width="8" height="10" fill="#0f111a"/>
+            <rect x="0" y="13" width="16" height="7" fill="#0f111a"/>
+            <rect x="10" y="13" width="15" height="7" fill="#2563eb"/>
+          </svg>
+          <span>{t.logo}</span>
+        </Link>
+      </div>
+
+      {/* Floating Pill Header Navigation (CENTER) */}
       <header
         className="desktop-header-nav"
         style={{
@@ -676,17 +715,6 @@ export default function ImageDownloaderPage() {
           border: "1px solid rgba(15, 17, 26, 0.08)"
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "16px", fontWeight: "900", color: "#0f111a", paddingLeft: lang === "AR" ? "10px" : "0", paddingRight: lang === "EN" ? "10px" : "0", borderLeft: lang === "AR" ? "1px solid #e2e8f0" : "none", borderRight: lang === "EN" ? "1px solid #e2e8f0" : "none" }}>
-          <svg width="20" height="16" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="7" y="1" width="8" height="10" fill="#0f111a"/>
-            <rect x="0" y="13" width="16" height="7" fill="#0f111a"/>
-            <rect x="10" y="13" width="15" height="7" fill="#64748b"/>
-          </svg>
-          <Link href="/" style={{ textDecoration: "none", color: "#0f111a" }}>
-            {t.logo}
-          </Link>
-        </div>
-
         <nav style={{ display: "flex", alignItems: "center", gap: "18px" }}>
           <FlipLink href="/" color="#0f111a" hoverColor="#2563eb">{t.navHome}</FlipLink>
           <FlipLink href="/#stats" color="#475569" hoverColor="#2563eb">{t.navStats}</FlipLink>
