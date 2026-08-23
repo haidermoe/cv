@@ -269,6 +269,17 @@ export default function Home() {
     }, 500);
   };
 
+  const [isScrolledPastHero, setIsScrolledPastHero] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolledPastHero(window.scrollY > 300);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   useEffect(() => {
     const vids = document.querySelectorAll("video");
     vids.forEach((v) => {
@@ -437,15 +448,16 @@ export default function Home() {
             gap: "10px",
             fontSize: "19px",
             fontWeight: "900",
-            color: "#000000",
+            color: isScrolledPastHero ? "#ffffff" : "#000000",
             textDecoration: "none",
-            letterSpacing: "-0.01em"
+            letterSpacing: "-0.01em",
+            transition: "color 0.35s cubic-bezier(0.4, 0, 0.2, 1)"
           }}
         >
           <svg width="22" height="18" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="7" y="1" width="8" height="10" fill="#000000"/>
-            <rect x="0" y="13" width="16" height="7" fill="#000000"/>
-            <rect x="10" y="13" width="15" height="7" fill="#2563eb"/>
+            <rect x="7" y="1" width="8" height="10" fill={isScrolledPastHero ? "#ffffff" : "#000000"} style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
+            <rect x="0" y="13" width="16" height="7" fill={isScrolledPastHero ? "#ffffff" : "#000000"} style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
+            <rect x="10" y="13" width="15" height="7" fill="#2563eb" style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
           </svg>
           <span>{t.logo}</span>
         </Link>

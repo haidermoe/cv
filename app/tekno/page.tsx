@@ -523,13 +523,14 @@ export default function TeknoPage() {
             fontWeight: "900",
             color: "#000000",
             textDecoration: "none",
-            letterSpacing: "-0.01em"
+            letterSpacing: "-0.01em",
+            transition: "color 0.3s ease"
           }}
         >
           <svg width="22" height="18" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="7" y="1" width="8" height="10" fill="#000000"/>
             <rect x="0" y="13" width="16" height="7" fill="#000000"/>
-            <rect x="10" y="13" width="15" height="7" fill="#2563eb"/>
+            <rect x="10" y="13" width="15" height="7" fill={activeColor} style={{ transition: "fill 0.3s ease" }}/>
           </svg>
           <span>{lang === "AR" ? "حيدر محمد" : "Haider Mohamed"}</span>
         </Link>
