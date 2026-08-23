@@ -420,20 +420,13 @@ export default function Home() {
 
       {/* INDEPENDENT FLOATING BRAND LOGO / NAME (TOP LEFT) */}
       <div
-        className="desktop-header-nav"
         style={{
           position: "fixed",
-          top: "24px",
+          top: "28px",
           left: "32px",
           zIndex: 1000,
           display: "flex",
           alignItems: "center",
-          gap: "8px",
-          background: "#ffffff",
-          padding: "10px 22px",
-          borderRadius: "50px",
-          boxShadow: "0 15px 35px rgba(0,0,0,0.12)",
-          border: "1px solid rgba(255,255,255,0.8)"
         }}
       >
         <Link
@@ -441,16 +434,17 @@ export default function Home() {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "8px",
-            fontSize: "16px",
+            gap: "10px",
+            fontSize: "19px",
             fontWeight: "900",
-            color: "#0f111a",
-            textDecoration: "none"
+            color: "#ffffff",
+            textDecoration: "none",
+            letterSpacing: "-0.01em"
           }}
         >
-          <svg width="20" height="16" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="7" y="1" width="8" height="10" fill="#0f111a"/>
-            <rect x="0" y="13" width="16" height="7" fill="#0f111a"/>
+          <svg width="22" height="18" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="7" y="1" width="8" height="10" fill="#ffffff"/>
+            <rect x="0" y="13" width="16" height="7" fill="#ffffff"/>
             <rect x="10" y="13" width="15" height="7" fill="#2563eb"/>
           </svg>
           <span>{t.logo}</span>
