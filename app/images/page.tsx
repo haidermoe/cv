@@ -1156,25 +1156,16 @@ export default function ImageDownloaderPage() {
             {mode === "download" ? t.subtitleDownload : t.subtitleUpload}
           </p>
 
-          {/* LIQUID GLASS MORPHING MODE TOGGLE PILLS */}
+          {/* LIQUID MERCURY FLUID MODE TOGGLE PILLS */}
           <div
+            className="awsmd-liquid-pill-track"
             style={{
-              position: "relative",
-              display: "inline-grid",
-              gridTemplateColumns: "1fr 1fr",
-              background: "rgba(241, 245, 249, 0.85)",
-              backdropFilter: "blur(16px)",
-              WebkitBackdropFilter: "blur(16px)",
-              padding: "5px",
-              borderRadius: "50px",
-              border: "1.5px solid rgba(226, 232, 240, 0.9)",
-              boxShadow: "inset 0 2px 6px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.04)",
               marginBottom: mode === "download" ? "15px" : "0",
               width: "fit-content",
-              minWidth: isDesktop ? "480px" : "100%",
+              minWidth: isDesktop ? "500px" : "100%",
             }}
           >
-            {/* LIQUID GLASS SLIDING PILL */}
+            {/* LIQUID GLASS SLIDING PILL WITH GLOSSY FLUID HIGHLIGHTS */}
             <div
               style={{
                 position: "absolute",
@@ -1185,19 +1176,44 @@ export default function ImageDownloaderPage() {
                 width: "calc(50% - 5px)",
                 borderRadius: "50px",
                 background: mode === "download"
-                  ? "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
-                  : "linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)",
+                  ? "linear-gradient(135deg, #2563eb 0%, #1d4ed8 55%, #3b82f6 100%)"
+                  : "linear-gradient(135deg, #dc2626 0%, #b91c1c 55%, #ef4444 100%)",
                 boxShadow: mode === "download"
-                  ? "0 8px 25px rgba(37, 99, 235, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.5)"
-                  : "0 8px 25px rgba(220, 38, 38, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.5)",
+                  ? "0 10px 28px rgba(37, 99, 235, 0.45), inset 0 2px 4px rgba(255, 255, 255, 0.6), inset 0 -2px 4px rgba(0, 0, 0, 0.15)"
+                  : "0 10px 28px rgba(220, 38, 38, 0.45), inset 0 2px 4px rgba(255, 255, 255, 0.6), inset 0 -2px 4px rgba(0, 0, 0, 0.15)",
                 transform: mode === "download"
-                  ? "translateX(0%)"
-                  : (lang === "AR" ? "translateX(-100%)" : "translateX(100%)"),
-                transition: "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.35s ease, box-shadow 0.35s ease",
+                  ? "translateX(0%) scale(1)"
+                  : (lang === "AR" ? "translateX(-100%) scale(1)" : "translateX(100%) scale(1)"),
+                transition: "transform 0.55s cubic-bezier(0.68, -0.4, 0.32, 1.4), background 0.4s ease, box-shadow 0.4s ease",
                 zIndex: 1,
                 pointerEvents: "none",
+                overflow: "hidden",
               }}
-            />
+            >
+              {/* LIQUID GLOSS SPECULAR REFLECTION */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "radial-gradient(ellipse 70% 50% at 50% 15%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.05) 70%, transparent 100%)",
+                  borderRadius: "50px",
+                  pointerEvents: "none",
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "3px",
+                  left: "15%",
+                  right: "15%",
+                  height: "3px",
+                  background: "rgba(255,255,255,0.35)",
+                  borderRadius: "10px",
+                  filter: "blur(1px)",
+                  pointerEvents: "none",
+                }}
+              />
+            </div>
 
             <button
               onClick={() => setMode("download")}
