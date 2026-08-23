@@ -1238,24 +1238,6 @@ ul {
   user-select: none !important;
 }
 
-@keyframes liquidGlassStretch {
-  0% {
-    transform: scaleX(1) scaleY(1);
-  }
-  30% {
-    transform: scaleX(1.25) scaleY(0.85);
-  }
-  60% {
-    transform: scaleX(0.92) scaleY(1.08);
-  }
-  85% {
-    transform: scaleX(1.05) scaleY(0.96);
-  }
-  100% {
-    transform: scaleX(1) scaleY(1);
-  }
-}
-
 .liquid-glass-pill {
   position: absolute !important;
   top: 6px !important;
@@ -1264,13 +1246,10 @@ ul {
   border-radius: 50px !important;
   z-index: 1 !important;
   pointer-events: none !important;
-  transition: transform 0.52s cubic-bezier(0.34, 1.45, 0.64, 1),
-              background 0.4s ease,
-              box-shadow 0.4s ease !important;
-}
-
-.liquid-glass-pill.morphing {
-  animation: liquidGlassStretch 0.52s cubic-bezier(0.34, 1.45, 0.64, 1) !important;
+  transition: transform 0.48s cubic-bezier(0.34, 1.35, 0.64, 1),
+              background 0.35s ease,
+              box-shadow 0.35s ease !important;
+  will-change: transform !important;
 }
 
 /* 100% BULLETPROOF NON-STOP TICKER ANIMATION */

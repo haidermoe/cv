@@ -862,9 +862,9 @@ export default function TeknoPage() {
               minWidth: isDesktop ? "500px" : "100%",
             }}
           >
-            {/* LIQUID GLASS SLIDING PILL WITH MORPH STRETCH */}
+            {/* LIQUID GLASS SLIDING PILL */}
             <div
-              className={isMorphing ? "liquid-glass-pill morphing" : "liquid-glass-pill"}
+              className="liquid-glass-pill"
               style={{
                 left: lang === "AR" ? "auto" : "6px",
                 right: lang === "AR" ? "6px" : "auto",
