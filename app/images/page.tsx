@@ -64,7 +64,19 @@ export default function ImageDownloaderPage() {
   const [isClientDrawerActive, setIsClientDrawerActive] = useState(false);
   const [isClientDrawerClosing, setIsClientDrawerClosing] = useState(false);
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
+  const [isNavMenuClosing, setIsNavMenuClosing] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const closeNavMenu = (targetHref?: string) => {
+    setIsNavMenuClosing(true);
+    setTimeout(() => {
+      setIsNavMenuOpen(false);
+      setIsNavMenuClosing(false);
+      if (targetHref) {
+        window.location.href = targetHref;
+      }
+    }, 750);
+  };
 
   // File states
   const [file, setFile] = useState<File | null>(null);
@@ -710,82 +722,185 @@ export default function ImageDownloaderPage() {
         </a>
       </header>
 
-      {/* Mobile Drawer Menu */}
-      {isNavMenuOpen && (
-        <div
-          className="mobile-drawer-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            background: "rgba(0, 0, 0, 0.4)",
-            backdropFilter: "blur(8px)",
-            WebkitBackdropFilter: "blur(8px)",
-            zIndex: 2000,
-            display: "flex",
-            justifyContent: lang === "AR" ? "flex-end" : "flex-start",
-          }}
-          onClick={() => setIsNavMenuOpen(false)}
-        >
+      {/* AWSMD FULLSCREEN NAVIGATION MENU OVERLAY (TWO BLUE PANELS) */}
+      {(isNavMenuOpen || isNavMenuClosing) && (
+        <React.Fragment>
+          {/* DARK BLUE SIDEBAR COLUMN */}
           <div
-            className={lang === "AR" ? "mobile-drawer-content-ar" : "mobile-drawer-content-en"}
+            className={isNavMenuClosing ? "awsmd-col-dark awsmd-col-dark-exit" : "awsmd-col-dark"}
             style={{
-              width: "300px",
+              position: "fixed",
+              top: 0,
+              bottom: 0,
+              width: "280px",
               height: "100vh",
-              background: "#ffffff",
-              color: "#0f111a",
-              padding: "40px 25px",
+              background: "#1d4ed8",
+              zIndex: 3000,
+              left: lang === "EN" ? 0 : "auto",
+              right: lang === "AR" ? 0 : "auto",
+              padding: "40px 30px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              boxShadow: lang === "AR" ? "-10px 0 30px rgba(0,0,0,0.15)" : "10px 0 30px rgba(0,0,0,0.15)",
+              borderRight: lang === "EN" ? "1px solid rgba(255,255,255,0.1)" : "none",
+              borderLeft: lang === "AR" ? "1px solid rgba(255,255,255,0.1)" : "none"
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <svg width="24" height="20" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="7" y="1" width="8" height="10" fill="#ffffff"/>
+                <rect x="0" y="13" width="16" height="7" fill="#ffffff"/>
+                <rect x="10" y="13" width="15" height="7" fill="rgba(255,255,255,0.7)"/>
+              </svg>
+              <span style={{ fontSize: "20px", fontWeight: "900", color: "#ffffff" }}>{t.logo}</span>
+            </div>
+
+            <div style={{ background: "rgba(255,255,255,0.08)", padding: "20px", borderRadius: "16px", border: "1px solid rgba(255,255,255,0.15)" }}>
+              <div style={{ color: "#fbbf24", fontSize: "14px", fontWeight: "900", marginBottom: "6px" }}>★ 5.0 Gold Verified</div>
+              <p style={{ color: "#ffffff", fontSize: "13px", lineHeight: "1.5", fontWeight: "600", opacity: 0.9 }}>
+                {lang === "AR" ? "تصميم ومشاريع برمجية استثنائية." : "Awesome portfolio for awesome business."}
+              </p>
+            </div>
+          </div>
+
+          {/* LIGHT COBALT BLUE MAIN PANEL */}
+          <div
+            className={isNavMenuClosing ? "awsmd-col-light awsmd-col-light-exit" : "awsmd-col-light"}
+            style={{
+              position: "fixed",
+              top: 0,
+              bottom: 0,
+              width: "calc(100vw - 280px)",
+              height: "100vh",
+              background: "#2563eb",
+              zIndex: 3000,
+              left: lang === "EN" ? "280px" : 0,
+              right: lang === "AR" ? "280px" : 0
+            }}
+          ></div>
+
+          {/* MAIN MENU CONTENT */}
+          <div
+            className={isNavMenuClosing ? "awsmd-nav-content awsmd-nav-content-exit" : "awsmd-nav-content"}
+            style={{
+              position: "fixed",
+              top: 0,
+              bottom: 0,
+              width: "calc(100vw - 280px)",
+              height: "100vh",
+              color: "#ffffff",
+              zIndex: 3001,
+              left: lang === "EN" ? "280px" : 0,
+              right: lang === "AR" ? "280px" : 0,
+              padding: "40px 60px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
               overflowY: "auto",
               fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif"
             }}
-            onClick={(e) => e.stopPropagation()}
           >
-            <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "16px", fontWeight: "900", color: "#0f111a" }}>
-                  <svg width="20" height="16" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="7" y="1" width="8" height="10" fill="#0f111a"/>
-                    <rect x="0" y="13" width="16" height="7" fill="#0f111a"/>
-                    <rect x="10" y="13" width="15" height="7" fill="#64748b"/>
-                  </svg>
-                  <span>{t.logo}</span>
-                </div>
+            {/* TOP HEADER BAR */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <svg width="24" height="20" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="7" y="1" width="8" height="10" fill="#ffffff"/>
+                  <rect x="0" y="13" width="16" height="7" fill="#ffffff"/>
+                  <rect x="10" y="13" width="15" height="7" fill="rgba(255,255,255,0.7)"/>
+                </svg>
+                <span style={{ fontSize: "20px", fontWeight: "900" }}>{t.logo}</span>
+              </div>
+
+              <span style={{ fontSize: "14px", fontWeight: "700", opacity: 0.8, textTransform: "uppercase", letterSpacing: "1px" }}>
+                {lang === "AR" ? "التصفح والشرائح" : "Navigation"}
+              </span>
+
+              <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
                 <button
-                  onClick={() => setIsNavMenuOpen(false)}
+                  onClick={() => { closeNavMenu(); openClientDrawer(); }}
                   style={{
-                    background: "#f1f5f9",
+                    background: "rgba(255, 255, 255, 0.2)",
+                    backdropFilter: "blur(10px)",
                     border: "none",
-                    width: "32px",
-                    height: "32px",
+                    color: "#ffffff",
+                    padding: "8px 20px",
+                    borderRadius: "50px",
+                    fontSize: "13.5px",
+                    fontWeight: "800",
+                    cursor: "pointer"
+                  }}
+                >
+                  + {t.becomeClient}
+                </button>
+
+                <button
+                  onClick={() => closeNavMenu()}
+                  style={{
+                    width: "42px",
+                    height: "42px",
                     borderRadius: "50%",
-                    fontSize: "16px",
+                    background: "rgba(255, 255, 255, 0.2)",
+                    border: "none",
+                    color: "#ffffff",
+                    fontSize: "20px",
                     fontWeight: "900",
                     cursor: "pointer",
-                    color: "#475569"
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
                   }}
                 >
                   ✕
                 </button>
               </div>
-
-              <nav style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
-                <a href="/" onClick={() => setIsNavMenuOpen(false)} style={{ fontSize: "17px", fontWeight: "800", color: "#0f111a", textDecoration: "none" }}>{t.navHome}</a>
-                <a href="/#stats" onClick={() => setIsNavMenuOpen(false)} style={{ fontSize: "17px", fontWeight: "800", color: "#475569", textDecoration: "none" }}>{t.navStats}</a>
-                <a href="/#about" onClick={() => setIsNavMenuOpen(false)} style={{ fontSize: "17px", fontWeight: "800", color: "#475569", textDecoration: "none" }}>{t.navAbout}</a>
-                <a href="/#experience" onClick={() => setIsNavMenuOpen(false)} style={{ fontSize: "17px", fontWeight: "800", color: "#475569", textDecoration: "none" }}>{t.navExperience}</a>
-                <a href="/#tools" onClick={() => setIsNavMenuOpen(false)} style={{ fontSize: "17px", fontWeight: "800", color: "#475569", textDecoration: "none" }}>{t.navTools}</a>
-                <a href="/#education" onClick={() => setIsNavMenuOpen(false)} style={{ fontSize: "17px", fontWeight: "800", color: "#475569", textDecoration: "none" }}>{t.navEducation}</a>
-                <a href="/#contact" onClick={() => setIsNavMenuOpen(false)} style={{ fontSize: "17px", fontWeight: "800", color: "#475569", textDecoration: "none" }}>{t.navContact}</a>
-              </nav>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "30px" }}>
+            {/* MAIN HUGE DISPLAY MENU LIST */}
+            <div style={{ margin: "50px 0", display: "flex", flexDirection: "column", gap: "16px" }}>
+              {[
+                { num: "01", label: t.navHome, href: "/" },
+                { num: "02", label: t.navStats, href: "/#stats" },
+                { num: "03", label: t.navAbout, href: "/#about" },
+                { num: "04", label: t.navExperience, href: "/#experience" },
+                { num: "05", label: t.navTools, href: "/#tools" },
+                { num: "06", label: t.navEducation, href: "/#education" },
+                { num: "07", label: t.navContact, href: "/#contact" }
+              ].map((item, index) => (
+                <a
+                  key={index}
+                  href={item.href}
+                  onClick={(e) => { e.preventDefault(); closeNavMenu(item.href); }}
+                  className="awsmd-nav-item"
+                  style={{
+                    fontSize: "clamp(36px, 5vw, 68px)",
+                    fontWeight: "900",
+                    color: "#ffffff",
+                    textDecoration: "none",
+                    display: "inline-flex",
+                    alignItems: "baseline",
+                    gap: "20px",
+                    lineHeight: "1.0",
+                    width: "fit-content",
+                    animationDelay: `${index * 45 + 300}ms`
+                  }}
+                >
+                  <span>{item.label}</span>
+                  <sup style={{ fontSize: "20px", color: "rgba(255,255,255,0.6)", fontWeight: "800" }}>{item.num}</sup>
+                </a>
+              ))}
+            </div>
+
+            {/* FOOTER INFO */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(255,255,255,0.2)", paddingTop: "25px", flexWrap: "wrap", gap: "20px" }}>
+              <div>
+                <span style={{ fontSize: "14px", opacity: 0.8, display: "block", marginBottom: "4px" }}>
+                  {lang === "AR" ? "البريد الإلكتروني المباشر" : "Direct Email"}
+                </span>
+                <a href="mailto:haider.m.shwkat@outlook.com" style={{ color: "#ffffff", fontSize: "18px", fontWeight: "800", textDecoration: "none" }}>
+                  haider.m.shwkat@outlook.com
+                </a>
+              </div>
+
               <a
                 href="/HAIDER-MOHAMED-SHWKAT-CV.pdf"
                 download="HAIDER-MOHAMED-SHWKAT-CV.pdf"
@@ -794,19 +909,19 @@ export default function ImageDownloaderPage() {
                 style={{
                   background: "#0f111a",
                   color: "#ffffff",
-                  padding: "12px 20px",
-                  borderRadius: "30px",
+                  padding: "12px 28px",
+                  borderRadius: "50px",
                   fontSize: "14px",
                   fontWeight: "800",
                   textDecoration: "none",
-                  textAlign: "center"
+                  boxShadow: "0 4px 15px rgba(0,0,0,0.2)"
                 }}
               >
                 {t.downloadCV}
               </a>
             </div>
           </div>
-        </div>
+        </React.Fragment>
       )}
 
       {/* MAIN TOOL CONTENT */}
