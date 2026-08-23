@@ -1261,6 +1261,7 @@ export default function ImageDownloaderPage() {
         {/* --- MODE 1 CONTENT: DOWNLOAD FROM EXCEL --- */}
         {mode === "download" && (
           <div
+            className="awsmd-interactive-card"
             style={{
               background: "#ffffff",
               padding: isDesktop ? "35px 40px" : "25px 20px",
@@ -1268,10 +1269,13 @@ export default function ImageDownloaderPage() {
               boxShadow: "0 10px 40px rgba(0, 0, 0, 0.04)",
               border: "1px solid rgba(15, 17, 26, 0.06)",
               marginBottom: "30px",
+              ["--card-hover-color" as any]: "#2563eb",
+              ["--card-hover-bg" as any]: "rgba(37, 99, 235, 0.04)",
             }}
           >
             {!file ? (
               <label
+                className="awsmd-interactive-dropzone"
                 style={{
                   background: "#f8fafc",
                   border: "2px dashed #cbd5e1",
@@ -1279,11 +1283,12 @@ export default function ImageDownloaderPage() {
                   padding: isDesktop ? "50px 30px" : "35px 20px",
                   textAlign: "center",
                   cursor: "pointer",
-                  transition: "border-color 0.3s ease",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   gap: "10px",
+                  ["--card-hover-color" as any]: "#2563eb",
+                  ["--card-hover-bg" as any]: "rgba(37, 99, 235, 0.04)",
                 }}
               >
                 <input
@@ -1408,6 +1413,7 @@ export default function ImageDownloaderPage() {
         {/* --- MODE 2 CONTENT: UPLOAD IMAGES TO LINKS --- */}
         {mode === "upload" && (
           <div
+            className="awsmd-interactive-card"
             style={{
               background: "#ffffff",
               padding: isDesktop ? "35px 40px" : "25px 20px",
@@ -1415,9 +1421,12 @@ export default function ImageDownloaderPage() {
               boxShadow: "0 10px 40px rgba(0, 0, 0, 0.04)",
               border: "1px solid rgba(15, 17, 26, 0.06)",
               marginBottom: "30px",
+              ["--card-hover-color" as any]: "#dc2626",
+              ["--card-hover-bg" as any]: "rgba(220, 38, 38, 0.04)",
             }}
           >
             <label
+              className="awsmd-interactive-dropzone"
               style={{
                 background: "#fef2f2",
                 border: "2px dashed #fca5a5",
@@ -1425,11 +1434,12 @@ export default function ImageDownloaderPage() {
                 padding: isDesktop ? "50px 30px" : "35px 20px",
                 textAlign: "center",
                 cursor: "pointer",
-                transition: "border-color 0.3s ease",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 gap: "10px",
+                ["--card-hover-color" as any]: "#dc2626",
+                ["--card-hover-bg" as any]: "rgba(220, 38, 38, 0.04)",
               }}
             >
               <input

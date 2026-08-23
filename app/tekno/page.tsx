@@ -935,6 +935,7 @@ export default function TeknoPage() {
         >
           {/* CARD 1: WEBSITE FILE */}
           <div
+            className="awsmd-interactive-card"
             style={{
               background: "#ffffff",
               padding: "26px 22px",
@@ -944,6 +945,8 @@ export default function TeknoPage() {
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
+              ["--card-hover-color" as any]: activeColor,
+              ["--card-hover-bg" as any]: mode === "pull" ? "rgba(22, 163, 74, 0.05)" : "rgba(37, 99, 235, 0.05)",
             }}
           >
             <div>
@@ -975,6 +978,7 @@ export default function TeknoPage() {
             </div>
 
             <label
+              className="awsmd-interactive-dropzone"
               style={{
                 background: "#f8fafc",
                 border: "2px dashed #cbd5e1",
@@ -987,6 +991,8 @@ export default function TeknoPage() {
                 flexDirection: "column",
                 alignItems: "center",
                 gap: "8px",
+                ["--card-hover-color" as any]: activeColor,
+                ["--card-hover-bg" as any]: mode === "pull" ? "rgba(22, 163, 74, 0.05)" : "rgba(37, 99, 235, 0.05)",
               }}
             >
               <input
@@ -1009,6 +1015,7 @@ export default function TeknoPage() {
 
           {/* CARD 2: WAREHOUSE FILE */}
           <div
+            className="awsmd-interactive-card"
             style={{
               background: "#ffffff",
               padding: "26px 22px",
@@ -1018,6 +1025,8 @@ export default function TeknoPage() {
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
+              ["--card-hover-color" as any]: activeColor,
+              ["--card-hover-bg" as any]: mode === "pull" ? "rgba(22, 163, 74, 0.05)" : "rgba(37, 99, 235, 0.05)",
             }}
           >
             <div>
@@ -1049,6 +1058,7 @@ export default function TeknoPage() {
             </div>
 
             <label
+              className="awsmd-interactive-dropzone"
               style={{
                 background: "#f8fafc",
                 border: "2px dashed #cbd5e1",
@@ -1061,6 +1071,8 @@ export default function TeknoPage() {
                 flexDirection: "column",
                 alignItems: "center",
                 gap: "8px",
+                ["--card-hover-color" as any]: activeColor,
+                ["--card-hover-bg" as any]: mode === "pull" ? "rgba(22, 163, 74, 0.05)" : "rgba(37, 99, 235, 0.05)",
               }}
             >
               <input
@@ -1082,6 +1094,7 @@ export default function TeknoPage() {
 
           {/* CARD 3: REFERENCE / CORRECTION FILE */}
           <div
+            className="awsmd-interactive-card"
             style={{
               background: "#ffffff",
               padding: "26px 22px",
@@ -1091,6 +1104,8 @@ export default function TeknoPage() {
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
+              ["--card-hover-color" as any]: activeColor,
+              ["--card-hover-bg" as any]: mode === "pull" ? "rgba(22, 163, 74, 0.05)" : "rgba(37, 99, 235, 0.05)",
             }}
           >
             <div>
@@ -1121,6 +1136,7 @@ export default function TeknoPage() {
             </div>
 
             <label
+              className="awsmd-interactive-dropzone"
               style={{
                 background: "#f8fafc",
                 border: "2px dashed #cbd5e1",
@@ -1133,6 +1149,8 @@ export default function TeknoPage() {
                 flexDirection: "column",
                 alignItems: "center",
                 gap: "8px",
+                ["--card-hover-color" as any]: activeColor,
+                ["--card-hover-bg" as any]: mode === "pull" ? "rgba(22, 163, 74, 0.05)" : "rgba(37, 99, 235, 0.05)",
               }}
             >
               <input
