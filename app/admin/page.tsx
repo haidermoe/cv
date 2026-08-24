@@ -20,6 +20,12 @@ export default function AdminPage() {
   const [isUploadingCv, setIsUploadingCv] = useState(false);
   const [uploadCvStatus, setUploadCvStatus] = useState("");
 
+  // Live Instant Preview States
+  const [showLivePreview, setShowLivePreview] = useState(true);
+  const [previewLang, setPreviewLang] = useState<"AR" | "EN">("AR");
+  const [previewDevice, setPreviewDevice] = useState<"mobile" | "desktop">("mobile");
+  const [isPreviewMinimized, setIsPreviewMinimized] = useState(false);
+
   useEffect(() => {
     checkAuth();
   }, []);
@@ -358,6 +364,25 @@ export default function AdminPage() {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <button
+            onClick={() => setShowLivePreview(!showLivePreview)}
+            style={{
+              background: showLivePreview ? "#10b981" : "#1e2130",
+              color: "#ffffff",
+              border: "1px solid #059669",
+              padding: "9px 16px",
+              borderRadius: "12px",
+              fontSize: "13.5px",
+              fontWeight: "800",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px"
+            }}
+          >
+            <span>{showLivePreview ? "إخفاء نافذة المعاينة الحية" : "إظهار نافذة المعاينة الحية"}</span>
+          </button>
+
           <Link
             href="/"
             target="_blank"
@@ -933,6 +958,251 @@ export default function AdminPage() {
           </div>
         )}
       </div>
+
+      {/* LIVE PREVIEW FLOATING DOCK */}
+      {showLivePreview && data && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            left: "20px",
+            width: isPreviewMinimized ? "280px" : previewDevice === "mobile" ? "390px" : "580px",
+            maxHeight: isPreviewMinimized ? "60px" : "80vh",
+            background: "#0c0d17",
+            border: "2px solid #2563eb",
+            borderRadius: "20px",
+            boxShadow: "0 25px 60px rgba(0, 0, 0, 0.85)",
+            zIndex: 999,
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          }}
+        >
+          {/* PREVIEW WINDOW HEADER */}
+          <div
+            style={{
+              background: "#151728",
+              padding: "12px 18px",
+              borderBottom: "1px solid rgba(255,255,255,0.08)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "8px",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#10b981", display: "inline-block", boxShadow: "0 0 10px #10b981" }} />
+              <span style={{ fontSize: "13px", fontWeight: "900", color: "#ffffff" }}>معاينة حية (0ms Live)</span>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              {/* LANG TOGGLE */}
+              {!isPreviewMinimized && (
+                <>
+                  <button
+                    onClick={() => setPreviewLang(previewLang === "AR" ? "EN" : "AR")}
+                    style={{
+                      background: "#1e2130",
+                      color: "#60a5fa",
+                      border: "1px solid #334155",
+                      padding: "4px 8px",
+                      borderRadius: "8px",
+                      fontSize: "11.5px",
+                      fontWeight: "800",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {previewLang === "AR" ? "عرض بالإنجليزية" : "عرض بالعربية"}
+                  </button>
+
+                  <button
+                    onClick={() => setPreviewDevice(previewDevice === "mobile" ? "desktop" : "mobile")}
+                    style={{
+                      background: "#1e2130",
+                      color: "#cbd5e1",
+                      border: "1px solid #334155",
+                      padding: "4px 8px",
+                      borderRadius: "8px",
+                      fontSize: "11.5px",
+                      fontWeight: "800",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {previewDevice === "mobile" ? "شاشة عريضة" : "هاتف"}
+                  </button>
+                </>
+              )}
+
+              {/* MINIMIZE BUTTON */}
+              <button
+                onClick={() => setIsPreviewMinimized(!isPreviewMinimized)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#94a3b8",
+                  fontSize: "14px",
+                  cursor: "pointer",
+                  padding: "2px 6px",
+                  fontWeight: "900",
+                }}
+                title={isPreviewMinimized ? "تكبير المعاينة" : "تصغير المعاينة"}
+              >
+                {isPreviewMinimized ? "□" : "—"}
+              </button>
+
+              {/* CLOSE BUTTON */}
+              <button
+                onClick={() => setShowLivePreview(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#ef4444",
+                  fontSize: "14px",
+                  cursor: "pointer",
+                  padding: "2px 6px",
+                  fontWeight: "900",
+                }}
+                title="إغلاق المعاينة"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+
+          {/* PREVIEW CONTENT BODY */}
+          {!isPreviewMinimized && (
+            <div
+              style={{
+                flex: 1,
+                overflowY: "auto",
+                padding: "16px",
+                background: "#08090f",
+                display: "flex",
+                flexDirection: "column",
+                gap: "18px",
+              }}
+              dir={previewLang === "AR" ? "rtl" : "ltr"}
+            >
+              {/* NOTICE PILL */}
+              <div
+                style={{
+                  background: "rgba(37, 99, 235, 0.15)",
+                  border: "1px solid rgba(37, 99, 235, 0.3)",
+                  borderRadius: "12px",
+                  padding: "8px 12px",
+                  fontSize: "11.5px",
+                  color: "#93c5fd",
+                  fontWeight: "700",
+                  textAlign: "center",
+                  lineHeight: "1.4",
+                }}
+              >
+                المعاينة تتحدث فوراً مع كل حرف تكتبه. لن يتم النشر على الموقع الحقيقي إلا عند الضغط على "حفظ جميع التعديلات".
+              </div>
+
+              {/* LIVE HERO PREVIEW */}
+              <div style={{ background: "#11121d", padding: "16px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                  <span style={{ fontSize: "14px", fontWeight: "900", color: "#ffffff" }}>
+                    {previewLang === "AR" ? data.general.nameAR : data.general.nameEN}
+                  </span>
+                  <span style={{ background: "#ffffff", color: "#000000", padding: "4px 10px", borderRadius: "20px", fontSize: "10.5px", fontWeight: "900" }}>
+                    {previewLang === "AR" ? "تحميل السيرة الذاتية" : "Download CV"}
+                  </span>
+                </div>
+
+                <p style={{ fontSize: "12px", color: "#94a3b8", lineHeight: "1.6", margin: "0 0 10px 0" }}>
+                  {data.translations[previewLang]?.bio || (previewLang === "AR" ? data.translations.AR.bio : data.translations.EN.bio)}
+                </p>
+
+                <div style={{ fontSize: "11px", color: "#60a5fa", fontWeight: "700" }}>
+                  فيديو الهيرو: {data.general.heroVideo}
+                </div>
+              </div>
+
+              {/* LIVE STATS PREVIEW */}
+              <div>
+                <span style={{ fontSize: "12px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
+                  {previewLang === "AR" ? "الإحصائيات والأرقام" : "Stats & Numbers"} ({data.stats.length})
+                </span>
+                <div style={{ display: "grid", gridTemplateColumns: previewDevice === "mobile" ? "1fr 1fr" : "1fr 1fr", gap: "8px" }}>
+                  {data.stats.map((st, i) => (
+                    <div key={st.id || i} style={{ background: "#11121d", padding: "12px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                      <div style={{ fontSize: "16px", fontWeight: "900", color: "#ffffff", marginBottom: "4px" }}>
+                        {st.value}
+                      </div>
+                      <div style={{ fontSize: "11px", color: "#94a3b8", lineHeight: "1.4" }}>
+                        {previewLang === "AR" ? st.textAR : st.textEN}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* LIVE EXPERIENCE PREVIEW */}
+              <div>
+                <span style={{ fontSize: "12px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
+                  {previewLang === "AR" ? "الخبرات العملية" : "Work Experience"} ({data.experiences.length})
+                </span>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {data.experiences.map((exp, i) => (
+                    <div key={exp.id || i} style={{ background: "#11121d", padding: "14px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "6px" }}>
+                        <div>
+                          <div style={{ fontSize: "13px", fontWeight: "900", color: "#ffffff" }}>
+                            {previewLang === "AR" ? exp.companyAR : exp.companyEN}
+                          </div>
+                          <div style={{ fontSize: "11.5px", fontWeight: "700", color: "#60a5fa" }}>
+                            {previewLang === "AR" ? exp.roleAR : exp.roleEN}
+                          </div>
+                        </div>
+                        <span style={{ fontSize: "10px", color: "#94a3b8", background: "#1c1e2e", padding: "3px 6px", borderRadius: "6px" }}>
+                          {previewLang === "AR" ? exp.dateAR : exp.dateEN}
+                        </span>
+                      </div>
+
+                      <ul style={{ margin: "6px 0 0 0", paddingInlineStart: "16px", fontSize: "11px", color: "#cbd5e1", lineHeight: "1.5" }}>
+                        {(previewLang === "AR" ? exp.bulletsAR : exp.bulletsEN).map((b, bi) => (
+                          <li key={bi} style={{ marginBottom: "3px" }}>{b}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* LIVE EDUCATION & CERTS PREVIEW */}
+              <div>
+                <span style={{ fontSize: "12px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
+                  {previewLang === "AR" ? "التعليم والشهادات" : "Education & Certifications"}
+                </span>
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  {data.education.map((edu, i) => (
+                    <div key={edu.id || i} style={{ background: "#11121d", padding: "10px 12px", borderRadius: "10px", fontSize: "11px" }}>
+                      <strong style={{ color: "#ffffff", display: "block" }}>{previewLang === "AR" ? edu.degreeAR : edu.degreeEN}</strong>
+                      <span style={{ color: "#94a3b8" }}>{previewLang === "AR" ? edu.schoolAR : edu.schoolEN} ({previewLang === "AR" ? edu.yearAR : edu.yearEN})</span>
+                    </div>
+                  ))}
+                  {data.certifications.map((cert, i) => (
+                    <div key={cert.id || i} style={{ background: "#11121d", padding: "8px 12px", borderRadius: "8px", fontSize: "11px", color: "#cbd5e1" }}>
+                      • {previewLang === "AR" ? cert.titleAR : cert.titleEN}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* FOOTER INFO PREVIEW */}
+              <div style={{ background: "#11121d", padding: "12px", borderRadius: "12px", borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: "11px", color: "#94a3b8" }}>
+                <div>البريد: {data.general.email}</div>
+                <div>الهاتف: {data.general.phone}</div>
+                <div>الموقع: {previewLang === "AR" ? data.general.locationAR : data.general.locationEN}</div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
