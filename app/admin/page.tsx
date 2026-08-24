@@ -57,10 +57,12 @@ export default function AdminPage() {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [generatePdfStatus, setGeneratePdfStatus] = useState("");
 
-  // Live Instant Preview States
+  // Layout & Live Instant Preview States
+  const [layoutMode, setLayoutMode] = useState<"split" | "full" | "preview">("split");
   const [showLivePreview, setShowLivePreview] = useState(true);
   const [previewLang, setPreviewLang] = useState<"AR" | "EN">("AR");
-  const [previewDevice, setPreviewDevice] = useState<"mobile" | "desktop">("mobile");
+  const [previewDevice, setPreviewDevice] = useState<"mobile" | "tablet" | "desktop">("mobile");
+  const [a4Zoom, setA4Zoom] = useState<number>(0.9);
   const [isPreviewMinimized, setIsPreviewMinimized] = useState(false);
   const [previewSectionTab, setPreviewSectionTab] = useState<"auto" | "general" | "stats" | "experiences" | "education" | "cv" | "typography" | "all">("auto");
   const [showShortcutsModal, setShowShortcutsModal] = useState(false);
@@ -669,25 +671,68 @@ export default function AdminPage() {
             <kbd style={{ background: "#0a0b12", border: "1px solid #475569", padding: "1px 5px", borderRadius: "4px", fontSize: "10.5px", color: "#60a5fa" }}>?</kbd>
           </button>
 
-          <button
-            onClick={() => setShowLivePreview(!showLivePreview)}
-            style={{
-              background: showLivePreview ? "#10b981" : "#1e2130",
-              color: "#ffffff",
-              border: "1px solid #059669",
-              padding: "8px 14px",
-              borderRadius: "10px",
-              fontSize: "13px",
-              fontWeight: "800",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "6px"
-            }}
-          >
-            <span>{showLivePreview ? "إخفاء المعاينة" : "إظهار المعاينة"}</span>
-            <kbd style={{ background: "rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.2)", padding: "1px 5px", borderRadius: "4px", fontSize: "10px", color: "#ffffff" }}>Ctrl+P</kbd>
-          </button>
+          {/* LAYOUT MODE SWITCHER */}
+          <div style={{ display: "flex", background: "#0a0b12", padding: "3px", borderRadius: "10px", border: "1px solid #334155" }}>
+            <button
+              onClick={() => {
+                setLayoutMode("split");
+                setShowLivePreview(true);
+              }}
+              style={{
+                background: layoutMode === "split" && showLivePreview ? "#2563eb" : "transparent",
+                color: layoutMode === "split" && showLivePreview ? "#ffffff" : "#94a3b8",
+                border: "none",
+                padding: "6px 12px",
+                borderRadius: "8px",
+                fontSize: "12px",
+                fontWeight: "800",
+                cursor: "pointer",
+              }}
+              title="عرض مقسم: التعديلات والمعاينة معاً"
+            >
+              شاشة منقسمة
+            </button>
+
+            <button
+              onClick={() => {
+                setLayoutMode("full");
+                setShowLivePreview(false);
+              }}
+              style={{
+                background: layoutMode === "full" || !showLivePreview ? "#2563eb" : "transparent",
+                color: layoutMode === "full" || !showLivePreview ? "#ffffff" : "#94a3b8",
+                border: "none",
+                padding: "6px 12px",
+                borderRadius: "8px",
+                fontSize: "12px",
+                fontWeight: "800",
+                cursor: "pointer",
+              }}
+              title="ملء الشاشة للتعديل المريح"
+            >
+              تركيز كامل
+            </button>
+
+            <button
+              onClick={() => {
+                setLayoutMode("preview");
+                setShowLivePreview(true);
+              }}
+              style={{
+                background: layoutMode === "preview" ? "#2563eb" : "transparent",
+                color: layoutMode === "preview" ? "#ffffff" : "#94a3b8",
+                border: "none",
+                padding: "6px 12px",
+                borderRadius: "8px",
+                fontSize: "12px",
+                fontWeight: "800",
+                cursor: "pointer",
+              }}
+              title="عرض المعاينة فقط"
+            >
+              معاينة فقط
+            </button>
+          </div>
 
           <Link
             href="/"
@@ -728,7 +773,7 @@ export default function AdminPage() {
         </div>
       )}
 
-      <div style={{ maxWidth: "1600px", margin: "25px auto", padding: "0 24px" }}>
+      <div style={{ maxWidth: layoutMode === "full" ? "1400px" : "1680px", margin: "25px auto", padding: "0 24px" }}>
         <div style={{ display: "flex", gap: "10px", overflowX: "auto", paddingBottom: "12px", borderBottom: "1px solid rgba(255,255,255,0.08)", marginBottom: "25px" }}>
           {[
             { id: "general", label: "النبذة والمعلومات الأساسية", key: "1" },
@@ -765,9 +810,10 @@ export default function AdminPage() {
           ))}
         </div>
 
-        {/* SPLIT SCREEN CONTAINER: FORM ON RIGHT, PREVIEW ON LEFT */}
-        <div style={{ display: "grid", gridTemplateColumns: showLivePreview ? "minmax(0, 1fr) minmax(360px, 440px)" : "minmax(0, 1fr)", gap: "28px", alignItems: "start" }}>
+        {/* SCREEN CONTAINER: FORM ON RIGHT, PREVIEW ON LEFT */}
+        <div style={{ display: "grid", gridTemplateColumns: layoutMode === "preview" ? "1fr" : (layoutMode === "split" && showLivePreview) ? "minmax(0, 1fr) minmax(380px, 480px)" : "1fr", gap: "28px", alignItems: "start" }}>
           {/* MAIN EDITING FORM COLUMN */}
+          {layoutMode !== "preview" && (
           <div style={{ minWidth: 0 }}>
 
         {activeTab === "general" && data && (
@@ -1517,11 +1563,36 @@ export default function AdminPage() {
 
                   {/* RIGHT: LIVE A4 SHEET CANVAS PREVIEW */}
                   <div style={{ background: "#05060a", padding: "16px", borderRadius: "18px", border: "1px solid #334155", overflowX: "auto" }}>
-                    <div style={{ fontSize: "12px", fontWeight: "800", color: "#60a5fa", marginBottom: "12px", display: "flex", justifyContent: "space-between" }}>
+                    <div style={{ fontSize: "12px", fontWeight: "800", color: "#60a5fa", marginBottom: "14px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>
                       <span>معاينة ورقة الـ PDF الحقيقية (A4 Sheet):</span>
-                      <span>210mm x 297mm</span>
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <span style={{ fontSize: "11px", color: "#94a3b8" }}>المقياس:</span>
+                        {[
+                          { label: "75%", val: 0.75 },
+                          { label: "90%", val: 0.9 },
+                          { label: "100%", val: 1.0 },
+                        ].map((z) => (
+                          <button
+                            key={z.label}
+                            onClick={() => setA4Zoom(z.val)}
+                            style={{
+                              background: a4Zoom === z.val ? "#2563eb" : "#1e2130",
+                              color: a4Zoom === z.val ? "#ffffff" : "#cbd5e1",
+                              border: "1px solid #334155",
+                              padding: "3px 8px",
+                              borderRadius: "6px",
+                              fontSize: "11px",
+                              fontWeight: "700",
+                              cursor: "pointer",
+                            }}
+                          >
+                            {z.label}
+                          </button>
+                        ))}
+                      </div>
                     </div>
 
+                    <div style={{ transform: `scale(${a4Zoom})`, transformOrigin: "top center", transition: "transform 0.2s ease", width: "100%" }}>
                     {/* THE EXACT A4 CANVAS ELEMENT TO BE RENDERED INTO PDF */}
                     <div
                       id="cv-pdf-canvas"
@@ -1660,6 +1731,7 @@ export default function AdminPage() {
                           ))}
                         </div>
                       </div>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -2184,6 +2256,7 @@ export default function AdminPage() {
           </div>
         )}
           </div>
+        )}
 
         {/* STICKY SIDE-BY-SIDE LIVE PREVIEW COLUMN */}
         {showLivePreview && data && (
@@ -2221,7 +2294,7 @@ export default function AdminPage() {
               <span style={{ fontSize: "13px", fontWeight: "900", color: "#ffffff" }}>معاينة حية (0ms Live)</span>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
               {/* LANG TOGGLE */}
               {!isPreviewMinimized && (
                 <>
@@ -2241,21 +2314,56 @@ export default function AdminPage() {
                     {previewLang === "AR" ? "عرض بالإنجليزية" : "عرض بالعربية"}
                   </button>
 
-                  <button
-                    onClick={() => setPreviewDevice(previewDevice === "mobile" ? "desktop" : "mobile")}
-                    style={{
-                      background: "#1e2130",
-                      color: "#cbd5e1",
-                      border: "1px solid #334155",
-                      padding: "4px 8px",
-                      borderRadius: "8px",
-                      fontSize: "11.5px",
-                      fontWeight: "800",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {previewDevice === "mobile" ? "شاشة عريضة" : "هاتف"}
-                  </button>
+                  <div style={{ display: "flex", background: "#0a0b12", padding: "2px", borderRadius: "6px", border: "1px solid #334155" }}>
+                    <button
+                      onClick={() => setPreviewDevice("mobile")}
+                      style={{
+                        background: previewDevice === "mobile" ? "#2563eb" : "transparent",
+                        color: previewDevice === "mobile" ? "#ffffff" : "#94a3b8",
+                        border: "none",
+                        padding: "3px 6px",
+                        borderRadius: "5px",
+                        fontSize: "11px",
+                        fontWeight: "800",
+                        cursor: "pointer",
+                      }}
+                      title="شاشة الهاتف (380px)"
+                    >
+                      هاتف
+                    </button>
+                    <button
+                      onClick={() => setPreviewDevice("tablet")}
+                      style={{
+                        background: previewDevice === "tablet" ? "#2563eb" : "transparent",
+                        color: previewDevice === "tablet" ? "#ffffff" : "#94a3b8",
+                        border: "none",
+                        padding: "3px 6px",
+                        borderRadius: "5px",
+                        fontSize: "11px",
+                        fontWeight: "800",
+                        cursor: "pointer",
+                      }}
+                      title="شاشة التابلت (680px)"
+                    >
+                      تابلت
+                    </button>
+                    <button
+                      onClick={() => setPreviewDevice("desktop")}
+                      style={{
+                        background: previewDevice === "desktop" ? "#2563eb" : "transparent",
+                        color: previewDevice === "desktop" ? "#ffffff" : "#94a3b8",
+                        border: "none",
+                        padding: "3px 6px",
+                        borderRadius: "5px",
+                        fontSize: "11px",
+                        fontWeight: "800",
+                        cursor: "pointer",
+                      }}
+                      title="شاشة كاملة (100%)"
+                    >
+                      شاشة
+                    </button>
+                  </div>
                 </>
               )}
 
