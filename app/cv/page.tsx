@@ -265,6 +265,7 @@ function translateText(text: string): string {
 
 export default function PublicCvBuilderPage() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [activeTab, setActiveTab] = useState<"personal" | "experience" | "education" | "skills" | "presets" | "styling">("personal");
 
   // SEPARATE BILINGUAL STATE STORES
@@ -297,6 +298,14 @@ export default function PublicCvBuilderPage() {
   const [newSkillInput, setNewSkillInput] = useState<string>("");
   const [toastMessage, setToastMessage] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+    const x = (clientX / innerWidth - 0.5) * 2;
+    const y = (clientY / innerHeight - 0.5) * 2;
+    setMousePos({ x, y });
+  };
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -938,14 +947,43 @@ export default function PublicCvBuilderPage() {
 
   return (
     <div
+      onMouseMove={handleMouseMove}
       dir={isArabic ? "rtl" : "ltr"}
       style={{
-        background: "#080911",
-        color: "#ffffff",
+        background: "#f2f1f6",
+        color: "#0f111a",
         minHeight: "100vh",
+        position: "relative",
+        overflowX: "hidden",
         fontFamily: isArabic ? "'Tajawal', sans-serif" : "'Outfit', sans-serif",
       }}
     >
+      {/* 3D CONCAVE DOT GRID BACKGROUND LAYER (MATCHING /images & /tekno) */}
+      <div
+        style={{
+          position: "fixed",
+          inset: "-15%",
+          zIndex: 0,
+          pointerEvents: "none",
+          overflow: "hidden",
+          perspective: "1000px",
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            backgroundImage: "radial-gradient(rgba(15, 17, 26, 0.16) 1.5px, transparent 1.5px)",
+            backgroundSize: "20px 20px",
+            transform: `perspective(1000px) rotateX(${16 + mousePos.y * 14}deg) rotateY(${mousePos.x * 16}deg) scale(1.25)`,
+            transformOrigin: "center center",
+            transition: "transform 0.08s linear",
+            maskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
+            WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
+          }}
+        />
+      </div>
+
       {/* HIDDEN FILE INPUT FOR PHOTO */}
       <input
         type="file"
@@ -963,13 +1001,13 @@ export default function PublicCvBuilderPage() {
             bottom: "24px",
             left: "50%",
             transform: "translateX(-50%)",
-            background: "#2563eb",
+            background: "#0f172a",
             color: "#ffffff",
             padding: "12px 24px",
             borderRadius: "50px",
             fontSize: "14px",
             fontWeight: "800",
-            boxShadow: "0 10px 30px rgba(37,99,235,0.6)",
+            boxShadow: "0 10px 30px rgba(15,23,42,0.35)",
             zIndex: 9999,
           }}
         >
@@ -977,7 +1015,7 @@ export default function PublicCvBuilderPage() {
         </div>
       )}
 
-      {/* DEDICATED HIDDEN FULL-SCALE (100% UNSCALED) EXPORT ELEMENTS FOR FLAWLESS PDF RENDERING */}
+      {/* DEDICATED HIDDEN FULL-SCALE EXPORT ELEMENTS FOR FLAWLESS PDF RENDERING */}
       <div style={{ position: "fixed", left: "-9999px", top: "-9999px", opacity: 0, pointerEvents: "none", zIndex: -100 }}>
         {renderDocumentContent(docAR, true, "cv-export-arabic-desk")}
         {renderDocumentContent(docEN, false, "cv-export-english-desk")}
@@ -992,8 +1030,8 @@ export default function PublicCvBuilderPage() {
             left: 0,
             width: "100vw",
             height: "100vh",
-            background: "rgba(0,0,0,0.75)",
-            backdropFilter: "blur(10px)",
+            background: "rgba(15, 23, 42, 0.5)",
+            backdropFilter: "blur(8px)",
             zIndex: 10000,
             display: "flex",
             alignItems: "center",
@@ -1004,13 +1042,13 @@ export default function PublicCvBuilderPage() {
         >
           <div
             style={{
-              background: "#0e101d",
-              border: "1.5px solid #2563eb",
+              background: "#ffffff",
+              border: "1px solid #e2e8f0",
               borderRadius: "24px",
               padding: "32px 28px",
               maxWidth: "460px",
               width: "100%",
-              boxShadow: "0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(37,99,235,0.25)",
+              boxShadow: "0 25px 60px rgba(0,0,0,0.18)",
               textAlign: "center",
               display: "flex",
               flexDirection: "column",
@@ -1019,10 +1057,10 @@ export default function PublicCvBuilderPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <div>
-              <h2 style={{ fontSize: "21px", fontWeight: "900", color: "#ffffff", margin: "0 0 8px 0" }}>
+              <h2 style={{ fontSize: "21px", fontWeight: "900", color: "#0f172a", margin: "0 0 8px 0" }}>
                 {isArabic ? "اختر صيغة تنزيل السيرة الذاتية" : "Choose Download Format"}
               </h2>
-              <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>
+              <p style={{ fontSize: "13px", color: "#64748b", margin: 0, lineHeight: "1.5" }}>
                 {isArabic ? "هل ترغب في تنزيل النسخة العربية أم الإنجليزية أم كلاهما معاً؟" : "Would you like to export Arabic, English, or Both versions?"}
               </p>
             </div>
@@ -1043,7 +1081,7 @@ export default function PublicCvBuilderPage() {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  boxShadow: "0 4px 15px rgba(21,128,61,0.35)",
+                  boxShadow: "0 4px 15px rgba(21,128,61,0.25)",
                 }}
               >
                 <span>تنزيل النسخة العربية فقط</span>
@@ -1065,7 +1103,7 @@ export default function PublicCvBuilderPage() {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  boxShadow: "0 4px 15px rgba(2,132,199,0.35)",
+                  boxShadow: "0 4px 15px rgba(2,132,199,0.25)",
                 }}
               >
                 <span>Download English Version Only</span>
@@ -1076,7 +1114,7 @@ export default function PublicCvBuilderPage() {
               <button
                 onClick={() => handleExecuteExport("BOTH")}
                 style={{
-                  background: "linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)",
+                  background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
                   color: "#ffffff",
                   border: "none",
                   padding: "15px 20px",
@@ -1087,7 +1125,7 @@ export default function PublicCvBuilderPage() {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  boxShadow: "0 8px 25px rgba(37,99,235,0.45)",
+                  boxShadow: "0 8px 25px rgba(37,99,235,0.35)",
                 }}
               >
                 <span>تنزيل اللغتين معاً (AR + EN)</span>
@@ -1116,13 +1154,14 @@ export default function PublicCvBuilderPage() {
       {/* TOP HEADER */}
       <header
         style={{
-          background: "rgba(10, 11, 18, 0.9)",
+          background: "rgba(255, 255, 255, 0.85)",
           backdropFilter: "blur(16px)",
-          borderBottom: "1px solid rgba(255,255,255,0.08)",
+          borderBottom: "1px solid rgba(0,0,0,0.06)",
           padding: "14px 24px",
           position: "sticky",
           top: 0,
           zIndex: 100,
+          boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
         }}
       >
         <div style={{ maxWidth: "1440px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
@@ -1133,9 +1172,9 @@ export default function PublicCvBuilderPage() {
               href="/"
               style={{
                 textDecoration: "none",
-                background: "#1e293b",
-                color: "#60a5fa",
-                border: "1px solid #334155",
+                background: "#f1f5f9",
+                color: "#0f172a",
+                border: "1px solid #e2e8f0",
                 padding: "6px 12px",
                 borderRadius: "10px",
                 fontSize: "13px",
@@ -1151,14 +1190,14 @@ export default function PublicCvBuilderPage() {
 
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <h1 style={{ fontSize: "17px", fontWeight: "900", margin: 0, color: "#ffffff" }}>
-                  {isArabic ? "صانع السيرة الذاتية الذكي ومولد الـ PDF" : "Interactive ATS CV Builder & PDF Engine"}
+                <h1 style={{ fontSize: "17px", fontWeight: "900", margin: 0, color: "#0f172a" }}>
+                  {isArabic ? "صانع السيرة الذاتية ومولد الـ PDF الذكي" : "Interactive ATS CV Builder & PDF Engine"}
                 </h1>
                 <span style={{ background: "#16a34a", color: "#ffffff", padding: "2px 8px", borderRadius: "12px", fontSize: "10px", fontWeight: "900" }}>
                   BILINGUAL AR / EN
                 </span>
               </div>
-              <span style={{ fontSize: "11px", color: "#94a3b8" }}>
+              <span style={{ fontSize: "11px", color: "#64748b" }}>
                 {isArabic ? "أنشئ سيرتك وقم بالتحويل اللحظي بين اللغتين وتصدير ملفات PDF قياسية جاهزة للطباعة" : "Build your CV, switch languages instantly & download print-ready PDFs"}
               </span>
             </div>
@@ -1171,9 +1210,9 @@ export default function PublicCvBuilderPage() {
             <button
               onClick={() => handleInstantSwitchLanguage(isArabic ? "EN" : "AR")}
               style={{
-                background: isArabic ? "#1e293b" : "#0284c7",
-                color: "#ffffff",
-                border: "1.5px solid #38bdf8",
+                background: "#ffffff",
+                color: "#0f172a",
+                border: "1.5px solid #2563eb",
                 padding: "9px 18px",
                 borderRadius: "10px",
                 fontSize: "13px",
@@ -1182,7 +1221,7 @@ export default function PublicCvBuilderPage() {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "8px",
-                boxShadow: "0 4px 15px rgba(56,189,248,0.25)",
+                boxShadow: "0 4px 12px rgba(37,99,235,0.12)",
               }}
             >
               <span>{isArabic ? "تحويل مباشر إلى الإنجليزية (EN)" : "تحويل مباشر إلى العربية (AR)"}</span>
@@ -1201,7 +1240,7 @@ export default function PublicCvBuilderPage() {
                 fontSize: "13.5px",
                 fontWeight: "900",
                 cursor: "pointer",
-                boxShadow: "0 4px 18px rgba(22,163,74,0.45)",
+                boxShadow: "0 4px 18px rgba(22,163,74,0.35)",
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "8px",
@@ -1214,17 +1253,17 @@ export default function PublicCvBuilderPage() {
       </header>
 
       {/* MAIN WORKSPACE */}
-      <main style={{ maxWidth: "1440px", margin: "0 auto", padding: "20px 16px" }}>
+      <main style={{ maxWidth: "1440px", margin: "0 auto", padding: "24px 16px", position: "relative", zIndex: 1 }}>
         <div style={{ display: "grid", gridTemplateColumns: "minmax(340px, 430px) 1fr", gap: "24px", alignItems: "start" }}>
           
           {/* LEFT INTERACTIVE EDITOR PANEL */}
           <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             
             {/* TOP BAR ACTIONS (LOAD SAMPLE, CLEAR) */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0e101d", padding: "10px 14px", borderRadius: "12px", border: "1px solid #334155", flexWrap: "wrap", gap: "8px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#ffffff", padding: "10px 14px", borderRadius: "14px", border: "1px solid #e2e8f0", boxShadow: "0 4px 12px rgba(0,0,0,0.03)", flexWrap: "wrap", gap: "8px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <span style={{ fontSize: "11px", color: "#94a3b8" }}>{isArabic ? "لغة التعديل الحالية:" : "Active Language:"}</span>
-                <span style={{ fontSize: "12px", fontWeight: "900", color: isArabic ? "#34d399" : "#38bdf8" }}>
+                <span style={{ fontSize: "11px", color: "#64748b" }}>{isArabic ? "لغة التعديل الحالية:" : "Active Language:"}</span>
+                <span style={{ fontSize: "12px", fontWeight: "900", color: "#2563eb" }}>
                   {isArabic ? "العربية (RTL)" : "English (LTR)"}
                 </span>
               </div>
@@ -1233,9 +1272,9 @@ export default function PublicCvBuilderPage() {
                 <button
                   onClick={handleLoadSampleData}
                   style={{
-                    background: "#1e293b",
-                    color: "#93c5fd",
-                    border: "1px solid #3b82f640",
+                    background: "#eff6ff",
+                    color: "#2563eb",
+                    border: "1px solid #bfdbfe",
                     padding: "5px 10px",
                     borderRadius: "6px",
                     fontSize: "11px",
@@ -1249,9 +1288,9 @@ export default function PublicCvBuilderPage() {
                 <button
                   onClick={handleClearCurrent}
                   style={{
-                    background: "#1e1e2d",
-                    color: "#f87171",
-                    border: "1px solid #ef444440",
+                    background: "#fef2f2",
+                    color: "#dc2626",
+                    border: "1px solid #fecaca",
                     padding: "5px 10px",
                     borderRadius: "6px",
                     fontSize: "11px",
@@ -1270,10 +1309,11 @@ export default function PublicCvBuilderPage() {
                 display: "grid",
                 gridTemplateColumns: "repeat(3, 1fr)",
                 gap: "6px",
-                background: "#0d0f1a",
+                background: "#ffffff",
                 padding: "6px",
                 borderRadius: "14px",
-                border: "1px solid #334155",
+                border: "1px solid #e2e8f0",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
               }}
             >
               {[
@@ -1289,7 +1329,7 @@ export default function PublicCvBuilderPage() {
                   onClick={() => setActiveTab(tb.id as any)}
                   style={{
                     background: activeTab === tb.id ? "#2563eb" : "transparent",
-                    color: activeTab === tb.id ? "#ffffff" : "#94a3b8",
+                    color: activeTab === tb.id ? "#ffffff" : "#64748b",
                     border: "none",
                     padding: "8px 4px",
                     borderRadius: "8px",
@@ -1307,19 +1347,19 @@ export default function PublicCvBuilderPage() {
 
             {/* TAB 1: PERSONAL INFO */}
             {activeTab === "personal" && (
-              <div style={{ background: "#0e101d", padding: "20px", borderRadius: "18px", border: "1px solid #334155", display: "flex", flexDirection: "column", gap: "14px" }}>
+              <div style={{ background: "#ffffff", padding: "20px", borderRadius: "18px", border: "1px solid #e2e8f0", boxShadow: "0 10px 30px rgba(0,0,0,0.04)", display: "flex", flexDirection: "column", gap: "14px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>
+                  <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#0f172a", margin: 0 }}>
                     {isArabic ? "البيانات الشخصية والنبذة" : "Personal Information & Bio"}
                   </h3>
-                  <span style={{ fontSize: "11px", color: isArabic ? "#34d399" : "#60a5fa", fontWeight: "800" }}>
+                  <span style={{ fontSize: "11px", color: "#2563eb", fontWeight: "800" }}>
                     {isArabic ? "اللغة: العربية" : "Language: English"}
                   </span>
                 </div>
 
                 {/* PHOTO UPLOAD */}
-                <div style={{ display: "flex", alignItems: "center", gap: "14px", padding: "12px", background: "#151624", borderRadius: "12px", border: "1px solid #334155" }}>
-                  <div style={{ width: "65px", height: "65px", borderRadius: "12px", overflow: "hidden", background: "#1e293b", border: "1.5px solid #60a5fa", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "14px", padding: "12px", background: "#f8fafc", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
+                  <div style={{ width: "65px", height: "65px", borderRadius: "12px", overflow: "hidden", background: "#ffffff", border: "1.5px solid #2563eb", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                     {photo ? (
                       <img src={photo} alt="Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     ) : (
@@ -1344,7 +1384,7 @@ export default function PublicCvBuilderPage() {
                       {isArabic ? "رفع صورتك الشخصية" : "Upload Your Photo"}
                     </button>
 
-                    <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "11px", color: "#94a3b8", cursor: "pointer" }}>
+                    <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "11px", color: "#64748b", cursor: "pointer" }}>
                       <input
                         type="checkbox"
                         checked={showPhoto}
@@ -1356,7 +1396,7 @@ export default function PublicCvBuilderPage() {
                 </div>
 
                 <div>
-                  <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>
+                  <label style={{ display: "block", fontSize: "11.5px", color: "#64748b", marginBottom: "4px" }}>
                     {isArabic ? "الاسم الكامل:" : "Full Name:"}
                   </label>
                   <input
@@ -1364,12 +1404,12 @@ export default function PublicCvBuilderPage() {
                     value={curDoc.fullName}
                     onChange={(e) => setCurDoc((prev) => ({ ...prev, fullName: e.target.value }))}
                     placeholder={isArabic ? "مثال: حيدر محمد شوكت" : "e.g. Haider M. Shwkat"}
-                    style={{ width: "100%", padding: "8px 12px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "13px", outline: "none" }}
+                    style={{ width: "100%", padding: "8px 12px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "8px", color: "#0f172a", fontSize: "13px", outline: "none" }}
                   />
                 </div>
 
                 <div>
-                  <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>
+                  <label style={{ display: "block", fontSize: "11.5px", color: "#64748b", marginBottom: "4px" }}>
                     {isArabic ? "المسمى الوظيفي والمهني:" : "Professional Job Title:"}
                   </label>
                   <input
@@ -1377,13 +1417,13 @@ export default function PublicCvBuilderPage() {
                     value={curDoc.jobTitle}
                     onChange={(e) => setCurDoc((prev) => ({ ...prev, jobTitle: e.target.value }))}
                     placeholder={isArabic ? "مثال: مبرمج بايثون ومحلل بيانات" : "e.g. Computer Science Specialist"}
-                    style={{ width: "100%", padding: "8px 12px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "13px", outline: "none" }}
+                    style={{ width: "100%", padding: "8px 12px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "8px", color: "#0f172a", fontSize: "13px", outline: "none" }}
                   />
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                   <div>
-                    <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>
+                    <label style={{ display: "block", fontSize: "11.5px", color: "#64748b", marginBottom: "4px" }}>
                       {isArabic ? "البريد الإلكتروني:" : "Email Address:"}
                     </label>
                     <input
@@ -1391,12 +1431,12 @@ export default function PublicCvBuilderPage() {
                       value={curDoc.email}
                       onChange={(e) => setCurDoc((prev) => ({ ...prev, email: e.target.value }))}
                       placeholder="name@example.com"
-                      style={{ width: "100%", padding: "8px 10px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "12px", outline: "none" }}
+                      style={{ width: "100%", padding: "8px 10px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "8px", color: "#0f172a", fontSize: "12px", outline: "none" }}
                     />
                   </div>
 
                   <div>
-                    <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>
+                    <label style={{ display: "block", fontSize: "11.5px", color: "#64748b", marginBottom: "4px" }}>
                       {isArabic ? "رقم الهاتف:" : "Phone Number:"}
                     </label>
                     <input
@@ -1405,14 +1445,14 @@ export default function PublicCvBuilderPage() {
                       value={curDoc.phone}
                       onChange={(e) => setCurDoc((prev) => ({ ...prev, phone: e.target.value }))}
                       placeholder="+964 770 000 0000"
-                      style={{ width: "100%", padding: "8px 10px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "12px", outline: "none" }}
+                      style={{ width: "100%", padding: "8px 10px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "8px", color: "#0f172a", fontSize: "12px", outline: "none" }}
                     />
                   </div>
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                   <div>
-                    <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>
+                    <label style={{ display: "block", fontSize: "11.5px", color: "#64748b", marginBottom: "4px" }}>
                       {isArabic ? "المدينة / الدولة:" : "Location:"}
                     </label>
                     <input
@@ -1420,12 +1460,12 @@ export default function PublicCvBuilderPage() {
                       value={curDoc.location}
                       onChange={(e) => setCurDoc((prev) => ({ ...prev, location: e.target.value }))}
                       placeholder={isArabic ? "بغداد، العراق" : "Baghdad, Iraq"}
-                      style={{ width: "100%", padding: "8px 10px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "12px", outline: "none" }}
+                      style={{ width: "100%", padding: "8px 10px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "8px", color: "#0f172a", fontSize: "12px", outline: "none" }}
                     />
                   </div>
 
                   <div>
-                    <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>
+                    <label style={{ display: "block", fontSize: "11.5px", color: "#64748b", marginBottom: "4px" }}>
                       {isArabic ? "رابط لينكد إن / الموقع:" : "LinkedIn / Portfolio:"}
                     </label>
                     <input
@@ -1434,13 +1474,13 @@ export default function PublicCvBuilderPage() {
                       value={curDoc.linkedin}
                       onChange={(e) => setCurDoc((prev) => ({ ...prev, linkedin: e.target.value }))}
                       placeholder="linkedin.com/in/username"
-                      style={{ width: "100%", padding: "8px 10px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "12px", outline: "none" }}
+                      style={{ width: "100%", padding: "8px 10px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "8px", color: "#0f172a", fontSize: "12px", outline: "none" }}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>
+                  <label style={{ display: "block", fontSize: "11.5px", color: "#64748b", marginBottom: "4px" }}>
                     {isArabic ? "الهدف المهني والملخص التنفيذي:" : "Executive Summary & Bio:"}
                   </label>
                   <textarea
@@ -1448,7 +1488,7 @@ export default function PublicCvBuilderPage() {
                     value={curDoc.summary}
                     onChange={(e) => setCurDoc((prev) => ({ ...prev, summary: e.target.value }))}
                     placeholder={isArabic ? "اكتب نبذة موجزة عن خبرتك وأهدافك المهنية..." : "Write a concise summary of your background and achievements..."}
-                    style={{ width: "100%", padding: "8px 12px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "12px", outline: "none", resize: "vertical", lineHeight: "1.5" }}
+                    style={{ width: "100%", padding: "8px 12px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "8px", color: "#0f172a", fontSize: "12px", outline: "none", resize: "vertical", lineHeight: "1.5" }}
                   />
                 </div>
               </div>
@@ -1456,9 +1496,9 @@ export default function PublicCvBuilderPage() {
 
             {/* TAB 2: WORK EXPERIENCE */}
             {activeTab === "experience" && (
-              <div style={{ background: "#0e101d", padding: "20px", borderRadius: "18px", border: "1px solid #334155", display: "flex", flexDirection: "column", gap: "14px" }}>
+              <div style={{ background: "#ffffff", padding: "20px", borderRadius: "18px", border: "1px solid #e2e8f0", boxShadow: "0 10px 30px rgba(0,0,0,0.04)", display: "flex", flexDirection: "column", gap: "14px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>
+                  <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#0f172a", margin: 0 }}>
                     {isArabic ? "الخبرات المهنية والعملية" : "Work Experience"}
                   </h3>
 
@@ -1484,17 +1524,17 @@ export default function PublicCvBuilderPage() {
                     <div
                       key={exp.id}
                       style={{
-                        background: "#151624",
+                        background: "#f8fafc",
                         padding: "14px",
                         borderRadius: "12px",
-                        border: "1px solid #334155",
+                        border: "1px solid #e2e8f0",
                         display: "flex",
                         flexDirection: "column",
                         gap: "8px",
                       }}
                     >
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <span style={{ fontSize: "12px", fontWeight: "800", color: "#38bdf8" }}>
+                        <span style={{ fontSize: "12px", fontWeight: "800", color: "#2563eb" }}>
                           #{expIdx + 1}
                         </span>
                         <button
@@ -1524,7 +1564,7 @@ export default function PublicCvBuilderPage() {
                             }));
                           }}
                           placeholder={isArabic ? "المسمى الوظيفي" : "Role"}
-                          style={{ padding: "6px 10px", background: "#0e101d", border: "1px solid #334155", borderRadius: "6px", color: "#ffffff", fontSize: "12px" }}
+                          style={{ padding: "6px 10px", background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "6px", color: "#0f172a", fontSize: "12px" }}
                         />
                         <input
                           type="text"
@@ -1537,7 +1577,7 @@ export default function PublicCvBuilderPage() {
                             }));
                           }}
                           placeholder={isArabic ? "اسم الشركة" : "Company"}
-                          style={{ padding: "6px 10px", background: "#0e101d", border: "1px solid #334155", borderRadius: "6px", color: "#ffffff", fontSize: "12px" }}
+                          style={{ padding: "6px 10px", background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "6px", color: "#0f172a", fontSize: "12px" }}
                         />
                       </div>
 
@@ -1553,20 +1593,20 @@ export default function PublicCvBuilderPage() {
                             }));
                           }}
                           placeholder={isArabic ? "الفترة (مثال: 2023 - الحالي)" : "Date range"}
-                          style={{ width: "100%", padding: "6px 10px", background: "#0e101d", border: "1px solid #334155", borderRadius: "6px", color: "#ffffff", fontSize: "12px" }}
+                          style={{ width: "100%", padding: "6px 10px", background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "6px", color: "#0f172a", fontSize: "12px" }}
                         />
                       </div>
 
                       {/* BULLETS */}
                       <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginTop: "4px" }}>
-                        <span style={{ fontSize: "11px", color: "#94a3b8" }}>{isArabic ? "نقاط المهام والإنجازات:" : "Bullet Points:"}</span>
+                        <span style={{ fontSize: "11px", color: "#64748b" }}>{isArabic ? "نقاط المهام والإنجازات:" : "Bullet Points:"}</span>
                         {exp.bullets.map((b, bIdx) => (
                           <div key={bIdx} style={{ display: "flex", gap: "6px", alignItems: "center" }}>
                             <input
                               type="text"
                               value={b}
                               onChange={(e) => handleUpdateBullet(exp.id, bIdx, e.target.value)}
-                              style={{ flex: 1, padding: "5px 8px", background: "#0e101d", border: "1px solid #334155", borderRadius: "6px", color: "#ffffff", fontSize: "11.5px" }}
+                              style={{ flex: 1, padding: "5px 8px", background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "6px", color: "#0f172a", fontSize: "11.5px" }}
                             />
                             <button
                               onClick={() => handleRemoveBullet(exp.id, bIdx)}
@@ -1580,12 +1620,13 @@ export default function PublicCvBuilderPage() {
                         <button
                           onClick={() => handleAddBullet(exp.id)}
                           style={{
-                            background: "transparent",
-                            border: "1px dashed #3b82f6",
-                            color: "#60a5fa",
+                            background: "#ffffff",
+                            border: "1px dashed #2563eb",
+                            color: "#2563eb",
                             padding: "4px",
                             borderRadius: "6px",
                             fontSize: "11px",
+                            fontWeight: "700",
                             cursor: "pointer",
                             marginTop: "2px",
                           }}
@@ -1601,17 +1642,17 @@ export default function PublicCvBuilderPage() {
 
             {/* TAB 3: EDUCATION & CERTS */}
             {activeTab === "education" && (
-              <div style={{ background: "#0e101d", padding: "20px", borderRadius: "18px", border: "1px solid #334155", display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div style={{ background: "#ffffff", padding: "20px", borderRadius: "18px", border: "1px solid #e2e8f0", boxShadow: "0 10px 30px rgba(0,0,0,0.04)", display: "flex", flexDirection: "column", gap: "16px" }}>
                 
                 {/* EDUCATION */}
                 <div>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                    <h3 style={{ fontSize: "14px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>
+                    <h3 style={{ fontSize: "14px", fontWeight: "900", color: "#0f172a", margin: 0 }}>
                       {isArabic ? "المؤهلات العلمية (Education)" : "Education"}
                     </h3>
 
                     <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                      <label style={{ fontSize: "11px", color: "#94a3b8", display: "flex", alignItems: "center", gap: "4px" }}>
+                      <label style={{ fontSize: "11px", color: "#64748b", display: "flex", alignItems: "center", gap: "4px" }}>
                         <input
                           type="checkbox"
                           checked={showEducation}
@@ -1630,7 +1671,7 @@ export default function PublicCvBuilderPage() {
 
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     {curDoc.education.map((edu) => (
-                      <div key={edu.id} style={{ background: "#151624", padding: "10px", borderRadius: "8px", border: "1px solid #334155", display: "grid", gridTemplateColumns: "1fr 1fr auto", gap: "6px", alignItems: "center" }}>
+                      <div key={edu.id} style={{ background: "#f8fafc", padding: "10px", borderRadius: "8px", border: "1px solid #e2e8f0", display: "grid", gridTemplateColumns: "1fr 1fr auto", gap: "6px", alignItems: "center" }}>
                         <input
                           type="text"
                           value={edu.degree}
@@ -1642,7 +1683,7 @@ export default function PublicCvBuilderPage() {
                             }));
                           }}
                           placeholder={isArabic ? "الشهادة والتخصص" : "Degree"}
-                          style={{ padding: "5px 8px", background: "#0e101d", border: "1px solid #334155", borderRadius: "5px", color: "#ffffff", fontSize: "11.5px" }}
+                          style={{ padding: "5px 8px", background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "5px", color: "#0f172a", fontSize: "11.5px" }}
                         />
                         <input
                           type="text"
@@ -1655,7 +1696,7 @@ export default function PublicCvBuilderPage() {
                             }));
                           }}
                           placeholder={isArabic ? "الجامعة / المعهد" : "School"}
-                          style={{ padding: "5px 8px", background: "#0e101d", border: "1px solid #334155", borderRadius: "5px", color: "#ffffff", fontSize: "11.5px" }}
+                          style={{ padding: "5px 8px", background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "5px", color: "#0f172a", fontSize: "11.5px" }}
                         />
                         <button
                           onClick={() => handleRemoveEducation(edu.id)}
@@ -1671,12 +1712,12 @@ export default function PublicCvBuilderPage() {
                 {/* CERTIFICATIONS */}
                 <div>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                    <h3 style={{ fontSize: "14px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>
+                    <h3 style={{ fontSize: "14px", fontWeight: "900", color: "#0f172a", margin: 0 }}>
                       {isArabic ? "الشهادات والاعتمادات (Certifications)" : "Certifications"}
                     </h3>
 
                     <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                      <label style={{ fontSize: "11px", color: "#94a3b8", display: "flex", alignItems: "center", gap: "4px" }}>
+                      <label style={{ fontSize: "11px", color: "#64748b", display: "flex", alignItems: "center", gap: "4px" }}>
                         <input
                           type="checkbox"
                           checked={showCertifications}
@@ -1695,7 +1736,7 @@ export default function PublicCvBuilderPage() {
 
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     {curDoc.certifications.map((cert) => (
-                      <div key={cert.id} style={{ background: "#151624", padding: "8px 10px", borderRadius: "8px", border: "1px solid #334155", display: "flex", gap: "6px", alignItems: "center" }}>
+                      <div key={cert.id} style={{ background: "#f8fafc", padding: "8px 10px", borderRadius: "8px", border: "1px solid #e2e8f0", display: "flex", gap: "6px", alignItems: "center" }}>
                         <input
                           type="text"
                           value={cert.title}
@@ -1707,7 +1748,7 @@ export default function PublicCvBuilderPage() {
                             }));
                           }}
                           placeholder={isArabic ? "اسم الشهادة المعتمدة" : "Certification Title"}
-                          style={{ flex: 1, padding: "5px 8px", background: "#0e101d", border: "1px solid #334155", borderRadius: "5px", color: "#ffffff", fontSize: "11.5px" }}
+                          style={{ flex: 1, padding: "5px 8px", background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "5px", color: "#0f172a", fontSize: "11.5px" }}
                         />
                         <button
                           onClick={() => handleRemoveCertification(cert.id)}
@@ -1725,13 +1766,13 @@ export default function PublicCvBuilderPage() {
 
             {/* TAB 4: SKILLS */}
             {activeTab === "skills" && (
-              <div style={{ background: "#0e101d", padding: "20px", borderRadius: "18px", border: "1px solid #334155", display: "flex", flexDirection: "column", gap: "14px" }}>
+              <div style={{ background: "#ffffff", padding: "20px", borderRadius: "18px", border: "1px solid #e2e8f0", boxShadow: "0 10px 30px rgba(0,0,0,0.04)", display: "flex", flexDirection: "column", gap: "14px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>
+                  <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#0f172a", margin: 0 }}>
                     {isArabic ? "المهارات والقدرات التقنية" : "Skills & Competencies"}
                   </h3>
 
-                  <label style={{ fontSize: "11px", color: "#94a3b8", display: "flex", alignItems: "center", gap: "4px" }}>
+                  <label style={{ fontSize: "11px", color: "#64748b", display: "flex", alignItems: "center", gap: "4px" }}>
                     <input
                       type="checkbox"
                       checked={showSkills}
@@ -1748,7 +1789,7 @@ export default function PublicCvBuilderPage() {
                     onChange={(e) => setNewSkillInput(e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter") handleAddSkill(); }}
                     placeholder={isArabic ? "أدخل مهارة واضغط Enter..." : "Enter skill and press Enter..."}
-                    style={{ flex: 1, padding: "8px 12px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "12px" }}
+                    style={{ flex: 1, padding: "8px 12px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "8px", color: "#0f172a", fontSize: "12px" }}
                   />
                   <button
                     onClick={handleAddSkill}
@@ -1772,9 +1813,9 @@ export default function PublicCvBuilderPage() {
                     <span
                       key={skIdx}
                       style={{
-                        background: "#1e293b",
-                        border: "1px solid #3b82f640",
-                        color: "#93c5fd",
+                        background: "#eff6ff",
+                        border: "1px solid #bfdbfe",
+                        color: "#1d4ed8",
                         padding: "4px 10px",
                         borderRadius: "8px",
                         fontSize: "11.5px",
@@ -1787,7 +1828,7 @@ export default function PublicCvBuilderPage() {
                       <span>{sk}</span>
                       <button
                         onClick={() => handleRemoveSkill(skIdx)}
-                        style={{ background: "transparent", border: "none", color: "#f87171", cursor: "pointer", fontSize: "11px", padding: 0 }}
+                        style={{ background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", fontSize: "11px", padding: 0 }}
                       >
                         ✕
                       </button>
@@ -1799,12 +1840,12 @@ export default function PublicCvBuilderPage() {
 
             {/* TAB 5: PRESETS */}
             {activeTab === "presets" && (
-              <div style={{ background: "#0e101d", padding: "20px", borderRadius: "18px", border: "1.5px solid #2563eb", boxShadow: "0 8px 25px rgba(37,99,235,0.15)" }}>
+              <div style={{ background: "#ffffff", padding: "20px", borderRadius: "18px", border: "1.5px solid #2563eb", boxShadow: "0 10px 30px rgba(37,99,235,0.08)" }}>
                 <div style={{ marginBottom: "14px" }}>
-                  <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#60a5fa", margin: "0 0 4px 0" }}>
+                  <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#0f172a", margin: "0 0 4px 0" }}>
                     {isArabic ? "مكتبة القوالب المتخصصة (9 مجالات)" : "Specialized Industry Presets (9 Domains)"}
                   </h3>
-                  <span style={{ fontSize: "11.5px", color: "#94a3b8" }}>
+                  <span style={{ fontSize: "11.5px", color: "#64748b" }}>
                     {isArabic ? "اختر قالباً يتناسب مع مجالك المهني:" : "Select a preset tailored to your professional domain:"}
                   </span>
                 </div>
@@ -1817,8 +1858,8 @@ export default function PublicCvBuilderPage() {
                         key={p.id}
                         onClick={() => handleApplyPreset(p.id)}
                         style={{
-                          background: isSelected ? "#1e293b" : "#151624",
-                          border: isSelected ? `2px solid ${p.accent}` : "1px solid #334155",
+                          background: isSelected ? "#eff6ff" : "#f8fafc",
+                          border: isSelected ? `2px solid ${p.accent}` : "1px solid #e2e8f0",
                           borderRadius: "10px",
                           padding: "10px 12px",
                           textAlign: isArabic ? "right" : "left",
@@ -1830,11 +1871,11 @@ export default function PublicCvBuilderPage() {
                         }}
                       >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                          <strong style={{ fontSize: "13px", color: isSelected ? "#60a5fa" : "#ffffff", fontWeight: "800" }}>{p.title}</strong>
+                          <strong style={{ fontSize: "13px", color: isSelected ? "#1d4ed8" : "#0f172a", fontWeight: "800" }}>{p.title}</strong>
                           <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: p.accent, display: "inline-block" }} />
                         </div>
-                        <div style={{ fontSize: "11px", color: "#38bdf8", fontWeight: "700" }}>{p.field}</div>
-                        <p style={{ fontSize: "10.5px", color: "#94a3b8", margin: 0, lineHeight: "1.35" }}>{p.desc}</p>
+                        <div style={{ fontSize: "11px", color: "#2563eb", fontWeight: "700" }}>{p.field}</div>
+                        <p style={{ fontSize: "10.5px", color: "#64748b", margin: 0, lineHeight: "1.35" }}>{p.desc}</p>
                       </button>
                     );
                   })}
@@ -1844,13 +1885,13 @@ export default function PublicCvBuilderPage() {
 
             {/* TAB 6: STYLING & QR */}
             {activeTab === "styling" && (
-              <div style={{ background: "#0e101d", padding: "20px", borderRadius: "18px", border: "1px solid #334155", display: "flex", flexDirection: "column", gap: "14px" }}>
-                <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>
+              <div style={{ background: "#ffffff", padding: "20px", borderRadius: "18px", border: "1px solid #e2e8f0", boxShadow: "0 10px 30px rgba(0,0,0,0.04)", display: "flex", flexDirection: "column", gap: "14px" }}>
+                <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#0f172a", margin: 0 }}>
                   {isArabic ? "تنسيق الصفحة والألوان ورمز الـ QR" : "Layout, Colors & QR Studio"}
                 </h3>
 
                 <div>
-                  <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "6px" }}>
+                  <label style={{ display: "block", fontSize: "11.5px", color: "#64748b", marginBottom: "6px" }}>
                     {isArabic ? "نمط وهيكل الصفحة (Layout Format):" : "Layout Format:"}
                   </label>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}>
@@ -1864,9 +1905,9 @@ export default function PublicCvBuilderPage() {
                         key={fmt.id}
                         onClick={() => setLayoutFormat(fmt.id as any)}
                         style={{
-                          background: layoutFormat === fmt.id ? "#2563eb" : "#151624",
-                          color: layoutFormat === fmt.id ? "#ffffff" : "#94a3b8",
-                          border: "1px solid #334155",
+                          background: layoutFormat === fmt.id ? "#2563eb" : "#f8fafc",
+                          color: layoutFormat === fmt.id ? "#ffffff" : "#475569",
+                          border: "1px solid #e2e8f0",
                           padding: "8px 6px",
                           borderRadius: "8px",
                           fontSize: "11px",
@@ -1882,7 +1923,7 @@ export default function PublicCvBuilderPage() {
                 </div>
 
                 <div>
-                  <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "6px" }}>
+                  <label style={{ display: "block", fontSize: "11.5px", color: "#64748b", marginBottom: "6px" }}>
                     {isArabic ? "ثيم الألوان:" : "Color Theme:"}
                   </label>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px" }}>
@@ -1895,9 +1936,9 @@ export default function PublicCvBuilderPage() {
                         key={th.id}
                         onClick={() => setTemplateStyle(th.id as any)}
                         style={{
-                          background: templateStyle === th.id ? "#2563eb" : "#151624",
-                          color: templateStyle === th.id ? "#ffffff" : "#94a3b8",
-                          border: "1px solid #334155",
+                          background: templateStyle === th.id ? "#2563eb" : "#f8fafc",
+                          color: templateStyle === th.id ? "#ffffff" : "#475569",
+                          border: "1px solid #e2e8f0",
                           padding: "7px 4px",
                           borderRadius: "8px",
                           fontSize: "11px",
@@ -1912,7 +1953,7 @@ export default function PublicCvBuilderPage() {
                 </div>
 
                 <div>
-                  <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "6px" }}>
+                  <label style={{ display: "block", fontSize: "11.5px", color: "#64748b", marginBottom: "6px" }}>
                     {isArabic ? "لون التمييز (Accent Color):" : "Accent Color:"}
                   </label>
                   <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
@@ -1926,18 +1967,18 @@ export default function PublicCvBuilderPage() {
                       type="text"
                       value={accentColor}
                       onChange={(e) => setAccentColor(e.target.value)}
-                      style={{ flex: 1, padding: "8px 10px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "12px" }}
+                      style={{ flex: 1, padding: "8px 10px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "8px", color: "#0f172a", fontSize: "12px" }}
                     />
                   </div>
                 </div>
 
                 {/* QR CODE INPUT */}
-                <div style={{ borderTop: "1px solid #334155", paddingTop: "12px" }}>
+                <div style={{ borderTop: "1px solid #e2e8f0", paddingTop: "12px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-                    <label style={{ fontSize: "11.5px", color: "#94a3b8" }}>
+                    <label style={{ fontSize: "11.5px", color: "#64748b" }}>
                       {isArabic ? "رابط رمز الـ QR المخصص:" : "Custom QR URL:"}
                     </label>
-                    <label style={{ fontSize: "11px", color: "#94a3b8", display: "flex", alignItems: "center", gap: "4px" }}>
+                    <label style={{ fontSize: "11px", color: "#64748b", display: "flex", alignItems: "center", gap: "4px" }}>
                       <input
                         type="checkbox"
                         checked={showQrCode}
@@ -1952,7 +1993,7 @@ export default function PublicCvBuilderPage() {
                     value={qrUrl}
                     onChange={(e) => setQrUrl(e.target.value)}
                     placeholder="https://yourportfolio.com or WhatsApp link"
-                    style={{ width: "100%", padding: "8px 10px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "12px" }}
+                    style={{ width: "100%", padding: "8px 10px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "8px", color: "#0f172a", fontSize: "12px" }}
                   />
                 </div>
               </div>
@@ -1966,10 +2007,11 @@ export default function PublicCvBuilderPage() {
               position: "sticky",
               top: "80px",
               alignSelf: "start",
-              background: "#06070d",
+              background: "#ffffff",
               padding: "20px 14px",
               borderRadius: "20px",
-              border: "1px solid #334155",
+              border: "1px solid #e2e8f0",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.04)",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -1979,16 +2021,16 @@ export default function PublicCvBuilderPage() {
             }}
           >
             {/* DESK TOOLBAR */}
-            <div style={{ width: "100%", maxWidth: "794px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginBottom: "16px", borderBottom: "1px solid rgba(255,255,255,0.08)", paddingBottom: "10px" }}>
+            <div style={{ width: "100%", maxWidth: "794px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginBottom: "16px", borderBottom: "1px solid #e2e8f0", paddingBottom: "10px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: isArabic ? "#16a34a" : "#0284c7" }} />
-                <span style={{ fontSize: "12.5px", fontWeight: "900", color: "#ffffff" }}>
+                <span style={{ fontSize: "12.5px", fontWeight: "900", color: "#0f172a" }}>
                   {isArabic ? "معاينة السيرة (بالعربية AR: ISO A4)" : "Live Preview (English EN: ISO A4)"}
                 </span>
               </div>
 
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <span style={{ fontSize: "11px", color: "#94a3b8" }}>{isArabic ? "مقياس العرض:" : "Scale:"}</span>
+                <span style={{ fontSize: "11px", color: "#64748b" }}>{isArabic ? "مقياس العرض:" : "Scale:"}</span>
                 {[
                   { label: "65%", val: 0.65 },
                   { label: "75%", val: 0.75 },
@@ -1999,9 +2041,9 @@ export default function PublicCvBuilderPage() {
                     key={z.label}
                     onClick={() => setA4Zoom(z.val)}
                     style={{
-                      background: a4Zoom === z.val ? "#2563eb" : "#151624",
-                      color: a4Zoom === z.val ? "#ffffff" : "#94a3b8",
-                      border: "1px solid #334155",
+                      background: a4Zoom === z.val ? "#2563eb" : "#f1f5f9",
+                      color: a4Zoom === z.val ? "#ffffff" : "#64748b",
+                      border: "1px solid #e2e8f0",
                       padding: "3px 7px",
                       borderRadius: "6px",
                       fontSize: "10.5px",
@@ -2017,7 +2059,7 @@ export default function PublicCvBuilderPage() {
 
             {/* SCALABLE TRUE A4 CANVAS */}
             <div style={{ transform: `scale(${a4Zoom})`, transformOrigin: "top center", transition: "transform 0.2s ease", marginBottom: `${(1 - a4Zoom) * -1123}px` }}>
-              <div style={{ boxShadow: "0 25px 70px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden" }}>
+              <div style={{ boxShadow: "0 15px 45px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.06)", borderRadius: "4px", overflow: "hidden" }}>
                 {renderDocumentContent(curDoc, isArabic)}
               </div>
             </div>
