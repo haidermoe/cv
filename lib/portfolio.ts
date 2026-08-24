@@ -117,6 +117,9 @@ export interface PortfolioData {
     showSkills?: boolean;
     showEducation?: boolean;
     showCertifications?: boolean;
+    showQrCode?: boolean;
+    qrCodeTarget?: "portfolio" | "linkedin" | "custom";
+    qrCodeCustomUrl?: string;
     fontFamily?: string;
   };
 }

@@ -197,6 +197,45 @@ export default function AdminPage() {
   const [showShortcutsModal, setShowShortcutsModal] = useState(false);
   const [shortcutToast, setShortcutToast] = useState("");
 
+  // Interactive QR Code Generator States
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState("");
+  const [qrForegroundColor, setQrForegroundColor] = useState("#0f172a");
+  const [qrBackgroundColor, setQrBackgroundColor] = useState("#ffffff");
+
+  useEffect(() => {
+    let isMounted = true;
+    import("qrcode").then((QRCode) => {
+      const target = data?.cvDocument?.qrCodeTarget || "portfolio";
+      let urlToEncode = "https://cv-wine-tau.vercel.app";
+      if (target === "linkedin") {
+        urlToEncode = data?.cvDocument?.linkedin ? (data.cvDocument.linkedin.startsWith("http") ? data.cvDocument.linkedin : `https://${data.cvDocument.linkedin}`) : "https://linkedin.com/in/haidermoe";
+      } else if (target === "custom" && data?.cvDocument?.qrCodeCustomUrl) {
+        urlToEncode = data.cvDocument.qrCodeCustomUrl;
+      }
+
+      QRCode.toDataURL(urlToEncode, {
+        width: 320,
+        margin: 1,
+        color: {
+          dark: qrForegroundColor,
+          light: qrBackgroundColor,
+        },
+      }).then((url) => {
+        if (isMounted) setQrCodeDataUrl(url);
+      }).catch((e) => console.error("QR Error:", e));
+    });
+    return () => { isMounted = false; };
+  }, [data?.cvDocument?.qrCodeTarget, data?.cvDocument?.qrCodeCustomUrl, data?.cvDocument?.linkedin, qrForegroundColor, qrBackgroundColor]);
+
+  const handleDownloadQrCode = () => {
+    if (!qrCodeDataUrl) return;
+    const a = document.createElement("a");
+    a.href = qrCodeDataUrl;
+    a.download = "HAIDER_CV_QR_CODE.png";
+    a.click();
+    showToast("تم تنزيل الـ QR Code كصورة PNG بنجاح");
+  };
+
   useEffect(() => {
     checkAuth();
   }, []);
@@ -1834,6 +1873,84 @@ export default function AdminPage() {
                       </div>
                     </div>
 
+                    {/* INTERACTIVE QR CODE GENERATOR STUDIO */}
+                    <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                        <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#60a5fa", margin: 0 }}>مولد الـ QR Code التفاعلي (QR Studio)</h4>
+                        <span style={{ fontSize: "10.5px", background: "#1e293b", color: "#38bdf8", padding: "3px 8px", borderRadius: "6px", fontWeight: "700" }}>ماسح ذكي</span>
+                      </div>
+
+                      {/* TARGET SELECTOR */}
+                      <div style={{ marginBottom: "12px" }}>
+                        <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "6px" }}>الرابط الموجه إليه الـ QR Code:</label>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px", marginBottom: "8px" }}>
+                          {[
+                            { id: "portfolio", label: "الموقع التفاعلي" },
+                            { id: "linkedin", label: "LinkedIn" },
+                            { id: "custom", label: "رابط مخصص" },
+                          ].map((t) => (
+                            <button
+                              key={t.id}
+                              onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeTarget: t.id as any } })}
+                              style={{
+                                background: (data.cvDocument?.qrCodeTarget || "portfolio") === t.id ? "#2563eb" : "#151624",
+                                color: (data.cvDocument?.qrCodeTarget || "portfolio") === t.id ? "#ffffff" : "#94a3b8",
+                                border: "1px solid #334155",
+                                padding: "6px 4px",
+                                borderRadius: "6px",
+                                fontSize: "11px",
+                                fontWeight: "800",
+                                cursor: "pointer",
+                              }}
+                            >
+                              {t.label}
+                            </button>
+                          ))}
+                        </div>
+
+                        {data.cvDocument?.qrCodeTarget === "custom" && (
+                          <input
+                            type="text"
+                            placeholder="https://your-custom-link.com"
+                            value={data.cvDocument?.qrCodeCustomUrl || ""}
+                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeCustomUrl: e.target.value } })}
+                            style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px", marginBottom: "8px" }}
+                          />
+                        )}
+                      </div>
+
+                      {/* QR PREVIEW & DOWNLOAD */}
+                      <div style={{ display: "flex", gap: "14px", alignItems: "center", background: "#151624", padding: "12px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)", marginBottom: "12px" }}>
+                        <div style={{ width: "80px", height: "80px", background: qrBackgroundColor, padding: "4px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 12px rgba(0,0,0,0.3)" }}>
+                          {qrCodeDataUrl ? (
+                            <img src={qrCodeDataUrl} alt="QR Code" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                          ) : (
+                            <span style={{ fontSize: "10px", color: "#64748b" }}>جاري التوليد...</span>
+                          )}
+                        </div>
+
+                        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px" }}>
+                          <button
+                            onClick={handleDownloadQrCode}
+                            style={{ background: "#2563eb", color: "#ffffff", border: "none", padding: "7px 12px", borderRadius: "8px", fontSize: "12px", fontWeight: "800", cursor: "pointer", display: "inline-block", textAlign: "center" }}
+                          >
+                            تنزيل الـ QR Code كصورة PNG
+                          </button>
+                          <span style={{ fontSize: "10.5px", color: "#94a3b8" }}>دقة عالية 300DPI جاهزة للطباعة أو الاستخدام الخارجي</span>
+                        </div>
+                      </div>
+
+                      {/* EMBED IN CV TOGGLE */}
+                      <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "#ffffff", cursor: "pointer", background: "#151624", padding: "8px 12px", borderRadius: "8px", border: "1px solid #334155" }}>
+                        <input
+                          type="checkbox"
+                          checked={data.cvDocument?.showQrCode !== false}
+                          onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), showQrCode: e.target.checked } })}
+                        />
+                        <span style={{ fontWeight: "700" }}>إدراج الـ QR Code الذكي داخل ورقة السيرة الذاتية (A4 Sheet)</span>
+                      </label>
+                    </div>
+
                     {/* STYLING & ACCENT */}
                     <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
                       <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#60a5fa", marginBottom: "12px" }}>ثيم وتصميم الـ PDF</h4>
@@ -2002,6 +2119,14 @@ export default function AdminPage() {
                                   ))}
                                 </div>
                               )}
+
+                              {/* EMBEDDED QR CODE IN SIDEBAR */}
+                              {data.cvDocument?.showQrCode !== false && qrCodeDataUrl && (
+                                <div style={{ marginTop: "12px", padding: "8px", background: data.cvDocument?.templateStyle === "clean-white" ? "#f8fafc" : "rgba(255,255,255,0.05)", borderRadius: "10px", border: `1.5px solid ${data.cvDocument?.accentColor || "#2563eb"}40`, display: "flex", flexDirection: "column", alignItems: "center", gap: "3px" }}>
+                                  <img src={qrCodeDataUrl} alt="QR Code" style={{ width: "68px", height: "68px", objectFit: "contain" }} />
+                                  <span style={{ fontSize: "8px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", letterSpacing: "0.5px" }}>LIVE PORTFOLIO</span>
+                                </div>
+                              )}
                             </div>
 
                             {/* RIGHT MAIN CONTENT */}
@@ -2079,11 +2204,20 @@ export default function AdminPage() {
                                 </div>
                               </div>
 
-                              {data.cvDocument?.showPhoto !== false && data.cvDocument?.photo && data.cvDocument.photo.trim() !== "" && (
-                                <div style={{ width: "80px", height: "80px", borderRadius: "12px", overflow: "hidden", border: `2px solid ${data.cvDocument.accentColor || "#2563eb"}`, flexShrink: 0, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
-                                  <img src={data.cvDocument.photo} alt="Photo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                </div>
-                              )}
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
+                                {data.cvDocument?.showQrCode !== false && qrCodeDataUrl && (
+                                  <div style={{ padding: "4px", background: "#ffffff", borderRadius: "8px", border: `1.5px solid ${data.cvDocument?.accentColor || "#2563eb"}`, display: "flex", flexDirection: "column", alignItems: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+                                    <img src={qrCodeDataUrl} alt="QR" style={{ width: "55px", height: "55px", objectFit: "contain" }} />
+                                    <span style={{ fontSize: "6.5px", fontWeight: "900", color: "#0f172a", marginTop: "1px" }}>PORTFOLIO</span>
+                                  </div>
+                                )}
+
+                                {data.cvDocument?.showPhoto !== false && data.cvDocument?.photo && data.cvDocument.photo.trim() !== "" && (
+                                  <div style={{ width: "75px", height: "75px", borderRadius: "12px", overflow: "hidden", border: `2px solid ${data.cvDocument.accentColor || "#2563eb"}`, flexShrink: 0, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
+                                    <img src={data.cvDocument.photo} alt="Photo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                  </div>
+                                )}
+                              </div>
                             </div>
 
                             {/* EXECUTIVE SUMMARY */}
