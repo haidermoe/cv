@@ -64,16 +64,27 @@ export interface PortfolioData {
     textColorMuted?: string;
   };
   cvDocument?: {
+    cvLang?: "AR" | "EN";
     photo?: string;
     fullName: string;
+    fullNameAR?: string;
+    fullNameEN?: string;
     jobTitle: string;
+    jobTitleAR?: string;
+    jobTitleEN?: string;
     summary: string;
+    summaryAR?: string;
+    summaryEN?: string;
     email: string;
     phone: string;
     location: string;
+    locationAR?: string;
+    locationEN?: string;
     linkedin: string;
     website: string;
     skills: string[];
+    skillsAR?: string[];
+    skillsEN?: string[];
     languages: string[];
     experiences: Array<{
       id: string;

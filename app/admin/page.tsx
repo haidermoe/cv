@@ -459,6 +459,57 @@ export default function AdminPage() {
     reader.readAsDataURL(file);
   };
 
+  const handleSwitchCvLanguage = (lang: "AR" | "EN") => {
+    if (!data) return;
+    if (lang === "AR") {
+      setData({
+        ...data,
+        cvDocument: {
+          ...(data.cvDocument || ({} as any)),
+          cvLang: "AR",
+          fullName: data.general.nameAR || "حيدر محمد شوكت",
+          jobTitle: "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة",
+          location: data.general.locationAR || "بغداد، العراق",
+          summary: data.translations.AR?.bio || "",
+          fontFamily: "Tajawal",
+          skills: [
+            "أتمتة بايثون وبرمجة السكربتات",
+            "هيكلة وإدارة قواعد البيانات الضخمة SQL",
+            "تكامل أنظمة ERP وفودكس للتجارة الإلكترونية",
+            "إدارة وتشغيل شبكات FTTH و EPON الضوئية",
+            "تنظيف وتدقيق وضمان جودة البيانات",
+            "إدارة خوادم لينكس والـ Bash Scripts",
+            "إدارة المشاريع بالمنهجيات المرنة Agile",
+          ],
+        },
+      });
+      showToast("تم تحويل وتعبئة السيرة الذاتية باللغة العربية بنجاح");
+    } else {
+      setData({
+        ...data,
+        cvDocument: {
+          ...(data.cvDocument || ({} as any)),
+          cvLang: "EN",
+          fullName: data.general.nameEN || "HAIDER M. SHWKAT",
+          jobTitle: "Computer Science Specialist | Data Operations & Workflow Consultant",
+          location: data.general.locationEN || "Baghdad, Iraq",
+          summary: data.translations.EN?.bio || "",
+          fontFamily: "Outfit",
+          skills: [
+            "Python Automation & Scripting",
+            "SQL & High-Volume Database Architecture",
+            "E-Commerce & Foodics ERP Workflows",
+            "FTTH & EPON Optical Network Management",
+            "Data Cleansing & Integrity Verification",
+            "Linux Server Operations & Bash",
+            "Agile Project & Team Leadership",
+          ],
+        },
+      });
+      showToast("Switched and auto-filled CV with English Profile Data");
+    }
+  };
+
   const handleGeneratePdf = async (downloadLocal = false) => {
     const element = document.getElementById("cv-pdf-canvas");
     if (!element) {
@@ -466,8 +517,11 @@ export default function AdminPage() {
       return;
     }
 
+    const isArabic = data?.cvDocument?.cvLang === "AR";
+    const pdfFileName = isArabic ? "HAIDER_M_SHWKAT_CV_AR_2026.pdf" : "HAIDER_M_SHWKAT_CV_2026.pdf";
+
     setIsGeneratingPdf(true);
-    setGeneratePdfStatus(downloadLocal ? "جاري توليد ملف الـ PDF وتنزيله..." : "جاري توليد ملف الـ PDF وحفظه في الموقع...");
+    setGeneratePdfStatus(downloadLocal ? `جاري توليد ملف الـ PDF (${isArabic ? "بالعربية" : "بالإنجليزية"}) وتنزيله...` : `جاري توليد ملف الـ PDF (${isArabic ? "بالعربية" : "بالإنجليزية"}) وحفظه في الموقع...`);
 
     try {
       const html2canvas = (await import("html2canvas")).default;
@@ -507,14 +561,14 @@ export default function AdminPage() {
       }
 
       if (downloadLocal) {
-        pdf.save("HAIDER_M_SHWKAT_CV_2026.pdf");
-        setGeneratePdfStatus("تم توليد وتنزيل ملف الـ PDF متعدّد الصفحات بنجاح!");
+        pdf.save(pdfFileName);
+        setGeneratePdfStatus(`تم توليد وتنزيل ملف الـ PDF (${isArabic ? "بالعربية" : "بالإنجليزية"}) بنجاح!`);
       } else {
         const blob = pdf.output("blob");
-        const file = new File([blob], "HAIDER_M_SHWKAT_CV_2026.pdf", { type: "application/pdf" });
+        const file = new File([blob], pdfFileName, { type: "application/pdf" });
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("customName", "HAIDER_M_SHWKAT_CV_2026.pdf");
+        formData.append("customName", pdfFileName);
 
         const res = await fetch("/api/admin/upload", {
           method: "POST",
@@ -523,13 +577,13 @@ export default function AdminPage() {
         const json = await res.json();
 
         if (json.ok) {
-          setGeneratePdfStatus("تم توليد ملف الـ PDF بنجاح واعتماده كملف السيرة الرسمي للموقع!");
+          setGeneratePdfStatus(`تم توليد ملف الـ PDF (${isArabic ? "بالعربية" : "بالإنجليزية"}) بنجاح واعتماده في الموقع!`);
           if (data) {
             setData({
               ...data,
               general: {
                 ...data.general,
-                cvPdfPath: "/HAIDER_M_SHWKAT_CV_2026.pdf",
+                cvPdfPath: `/${pdfFileName}`,
               }
             });
           }
@@ -1496,35 +1550,65 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* ACTION TOOLBAR */}
+              {/* ACTION TOOLBAR & BILINGUAL LANGUAGE ENGINE */}
               {cvMode === "builder" && (
-                <div style={{ background: "#0a0b12", padding: "16px 20px", borderRadius: "14px", border: "1px solid #334155", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", marginBottom: "25px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                    <button
-                      onClick={() => handleGeneratePdf(false)}
-                      disabled={isGeneratingPdf}
-                      style={{ background: "#16a34a", color: "#ffffff", border: "none", padding: "10px 22px", borderRadius: "10px", fontSize: "14px", fontWeight: "800", cursor: "pointer", boxShadow: "0 4px 15px rgba(22, 163, 74, 0.4)", display: "flex", alignItems: "center", gap: "8px" }}
-                    >
-                      <span>{isGeneratingPdf ? "جاري التوليد والحفظ..." : "توليد وحفظ الـ PDF كملف الموقع الرسمي"}</span>
-                    </button>
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "25px" }}>
+                  <div style={{ background: "#0a0b12", padding: "16px 20px", borderRadius: "14px", border: "1px solid #334155", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
+                      <button
+                        onClick={() => handleGeneratePdf(false)}
+                        disabled={isGeneratingPdf}
+                        style={{ background: "#16a34a", color: "#ffffff", border: "none", padding: "10px 22px", borderRadius: "10px", fontSize: "14px", fontWeight: "800", cursor: "pointer", boxShadow: "0 4px 15px rgba(22, 163, 74, 0.4)", display: "flex", alignItems: "center", gap: "8px" }}
+                      >
+                        <span>{isGeneratingPdf ? "جاري التوليد والحفظ..." : `توليد وحفظ الـ PDF (${data.cvDocument?.cvLang === "AR" ? "بالعربية" : "بالإنجليزية"})`}</span>
+                      </button>
 
-                    <button
-                      onClick={() => handleGeneratePdf(true)}
-                      disabled={isGeneratingPdf}
-                      style={{ background: "#1e293b", color: "#60a5fa", border: "1px solid #3b82f6", padding: "10px 18px", borderRadius: "10px", fontSize: "13.5px", fontWeight: "800", cursor: "pointer" }}
-                    >
-                      تنزيل نسخة PDF إلى جهازي
-                    </button>
+                      <button
+                        onClick={() => handleGeneratePdf(true)}
+                        disabled={isGeneratingPdf}
+                        style={{ background: "#1e293b", color: "#60a5fa", border: "1px solid #3b82f6", padding: "10px 18px", borderRadius: "10px", fontSize: "13.5px", fontWeight: "800", cursor: "pointer" }}
+                      >
+                        تنزيل نسخة PDF إلى جهازي
+                      </button>
+                    </div>
+
+                    {/* BILINGUAL LANGUAGE ENGINE CONTROLS */}
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "#151624", padding: "6px 12px", borderRadius: "10px", border: "1px solid #334155" }}>
+                      <span style={{ fontSize: "12px", color: "#94a3b8", fontWeight: "800" }}>لغة السيرة (Language):</span>
+                      <button
+                        onClick={() => handleSwitchCvLanguage("AR")}
+                        style={{
+                          background: data.cvDocument?.cvLang === "AR" ? "#2563eb" : "transparent",
+                          color: data.cvDocument?.cvLang === "AR" ? "#ffffff" : "#94a3b8",
+                          border: "none",
+                          padding: "5px 12px",
+                          borderRadius: "6px",
+                          fontSize: "12px",
+                          fontWeight: "800",
+                          cursor: "pointer",
+                          transition: "all 0.2s",
+                        }}
+                      >
+                        العربية (AR)
+                      </button>
+                      <button
+                        onClick={() => handleSwitchCvLanguage("EN")}
+                        style={{
+                          background: (data.cvDocument?.cvLang || "EN") === "EN" ? "#2563eb" : "transparent",
+                          color: (data.cvDocument?.cvLang || "EN") === "EN" ? "#ffffff" : "#94a3b8",
+                          border: "none",
+                          padding: "5px 12px",
+                          borderRadius: "6px",
+                          fontSize: "12px",
+                          fontWeight: "800",
+                          cursor: "pointer",
+                          transition: "all 0.2s",
+                        }}
+                      >
+                        English (EN)
+                      </button>
+                    </div>
                   </div>
-
-                  <a
-                    href={data.general.cvPdfPath}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{ background: "#151624", color: "#cbd5e1", border: "1px solid #334155", padding: "9px 16px", borderRadius: "10px", fontSize: "13px", fontWeight: "700", textDecoration: "none" }}
-                  >
-                    معاينة الملف الحالي: <code style={{ color: "#60a5fa" }}>{data.general.cvPdfPath}</code>
-                  </a>
                 </div>
               )}
 
@@ -2036,294 +2120,318 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    {/* SCALABLE TRUE A4 CANVAS */}
+                    {/* SCALABLE TRUE A4 CANVAS (BILINGUAL AR/EN SUPPORT) */}
                     <div style={{ transform: `scale(${a4Zoom})`, transformOrigin: "top center", transition: "transform 0.2s ease", marginBottom: `${(1 - a4Zoom) * -1123}px` }}>
-                      <div
-                        id="cv-pdf-canvas"
-                        style={{
-                          width: "794px",
-                          minHeight: "1123px",
-                          background: data.cvDocument?.templateStyle === "clean-white" ? "#ffffff" : data.cvDocument?.templateStyle === "executive-blue" ? "#0f172a" : "#0d0f18",
-                          color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#ffffff",
-                          padding: data.cvDocument?.pageMargin === "compact" ? "28px 32px" : data.cvDocument?.pageMargin === "wide" ? "56px 60px" : "44px 48px",
-                          boxSizing: "border-box",
-                          fontFamily: `'${data.cvDocument?.fontFamily || "Outfit"}', 'Tajawal', sans-serif`,
-                          fontSize: data.cvDocument?.fontSizeScale === "compact" ? "10.5px" : data.cvDocument?.fontSizeScale === "large" ? "12.5px" : "11.5px",
-                          lineHeight: data.cvDocument?.lineSpacing === "compact" ? "1.45" : data.cvDocument?.lineSpacing === "relaxed" ? "1.85" : "1.65",
-                          boxShadow: "0 25px 70px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06)",
-                          borderRadius: "4px",
-                        }}
-                        dir="ltr"
-                      >
-                        {/* TWO COLUMN SIDEBAR LAYOUT MODE */}
-                        {data.cvDocument?.layoutFormat === "two-column-sidebar" ? (
-                          <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", gap: "28px", alignItems: "start" }}>
-                            {/* LEFT SIDEBAR */}
-                            <div style={{ borderRight: `2px solid ${data.cvDocument?.accentColor || "#2563eb"}30`, paddingRight: "20px", display: "flex", flexDirection: "column", gap: "18px" }}>
-                              {data.cvDocument?.showPhoto !== false && data.cvDocument?.photo && data.cvDocument.photo.trim() !== "" && (
-                                <div style={{ width: "100px", height: "100px", borderRadius: "14px", overflow: "hidden", border: `2.5px solid ${data.cvDocument.accentColor || "#2563eb"}`, margin: "0 auto", boxShadow: "0 4px 15px rgba(0,0,0,0.15)" }}>
-                                  <img src={data.cvDocument.photo} alt="Photo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                </div>
-                              )}
-
-                              <div>
-                                <div style={{ fontSize: "11.5px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
-                                  Contact Info
-                                </div>
-                                <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "10px", color: data.cvDocument?.templateStyle === "clean-white" ? "#475569" : "#94a3b8" }}>
-                                  <div>📧 {data.cvDocument?.email || data.general.email}</div>
-                                  <div>📞 {data.cvDocument?.phone || data.general.phone}</div>
-                                  <div>📍 {data.cvDocument?.location || data.general.locationEN}</div>
-                                  <div>🔗 {data.cvDocument?.linkedin || "linkedin.com/in/haidermoe"}</div>
-                                </div>
-                              </div>
-
-                              {data.cvDocument?.showSkills !== false && (
-                                <div>
-                                  <div style={{ fontSize: "11.5px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
-                                    Skills
-                                  </div>
-                                  <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
-                                    {(data.cvDocument?.skills || []).map((sk, i) => (
-                                      <span key={i} style={{ background: data.cvDocument?.templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${data.cvDocument?.accentColor || "#2563eb"}40`, color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "2px 7px", borderRadius: "5px", fontSize: "9.5px", fontWeight: "700" }}>
-                                        {sk}
-                                      </span>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
-
-                              {data.cvDocument?.showEducation !== false && (
-                                <div>
-                                  <div style={{ fontSize: "11.5px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
-                                    Education
-                                  </div>
-                                  {data.education.map((edu, i) => (
-                                    <div key={i} style={{ fontSize: "10px", marginBottom: "6px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
-                                      <strong>{edu.degreeEN}</strong>
-                                      <div style={{ color: data.cvDocument?.templateStyle === "clean-white" ? "#64748b" : "#94a3b8" }}>{edu.schoolEN} ({edu.yearEN})</div>
+                      {(() => {
+                        const isArabic = data.cvDocument?.cvLang === "AR";
+                        return (
+                          <div
+                            id="cv-pdf-canvas"
+                            style={{
+                              width: "794px",
+                              minHeight: "1123px",
+                              background: data.cvDocument?.templateStyle === "clean-white" ? "#ffffff" : data.cvDocument?.templateStyle === "executive-blue" ? "#0f172a" : "#0d0f18",
+                              color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#ffffff",
+                              padding: data.cvDocument?.pageMargin === "compact" ? "28px 32px" : data.cvDocument?.pageMargin === "wide" ? "56px 60px" : "44px 48px",
+                              boxSizing: "border-box",
+                              fontFamily: `'${data.cvDocument?.fontFamily || (isArabic ? "Tajawal" : "Outfit")}', 'Tajawal', sans-serif`,
+                              fontSize: data.cvDocument?.fontSizeScale === "compact" ? "10.5px" : data.cvDocument?.fontSizeScale === "large" ? "12.5px" : "11.5px",
+                              lineHeight: data.cvDocument?.lineSpacing === "compact" ? "1.45" : data.cvDocument?.lineSpacing === "relaxed" ? "1.85" : "1.65",
+                              boxShadow: "0 25px 70px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06)",
+                              borderRadius: "4px",
+                            }}
+                            dir={isArabic ? "rtl" : "ltr"}
+                          >
+                            {/* TWO COLUMN SIDEBAR LAYOUT MODE */}
+                            {data.cvDocument?.layoutFormat === "two-column-sidebar" ? (
+                              <div style={{ display: "grid", gridTemplateColumns: isArabic ? "1fr 240px" : "240px 1fr", gap: "28px", alignItems: "start" }}>
+                                
+                                {/* SIDEBAR */}
+                                <div style={{ borderRight: isArabic ? "none" : `2px solid ${data.cvDocument?.accentColor || "#2563eb"}30`, borderLeft: isArabic ? `2px solid ${data.cvDocument?.accentColor || "#2563eb"}30` : "none", paddingRight: isArabic ? "0" : "20px", paddingLeft: isArabic ? "20px" : "0", display: "flex", flexDirection: "column", gap: "18px" }}>
+                                  {data.cvDocument?.showPhoto !== false && data.cvDocument?.photo && data.cvDocument.photo.trim() !== "" && (
+                                    <div style={{ width: "100px", height: "100px", borderRadius: "14px", overflow: "hidden", border: `2.5px solid ${data.cvDocument.accentColor || "#2563eb"}`, margin: "0 auto", boxShadow: "0 4px 15px rgba(0,0,0,0.15)" }}>
+                                      <img src={data.cvDocument.photo} alt="Photo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                     </div>
-                                  ))}
-                                </div>
-                              )}
+                                  )}
 
-                              {data.cvDocument?.showCertifications !== false && (
-                                <div>
-                                  <div style={{ fontSize: "11.5px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
-                                    Certifications
-                                  </div>
-                                  {data.certifications.map((cert, i) => (
-                                    <div key={i} style={{ fontSize: "10px", marginBottom: "4px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
-                                      • {cert.titleEN}
+                                  <div>
+                                    <div style={{ fontSize: "11.5px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                                      {isArabic ? "بيانات الاتصال" : "Contact Info"}
                                     </div>
-                                  ))}
-                                </div>
-                              )}
-
-                              {/* EMBEDDED QR CODE IN SIDEBAR */}
-                              {data.cvDocument?.showQrCode !== false && qrCodeDataUrl && (
-                                <div style={{ marginTop: "12px", padding: "8px", background: data.cvDocument?.templateStyle === "clean-white" ? "#f8fafc" : "rgba(255,255,255,0.05)", borderRadius: "10px", border: `1.5px solid ${data.cvDocument?.accentColor || "#2563eb"}40`, display: "flex", flexDirection: "column", alignItems: "center", gap: "3px" }}>
-                                  <img src={qrCodeDataUrl} alt="QR Code" style={{ width: "68px", height: "68px", objectFit: "contain" }} />
-                                  <span style={{ fontSize: "8px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", letterSpacing: "0.5px" }}>LIVE PORTFOLIO</span>
-                                </div>
-                              )}
-                            </div>
-
-                            {/* RIGHT MAIN CONTENT */}
-                            <div>
-                              <div style={{ borderBottom: `2.5px solid ${data.cvDocument?.accentColor || "#2563eb"}`, paddingBottom: "14px", marginBottom: "18px" }}>
-                                <h1 style={{ fontSize: "28px", fontWeight: "900", margin: "0 0 4px 0", color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
-                                  {data.cvDocument?.fullName || "HAIDER M. SHWKAT"}
-                                </h1>
-                                <div style={{ fontSize: "13.5px", fontWeight: "700", color: data.cvDocument?.accentColor || "#2563eb" }}>
-                                  {data.cvDocument?.jobTitle || "Computer Science Specialist | Data Operations & Workflow Consultant"}
-                                </div>
-                              </div>
-
-                              {data.cvDocument?.showSummary !== false && data.cvDocument?.summary && (
-                                <div style={{ marginBottom: "18px" }}>
-                                  <div style={{ fontSize: "12px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
-                                    Executive Summary
+                                    <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "10px", color: data.cvDocument?.templateStyle === "clean-white" ? "#475569" : "#94a3b8" }}>
+                                      <div>📧 {data.cvDocument?.email || data.general.email}</div>
+                                      <div>📞 {data.cvDocument?.phone || data.general.phone}</div>
+                                      <div>📍 {data.cvDocument?.location || (isArabic ? data.general.locationAR : data.general.locationEN)}</div>
+                                      <div>🔗 {data.cvDocument?.linkedin || "linkedin.com/in/haidermoe"}</div>
+                                    </div>
                                   </div>
-                                  <p style={{ fontSize: "11px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
-                                    {data.cvDocument.summary}
-                                  </p>
-                                </div>
-                              )}
 
-                              <div>
-                                <div style={{ fontSize: "12px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
-                                  Work Experience
-                                </div>
-                                <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-                                  {(data.cvDocument?.experiences?.length ? data.cvDocument.experiences : data.experiences).map((exp, i) => (
-                                    <div key={exp.id || i}>
-                                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
-                                        <div>
-                                          <strong style={{ fontSize: "12.5px", color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
-                                            {(exp as any).role || (exp as any).roleEN}
-                                          </strong>
-                                          <span style={{ fontSize: "11.5px", color: data.cvDocument?.accentColor || "#2563eb", marginLeft: "6px", fontWeight: "700" }}>
-                                            | {(exp as any).company || (exp as any).companyEN}
+                                  {data.cvDocument?.showSkills !== false && (
+                                    <div>
+                                      <div style={{ fontSize: "11.5px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                                        {isArabic ? "المهارات والقدرات" : "Skills & Competencies"}
+                                      </div>
+                                      <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+                                        {(data.cvDocument?.skills || []).map((sk, i) => (
+                                          <span key={i} style={{ background: data.cvDocument?.templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${data.cvDocument?.accentColor || "#2563eb"}40`, color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "2px 7px", borderRadius: "5px", fontSize: "9.5px", fontWeight: "700" }}>
+                                            {sk}
                                           </span>
-                                        </div>
-                                        <span style={{ fontSize: "10.5px", color: data.cvDocument?.templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
-                                          {(exp as any).date || (exp as any).dateEN}
-                                        </span>
-                                      </div>
-
-                                      <ul style={{ margin: "3px 0 0 0", paddingLeft: "16px", fontSize: "10.5px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.5" }}>
-                                        {((exp as any).bullets || (exp as any).bulletsEN || []).map((b: string, bi: number) => (
-                                          <li key={bi} style={{ marginBottom: "2px" }}>{b}</li>
                                         ))}
-                                      </ul>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ) : (
-                          /* SINGLE COLUMN / EXECUTIVE / MINIMAL LAYOUT */
-                          <div>
-                            {/* HEADER ROW */}
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: `2.5px solid ${data.cvDocument?.accentColor || "#2563eb"}`, paddingBottom: "16px", marginBottom: "20px", gap: "20px" }}>
-                              <div style={{ flex: 1 }}>
-                                <h1 style={{ fontSize: "28px", fontWeight: "900", margin: "0 0 4px 0", letterSpacing: "0.5px", color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
-                                  {data.cvDocument?.fullName || "HAIDER M. SHWKAT"}
-                                </h1>
-                                <div style={{ fontSize: "13.5px", fontWeight: "700", color: data.cvDocument?.accentColor || "#2563eb", marginBottom: "10px" }}>
-                                  {data.cvDocument?.jobTitle || "Computer Science Specialist | Data Operations & Workflow Consultant"}
-                                </div>
-
-                                <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", fontSize: "11px", color: data.cvDocument?.templateStyle === "clean-white" ? "#475569" : "#94a3b8", fontWeight: "600" }}>
-                                  <div>📧 {data.cvDocument?.email || data.general.email}</div>
-                                  <div>📞 {data.cvDocument?.phone || data.general.phone}</div>
-                                  <div>📍 {data.cvDocument?.location || data.general.locationEN}</div>
-                                  <div>🔗 {data.cvDocument?.linkedin || "linkedin.com/in/haidermoe"}</div>
-                                </div>
-                              </div>
-
-                              <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
-                                {data.cvDocument?.showQrCode !== false && qrCodeDataUrl && (
-                                  <div style={{ padding: "4px", background: "#ffffff", borderRadius: "8px", border: `1.5px solid ${data.cvDocument?.accentColor || "#2563eb"}`, display: "flex", flexDirection: "column", alignItems: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-                                    <img src={qrCodeDataUrl} alt="QR" style={{ width: "55px", height: "55px", objectFit: "contain" }} />
-                                    <span style={{ fontSize: "6.5px", fontWeight: "900", color: "#0f172a", marginTop: "1px" }}>PORTFOLIO</span>
-                                  </div>
-                                )}
-
-                                {data.cvDocument?.showPhoto !== false && data.cvDocument?.photo && data.cvDocument.photo.trim() !== "" && (
-                                  <div style={{ width: "75px", height: "75px", borderRadius: "12px", overflow: "hidden", border: `2px solid ${data.cvDocument.accentColor || "#2563eb"}`, flexShrink: 0, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
-                                    <img src={data.cvDocument.photo} alt="Photo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* EXECUTIVE SUMMARY */}
-                            {data.cvDocument?.showSummary !== false && data.cvDocument?.summary && (
-                              <div style={{ marginBottom: "20px" }}>
-                                <div style={{ fontSize: "12.5px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
-                                  Executive Summary
-                                </div>
-                                <p style={{ fontSize: "11px", lineHeight: "1.65", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
-                                  {data.cvDocument.summary}
-                                </p>
-                              </div>
-                            )}
-
-                            {/* WORK EXPERIENCE */}
-                            <div style={{ marginBottom: "20px" }}>
-                              <div style={{ fontSize: "12.5px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
-                                Professional Work Experience
-                              </div>
-
-                              <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-                                {(data.cvDocument?.experiences?.length ? data.cvDocument.experiences : data.experiences).map((exp, i) => (
-                                  <div key={exp.id || i}>
-                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
-                                      <div>
-                                        <strong style={{ fontSize: "13px", color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
-                                          {(exp as any).role || (exp as any).roleEN}
-                                        </strong>
-                                        <span style={{ fontSize: "12px", color: data.cvDocument?.accentColor || "#2563eb", marginLeft: "8px", fontWeight: "700" }}>
-                                          | {(exp as any).company || (exp as any).companyEN}
-                                        </span>
                                       </div>
-                                      <span style={{ fontSize: "11px", color: data.cvDocument?.templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
-                                        {(exp as any).date || (exp as any).dateEN}
+                                    </div>
+                                  )}
+
+                                  {data.cvDocument?.showEducation !== false && (
+                                    <div>
+                                      <div style={{ fontSize: "11.5px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                                        {isArabic ? "المؤهلات العلمية" : "Education"}
+                                      </div>
+                                      {data.education.map((edu, i) => (
+                                        <div key={i} style={{ fontSize: "10px", marginBottom: "6px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                                          <strong>{isArabic ? (edu.degreeAR || edu.degreeEN) : (edu.degreeEN || edu.degreeAR)}</strong>
+                                          <div style={{ color: data.cvDocument?.templateStyle === "clean-white" ? "#64748b" : "#94a3b8" }}>{isArabic ? (edu.schoolAR || edu.schoolEN) : (edu.schoolEN || edu.schoolAR)} ({isArabic ? (edu.yearAR || edu.yearEN) : (edu.yearEN || edu.yearAR)})</div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+
+                                  {data.cvDocument?.showCertifications !== false && (
+                                    <div>
+                                      <div style={{ fontSize: "11.5px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                                        {isArabic ? "الشهادات والاعتمادات" : "Certifications"}
+                                      </div>
+                                      {data.certifications.map((cert, i) => (
+                                        <div key={i} style={{ fontSize: "10px", marginBottom: "4px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                                          • {isArabic ? (cert.titleAR || cert.titleEN) : (cert.titleEN || cert.titleAR)}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+
+                                  {/* EMBEDDED QR CODE IN SIDEBAR */}
+                                  {data.cvDocument?.showQrCode !== false && qrCodeDataUrl && (
+                                    <div style={{ marginTop: "12px", padding: "8px", background: data.cvDocument?.templateStyle === "clean-white" ? "#f8fafc" : "rgba(255,255,255,0.05)", borderRadius: "10px", border: `1.5px solid ${data.cvDocument?.accentColor || "#2563eb"}40`, display: "flex", flexDirection: "column", alignItems: "center", gap: "3px" }}>
+                                      <img src={qrCodeDataUrl} alt="QR Code" style={{ width: "68px", height: "68px", objectFit: "contain" }} />
+                                      <span style={{ fontSize: "8px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", letterSpacing: "0.5px" }}>
+                                        {isArabic ? "الموقع التفاعلي" : "LIVE PORTFOLIO"}
                                       </span>
                                     </div>
-
-                                    <ul style={{ margin: "4px 0 0 0", paddingLeft: "18px", fontSize: "11px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.55" }}>
-                                      {((exp as any).bullets || (exp as any).bulletsEN || []).map((b: string, bi: number) => (
-                                        <li key={bi} style={{ marginBottom: "2px" }}>{b}</li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-
-                            {/* TECHNICAL SKILLS */}
-                            {data.cvDocument?.showSkills !== false && (
-                              <div style={{ marginBottom: "20px" }}>
-                                <div style={{ fontSize: "12.5px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "10px" }}>
-                                  Technical Skills & Core Competencies
+                                  )}
                                 </div>
-                                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                                  {(data.cvDocument?.skills || []).map((sk, i) => (
-                                    <span
-                                      key={i}
-                                      style={{
-                                        background: data.cvDocument?.templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)",
-                                        border: `1px solid ${data.cvDocument?.accentColor || "#2563eb"}40`,
-                                        color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0",
-                                        padding: "3px 9px",
-                                        borderRadius: "6px",
-                                        fontSize: "10.5px",
-                                        fontWeight: "700",
-                                      }}
-                                    >
-                                      {sk}
-                                    </span>
-                                  ))}
+
+                                {/* MAIN CONTENT */}
+                                <div>
+                                  <div style={{ borderBottom: `2.5px solid ${data.cvDocument?.accentColor || "#2563eb"}`, paddingBottom: "14px", marginBottom: "18px" }}>
+                                    <h1 style={{ fontSize: "28px", fontWeight: "900", margin: "0 0 4px 0", color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                                      {data.cvDocument?.fullName || (isArabic ? data.general.nameAR : "HAIDER M. SHWKAT")}
+                                    </h1>
+                                    <div style={{ fontSize: "13.5px", fontWeight: "700", color: data.cvDocument?.accentColor || "#2563eb" }}>
+                                      {data.cvDocument?.jobTitle || (isArabic ? "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة" : "Computer Science Specialist | Data Operations & Workflow Consultant")}
+                                    </div>
+                                  </div>
+
+                                  {data.cvDocument?.showSummary !== false && data.cvDocument?.summary && (
+                                    <div style={{ marginBottom: "18px" }}>
+                                      <div style={{ fontSize: "12px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
+                                        {isArabic ? "الهدف المهني والملخص التنفيذي" : "Executive Summary"}
+                                      </div>
+                                      <p style={{ fontSize: "11px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
+                                        {data.cvDocument.summary}
+                                      </p>
+                                    </div>
+                                  )}
+
+                                  <div>
+                                    <div style={{ fontSize: "12px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
+                                      {isArabic ? "الخبرات المهنية والعملية" : "Work Experience"}
+                                    </div>
+                                    <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                                      {(data.cvDocument?.experiences?.length ? data.cvDocument.experiences : data.experiences).map((exp, i) => {
+                                        const role = isArabic ? ((exp as any).roleAR || (exp as any).role || (exp as any).roleEN) : ((exp as any).roleEN || (exp as any).role || (exp as any).roleAR);
+                                        const company = isArabic ? ((exp as any).companyAR || (exp as any).company || (exp as any).companyEN) : ((exp as any).companyEN || (exp as any).company || (exp as any).companyAR);
+                                        const date = isArabic ? ((exp as any).dateAR || (exp as any).date || (exp as any).dateEN) : ((exp as any).dateEN || (exp as any).date || (exp as any).dateAR);
+                                        const bullets = isArabic ? ((exp as any).bulletsAR || (exp as any).bullets || (exp as any).bulletsEN || []) : ((exp as any).bulletsEN || (exp as any).bullets || (exp as any).bulletsAR || []);
+
+                                        return (
+                                          <div key={exp.id || i}>
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
+                                              <div>
+                                                <strong style={{ fontSize: "12.5px", color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                                                  {role}
+                                                </strong>
+                                                <span style={{ fontSize: "11.5px", color: data.cvDocument?.accentColor || "#2563eb", marginLeft: isArabic ? "0" : "6px", marginRight: isArabic ? "6px" : "0", fontWeight: "700" }}>
+                                                  | {company}
+                                                </span>
+                                              </div>
+                                              <span style={{ fontSize: "10.5px", color: data.cvDocument?.templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
+                                                {date}
+                                              </span>
+                                            </div>
+
+                                            <ul style={{ margin: "3px 0 0 0", paddingLeft: isArabic ? "0" : "16px", paddingRight: isArabic ? "16px" : "0", fontSize: "10.5px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.5" }}>
+                                              {bullets.map((b: string, bi: number) => (
+                                                <li key={bi} style={{ marginBottom: "2px" }}>{b}</li>
+                                              ))}
+                                            </ul>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              /* SINGLE COLUMN / EXECUTIVE / MINIMAL LAYOUT */
+                              <div>
+                                {/* HEADER ROW */}
+                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: `2.5px solid ${data.cvDocument?.accentColor || "#2563eb"}`, paddingBottom: "16px", marginBottom: "20px", gap: "20px" }}>
+                                  <div style={{ flex: 1 }}>
+                                    <h1 style={{ fontSize: "28px", fontWeight: "900", margin: "0 0 4px 0", letterSpacing: "0.5px", color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                                      {data.cvDocument?.fullName || (isArabic ? data.general.nameAR : "HAIDER M. SHWKAT")}
+                                    </h1>
+                                    <div style={{ fontSize: "13.5px", fontWeight: "700", color: data.cvDocument?.accentColor || "#2563eb", marginBottom: "10px" }}>
+                                      {data.cvDocument?.jobTitle || (isArabic ? "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة" : "Computer Science Specialist | Data Operations & Workflow Consultant")}
+                                    </div>
+
+                                    <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", fontSize: "11px", color: data.cvDocument?.templateStyle === "clean-white" ? "#475569" : "#94a3b8", fontWeight: "600" }}>
+                                      <div>📧 {data.cvDocument?.email || data.general.email}</div>
+                                      <div>📞 {data.cvDocument?.phone || data.general.phone}</div>
+                                      <div>📍 {data.cvDocument?.location || (isArabic ? data.general.locationAR : data.general.locationEN)}</div>
+                                      <div>🔗 {data.cvDocument?.linkedin || "linkedin.com/in/haidermoe"}</div>
+                                    </div>
+                                  </div>
+
+                                  <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
+                                    {data.cvDocument?.showQrCode !== false && qrCodeDataUrl && (
+                                      <div style={{ padding: "4px", background: "#ffffff", borderRadius: "8px", border: `1.5px solid ${data.cvDocument?.accentColor || "#2563eb"}`, display: "flex", flexDirection: "column", alignItems: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+                                        <img src={qrCodeDataUrl} alt="QR" style={{ width: "55px", height: "55px", objectFit: "contain" }} />
+                                        <span style={{ fontSize: "6.5px", fontWeight: "900", color: "#0f172a", marginTop: "1px" }}>
+                                          {isArabic ? "الموقع" : "PORTFOLIO"}
+                                        </span>
+                                      </div>
+                                    )}
+
+                                    {data.cvDocument?.showPhoto !== false && data.cvDocument?.photo && data.cvDocument.photo.trim() !== "" && (
+                                      <div style={{ width: "75px", height: "75px", borderRadius: "12px", overflow: "hidden", border: `2px solid ${data.cvDocument.accentColor || "#2563eb"}`, flexShrink: 0, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
+                                        <img src={data.cvDocument.photo} alt="Photo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* EXECUTIVE SUMMARY */}
+                                {data.cvDocument?.showSummary !== false && data.cvDocument?.summary && (
+                                  <div style={{ marginBottom: "20px" }}>
+                                    <div style={{ fontSize: "12.5px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
+                                      {isArabic ? "الهدف المهني والملخص التنفيذي" : "Executive Summary"}
+                                    </div>
+                                    <p style={{ fontSize: "11px", lineHeight: "1.65", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
+                                      {data.cvDocument.summary}
+                                    </p>
+                                  </div>
+                                )}
+
+                                {/* WORK EXPERIENCE */}
+                                <div style={{ marginBottom: "20px" }}>
+                                  <div style={{ fontSize: "12.5px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
+                                    {isArabic ? "الخبرات المهنية والعملية" : "Professional Work Experience"}
+                                  </div>
+
+                                  <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+                                    {(data.cvDocument?.experiences?.length ? data.cvDocument.experiences : data.experiences).map((exp, i) => {
+                                      const role = isArabic ? ((exp as any).roleAR || (exp as any).role || (exp as any).roleEN) : ((exp as any).roleEN || (exp as any).role || (exp as any).roleAR);
+                                      const company = isArabic ? ((exp as any).companyAR || (exp as any).company || (exp as any).companyEN) : ((exp as any).companyEN || (exp as any).company || (exp as any).companyAR);
+                                      const date = isArabic ? ((exp as any).dateAR || (exp as any).date || (exp as any).dateEN) : ((exp as any).dateEN || (exp as any).date || (exp as any).dateAR);
+                                      const bullets = isArabic ? ((exp as any).bulletsAR || (exp as any).bullets || (exp as any).bulletsEN || []) : ((exp as any).bulletsEN || (exp as any).bullets || (exp as any).bulletsAR || []);
+
+                                      return (
+                                        <div key={exp.id || i}>
+                                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
+                                            <div>
+                                              <strong style={{ fontSize: "13px", color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                                                {role}
+                                              </strong>
+                                              <span style={{ fontSize: "12px", color: data.cvDocument?.accentColor || "#2563eb", marginLeft: isArabic ? "0" : "8px", marginRight: isArabic ? "8px" : "0", fontWeight: "700" }}>
+                                                | {company}
+                                              </span>
+                                            </div>
+                                            <span style={{ fontSize: "11px", color: data.cvDocument?.templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
+                                              {date}
+                                            </span>
+                                          </div>
+
+                                          <ul style={{ margin: "4px 0 0 0", paddingLeft: isArabic ? "0" : "18px", paddingRight: isArabic ? "18px" : "0", fontSize: "11px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.55" }}>
+                                            {bullets.map((b: string, bi: number) => (
+                                              <li key={bi} style={{ marginBottom: "2px" }}>{b}</li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+
+                                {/* TECHNICAL SKILLS */}
+                                {data.cvDocument?.showSkills !== false && (
+                                  <div style={{ marginBottom: "20px" }}>
+                                    <div style={{ fontSize: "12.5px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "10px" }}>
+                                      {isArabic ? "المهارات التقنية والقدرات" : "Technical Skills & Core Competencies"}
+                                    </div>
+                                    <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                                      {(data.cvDocument?.skills || []).map((sk, i) => (
+                                        <span
+                                          key={i}
+                                          style={{
+                                            background: data.cvDocument?.templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)",
+                                            border: `1px solid ${data.cvDocument?.accentColor || "#2563eb"}40`,
+                                            color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0",
+                                            padding: "3px 9px",
+                                            borderRadius: "6px",
+                                            fontSize: "10.5px",
+                                            fontWeight: "700",
+                                          }}
+                                        >
+                                          {sk}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* EDUCATION & CERTS */}
+                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                                  {data.cvDocument?.showEducation !== false && (
+                                    <div>
+                                      <div style={{ fontSize: "12px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px", marginBottom: "8px" }}>
+                                        {isArabic ? "المؤهلات العلمية" : "Education"}
+                                      </div>
+                                      {data.education.map((edu, i) => (
+                                        <div key={i} style={{ fontSize: "11px", marginBottom: "4px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                                          <strong>{isArabic ? (edu.degreeAR || edu.degreeEN) : (edu.degreeEN || edu.degreeAR)}</strong>
+                                          <div style={{ color: data.cvDocument?.templateStyle === "clean-white" ? "#64748b" : "#94a3b8" }}>{isArabic ? (edu.schoolAR || edu.schoolEN) : (edu.schoolEN || edu.schoolAR)} ({isArabic ? (edu.yearAR || edu.yearEN) : (edu.yearEN || edu.yearAR)})</div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+
+                                  {data.cvDocument?.showCertifications !== false && (
+                                    <div>
+                                      <div style={{ fontSize: "12px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px", marginBottom: "8px" }}>
+                                        {isArabic ? "الشهادات والاعتمادات" : "Certifications"}
+                                      </div>
+                                      {data.certifications.map((cert, i) => (
+                                        <div key={i} style={{ fontSize: "11px", marginBottom: "4px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                                          • {isArabic ? (cert.titleAR || cert.titleEN) : (cert.titleEN || cert.titleAR)}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             )}
-
-                            {/* EDUCATION & CERTS */}
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-                              {data.cvDocument?.showEducation !== false && (
-                                <div>
-                                  <div style={{ fontSize: "12px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px", marginBottom: "8px" }}>
-                                    Education
-                                  </div>
-                                  {data.education.map((edu, i) => (
-                                    <div key={i} style={{ fontSize: "11px", marginBottom: "4px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
-                                      <strong>{edu.degreeEN}</strong>
-                                      <div style={{ color: data.cvDocument?.templateStyle === "clean-white" ? "#64748b" : "#94a3b8" }}>{edu.schoolEN} ({edu.yearEN})</div>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-
-                              {data.cvDocument?.showCertifications !== false && (
-                                <div>
-                                  <div style={{ fontSize: "12px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px", marginBottom: "8px" }}>
-                                    Certifications
-                                  </div>
-                                  {data.certifications.map((cert, i) => (
-                                    <div key={i} style={{ fontSize: "11px", marginBottom: "4px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
-                                      • {cert.titleEN}
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
                           </div>
-                        )}
-                      </div>
+                        );
+                      })()}
                     </div>
                   </div>
                 </div>
