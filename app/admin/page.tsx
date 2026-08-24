@@ -415,8 +415,8 @@ export default function AdminPage() {
         </div>
       )}
 
-      <div style={{ maxWidth: "1200px", margin: "30px auto", padding: "0 20px" }}>
-        <div style={{ display: "flex", gap: "10px", overflowX: "auto", paddingBottom: "12px", borderBottom: "1px solid rgba(255,255,255,0.08)", marginBottom: "30px" }}>
+      <div style={{ maxWidth: "1600px", margin: "25px auto", padding: "0 24px" }}>
+        <div style={{ display: "flex", gap: "10px", overflowX: "auto", paddingBottom: "12px", borderBottom: "1px solid rgba(255,255,255,0.08)", marginBottom: "25px" }}>
           {[
             { id: "general", label: "النبذة والمعلومات الأساسية" },
             { id: "stats", label: "الإحصائيات والأرقام" },
@@ -444,6 +444,11 @@ export default function AdminPage() {
             </button>
           ))}
         </div>
+
+        {/* SPLIT SCREEN CONTAINER: FORM ON RIGHT, PREVIEW ON LEFT */}
+        <div style={{ display: "grid", gridTemplateColumns: showLivePreview ? "minmax(0, 1fr) minmax(360px, 440px)" : "minmax(0, 1fr)", gap: "28px", alignItems: "start" }}>
+          {/* MAIN EDITING FORM COLUMN */}
+          <div style={{ minWidth: 0 }}>
 
         {activeTab === "general" && data && (
           <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
@@ -958,41 +963,39 @@ export default function AdminPage() {
             </div>
           </div>
         )}
-      </div>
+          </div>
 
-      {/* LIVE PREVIEW FLOATING DOCK */}
-      {showLivePreview && data && (
-        <div
-          style={{
-            position: "fixed",
-            bottom: "20px",
-            left: "20px",
-            width: isPreviewMinimized ? "280px" : previewDevice === "mobile" ? "390px" : "580px",
-            maxHeight: isPreviewMinimized ? "60px" : "80vh",
-            background: "#0c0d17",
-            border: "2px solid #2563eb",
-            borderRadius: "20px",
-            boxShadow: "0 25px 60px rgba(0, 0, 0, 0.85)",
-            zIndex: 999,
-            display: "flex",
-            flexDirection: "column",
-            overflow: "hidden",
-            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-          }}
-        >
-          {/* PREVIEW WINDOW HEADER */}
+        {/* STICKY SIDE-BY-SIDE LIVE PREVIEW COLUMN */}
+        {showLivePreview && data && (
           <div
             style={{
-              background: "#151728",
-              padding: "12px 18px",
-              borderBottom: "1px solid rgba(255,255,255,0.08)",
+              position: "sticky",
+              top: "85px",
+              height: "calc(100vh - 110px)",
+              width: "100%",
+              background: "#0c0d17",
+              border: "2px solid #2563eb",
+              borderRadius: "20px",
+              boxShadow: "0 15px 40px rgba(0, 0, 0, 0.6)",
               display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexWrap: "wrap",
-              gap: "8px",
+              flexDirection: "column",
+              overflow: "hidden",
+              zIndex: 50,
             }}
           >
+            {/* PREVIEW WINDOW HEADER */}
+            <div
+              style={{
+                background: "#151728",
+                padding: "12px 18px",
+                borderBottom: "1px solid rgba(255,255,255,0.08)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "8px",
+              }}
+            >
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#10b981", display: "inline-block", boxShadow: "0 0 10px #10b981" }} />
               <span style={{ fontSize: "13px", fontWeight: "900", color: "#ffffff" }}>معاينة حية (0ms Live)</span>
@@ -1287,6 +1290,8 @@ export default function AdminPage() {
           )}
         </div>
       )}
+        </div>
+      </div>
     </div>
   );
 }
