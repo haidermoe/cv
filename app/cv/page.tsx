@@ -38,6 +38,83 @@ interface LanguageSpecificData {
   certifications: CvCertification[];
 }
 
+// BUILT-IN BIDIRECTIONAL TRANSLATION DICTIONARY
+const TRANSLATION_MAP: Record<string, string> = {
+  // Roles & Titles
+  "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة": "Computer Science Specialist | Data Operations & Workflow Consultant",
+  "Computer Science Specialist | Data Operations & Workflow Consultant": "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة",
+  "حيدر محمد شوكت": "Haider M. Shwkat",
+  "Haider M. Shwkat": "حيدر محمد شوكت",
+  "أخصائي عمليات التجارة الإلكترونية، البيانات والمبيعات": "E-Commerce, Data Operations & Sales Specialist",
+  "E-Commerce, Data Operations & Sales Specialist": "أخصائي عمليات التجارة الإلكترونية، البيانات والمبيعات",
+  "استشاري حر لعمليات البيانات والحلول التقنية": "Freelance Data & Technical Operations Consultant",
+  "Freelance Data & Technical Operations Consultant": "استشاري حر لعمليات البيانات والحلول التقنية",
+  "مسؤول عمليات ومنسق دعم الشبكات": "Operations Lead & Network Support Coordinator",
+  "Operations Lead & Network Support Coordinator": "مسؤول عمليات ومنسق دعم الشبكات",
+  "مهندس برمجيات": "Software Engineer",
+  "Software Engineer": "مهندس برمجيات",
+  "مطور ويب وتطبيقات": "Full-Stack Web Developer",
+  "Full-Stack Web Developer": "مطور ويب وتطبيقات",
+  "محلل بيانات": "Data Analyst",
+  "Data Analyst": "محلل بيانات",
+  "مدير مشاريع": "Project Manager",
+  "Project Manager": "مدير مشاريع",
+  "مهندس شبكات": "Network Engineer",
+  "Network Engineer": "مهندس شبكات",
+
+  // Companies & Locations
+  "تكنو ستور — بغداد، العراق": "Techno Store — Baghdad, Iraq",
+  "Techno Store — Baghdad, Iraq": "تكنو ستور — بغداد، العراق",
+  "مشاريع قطاع الدفاع والتجارة الإلكترونية": "Multi-Client / Defense & E-commerce Projects",
+  "Multi-Client / Defense & E-commerce Projects": "مشاريع قطاع الدفاع والتجارة الإلكترونية",
+  "قطاع الفعاليات والاتصالات — بغداد": "Events & Telecommunications Sector — Baghdad",
+  "Events & Telecommunications Sector — Baghdad": "قطاع الفعاليات والاتصالات — بغداد",
+  "بغداد، العراق": "Baghdad, Iraq",
+  "Baghdad, Iraq": "بغداد، العراق",
+  "جامعة دجلة – بغداد": "Dijlah University – Baghdad",
+  "Dijlah University – Baghdad": "جامعة دجلة – بغداد",
+  "معهد التكنولوجيا – بغداد": "Institute of Technology – Baghdad",
+  "Institute of Technology – Baghdad": "معهد التكنولوجيا – بغداد",
+  "2025 - الحالي": "2025 - Present",
+  "2025 - Present": "2025 - الحالي",
+  "2024 - الحالي": "2024 - Present",
+  "2024 - Present": "2024 - الحالي",
+  "2023 - 2025": "2023 - 2025",
+  "2019 - 2023": "2019 - 2023",
+  "2022 - 2026": "2022 - 2026",
+  "2019 - 2021": "2019 - 2021",
+
+  // Degrees
+  "بكالوريوس في علوم الحاسوب (Computer Science)": "Bachelor's Degree in Computer Science",
+  "Bachelor's Degree in Computer Science": "بكالوريوس في علوم الحاسوب (Computer Science)",
+  "دبلوم في الصناعات الكيماوية (Chemical Industry)": "Diploma in Chemical Industry",
+  "Diploma in Chemical Industry": "دبلوم في الصناعات الكيماوية (Chemical Industry)",
+
+  // Certifications
+  "شهادة CCNA 1: Introduction to Networks — جامعة دجلة": "CCNA 1: Introduction to Networks — Dijlah University",
+  "CCNA 1: Introduction to Networks — Dijlah University": "شهادة CCNA 1: Introduction to Networks — جامعة دجلة",
+  "شهادة مهارات المبيعات وخدمة العملاء — شركة إيرثلنك": "Sales and Customer Service Skills — EarthLink Telecommunications",
+  "Sales and Customer Service Skills — EarthLink Telecommunications": "شهادة مهارات المبيعات وخدمة العملاء — شركة إيرثلنك",
+  "تدريب السلامة والصحة المهنية — معهد التكنولوجيا بغداد": "Occupational Safety Training — Institute of Technology Baghdad",
+  "Occupational Safety Training — Institute of Technology Baghdad": "تدريب السلامة والصحة المهنية — معهد التكنولوجيا بغداد",
+
+  // Skills
+  "أتمتة بايثون وبرمجة السكربتات": "Python Automation & Scripting",
+  "Python Automation & Scripting": "أتمتة بايثون وبرمجة السكربتات",
+  "هيكلة وإدارة قواعد البيانات الضخمة SQL": "SQL & High-Volume Database Architecture",
+  "SQL & High-Volume Database Architecture": "هيكلة وإدارة قواعد البيانات الضخمة SQL",
+  "تكامل أنظمة ERP وفودكس للتجارة الإلكترونية": "E-Commerce & Foodics ERP Workflows",
+  "E-Commerce & Foodics ERP Workflows": "تكامل أنظمة ERP وفودكس للتجارة الإلكترونية",
+  "إدارة وتشغيل شبكات FTTH و EPON الضوئية": "FTTH & EPON Optical Network Management",
+  "FTTH & EPON Optical Network Management": "إدارة وتشغيل شبكات FTTH و EPON الضوئية",
+  "تنظيف وتدقيق وضمان جودة البيانات": "Data Cleansing & Integrity Verification",
+  "Data Cleansing & Integrity Verification": "تنظيف وتدقيق وضمان جودة البيانات",
+  "إدارة خوادم لينكس والـ Bash Scripts": "Linux Server Operations & Bash",
+  "Linux Server Operations & Bash": "إدارة خوادم لينكس والـ Bash Scripts",
+  "إدارة المشاريع بالمنهجيات المرنة Agile": "Agile Project & Team Leadership",
+  "Agile Project & Team Leadership": "إدارة المشاريع بالمنهجيات المرنة Agile",
+};
+
 const DEFAULT_AR_DATA: LanguageSpecificData = {
   fullName: "حيدر محمد شوكت",
   jobTitle: "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة",
@@ -188,9 +265,17 @@ const DEFAULT_EN_DATA: LanguageSpecificData = {
   ]
 };
 
+// HELPER: Auto-translate text using dictionary mapping
+function translateText(text: string): string {
+  if (!text || !text.trim()) return "";
+  const trimmed = text.trim();
+  if (TRANSLATION_MAP[trimmed]) return TRANSLATION_MAP[trimmed];
+  return text;
+}
+
 export default function PublicCvBuilderPage() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
-  const [activeTab, setActiveTab] = useState<"presets" | "personal" | "experience" | "education" | "skills" | "styling" | "qr">("personal");
+  const [activeTab, setActiveTab] = useState<"personal" | "experience" | "education" | "skills" | "presets" | "styling">("personal");
 
   // SEPARATE BILINGUAL STATE STORES
   const [docAR, setDocAR] = useState<LanguageSpecificData>(DEFAULT_AR_DATA);
@@ -217,6 +302,7 @@ export default function PublicCvBuilderPage() {
 
   const [a4Zoom, setA4Zoom] = useState<number>(0.85);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState<boolean>(false);
+  const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false);
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
   const [newSkillInput, setNewSkillInput] = useState<string>("");
   const [toastMessage, setToastMessage] = useState<string>("");
@@ -260,19 +346,85 @@ export default function PublicCvBuilderPage() {
     fetch("/api/track?path=/cv&page=Public_Bilingual_CV_Builder").catch(() => {});
   }, []);
 
-  const handleSwitchLanguage = (newLang: "AR" | "EN") => {
-    setLang(newLang);
-    setFontFamily(newLang === "AR" ? "Tajawal" : "Outfit");
-    showToast(newLang === "AR" ? "تم التحويل إلى وضع السيرة باللغة العربية (RTL)" : "Switched to English Resume mode (LTR)");
-  };
+  // INSTANT BIDIRECTIONAL LANGUAGE SWITCH & TRANSLATION
+  const handleInstantSwitchLanguage = (targetLang: "AR" | "EN") => {
+    if (targetLang === lang) return;
 
-  const handleCopyCurrentToOther = () => {
-    if (lang === "AR") {
-      setDocEN({ ...docAR });
-      showToast("تم نسخ البيانات العربية إلى النموذج الإنجليزي بنجاح");
+    if (targetLang === "EN") {
+      // Switching from Arabic to English:
+      // If docEN is untouched or empty, translate docAR into docEN automatically!
+      if (!docEN.fullName || docEN.fullName === DEFAULT_EN_DATA.fullName) {
+        if (docAR.fullName && docAR.fullName !== DEFAULT_AR_DATA.fullName) {
+          const autoTranslatedEN: LanguageSpecificData = {
+            fullName: translateText(docAR.fullName),
+            jobTitle: translateText(docAR.jobTitle),
+            summary: translateText(docAR.summary),
+            email: docAR.email,
+            phone: docAR.phone,
+            location: translateText(docAR.location),
+            linkedin: docAR.linkedin,
+            skills: docAR.skills.map((s) => translateText(s)),
+            experiences: docAR.experiences.map((exp) => ({
+              ...exp,
+              role: translateText(exp.role),
+              company: translateText(exp.company),
+              date: translateText(exp.date),
+              bullets: exp.bullets.map((b) => translateText(b)),
+            })),
+            education: docAR.education.map((edu) => ({
+              ...edu,
+              school: translateText(edu.school),
+              degree: translateText(edu.degree),
+              year: translateText(edu.year),
+            })),
+            certifications: docAR.certifications.map((c) => ({
+              ...c,
+              title: translateText(c.title),
+            })),
+          };
+          setDocEN(autoTranslatedEN);
+        }
+      }
+      setLang("EN");
+      setFontFamily("Outfit");
+      showToast("تم التحويل الفوري إلى النسخة الإنجليزية (English Mode)");
     } else {
-      setDocAR({ ...docEN });
-      showToast("Copied English data to Arabic resume template");
+      // Switching from English to Arabic:
+      if (!docAR.fullName || docAR.fullName === DEFAULT_AR_DATA.fullName) {
+        if (docEN.fullName && docEN.fullName !== DEFAULT_EN_DATA.fullName) {
+          const autoTranslatedAR: LanguageSpecificData = {
+            fullName: translateText(docEN.fullName),
+            jobTitle: translateText(docEN.jobTitle),
+            summary: translateText(docEN.summary),
+            email: docEN.email,
+            phone: docEN.phone,
+            location: translateText(docEN.location),
+            linkedin: docEN.linkedin,
+            skills: docEN.skills.map((s) => translateText(s)),
+            experiences: docEN.experiences.map((exp) => ({
+              ...exp,
+              role: translateText(exp.role),
+              company: translateText(exp.company),
+              date: translateText(exp.date),
+              bullets: exp.bullets.map((b) => translateText(b)),
+            })),
+            education: docEN.education.map((edu) => ({
+              ...edu,
+              school: translateText(edu.school),
+              degree: translateText(edu.degree),
+              year: translateText(edu.year),
+            })),
+            certifications: docEN.certifications.map((c) => ({
+              ...c,
+              title: translateText(c.title),
+            })),
+          };
+          setDocAR(autoTranslatedAR);
+        }
+      }
+      setLang("AR");
+      setFontFamily("Tajawal");
+      showToast("تم التحويل الفوري إلى النسخة العربية (Arabic Mode)");
     }
   };
 
@@ -313,7 +465,7 @@ export default function PublicCvBuilderPage() {
     reader.onload = (event) => {
       if (event.target?.result) {
         setPhoto(event.target.result as string);
-        showToast(lang === "AR" ? "تم تحميل وتعيين الصورة الشخصية بنجاح" : "Profile photo uploaded successfully");
+        showToast(lang === "AR" ? "تم تعيين الصورة الشخصية بنجاح" : "Profile photo uploaded successfully");
       }
     };
     reader.readAsDataURL(file);
@@ -424,16 +576,15 @@ export default function PublicCvBuilderPage() {
     setCurDoc((prev) => ({ ...prev, skills: prev.skills.filter((_, idx) => idx !== skillIndex) }));
   };
 
-  // DUAL EXPORT PDF FUNCTION (SUPPORTS ARABIC & ENGLISH DIRECTLY)
-  const handleDownloadPdf = async (targetLang: "AR" | "EN") => {
+  // SINGLE PDF GENERATION CORE HELPER
+  const generateSinglePdf = async (targetLang: "AR" | "EN") => {
     const isTargetArabic = targetLang === "AR";
     
-    // Switch active view to the export language if different
+    // Switch canvas to target language
     if (lang !== targetLang) {
       setLang(targetLang);
       setFontFamily(isTargetArabic ? "Tajawal" : "Outfit");
-      // Wait a tick for DOM re-render
-      await new Promise((resolve) => setTimeout(resolve, 150));
+      await new Promise((resolve) => setTimeout(resolve, 200));
     }
 
     const element = document.getElementById("cv-pdf-canvas");
@@ -443,51 +594,71 @@ export default function PublicCvBuilderPage() {
     const sanitizedName = (activeData.fullName || "My_CV").replace(/[^a-zA-Z0-9_\u0600-\u06FF]/g, "_");
     const pdfFileName = `${sanitizedName}_CV_${targetLang}_2026.pdf`;
 
-    setIsGeneratingPdf(true);
-    showToast(isTargetArabic ? "جاري تحويل وتجهيز ملف الـ PDF باللغة العربية..." : "Rendering English PDF file...");
+    const html2canvas = (await import("html2canvas")).default;
+    const { jsPDF } = await import("jspdf");
 
-    try {
-      const html2canvas = (await import("html2canvas")).default;
-      const { jsPDF } = await import("jspdf");
+    const canvas = await html2canvas(element, {
+      scale: 2.2,
+      useCORS: true,
+      logging: false,
+      backgroundColor: null,
+    });
 
-      const canvas = await html2canvas(element, {
-        scale: 2.2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: null,
-      });
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
 
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
+    const pdfWidth = pdf.internal.pageSize.getWidth(); // 210mm
+    const pdfPageHeight = pdf.internal.pageSize.getHeight(); // 297mm
+    const totalPdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-      const pdfWidth = pdf.internal.pageSize.getWidth(); // 210mm
-      const pdfPageHeight = pdf.internal.pageSize.getHeight(); // 297mm
-      const totalPdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    let heightLeft = totalPdfHeight;
+    let position = 0;
 
-      let heightLeft = totalPdfHeight;
-      let position = 0;
+    // First Page
+    pdf.addImage(imgData, "PNG", 0, position, pdfWidth, totalPdfHeight);
+    heightLeft -= pdfPageHeight;
 
-      // Render First Page
+    // Multi-page protection
+    while (heightLeft > 5) {
+      position = position - pdfPageHeight;
+      pdf.addPage();
       pdf.addImage(imgData, "PNG", 0, position, pdfWidth, totalPdfHeight);
       heightLeft -= pdfPageHeight;
+    }
 
-      // Multi-page protection loop
-      while (heightLeft > 5) {
-        position = position - pdfPageHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, totalPdfHeight);
-        heightLeft -= pdfPageHeight;
+    pdf.save(pdfFileName);
+  };
+
+  // DOWNLOAD HANDLER (CHOICES: AR, EN, OR BOTH)
+  const handleExecuteExport = async (choice: "AR" | "EN" | "BOTH") => {
+    setIsExportModalOpen(false);
+    setIsGeneratingPdf(true);
+
+    try {
+      if (choice === "AR") {
+        showToast("جاري تنزيل ملف الـ PDF باللغة العربية...");
+        await generateSinglePdf("AR");
+        showToast("تم تنزيل النسخة العربية بنجاح");
+      } else if (choice === "EN") {
+        showToast("Generating English PDF resume...");
+        await generateSinglePdf("EN");
+        showToast("English PDF Downloaded successfully");
+      } else if (choice === "BOTH") {
+        showToast("جاري تجهيز وتنزيل النسختين (العربية والإنجليزية)...");
+        // 1. Download Arabic
+        await generateSinglePdf("AR");
+        await new Promise((res) => setTimeout(res, 600));
+        // 2. Download English
+        await generateSinglePdf("EN");
+        showToast("تم تنزيل النسختين العربية والإنجليزية بنجاح");
       }
-
-      pdf.save(pdfFileName);
-      showToast(isTargetArabic ? `تم تنزيل السيرة الذاتية (بالعربية) بنجاح` : `Successfully downloaded English CV PDF`);
     } catch (err) {
-      console.error("PDF generation error:", err);
-      showToast(isTargetArabic ? "حدث خطأ أثناء تنزيل الـ PDF" : "Error generating PDF");
+      console.error("PDF Export Error:", err);
+      showToast("حدث خطأ أثناء تصدير الـ PDF");
     } finally {
       setIsGeneratingPdf(false);
     }
@@ -536,7 +707,137 @@ export default function PublicCvBuilderPage() {
         </div>
       )}
 
-      {/* TOP HEADER WITH DUAL EXPORT CONTROLS */}
+      {/* DOWNLOAD CHOICE MODAL */}
+      {isExportModalOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.75)",
+            backdropFilter: "blur(10px)",
+            zIndex: 10000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+          onClick={() => setIsExportModalOpen(false)}
+        >
+          <div
+            style={{
+              background: "#0e101d",
+              border: "1.5px solid #2563eb",
+              borderRadius: "24px",
+              padding: "32px 28px",
+              maxWidth: "460px",
+              width: "100%",
+              boxShadow: "0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(37,99,235,0.25)",
+              textAlign: "center",
+              display: "flex",
+              flexDirection: "column",
+              gap: "20px",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div>
+              <h2 style={{ fontSize: "21px", fontWeight: "900", color: "#ffffff", margin: "0 0 8px 0" }}>
+                {isArabic ? "اختر صيغة تنزيل السيرة الذاتية" : "Choose Download Format"}
+              </h2>
+              <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0, lineHeight: "1.5" }}>
+                {isArabic ? "هل ترغب في تنزيل النسخة العربية أم الإنجليزية أم كلاهما معاً؟" : "Would you like to export Arabic, English, or Both versions?"}
+              </p>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {/* OPTION 1: ARABIC ONLY */}
+              <button
+                onClick={() => handleExecuteExport("AR")}
+                style={{
+                  background: "#15803d",
+                  color: "#ffffff",
+                  border: "none",
+                  padding: "14px 20px",
+                  borderRadius: "14px",
+                  fontSize: "14.5px",
+                  fontWeight: "900",
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  boxShadow: "0 4px 15px rgba(21,128,61,0.35)",
+                }}
+              >
+                <span>تنزيل النسخة العربية فقط</span>
+                <span style={{ fontSize: "12px", background: "rgba(255,255,255,0.2)", padding: "3px 8px", borderRadius: "8px" }}>AR PDF</span>
+              </button>
+
+              {/* OPTION 2: ENGLISH ONLY */}
+              <button
+                onClick={() => handleExecuteExport("EN")}
+                style={{
+                  background: "#0284c7",
+                  color: "#ffffff",
+                  border: "none",
+                  padding: "14px 20px",
+                  borderRadius: "14px",
+                  fontSize: "14.5px",
+                  fontWeight: "900",
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  boxShadow: "0 4px 15px rgba(2,132,199,0.35)",
+                }}
+              >
+                <span>Download English Version Only</span>
+                <span style={{ fontSize: "12px", background: "rgba(255,255,255,0.2)", padding: "3px 8px", borderRadius: "8px" }}>EN PDF</span>
+              </button>
+
+              {/* OPTION 3: BOTH VERSIONS */}
+              <button
+                onClick={() => handleExecuteExport("BOTH")}
+                style={{
+                  background: "linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)",
+                  color: "#ffffff",
+                  border: "none",
+                  padding: "15px 20px",
+                  borderRadius: "14px",
+                  fontSize: "15px",
+                  fontWeight: "900",
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  boxShadow: "0 8px 25px rgba(37,99,235,0.45)",
+                }}
+              >
+                <span>تنزيل اللغتين معاً (AR + EN)</span>
+                <span style={{ fontSize: "12px", background: "rgba(255,255,255,0.25)", padding: "3px 8px", borderRadius: "8px" }}>ملفان 2x PDF</span>
+              </button>
+            </div>
+
+            <button
+              onClick={() => setIsExportModalOpen(false)}
+              style={{
+                background: "transparent",
+                border: "none",
+                color: "#64748b",
+                fontSize: "13px",
+                fontWeight: "700",
+                cursor: "pointer",
+                padding: "4px",
+              }}
+            >
+              {isArabic ? "إلغاء" : "Cancel"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* TOP HEADER WITH INSTANT TRANSLATE TOGGLE & MAIN DOWNLOAD BUTTON */}
       <header
         style={{
           background: "rgba(10, 11, 18, 0.9)",
@@ -575,97 +876,62 @@ export default function PublicCvBuilderPage() {
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <h1 style={{ fontSize: "17px", fontWeight: "900", margin: 0, color: "#ffffff" }}>
-                  {isArabic ? "صانع السيرة الذاتية ثنائي اللغة (عربي / English)" : "Bilingual ATS CV Builder & PDF Studio"}
+                  {isArabic ? "صانع السيرة الذاتية الذكي ومولد الـ PDF" : "Interactive ATS CV Builder & PDF Engine"}
                 </h1>
                 <span style={{ background: "#16a34a", color: "#ffffff", padding: "2px 8px", borderRadius: "12px", fontSize: "10px", fontWeight: "900" }}>
                   BILINGUAL AR / EN
                 </span>
               </div>
               <span style={{ fontSize: "11px", color: "#94a3b8" }}>
-                {isArabic ? "صمم سيرتك الذاتية وصدر ملف PDF منفصل بالعربية أو بالإنجليزية بنقرة زر واحدة" : "Build your CV and export dedicated print-ready PDFs in Arabic or English with 1-click"}
+                {isArabic ? "أنشئ سيرتك وقم بالتحويل اللحظي بين اللغتين وتصدير ملفات PDF قياسية جاهزة للطباعة" : "Build your CV, switch languages instantly & download print-ready PDFs"}
               </span>
             </div>
           </div>
 
-          {/* DUAL LANGUAGE TOGGLE & DUAL PDF EXPORT BUTTONS */}
+          {/* ACTION BUTTONS: INSTANT SWITCH + UNIFIED DOWNLOAD BUTTON */}
           <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
             
-            {/* ACTIVE EDITING LANGUAGE SELECTOR */}
-            <div style={{ display: "flex", background: "#151624", padding: "3px", borderRadius: "8px", border: "1.5px solid #3b82f6" }}>
-              <button
-                onClick={() => handleSwitchLanguage("AR")}
-                style={{
-                  background: isArabic ? "#2563eb" : "transparent",
-                  color: isArabic ? "#ffffff" : "#94a3b8",
-                  border: "none",
-                  padding: "6px 14px",
-                  borderRadius: "6px",
-                  fontSize: "12px",
-                  fontWeight: "900",
-                  cursor: "pointer",
-                }}
-              >
-                تعديل العربية (AR)
-              </button>
-              <button
-                onClick={() => handleSwitchLanguage("EN")}
-                style={{
-                  background: !isArabic ? "#2563eb" : "transparent",
-                  color: !isArabic ? "#ffffff" : "#94a3b8",
-                  border: "none",
-                  padding: "6px 14px",
-                  borderRadius: "6px",
-                  fontSize: "12px",
-                  fontWeight: "900",
-                  cursor: "pointer",
-                }}
-              >
-                Edit English (EN)
-              </button>
-            </div>
-
-            {/* DIRECT EXPORT BUTTON 1: ARABIC PDF */}
+            {/* INSTANT BILINGUAL TRANSLATE TOGGLE BUTTON */}
             <button
-              onClick={() => handleDownloadPdf("AR")}
-              disabled={isGeneratingPdf}
+              onClick={() => handleInstantSwitchLanguage(isArabic ? "EN" : "AR")}
               style={{
-                background: "#15803d",
+                background: isArabic ? "#1e293b" : "#0284c7",
                 color: "#ffffff",
-                border: "none",
-                padding: "8px 14px",
-                borderRadius: "8px",
-                fontSize: "12.5px",
+                border: "1.5px solid #38bdf8",
+                padding: "9px 18px",
+                borderRadius: "10px",
+                fontSize: "13px",
                 fontWeight: "900",
                 cursor: "pointer",
-                boxShadow: "0 4px 12px rgba(21, 128, 61, 0.35)",
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "6px",
+                gap: "8px",
+                boxShadow: "0 4px 15px rgba(56,189,248,0.25)",
               }}
             >
-              <span>تصدير PDF (بالعربية)</span>
+              <span>{isArabic ? "تحويل مباشر إلى الإنجليزية (EN)" : "تحويل مباشر إلى العربية (AR)"}</span>
             </button>
 
-            {/* DIRECT EXPORT BUTTON 2: ENGLISH PDF */}
+            {/* UNIFIED DOWNLOAD PDF BUTTON (OPENS MODAL WITH AR/EN/BOTH CHOICES) */}
             <button
-              onClick={() => handleDownloadPdf("EN")}
+              onClick={() => setIsExportModalOpen(true)}
               disabled={isGeneratingPdf}
               style={{
-                background: "#0284c7",
+                background: "#16a34a",
                 color: "#ffffff",
                 border: "none",
-                padding: "8px 14px",
-                borderRadius: "8px",
-                fontSize: "12.5px",
+                padding: "10px 22px",
+                borderRadius: "10px",
+                fontSize: "13.5px",
                 fontWeight: "900",
                 cursor: "pointer",
-                boxShadow: "0 4px 12px rgba(2, 132, 199, 0.35)",
+                boxShadow: "0 4px 18px rgba(22,163,74,0.45)",
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "6px",
+                gap: "8px",
               }}
             >
-              <span>Export PDF (English)</span>
+              <span>{isGeneratingPdf ? (isArabic ? "جاري التصدير..." : "Exporting...") : (isArabic ? "تحميل السيرة الذاتية PDF" : "Download Resume PDF")}</span>
             </button>
           </div>
         </div>
@@ -678,33 +944,16 @@ export default function PublicCvBuilderPage() {
           {/* LEFT INTERACTIVE EDITOR PANEL */}
           <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             
-            {/* TOP BAR ACTIONS (COPY TO OTHER LANG, LOAD SAMPLE, CLEAR) */}
+            {/* TOP BAR ACTIONS (LOAD SAMPLE, CLEAR) */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0e101d", padding: "10px 14px", borderRadius: "12px", border: "1px solid #334155", flexWrap: "wrap", gap: "8px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <span style={{ fontSize: "11px", color: "#94a3b8" }}>{isArabic ? "الوضع النشط:" : "Active:"}</span>
-                <span style={{ fontSize: "12px", fontWeight: "900", color: "#60a5fa" }}>
-                  {isArabic ? "النسخة العربية" : "English Version"}
+                <span style={{ fontSize: "11px", color: "#94a3b8" }}>{isArabic ? "لغة التعديل الحالية:" : "Active Language:"}</span>
+                <span style={{ fontSize: "12px", fontWeight: "900", color: isArabic ? "#34d399" : "#38bdf8" }}>
+                  {isArabic ? "العربية (RTL)" : "English (LTR)"}
                 </span>
               </div>
 
               <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-                <button
-                  onClick={handleCopyCurrentToOther}
-                  title={isArabic ? "نسخ البيانات الحالية إلى النموذج الإنجليزي" : "Copy current data to Arabic model"}
-                  style={{
-                    background: "#1e293b",
-                    color: "#38bdf8",
-                    border: "1px solid #0284c740",
-                    padding: "5px 10px",
-                    borderRadius: "6px",
-                    fontSize: "11px",
-                    fontWeight: "800",
-                    cursor: "pointer",
-                  }}
-                >
-                  {isArabic ? "نسخ إلى الإنجليزية ⇄" : "Copy to Arabic ⇄"}
-                </button>
-
                 <button
                   onClick={handleLoadSampleData}
                   style={{
@@ -734,7 +983,7 @@ export default function PublicCvBuilderPage() {
                     cursor: "pointer",
                   }}
                 >
-                  {isArabic ? "تفريغ" : "Clear"}
+                  {isArabic ? "تفريغ الحقول" : "Clear All"}
                 </button>
               </div>
             </div>
@@ -785,10 +1034,10 @@ export default function PublicCvBuilderPage() {
               <div style={{ background: "#0e101d", padding: "20px", borderRadius: "18px", border: "1px solid #334155", display: "flex", flexDirection: "column", gap: "14px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>
-                    {isArabic ? "البيانات الشخصية (النسخة العربية)" : "Personal Information (English Version)"}
+                    {isArabic ? "البيانات الشخصية والنبذة" : "Personal Information & Bio"}
                   </h3>
                   <span style={{ fontSize: "11px", color: isArabic ? "#34d399" : "#60a5fa", fontWeight: "800" }}>
-                    {isArabic ? "وضع الكتابة: عربي" : "Mode: English"}
+                    {isArabic ? "اللغة: العربية" : "Language: English"}
                   </span>
                 </div>
 
