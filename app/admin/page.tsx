@@ -4,6 +4,135 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { PortfolioData } from "@/lib/portfolio";
 
+export const CV_TEMPLATES_PRESETS = [
+  {
+    id: "classic-ats-standard",
+    title: "1. القياسي العام (Classic ATS Standard)",
+    field: "كافة المجالات والشركات العالمية",
+    desc: "أعلى درجات التوافق بنسبة 100% مع كافة برامج فحص السير الذاتية ATS بتصميم عمود واحد نقي.",
+    accent: "#1e293b",
+    style: "clean-white" as const,
+    format: "single-column" as const,
+    font: "Outfit",
+    margin: "normal" as const,
+    spacing: "normal" as const,
+    fontSize: "normal" as const,
+    isRTL: false,
+  },
+  {
+    id: "ats-tech-software",
+    title: "2. هندسة البرمجيات والتقنية (Tech & Software ATS)",
+    field: "البرمجة وهندسة البرمجيات",
+    desc: "مخصص للمطورين ومهندسي البرمجيات والأنظمة مع إبراز التقنيات والمشاريع وروابط GitHub.",
+    accent: "#0284c7",
+    style: "clean-white" as const,
+    format: "single-column" as const,
+    font: "Inter",
+    margin: "compact" as const,
+    spacing: "compact" as const,
+    fontSize: "compact" as const,
+    isRTL: false,
+  },
+  {
+    id: "hybrid-tech-sidebar",
+    title: "3. الشريط الجانبي للـ DevOps والسحابة (Hybrid Tech Sidebar)",
+    field: "السحابة والشبكات والـ DevOps",
+    desc: "تصميم عمودين يضع الشهادات والمهارات السحابية في شريط جانبي أنيق لتسهيل القراءة.",
+    accent: "#2563eb",
+    style: "clean-white" as const,
+    format: "two-column-sidebar" as const,
+    font: "Plus Jakarta Sans",
+    margin: "compact" as const,
+    spacing: "normal" as const,
+    fontSize: "normal" as const,
+    isRTL: false,
+  },
+  {
+    id: "executive-business",
+    title: "4. الإدارة والأعمال التنفيذية (Executive & Business Management)",
+    field: "الإدارة العليا والمشاريع P&L",
+    desc: "تصميم تنفيذي أنيق موجه لمدراء المشاريع والعمليات مع التركيز على مؤشرات الأداء والأرقام.",
+    accent: "#1e3a8a",
+    style: "clean-white" as const,
+    format: "single-column" as const,
+    font: "Outfit",
+    margin: "normal" as const,
+    spacing: "relaxed" as const,
+    fontSize: "normal" as const,
+    isRTL: false,
+  },
+  {
+    id: "executive-gold-slate",
+    title: "5. الاستشارات والتحليل المالي (Gold & Slate M&A)",
+    field: "المالية والاستشارات الاستراتيجية",
+    desc: "لمسات ذهبية ورمادية فخمة موجهة للمستشارين الماليين ومدراء الصفقات والاستثمار.",
+    accent: "#b45309",
+    style: "clean-white" as const,
+    format: "modern-executive" as const,
+    font: "Outfit",
+    margin: "normal" as const,
+    spacing: "normal" as const,
+    fontSize: "normal" as const,
+    isRTL: false,
+  },
+  {
+    id: "marketing-product",
+    title: "6. التسويق وإدارة المنتجات (Product & Growth Marketing)",
+    field: "إدارة المنتجات والتسويق الرقمي",
+    desc: "تصميم يبرز استراتيجيات النمو والـ GTM والتحليلات وقمع المبيعات ومؤشرات التحويل.",
+    accent: "#e11d48",
+    style: "clean-white" as const,
+    format: "single-column" as const,
+    font: "Plus Jakarta Sans",
+    margin: "normal" as const,
+    spacing: "normal" as const,
+    fontSize: "normal" as const,
+    isRTL: false,
+  },
+  {
+    id: "emerald-creative",
+    title: "7. تصميم المنتجات والـ UI/UX (Emerald Creative Cards)",
+    field: "التصميم الإبداعي وتجربة المستخدم",
+    desc: "تصميم أنيق بلمسات زمردية خضراء وبطاقات مهارات موجه للمصممين ومطوري الواجهات.",
+    accent: "#059669",
+    style: "clean-white" as const,
+    format: "two-column-sidebar" as const,
+    font: "Outfit",
+    margin: "compact" as const,
+    spacing: "normal" as const,
+    fontSize: "normal" as const,
+    isRTL: false,
+  },
+  {
+    id: "arabic-professional",
+    title: "8. السيرة الاحترافية العربية الرسمية (Arabic Professional CV)",
+    field: "السيرة العربية الرسمية",
+    desc: "تنسيق عربي متكامل من اليمين إلى اليسار (RTL) للشركات والمؤسسات والوزارات العربية.",
+    accent: "#0f766e",
+    style: "clean-white" as const,
+    format: "single-column" as const,
+    font: "Tajawal",
+    margin: "normal" as const,
+    spacing: "normal" as const,
+    fontSize: "normal" as const,
+    isRTL: true,
+  },
+  {
+    id: "arabic-modern-blue",
+    title: "9. السيرة العربية الزرقاء الحديثة (Arabic Modern Blue CV)",
+    field: "السيرة العربية العصرية",
+    desc: "تصميم عربي كحلي مميز مع هيدر عريض وخطوط عربية عصرية وواضحة وبطاقات مهارات.",
+    accent: "#1d4ed8",
+    style: "clean-white" as const,
+    format: "two-column-sidebar" as const,
+    font: "Cairo",
+    margin: "compact" as const,
+    spacing: "normal" as const,
+    fontSize: "normal" as const,
+    isRTL: true,
+  },
+];
+
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [password, setPassword] = useState("");
@@ -1368,9 +1497,67 @@ export default function AdminPage() {
 
               {/* BUILDER MODE */}
               {cvMode === "builder" && (
-                <div style={{ display: "grid", gridTemplateColumns: "minmax(360px, 460px) 1fr", gap: "30px", alignItems: "start" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "minmax(380px, 480px) 1fr", gap: "30px", alignItems: "start" }}>
                   {/* RIGHT PANEL: EDITING CONTROLS */}
                   <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+                    
+                    {/* SPECIALIZED TEMPLATES PRESETS SELECTOR */}
+                    <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "2px solid #2563eb", boxShadow: "0 8px 25px rgba(37,99,235,0.15)" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+                        <div>
+                          <h4 style={{ fontSize: "15px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>مكتبة القوالب المتخصصة (9 مجالات)</h4>
+                          <span style={{ fontSize: "11px", color: "#94a3b8" }}>اختر القالب المخصص لمجالك المهني لتطبيقه فورياً:</span>
+                        </div>
+                      </div>
+
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "8px", maxHeight: "320px", overflowY: "auto", paddingRight: "4px" }}>
+                        {CV_TEMPLATES_PRESETS.map((p) => {
+                          const isSelected = (data.cvDocument?.templatePreset || "classic-ats-standard") === p.id;
+                          return (
+                            <button
+                              key={p.id}
+                              onClick={() => {
+                                setData({
+                                  ...data,
+                                  cvDocument: {
+                                    ...(data.cvDocument || ({} as any)),
+                                    templatePreset: p.id as any,
+                                    accentColor: p.accent,
+                                    templateStyle: p.style,
+                                    layoutFormat: p.format,
+                                    fontFamily: p.font,
+                                    fontSizeScale: p.fontSize,
+                                    pageMargin: p.margin,
+                                    lineSpacing: p.spacing,
+                                  },
+                                });
+                                showToast(`تم تفعيل: ${p.title}`);
+                              }}
+                              style={{
+                                background: isSelected ? "#172554" : "#151624",
+                                border: isSelected ? `2px solid ${p.accent}` : "1px solid #334155",
+                                borderRadius: "10px",
+                                padding: "10px 12px",
+                                textAlign: "right",
+                                cursor: "pointer",
+                                transition: "all 0.15s",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "4px",
+                              }}
+                            >
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <strong style={{ fontSize: "12.5px", color: isSelected ? "#60a5fa" : "#ffffff", fontWeight: "800" }}>{p.title}</strong>
+                                <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: p.accent, display: "inline-block" }} />
+                              </div>
+                              <div style={{ fontSize: "11px", color: "#38bdf8", fontWeight: "700" }}>المجال: {p.field}</div>
+                              <p style={{ fontSize: "10.5px", color: "#94a3b8", margin: 0, lineHeight: "1.4" }}>{p.desc}</p>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
                     {/* PHOTO & PERSONAL INFO */}
                     <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
                       <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#60a5fa", marginBottom: "14px" }}>المعلومات الأساسية والصورة</h4>

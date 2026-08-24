@@ -96,6 +96,16 @@ export interface PortfolioData {
       year?: string;
     }>;
     templateStyle: "modern-dark" | "clean-white" | "executive-blue";
+    templatePreset?: 
+      | "classic-ats-standard"
+      | "ats-tech-software"
+      | "hybrid-tech-sidebar"
+      | "executive-business"
+      | "executive-gold-slate"
+      | "marketing-product"
+      | "emerald-creative"
+      | "arabic-professional"
+      | "arabic-modern-blue";
     accentColor: string;
     layoutFormat?: "single-column" | "two-column-sidebar" | "modern-executive" | "minimal-compact";
     headerAlignment?: "left" | "center" | "split";
