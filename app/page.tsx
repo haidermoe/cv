@@ -210,11 +210,20 @@ const translations = {
 
 export default function Home() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isClientDrawerOpen, setIsClientDrawerOpen] = useState(false);
   const [isClientDrawerClosing, setIsClientDrawerClosing] = useState(false);
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
   const [isNavMenuClosing, setIsNavMenuClosing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+    const x = (clientX / innerWidth - 0.5) * 2;
+    const y = (clientY / innerHeight - 0.5) * 2;
+    setMousePos({ x, y });
+  };
 
   // Circular Language Transition Ripple State
   const [isLangAnimating, setIsLangAnimating] = useState(false);
@@ -367,16 +376,16 @@ export default function Home() {
   };
 
   const marqueeContent = (
-    <div style={{ display: "flex", gap: "30px", alignItems: "center", whiteSpace: "nowrap", fontSize: "16px", fontWeight: "900", letterSpacing: "1px", color: "#ffffff", fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif", paddingRight: "30px", flexShrink: 0 }}>
+    <div style={{ display: "flex", gap: "30px", alignItems: "center", whiteSpace: "nowrap", fontSize: "16px", fontWeight: "900", letterSpacing: "1px", color: "#0f111a", fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif", paddingRight: "30px", flexShrink: 0 }}>
       {lang === "AR" ? (
         <>
-          <span style={{ color: "#ffffff" }}>تحليل البيانات</span> • <span style={{ color: "#60a5fa" }}>التجارة الإلكترونية</span> • <span style={{ color: "#ffffff" }}>إدارة شبكات FTTH</span> • <span style={{ color: "#60a5fa" }}>أتمتة PYTHON</span> • <span style={{ color: "#ffffff" }}>قواعد بيانات SQL</span> • 
-          <span style={{ color: "#60a5fa" }}>DATA DRIVEN</span> • <span style={{ color: "#ffffff" }}>USER FOCUSED</span> • <span style={{ color: "#60a5fa" }}>VALUE BASED</span> • <span style={{ color: "#ffffff" }}>E-COMMERCE OPS</span> • 
+          <span style={{ color: "#0f111a" }}>تحليل البيانات</span> • <span style={{ color: "#2563eb" }}>التجارة الإلكترونية</span> • <span style={{ color: "#0f111a" }}>إدارة شبكات FTTH</span> • <span style={{ color: "#2563eb" }}>أتمتة PYTHON</span> • <span style={{ color: "#0f111a" }}>قواعد بيانات SQL</span> • 
+          <span style={{ color: "#2563eb" }}>DATA DRIVEN</span> • <span style={{ color: "#0f111a" }}>USER FOCUSED</span> • <span style={{ color: "#2563eb" }}>VALUE BASED</span> • <span style={{ color: "#0f111a" }}>E-COMMERCE OPS</span> • 
         </>
       ) : (
         <>
-          <span style={{ color: "#ffffff" }}>DATA ANALYSIS</span> • <span style={{ color: "#60a5fa" }}>E-COMMERCE OPS</span> • <span style={{ color: "#ffffff" }}>FTTH NETWORKS</span> • <span style={{ color: "#60a5fa" }}>PYTHON AUTOMATION</span> • <span style={{ color: "#ffffff" }}>SQL DATABASES</span> • 
-          <span style={{ color: "#60a5fa" }}>DATA DRIVEN</span> • <span style={{ color: "#ffffff" }}>USER FOCUSED</span> • <span style={{ color: "#60a5fa" }}>VALUE BASED</span> • 
+          <span style={{ color: "#0f111a" }}>DATA ANALYSIS</span> • <span style={{ color: "#2563eb" }}>E-COMMERCE OPS</span> • <span style={{ color: "#0f111a" }}>FTTH NETWORKS</span> • <span style={{ color: "#2563eb" }}>PYTHON AUTOMATION</span> • <span style={{ color: "#0f111a" }}>SQL DATABASES</span> • 
+          <span style={{ color: "#2563eb" }}>DATA DRIVEN</span> • <span style={{ color: "#0f111a" }}>USER FOCUSED</span> • <span style={{ color: "#2563eb" }}>VALUE BASED</span> • 
         </>
       )}
     </div>
@@ -384,15 +393,44 @@ export default function Home() {
 
   return (
     <div
+      onMouseMove={handleMouseMove}
       className="main-layout"
       dir={lang === "AR" ? "rtl" : "ltr"}
       style={{
-        background: "#0e0d15",
-        color: "#ffffff",
+        background: "#f2f1f6",
+        color: "#0f111a",
         minHeight: "100vh",
+        position: "relative",
+        overflowX: "hidden",
         fontFamily: lang === "AR" ? `'${portfolioData?.typography?.fontFamilyAR || "Tajawal"}', sans-serif` : `'${portfolioData?.typography?.fontFamilyEN || "Outfit"}', sans-serif`
       }}
     >
+      {/* 3D CONCAVE DOT GRID BACKGROUND LAYER (MATCHING /images, /tekno & /cv) */}
+      <div
+        style={{
+          position: "fixed",
+          inset: "-15%",
+          zIndex: 0,
+          pointerEvents: "none",
+          overflow: "hidden",
+          perspective: "1000px",
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            backgroundImage: "radial-gradient(rgba(15, 17, 26, 0.16) 1.5px, transparent 1.5px)",
+            backgroundSize: "20px 20px",
+            transform: `perspective(1000px) rotateX(${16 + mousePos.y * 14}deg) rotateY(${mousePos.x * 16}deg) scale(1.25)`,
+            transformOrigin: "center center",
+            transition: "transform 0.08s linear",
+            maskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
+            WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
+          }}
+        />
+      </div>
+
       {/* AWSMD TOP ACTION BUTTONS MATCHING SCREENSHOT */}
       <div
         className="awsmd-top-actions"
@@ -425,8 +463,8 @@ export default function Home() {
           onClick={handleLangSwitch}
           style={{
             background: "#ffffff",
-            border: "1.5px solid #4f46e5",
-            color: "#4f46e5",
+            border: "1.5px solid #2563eb",
+            color: "#2563eb",
             padding: "8px 18px",
             borderRadius: "50px",
             fontSize: "13.5px",
@@ -480,15 +518,15 @@ export default function Home() {
             gap: "10px",
             fontSize: "19px",
             fontWeight: "900",
-            color: isScrolledPastHero ? "#ffffff" : "#000000",
+            color: isScrolledPastHero ? "#0f111a" : "#000000",
             textDecoration: "none",
             letterSpacing: "-0.01em",
             transition: "color 0.35s cubic-bezier(0.4, 0, 0.2, 1)"
           }}
         >
           <svg width="22" height="18" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="7" y="1" width="8" height="10" fill={isScrolledPastHero ? "#ffffff" : "#000000"} style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
-            <rect x="0" y="13" width="16" height="7" fill={isScrolledPastHero ? "#ffffff" : "#000000"} style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
+            <rect x="7" y="1" width="8" height="10" fill={isScrolledPastHero ? "#0f111a" : "#000000"} style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
+            <rect x="0" y="13" width="16" height="7" fill={isScrolledPastHero ? "#0f111a" : "#000000"} style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
             <rect x="10" y="13" width="15" height="7" fill="#2563eb" style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
           </svg>
           <span>{t.logo}</span>
@@ -507,17 +545,17 @@ export default function Home() {
           display: "flex",
           alignItems: "center",
           gap: "24px",
-          background: "#ffffff",
+          background: "rgba(255, 255, 255, 0.9)",
+          backdropFilter: "blur(16px)",
           padding: "8px 24px",
           borderRadius: "50px",
-          boxShadow: "0 15px 35px rgba(0,0,0,0.12)",
+          boxShadow: "0 15px 35px rgba(0,0,0,0.08)",
           border: "1px solid rgba(255,255,255,0.8)"
         }}
       >
         <nav style={{ display: "flex", alignItems: "center", gap: "18px" }}>
           <FlipLink href="#home" color="#0f111a" hoverColor="#2563eb">{t.navHome}</FlipLink>
           <FlipLink href="#stats" color="#475569" hoverColor="#2563eb">{t.navStats}</FlipLink>
-          <FlipLink href="#about" color="#475569" hoverColor="#2563eb">{t.navAbout}</FlipLink>
           <FlipLink href="#experience" color="#475569" hoverColor="#2563eb">{t.navExperience}</FlipLink>
           <FlipLink href="#tools" color="#475569" hoverColor="#2563eb">{t.navTools}</FlipLink>
           <FlipLink href="#education" color="#475569" hoverColor="#2563eb">{t.navEducation}</FlipLink>
@@ -610,14 +648,14 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="awsmd-btn-glow"
                 style={{
-                  background: "#4f46e5",
+                  background: "#2563eb",
                   color: "#ffffff",
                   padding: "14px 28px",
                   borderRadius: "50px",
                   fontSize: "15px",
                   fontWeight: "800",
                   textDecoration: "none",
-                  boxShadow: "0 8px 25px rgba(79, 70, 229, 0.4)",
+                  boxShadow: "0 8px 25px rgba(37, 99, 235, 0.4)",
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "10px"
@@ -636,11 +674,13 @@ export default function Home() {
         style={{
           width: "100%",
           overflow: "hidden",
-          background: "#0d0f19",
+          background: "#f2f0f1",
           padding: "20px 0",
-          borderTop: "1px solid rgba(255,255,255,0.12)",
-          borderBottom: "1px solid rgba(255,255,255,0.12)",
-          direction: "ltr"
+          borderTop: "1px solid #e2e8f0",
+          borderBottom: "1px solid #e2e8f0",
+          direction: "ltr",
+          position: "relative",
+          zIndex: 2
         }}
       >
         <div className="news-ticker-track" style={{ display: "flex", width: "max-content", direction: "ltr" }}>
@@ -652,16 +692,16 @@ export default function Home() {
       </div>
 
       {/* Stats Section */}
-      <section className="section" id="stats" style={{ padding: "110px 40px", maxWidth: "1300px", margin: "0 auto", background: "#0e0d15" }}>
+      <section className="section" id="stats" style={{ padding: "110px 40px", maxWidth: "1300px", margin: "0 auto", background: "transparent", position: "relative", zIndex: 2 }}>
         <div style={{ marginBottom: "60px", textAlign: lang === "AR" ? "right" : "left" }}>
-          <span style={{ color: "#60a5fa", fontSize: "15px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "1px" }}>{t.statsTag}</span>
-          <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: "#ffffff" }}>{t.statsTitle}</h2>
+          <span style={{ color: "#2563eb", fontSize: "15px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "1px" }}>{t.statsTag}</span>
+          <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: "#0f111a" }}>{t.statsTitle}</h2>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "25px" }}>
           
           {/* STAT CARD 1 */}
-          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0" }}>
+          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0" }}>
             <div style={{ position: "relative", zIndex: 2 }}>
               <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>+22K</span>
               <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat1}</p>
@@ -670,7 +710,7 @@ export default function Home() {
           </div>
 
           {/* STAT CARD 2 */}
-          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0" }}>
+          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0" }}>
             <div style={{ position: "relative", zIndex: 2 }}>
               <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>+3K</span>
               <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat2}</p>
@@ -679,7 +719,7 @@ export default function Home() {
           </div>
 
           {/* STAT CARD 3 */}
-          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0" }}>
+          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0" }}>
             <div style={{ position: "relative", zIndex: 2 }}>
               <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>3</span>
               <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat3}</p>
@@ -688,7 +728,7 @@ export default function Home() {
           </div>
 
           {/* STAT CARD 4 */}
-          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0" }}>
+          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0" }}>
             <div style={{ position: "relative", zIndex: 2 }}>
               <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>+2K</span>
               <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat4}</p>
@@ -700,20 +740,11 @@ export default function Home() {
       </section>
 
       {/* Experience Section */}
-      <section className="section" id="experience" style={{ padding: "110px 40px", background: "#0c0d18", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", position: "relative", overflow: "hidden" }}>
-        {/* TECH MATRIX GRID & AMBIENT GLOW LINES */}
-        <div className="tech-grid-container">
-          <div className="tech-grid-pattern" />
-          <div className="tech-ambient-glow-1" />
-          <div className="tech-ambient-glow-2" />
-          <div className="tech-light-beam-1" />
-          <div className="tech-light-beam-2" />
-        </div>
-
+      <section className="section" id="experience" style={{ padding: "110px 40px", background: "transparent", position: "relative", overflow: "hidden", zIndex: 2 }}>
         <div style={{ maxWidth: "1300px", margin: "0 auto", position: "relative", zIndex: 2 }}>
           <div style={{ marginBottom: "60px", textAlign: lang === "AR" ? "right" : "left" }}>
-            <span style={{ color: "#60a5fa", fontSize: "15px", fontWeight: "800", textTransform: "uppercase" }}>{t.expTag}</span>
-            <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px" }}>{t.expTitle}</h2>
+            <span style={{ color: "#2563eb", fontSize: "15px", fontWeight: "800", textTransform: "uppercase" }}>{t.expTag}</span>
+            <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: "#0f111a" }}>{t.expTitle}</h2>
           </div>
 
           {/* 3 HIGH-IMPACT CARDS RESPONSIVE GRID */}
@@ -729,32 +760,32 @@ export default function Home() {
               href="/tekno"
               className="awsmd-dark-card"
               style={{
-                background: "#151624",
+                background: "#f2f0f1",
                 padding: "30px 26px",
                 borderRadius: "24px",
-                border: "1.5px solid rgba(96, 165, 250, 0.35)",
+                border: "1.5px solid rgba(37, 99, 235, 0.35)",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
                 textDecoration: "none",
-                color: "#ffffff",
+                color: "#0f111a",
                 cursor: "pointer",
                 transition: "all 0.3s ease",
-                boxShadow: "0 10px 30px rgba(37, 99, 235, 0.15)",
+                boxShadow: "0 10px 30px rgba(37, 99, 235, 0.08)",
                 minHeight: "280px",
               }}
             >
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
-                  <span style={{ background: "rgba(96, 165, 250, 0.15)", color: "#60a5fa", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800" }}>{t.exp1Date}</span>
+                  <span style={{ background: "rgba(37, 99, 235, 0.1)", color: "#2563eb", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800" }}>{t.exp1Date}</span>
                   <span style={{ background: "#2563eb", color: "#ffffff", padding: "5px 12px", borderRadius: "20px", fontSize: "11.5px", fontWeight: "800", display: "inline-flex", alignItems: "center", gap: "4px" }}>
                     <span>{lang === "AR" ? "تشغيل أداة تكنو" : "Launch Tekno Tool"}</span>
                   </span>
                 </div>
-                <h3 style={{ fontSize: "22px", fontWeight: "800", color: "#ffffff", marginBottom: "4px" }}>{t.exp1Company}</h3>
-                <p style={{ color: "#60a5fa", fontSize: "14px", fontWeight: "700", marginBottom: "14px" }}>{t.exp1Role}</p>
+                <h3 style={{ fontSize: "22px", fontWeight: "800", color: "#0f111a", marginBottom: "4px" }}>{t.exp1Company}</h3>
+                <p style={{ color: "#2563eb", fontSize: "14px", fontWeight: "700", marginBottom: "14px" }}>{t.exp1Role}</p>
               </div>
-              <ul style={{ color: "#94a3b8", fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
+              <ul style={{ color: "#475569", fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
                 {t.exp1Bullets.map((b, i) => (
                   <li key={i}>{b}</li>
                 ))}
@@ -765,22 +796,23 @@ export default function Home() {
             <div
               className="awsmd-dark-card"
               style={{
-                background: "#151624",
+                background: "#f2f0f1",
                 padding: "30px 26px",
                 borderRadius: "24px",
-                border: "1px solid rgba(255,255,255,0.08)",
+                border: "1px solid #e2e8f0",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
                 minHeight: "280px",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.04)"
               }}
             >
               <div>
-                <span style={{ background: "rgba(255, 255, 255, 0.08)", color: "#ffffff", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "14px" }}>{t.exp2Date}</span>
-                <h3 style={{ fontSize: "22px", fontWeight: "800", color: "#ffffff", marginBottom: "4px" }}>{t.exp2Company}</h3>
-                <p style={{ color: "#94a3b8", fontSize: "14px", fontWeight: "600", marginBottom: "14px" }}>{t.exp2Role}</p>
+                <span style={{ background: "rgba(0, 0, 0, 0.06)", color: "#0f111a", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "14px" }}>{t.exp2Date}</span>
+                <h3 style={{ fontSize: "22px", fontWeight: "800", color: "#0f111a", marginBottom: "4px" }}>{t.exp2Company}</h3>
+                <p style={{ color: "#64748b", fontSize: "14px", fontWeight: "600", marginBottom: "14px" }}>{t.exp2Role}</p>
               </div>
-              <ul style={{ color: "#64748b", fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
+              <ul style={{ color: "#475569", fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
                 {t.exp2Bullets.map((b, i) => (
                   <li key={i}>{b}</li>
                 ))}
@@ -791,22 +823,23 @@ export default function Home() {
             <div
               className="awsmd-dark-card"
               style={{
-                background: "#151624",
+                background: "#f2f0f1",
                 padding: "30px 26px",
                 borderRadius: "24px",
-                border: "1px solid rgba(255,255,255,0.08)",
+                border: "1px solid #e2e8f0",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
                 minHeight: "280px",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.04)"
               }}
             >
               <div>
-                <span style={{ background: "rgba(255, 255, 255, 0.08)", color: "#ffffff", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "14px" }}>{t.exp3Date}</span>
-                <h3 style={{ fontSize: "22px", fontWeight: "800", color: "#ffffff", marginBottom: "4px" }}>{t.exp3Company}</h3>
-                <p style={{ color: "#94a3b8", fontSize: "14px", fontWeight: "600", marginBottom: "14px" }}>{t.exp3Role}</p>
+                <span style={{ background: "rgba(0, 0, 0, 0.06)", color: "#0f111a", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "14px" }}>{t.exp3Date}</span>
+                <h3 style={{ fontSize: "22px", fontWeight: "800", color: "#0f111a", marginBottom: "4px" }}>{t.exp3Company}</h3>
+                <p style={{ color: "#64748b", fontSize: "14px", fontWeight: "600", marginBottom: "14px" }}>{t.exp3Role}</p>
               </div>
-              <ul style={{ color: "#64748b", fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
+              <ul style={{ color: "#475569", fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
                 {t.exp3Bullets.map((b, i) => (
                   <li key={i}>{b}</li>
                 ))}
@@ -817,12 +850,12 @@ export default function Home() {
       </section>
 
       {/* Interactive Tools Section */}
-      <section className="section" id="tools" style={{ padding: "110px 40px", background: "#0a0b12", borderBottom: "1px solid rgba(255,255,255,0.06)", position: "relative", overflow: "hidden" }}>
+      <section className="section" id="tools" style={{ padding: "110px 40px", background: "transparent", position: "relative", overflow: "hidden", zIndex: 2 }}>
         <div style={{ maxWidth: "1300px", margin: "0 auto", position: "relative", zIndex: 2 }}>
           <div style={{ marginBottom: "60px", textAlign: lang === "AR" ? "right" : "left" }}>
-            <span style={{ color: "#8b5cf6", fontSize: "15px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "1px" }}>{t.toolsTag}</span>
-            <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: "#ffffff" }}>{t.toolsTitle}</h2>
-            <p style={{ color: "#94a3b8", fontSize: "16.5px", marginTop: "12px", maxWidth: "680px", lineHeight: "1.6", fontWeight: "500" }}>{t.toolsSubtitle}</p>
+            <span style={{ color: "#2563eb", fontSize: "15px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "1px" }}>{t.toolsTag}</span>
+            <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: "#0f111a" }}>{t.toolsTitle}</h2>
+            <p style={{ color: "#64748b", fontSize: "16.5px", marginTop: "12px", maxWidth: "680px", lineHeight: "1.6", fontWeight: "500" }}>{t.toolsSubtitle}</p>
           </div>
 
           {/* 3 TOOLS RESPONSIVE GRID */}
@@ -837,11 +870,11 @@ export default function Home() {
             <div
               className="awsmd-dark-card"
               style={{
-                background: "linear-gradient(145deg, #151728 0%, #0d0f1a 100%)",
+                background: "#f2f0f1",
                 padding: "36px 30px",
                 borderRadius: "28px",
-                border: "1.5px solid rgba(96, 165, 250, 0.4)",
-                boxShadow: "0 20px 45px rgba(37, 99, 235, 0.15)",
+                border: "1.5px solid rgba(37, 99, 235, 0.35)",
+                boxShadow: "0 10px 30px rgba(37, 99, 235, 0.08)",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
@@ -850,17 +883,17 @@ export default function Home() {
             >
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px", flexWrap: "wrap", gap: "10px" }}>
-                  <span style={{ background: "rgba(96, 165, 250, 0.15)", color: "#60a5fa", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
+                  <span style={{ background: "rgba(37, 99, 235, 0.12)", color: "#2563eb", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
                     {t.tool1Badge}
                   </span>
-                  <span style={{ background: "rgba(255,255,255,0.06)", color: "#94a3b8", padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
+                  <span style={{ background: "rgba(0,0,0,0.06)", color: "#64748b", padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
                     XLSX / XLS / CSV
                   </span>
                 </div>
 
-                <h3 style={{ fontSize: "22px", fontWeight: "900", color: "#ffffff", marginBottom: "12px" }}>{t.tool1Title}</h3>
+                <h3 style={{ fontSize: "22px", fontWeight: "900", color: "#0f111a", marginBottom: "12px" }}>{t.tool1Title}</h3>
                 
-                <p style={{ color: "#94a3b8", fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
+                <p style={{ color: "#475569", fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
                   {t.tool1Desc}
                 </p>
               </div>
@@ -880,7 +913,7 @@ export default function Home() {
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "8px",
-                    boxShadow: "0 8px 25px rgba(37, 99, 235, 0.4)",
+                    boxShadow: "0 8px 25px rgba(37, 99, 235, 0.35)",
                   }}
                 >
                   <span>{t.tool1Action}</span>
@@ -892,11 +925,11 @@ export default function Home() {
             <div
               className="awsmd-dark-card"
               style={{
-                background: "linear-gradient(145deg, #151728 0%, #0d0f1a 100%)",
+                background: "#f2f0f1",
                 padding: "36px 30px",
                 borderRadius: "28px",
-                border: "1.5px solid rgba(139, 92, 246, 0.4)",
-                boxShadow: "0 20px 45px rgba(139, 92, 246, 0.15)",
+                border: "1.5px solid rgba(124, 58, 237, 0.35)",
+                boxShadow: "0 10px 30px rgba(124, 58, 237, 0.08)",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
@@ -905,17 +938,17 @@ export default function Home() {
             >
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px", flexWrap: "wrap", gap: "10px" }}>
-                  <span style={{ background: "rgba(139, 92, 246, 0.15)", color: "#a78bfa", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
+                  <span style={{ background: "rgba(124, 58, 237, 0.12)", color: "#7c3aed", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
                     {t.tool2Badge}
                   </span>
-                  <span style={{ background: "rgba(255,255,255,0.06)", color: "#94a3b8", padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
+                  <span style={{ background: "rgba(0,0,0,0.06)", color: "#64748b", padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
                     Multi-threading / ZIP
                   </span>
                 </div>
 
-                <h3 style={{ fontSize: "22px", fontWeight: "900", color: "#ffffff", marginBottom: "12px" }}>{t.tool2Title}</h3>
+                <h3 style={{ fontSize: "22px", fontWeight: "900", color: "#0f111a", marginBottom: "12px" }}>{t.tool2Title}</h3>
                 
-                <p style={{ color: "#94a3b8", fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
+                <p style={{ color: "#475569", fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
                   {t.tool2Desc}
                 </p>
               </div>
@@ -935,7 +968,7 @@ export default function Home() {
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "8px",
-                    boxShadow: "0 8px 25px rgba(124, 58, 237, 0.4)",
+                    boxShadow: "0 8px 25px rgba(124, 58, 237, 0.35)",
                   }}
                 >
                   <span>{t.tool2Action}</span>
@@ -947,11 +980,11 @@ export default function Home() {
             <div
               className="awsmd-dark-card"
               style={{
-                background: "linear-gradient(145deg, #151728 0%, #0d0f1a 100%)",
+                background: "#f2f0f1",
                 padding: "36px 30px",
                 borderRadius: "28px",
-                border: "1.5px solid rgba(16, 185, 129, 0.4)",
-                boxShadow: "0 20px 45px rgba(16, 185, 129, 0.15)",
+                border: "1.5px solid rgba(5, 150, 105, 0.35)",
+                boxShadow: "0 10px 30px rgba(5, 150, 105, 0.08)",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
@@ -960,17 +993,17 @@ export default function Home() {
             >
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px", flexWrap: "wrap", gap: "10px" }}>
-                  <span style={{ background: "rgba(16, 185, 129, 0.15)", color: "#34d399", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
+                  <span style={{ background: "rgba(5, 150, 105, 0.12)", color: "#059669", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
                     {t.tool3Badge}
                   </span>
-                  <span style={{ background: "rgba(255,255,255,0.06)", color: "#94a3b8", padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
+                  <span style={{ background: "rgba(0,0,0,0.06)", color: "#64748b", padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
                     ISO A4 / 9 Presets
                   </span>
                 </div>
 
-                <h3 style={{ fontSize: "22px", fontWeight: "900", color: "#ffffff", marginBottom: "12px" }}>{t.tool3Title}</h3>
+                <h3 style={{ fontSize: "22px", fontWeight: "900", color: "#0f111a", marginBottom: "12px" }}>{t.tool3Title}</h3>
                 
-                <p style={{ color: "#94a3b8", fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
+                <p style={{ color: "#475569", fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
                   {t.tool3Desc}
                 </p>
               </div>
@@ -990,7 +1023,7 @@ export default function Home() {
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "8px",
-                    boxShadow: "0 8px 25px rgba(5, 150, 105, 0.4)",
+                    boxShadow: "0 8px 25px rgba(5, 150, 105, 0.35)",
                   }}
                 >
                   <span>{t.tool3Action}</span>
@@ -1003,52 +1036,52 @@ export default function Home() {
       </section>
 
       {/* Education & Certificates Section */}
-      <section className="section" id="education" style={{ padding: "110px 40px", background: "#0e0d15" }}>
+      <section className="section" id="education" style={{ padding: "110px 40px", background: "transparent", position: "relative", zIndex: 2 }}>
         <div style={{ maxWidth: "1300px", margin: "0 auto" }}>
           <div style={{ marginBottom: "60px", textAlign: lang === "AR" ? "right" : "left" }}>
-            <span style={{ color: "#60a5fa", fontSize: "15px", fontWeight: "800", textTransform: "uppercase" }}>{t.eduTag}</span>
-            <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px" }}>{t.eduTitle}</h2>
+            <span style={{ color: "#2563eb", fontSize: "15px", fontWeight: "800", textTransform: "uppercase" }}>{t.eduTag}</span>
+            <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: "#0f111a" }}>{t.eduTitle}</h2>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "25px", marginBottom: "40px" }}>
-            <div className="awsmd-dark-card" style={{ background: "#151624", padding: "35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)", position: "relative", overflow: "hidden" }}>
+            <div className="awsmd-dark-card" style={{ background: "#f2f0f1", padding: "35px", borderRadius: "24px", border: "1px solid #e2e8f0", boxShadow: "0 10px 30px rgba(0,0,0,0.04)", position: "relative", overflow: "hidden" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ background: "rgba(96, 165, 250, 0.15)", color: "#60a5fa", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.edu1Year}</span>
+                <span style={{ background: "rgba(37, 99, 235, 0.1)", color: "#2563eb", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.edu1Year}</span>
               </div>
-              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "16px", color: "#ffffff" }}>{t.edu1School}</h3>
-              <p style={{ color: "#94a3b8", fontSize: "16.5px", marginTop: "8px", fontWeight: "500" }}>{t.edu1Degree}</p>
+              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "16px", color: "#0f111a" }}>{t.edu1School}</h3>
+              <p style={{ color: "#475569", fontSize: "16.5px", marginTop: "8px", fontWeight: "500" }}>{t.edu1Degree}</p>
             </div>
 
-            <div className="awsmd-dark-card" style={{ background: "#151624", padding: "35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)", position: "relative", overflow: "hidden" }}>
+            <div className="awsmd-dark-card" style={{ background: "#f2f0f1", padding: "35px", borderRadius: "24px", border: "1px solid #e2e8f0", boxShadow: "0 10px 30px rgba(0,0,0,0.04)", position: "relative", overflow: "hidden" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ background: "rgba(255, 255, 255, 0.08)", color: "#ffffff", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.edu2Year}</span>
+                <span style={{ background: "rgba(0, 0, 0, 0.06)", color: "#0f111a", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.edu2Year}</span>
               </div>
-              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "16px", color: "#ffffff" }}>{t.edu2School}</h3>
-              <p style={{ color: "#94a3b8", fontSize: "16.5px", marginTop: "8px", fontWeight: "500" }}>{t.edu2Degree}</p>
+              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "16px", color: "#0f111a" }}>{t.edu2School}</h3>
+              <p style={{ color: "#475569", fontSize: "16.5px", marginTop: "8px", fontWeight: "500" }}>{t.edu2Degree}</p>
             </div>
           </div>
 
           <div style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
-            <span className="awsmd-cert-pill" style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px" }}><span>{t.cert1}</span></span>
-            <span className="awsmd-cert-pill" style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px" }}><span>{t.cert2}</span></span>
-            <span className="awsmd-cert-pill" style={{ background: "#151624", border: "1px solid rgba(255,255,255,0.08)", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#cbd5e1", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px" }}><span>{t.cert3}</span></span>
+            <span className="awsmd-cert-pill" style={{ background: "#f2f0f1", border: "1px solid #e2e8f0", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#0f111a", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px", boxShadow: "0 4px 15px rgba(0,0,0,0.03)" }}><span>{t.cert1}</span></span>
+            <span className="awsmd-cert-pill" style={{ background: "#f2f0f1", border: "1px solid #e2e8f0", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#0f111a", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px", boxShadow: "0 4px 15px rgba(0,0,0,0.03)" }}><span>{t.cert2}</span></span>
+            <span className="awsmd-cert-pill" style={{ background: "#f2f0f1", border: "1px solid #e2e8f0", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#0f111a", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px", boxShadow: "0 4px 15px rgba(0,0,0,0.03)" }}><span>{t.cert3}</span></span>
           </div>
         </div>
       </section>
 
       {/* Footer Contact Section */}
-      <footer className="footer" id="contact" style={{ background: "#06070a", padding: "110px 40px 40px", borderTop: "1px solid rgba(255,255,255,0.06)", textAlign: "center" }}>
+      <footer className="footer" id="contact" style={{ background: "transparent", padding: "110px 40px 40px", borderTop: "1px solid #e2e8f0", textAlign: "center", position: "relative", zIndex: 2 }}>
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-          <h2 style={{ fontSize: "68px", fontWeight: "900", letterSpacing: "-1px", marginBottom: "20px" }}>LET&apos;S TALK</h2>
-          <p style={{ fontSize: "21px", color: "#94a3b8", marginBottom: "40px", fontWeight: "500" }}>{t.footerSubtitle}</p>
+          <h2 style={{ fontSize: "68px", fontWeight: "900", letterSpacing: "-1px", marginBottom: "20px", color: "#0f111a" }}>LET&apos;S TALK</h2>
+          <p style={{ fontSize: "21px", color: "#64748b", marginBottom: "40px", fontWeight: "500" }}>{t.footerSubtitle}</p>
           <a
             href="mailto:haider.m.shwkat@outlook.com"
             className="awsmd-btn-glow"
-            style={{ fontSize: "24px", color: "#60a5fa", fontWeight: "800", textDecoration: "none", background: "rgba(96, 165, 250, 0.1)", padding: "18px 38px", borderRadius: "40px", border: "1px solid rgba(96, 165, 250, 0.25)", display: "inline-block", marginBottom: "60px" }}
+            style={{ fontSize: "24px", color: "#2563eb", fontWeight: "800", textDecoration: "none", background: "rgba(37, 99, 235, 0.08)", padding: "18px 38px", borderRadius: "40px", border: "1px solid rgba(37, 99, 235, 0.25)", display: "inline-block", marginBottom: "60px" }}
           >
             haider.m.shwkat@outlook.com
           </a>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", color: "#475569", fontSize: "14.5px", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "30px", fontWeight: "500" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", color: "#64748b", fontSize: "14.5px", borderTop: "1px solid #e2e8f0", paddingTop: "30px", fontWeight: "500" }}>
             <span>© {new Date().getFullYear()} Haider Mohamed Shwkat</span>
             <span>Baghdad, Iraq</span>
           </div>
