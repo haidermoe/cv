@@ -377,36 +377,38 @@ export default function Home() {
     window.location.href = "/thanks";
   };
 
+  const neonAccent = isDark ? "#ef4444" : "#2563eb";
   const tColors = {
     bg: isDark ? "#0e0d15" : "#f2f1f6",
     text: isDark ? "#ffffff" : "#0f111a",
     cardBg: isDark ? "#151624" : "#f2f0f1",
-    cardBorder: isDark ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid #e2e8f0",
+    cardBorder: isDark ? "1px solid rgba(239, 68, 68, 0.25)" : "1px solid #e2e8f0",
     cardShadow: isDark ? "0 10px 30px rgba(0,0,0,0.35)" : "0 10px 30px rgba(0,0,0,0.04)",
     subtext: isDark ? "#94a3b8" : "#475569",
     mutedText: isDark ? "#64748b" : "#64748b",
     dotColor: isDark ? "rgba(255, 255, 255, 0.14)" : "rgba(15, 17, 26, 0.16)",
-    headerBg: isDark ? "rgba(21, 22, 36, 0.9)" : "rgba(255, 255, 255, 0.9)",
-    headerBorder: isDark ? "1px solid rgba(255, 255, 255, 0.12)" : "1px solid rgba(255, 255, 255, 0.8)",
+    headerBg: isDark ? "rgba(21, 22, 36, 0.95)" : "rgba(255, 255, 255, 0.95)",
+    headerBorder: isDark ? "1.5px solid rgba(239, 68, 68, 0.4)" : "1.5px solid rgba(37, 99, 235, 0.25)",
+    headerShadow: isDark ? "0 15px 35px rgba(0,0,0,0.6), 0 0 25px rgba(239, 68, 68, 0.2)" : "0 15px 35px rgba(37, 99, 235, 0.12)",
     marqueeBg: isDark ? "#0d0f19" : "#f2f0f1",
     marqueeBorder: isDark ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid #e2e8f0",
     footerBorder: isDark ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid #e2e8f0",
     btnPillBg: isDark ? "#1e2235" : "#ffffff",
-    btnPillBorder: isDark ? "1px solid rgba(96, 165, 250, 0.3)" : "1.5px solid #2563eb",
-    btnPillColor: isDark ? "#60a5fa" : "#2563eb",
+    btnPillBorder: isDark ? "1px solid rgba(239, 68, 68, 0.4)" : "1.5px solid #2563eb",
+    btnPillColor: isDark ? "#ef4444" : "#2563eb",
   };
 
   const marqueeContent = (
     <div style={{ display: "flex", gap: "30px", alignItems: "center", whiteSpace: "nowrap", fontSize: "16px", fontWeight: "900", letterSpacing: "1px", color: tColors.text, fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif", paddingRight: "30px", flexShrink: 0 }}>
       {lang === "AR" ? (
         <>
-          <span style={{ color: tColors.text }}>تحليل البيانات</span> • <span style={{ color: "#2563eb" }}>التجارة الإلكترونية</span> • <span style={{ color: tColors.text }}>إدارة شبكات FTTH</span> • <span style={{ color: "#2563eb" }}>أتمتة PYTHON</span> • <span style={{ color: tColors.text }}>قواعد بيانات SQL</span> • 
-          <span style={{ color: "#2563eb" }}>DATA DRIVEN</span> • <span style={{ color: tColors.text }}>USER FOCUSED</span> • <span style={{ color: "#2563eb" }}>VALUE BASED</span> • <span style={{ color: tColors.text }}>E-COMMERCE OPS</span> • 
+          <span style={{ color: tColors.text }}>تحليل البيانات</span> • <span style={{ color: neonAccent }}>التجارة الإلكترونية</span> • <span style={{ color: tColors.text }}>إدارة شبكات FTTH</span> • <span style={{ color: neonAccent }}>أتمتة PYTHON</span> • <span style={{ color: tColors.text }}>قواعد بيانات SQL</span> • 
+          <span style={{ color: neonAccent }}>DATA DRIVEN</span> • <span style={{ color: tColors.text }}>USER FOCUSED</span> • <span style={{ color: neonAccent }}>VALUE BASED</span> • <span style={{ color: tColors.text }}>E-COMMERCE OPS</span> • 
         </>
       ) : (
         <>
-          <span style={{ color: tColors.text }}>DATA ANALYSIS</span> • <span style={{ color: "#2563eb" }}>E-COMMERCE OPS</span> • <span style={{ color: tColors.text }}>FTTH NETWORKS</span> • <span style={{ color: "#2563eb" }}>PYTHON AUTOMATION</span> • <span style={{ color: tColors.text }}>SQL DATABASES</span> • 
-          <span style={{ color: "#2563eb" }}>DATA DRIVEN</span> • <span style={{ color: tColors.text }}>USER FOCUSED</span> • <span style={{ color: "#2563eb" }}>VALUE BASED</span> • 
+          <span style={{ color: tColors.text }}>DATA ANALYSIS</span> • <span style={{ color: neonAccent }}>E-COMMERCE OPS</span> • <span style={{ color: tColors.text }}>FTTH NETWORKS</span> • <span style={{ color: neonAccent }}>PYTHON AUTOMATION</span> • <span style={{ color: tColors.text }}>SQL DATABASES</span> • 
+          <span style={{ color: neonAccent }}>DATA DRIVEN</span> • <span style={{ color: tColors.text }}>USER FOCUSED</span> • <span style={{ color: neonAccent }}>VALUE BASED</span> • 
         </>
       )}
     </div>
@@ -467,10 +469,15 @@ export default function Home() {
           direction: "ltr"
         }}
       >
-        {/* ENLARGED ROYAL BLUE SIDE FILL & FLIP TEXT BUTTON */}
+        {/* ENLARGED ROYAL BLUE / NEON RED SIDE FILL & FLIP TEXT BUTTON */}
         <button
           onClick={() => setIsClientDrawerOpen(true)}
           className="awsmd-royal-client-btn"
+          style={{
+            ["--client-btn-gradient" as any]: isDark ? "linear-gradient(90deg, #ef4444 0%, #dc2626 100%)" : "linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%)",
+            ["--client-btn-color" as any]: neonAccent,
+            ["--client-btn-shadow" as any]: isDark ? "rgba(239, 68, 68, 0.55)" : "rgba(37, 99, 235, 0.4)",
+          }}
         >
           <span className="flip-box">
             <span className="flip-wrapper">
@@ -497,7 +504,7 @@ export default function Home() {
             gap: "6px",
             cursor: "pointer",
             fontFamily: "'Outfit', sans-serif",
-            boxShadow: "0 4px 15px rgba(0,0,0,0.06)",
+            boxShadow: isDark ? "0 4px 15px rgba(239, 68, 68, 0.2)" : "0 4px 15px rgba(37, 99, 235, 0.12)",
             transition: "all 0.3s ease"
           }}
         >
@@ -527,7 +534,7 @@ export default function Home() {
           style={{
             background: tColors.btnPillBg,
             border: tColors.btnPillBorder,
-            color: tColors.btnPillColor,
+            color: isDark ? "#ffffff" : "#2563eb",
             padding: "8px 18px",
             borderRadius: "50px",
             fontSize: "13.5px",
@@ -537,7 +544,7 @@ export default function Home() {
             gap: "6px",
             cursor: "pointer",
             fontFamily: "'Outfit', sans-serif",
-            boxShadow: "0 4px 15px rgba(0,0,0,0.06)",
+            boxShadow: isDark ? "0 4px 15px rgba(239, 68, 68, 0.15)" : "0 4px 15px rgba(37, 99, 235, 0.12)",
             transition: "all 0.3s ease"
           }}
         >
@@ -563,8 +570,8 @@ export default function Home() {
           }}
         >
           <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="18" height="2.5" rx="1.25" fill={isDark ? "#94a3b8" : "#475569"}/>
-            <rect y="6.5" width="13" height="2.5" rx="1.25" fill={isDark ? "#94a3b8" : "#475569"}/>
+            <rect width="18" height="2.5" rx="1.25" fill={isDark ? "#ffffff" : "#475569"}/>
+            <rect y="6.5" width="13" height="2.5" rx="1.25" fill={isDark ? "#ffffff" : "#475569"}/>
           </svg>
         </button>
       </div>
@@ -590,7 +597,7 @@ export default function Home() {
           <svg width="22" height="18" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="7" y="1" width="8" height="10" fill={isDark ? "#ffffff" : (isScrolledPastHero ? "#0f111a" : "#000000")} style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
             <rect x="0" y="13" width="16" height="7" fill={isDark ? "#ffffff" : (isScrolledPastHero ? "#0f111a" : "#000000")} style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
-            <rect x="10" y="13" width="15" height="7" fill="#2563eb" style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
+            <rect x="10" y="13" width="15" height="7" fill={neonAccent} style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
           </svg>
           <span>{t.logo}</span>
         </Link>
@@ -612,17 +619,18 @@ export default function Home() {
           backdropFilter: "blur(16px)",
           padding: "8px 24px",
           borderRadius: "50px",
-          boxShadow: isDark ? "0 15px 35px rgba(0,0,0,0.4)" : "0 15px 35px rgba(0,0,0,0.08)",
-          border: tColors.headerBorder
+          boxShadow: tColors.headerShadow,
+          border: tColors.headerBorder,
+          transition: "all 0.35s ease"
         }}
       >
         <nav style={{ display: "flex", alignItems: "center", gap: "18px" }}>
-          <FlipLink href="#home" color={tColors.text} hoverColor="#2563eb">{t.navHome}</FlipLink>
-          <FlipLink href="#stats" color={tColors.subtext} hoverColor="#2563eb">{t.navStats}</FlipLink>
-          <FlipLink href="#experience" color={tColors.subtext} hoverColor="#2563eb">{t.navExperience}</FlipLink>
-          <FlipLink href="#tools" color={tColors.subtext} hoverColor="#2563eb">{t.navTools}</FlipLink>
-          <FlipLink href="#education" color={tColors.subtext} hoverColor="#2563eb">{t.navEducation}</FlipLink>
-          <FlipLink href="#contact" color={tColors.subtext} hoverColor="#2563eb">{t.navContact}</FlipLink>
+          <FlipLink href="#home" color={tColors.text} hoverColor={neonAccent}>{t.navHome}</FlipLink>
+          <FlipLink href="#stats" color={tColors.subtext} hoverColor={neonAccent}>{t.navStats}</FlipLink>
+          <FlipLink href="#experience" color={tColors.subtext} hoverColor={neonAccent}>{t.navExperience}</FlipLink>
+          <FlipLink href="#tools" color={tColors.subtext} hoverColor={neonAccent}>{t.navTools}</FlipLink>
+          <FlipLink href="#education" color={tColors.subtext} hoverColor={neonAccent}>{t.navEducation}</FlipLink>
+          <FlipLink href="#contact" color={tColors.subtext} hoverColor={neonAccent}>{t.navContact}</FlipLink>
         </nav>
 
         <a
@@ -632,18 +640,18 @@ export default function Home() {
           rel="noopener noreferrer"
           className="awsmd-btn-glow"
           style={{
-            background: isDark ? "#2563eb" : "#0f111a",
+            background: isDark ? "#ef4444" : "#2563eb",
             color: "#ffffff",
             padding: "8px 20px",
             borderRadius: "30px",
             fontSize: "13px",
             fontWeight: "800",
             textDecoration: "none",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            boxShadow: isDark ? "0 4px 18px rgba(239, 68, 68, 0.45)" : "0 4px 18px rgba(37, 99, 235, 0.35)",
             display: "inline-flex",
             alignItems: "center",
             gap: "6px",
-            transition: "transform 0.3s ease, background 0.3s ease"
+            transition: "all 0.3s ease"
           }}
         >
           <span>{t.downloadCV}</span>

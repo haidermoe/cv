@@ -796,8 +796,8 @@ export default function ImageDownloaderPage() {
           title={lang === "AR" ? "تبديل المظهر (فاتح / داكن)" : "Toggle Theme (Light / Dark)"}
           style={{
             background: isDark ? "#1e2235" : "#ffffff",
-            border: isDark ? "1px solid rgba(96, 165, 250, 0.3)" : `1.5px solid ${activeColor}`,
-            color: isDark ? "#60a5fa" : activeColor,
+            border: isDark ? `1px solid ${mode === "upload" ? "rgba(220, 38, 38, 0.45)" : "rgba(96, 165, 250, 0.4)"}` : `1.5px solid ${activeColor}`,
+            color: isDark ? (mode === "upload" ? "#ef4444" : "#60a5fa") : activeColor,
             padding: "8px 14px",
             borderRadius: "50px",
             fontSize: "13px",
@@ -807,7 +807,7 @@ export default function ImageDownloaderPage() {
             gap: "6px",
             cursor: "pointer",
             fontFamily: "'Outfit', sans-serif",
-            boxShadow: "0 4px 15px rgba(0,0,0,0.06)",
+            boxShadow: isDark ? `0 4px 15px ${mode === "upload" ? "rgba(220, 38, 38, 0.25)" : "rgba(37, 99, 235, 0.2)"}` : "0 4px 15px rgba(0,0,0,0.06)",
             transition: "all 0.3s ease"
           }}
         >
@@ -836,7 +836,7 @@ export default function ImageDownloaderPage() {
           onClick={handleLangSwitch}
           style={{
             background: isDark ? "#1e2235" : "#ffffff",
-            border: isDark ? "1px solid rgba(255,255,255,0.1)" : `1.5px solid ${activeColor}`,
+            border: isDark ? `1px solid ${mode === "upload" ? "rgba(220, 38, 38, 0.45)" : "rgba(96, 165, 250, 0.35)"}` : `1.5px solid ${activeColor}`,
             color: isDark ? "#ffffff" : activeColor,
             padding: "8px 18px",
             borderRadius: "50px",
@@ -918,22 +918,27 @@ export default function ImageDownloaderPage() {
           display: "flex",
           alignItems: "center",
           gap: "24px",
-          background: isDark ? "rgba(21, 22, 36, 0.9)" : "#ffffff",
+          background: isDark ? "rgba(21, 22, 36, 0.95)" : "rgba(255, 255, 255, 0.95)",
+          backdropFilter: "blur(16px)",
           padding: "8px 24px",
           borderRadius: "50px",
-          boxShadow: `0 15px 35px ${mode === "upload" ? "rgba(220, 38, 38, 0.12)" : "rgba(37, 99, 235, 0.12)"}`,
-          border: isDark ? "1.5px solid rgba(255, 255, 255, 0.1)" : `1.5px solid ${mode === "upload" ? "rgba(220, 38, 38, 0.25)" : "rgba(37, 99, 235, 0.2)"}`,
+          boxShadow: isDark
+            ? `0 15px 35px rgba(0,0,0,0.6), 0 0 25px ${mode === "upload" ? "rgba(220, 38, 38, 0.25)" : "rgba(37, 99, 235, 0.25)"}`
+            : `0 15px 35px ${mode === "upload" ? "rgba(220, 38, 38, 0.12)" : "rgba(37, 99, 235, 0.12)"}`,
+          border: isDark 
+            ? `1.5px solid ${mode === "upload" ? "rgba(220, 38, 38, 0.45)" : "rgba(37, 99, 235, 0.45)"}`
+            : `1.5px solid ${mode === "upload" ? "rgba(220, 38, 38, 0.25)" : "rgba(37, 99, 235, 0.25)"}`,
           transition: "all 0.35s ease"
         }}
       >
         <nav style={{ display: "flex", alignItems: "center", gap: "18px" }}>
-          <FlipLink href="/" color="#0f111a" hoverColor={activeColor}>{t.navHome}</FlipLink>
-          <FlipLink href="/#stats" color="#475569" hoverColor={activeColor}>{t.navStats}</FlipLink>
-          <FlipLink href="/#about" color="#475569" hoverColor={activeColor}>{t.navAbout}</FlipLink>
-          <FlipLink href="/#experience" color="#475569" hoverColor={activeColor}>{t.navExperience}</FlipLink>
-          <FlipLink href="/#tools" color="#475569" hoverColor={activeColor}>{t.navTools}</FlipLink>
-          <FlipLink href="/#education" color="#475569" hoverColor={activeColor}>{t.navEducation}</FlipLink>
-          <FlipLink href="/#contact" color="#475569" hoverColor={activeColor}>{t.navContact}</FlipLink>
+          <FlipLink href="/" color={isDark ? "#ffffff" : "#0f111a"} hoverColor={activeColor}>{t.navHome}</FlipLink>
+          <FlipLink href="/#stats" color={isDark ? "#94a3b8" : "#475569"} hoverColor={activeColor}>{t.navStats}</FlipLink>
+          <FlipLink href="/#about" color={isDark ? "#94a3b8" : "#475569"} hoverColor={activeColor}>{t.navAbout}</FlipLink>
+          <FlipLink href="/#experience" color={isDark ? "#94a3b8" : "#475569"} hoverColor={activeColor}>{t.navExperience}</FlipLink>
+          <FlipLink href="/#tools" color={isDark ? "#94a3b8" : "#475569"} hoverColor={activeColor}>{t.navTools}</FlipLink>
+          <FlipLink href="/#education" color={isDark ? "#94a3b8" : "#475569"} hoverColor={activeColor}>{t.navEducation}</FlipLink>
+          <FlipLink href="/#contact" color={isDark ? "#94a3b8" : "#475569"} hoverColor={activeColor}>{t.navContact}</FlipLink>
         </nav>
 
         <a
@@ -943,18 +948,18 @@ export default function ImageDownloaderPage() {
           rel="noopener noreferrer"
           className="awsmd-btn-glow"
           style={{
-            background: "#0f111a",
+            background: activeColor,
             color: "#ffffff",
             padding: "8px 20px",
             borderRadius: "30px",
             fontSize: "13px",
             fontWeight: "800",
             textDecoration: "none",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            boxShadow: `0 4px 18px ${mode === "upload" ? "rgba(220, 38, 38, 0.45)" : "rgba(37, 99, 235, 0.4)"}`,
             display: "inline-flex",
             alignItems: "center",
             gap: "6px",
-            transition: "transform 0.3s ease, background 0.3s ease"
+            transition: "transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease"
           }}
         >
           <span>{t.downloadCV}</span>
