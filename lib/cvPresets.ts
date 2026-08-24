@@ -1,0 +1,133 @@
+export interface CvTemplatePreset {
+  id: string;
+  title: string;
+  field: string;
+  desc: string;
+  accent: string;
+  style: "clean-white" | "modern-dark" | "executive-blue";
+  format: "single-column" | "two-column-sidebar" | "modern-executive" | "minimal-compact";
+  font: string;
+  fontSize: "compact" | "normal" | "large";
+  margin: "compact" | "normal" | "wide";
+  spacing: "compact" | "normal" | "relaxed";
+}
+
+export const CV_TEMPLATES_PRESETS: CvTemplatePreset[] = [
+  {
+    id: "arabic-modern-blue",
+    title: "العربي العصري المتميز (Modern Blue)",
+    field: "تكنولوجيا، بيانات، تجارة إلكترونية",
+    desc: "تصميم أنيق باللون الأزرق الملكي، شريط جانبي متناسق، وعزل كامل للأرقام والروابط.",
+    accent: "#2563eb",
+    style: "clean-white",
+    format: "two-column-sidebar",
+    font: "Tajawal",
+    fontSize: "normal",
+    margin: "normal",
+    spacing: "normal",
+  },
+  {
+    id: "classic-ats-standard",
+    title: "الكلاسيكي المعتمد لأنظمة الفرز (ATS Standard)",
+    field: "شركات كبرى وبوابات توظيف عالمية",
+    desc: "هيكلية عمود واحد نظيفة 100% بدون أي تعقيد رسومي لتجاوز كافة أنظمة الفرز الآلي.",
+    accent: "#0f172a",
+    style: "clean-white",
+    format: "single-column",
+    font: "Tajawal",
+    fontSize: "normal",
+    margin: "compact",
+    spacing: "normal",
+  },
+  {
+    id: "executive-leadership",
+    title: "القيادي والتنفيذي (Executive Leadership)",
+    field: "إدارة العمليات والقيادة والإشراف",
+    desc: "خطوط عريضة، تباعد مريح، ملخص تنفيذي بارز، مع ألوان رصينة ووقورة.",
+    accent: "#0369a1",
+    style: "clean-white",
+    format: "modern-executive",
+    font: "Tajawal",
+    fontSize: "large",
+    margin: "wide",
+    spacing: "relaxed",
+  },
+  {
+    id: "tech-software-engineer",
+    title: "مهندس البرمجيات والأنظمة (Tech & Data)",
+    field: "مبرمج بايثون، قواعد بيانات، أتمتة",
+    desc: "تركيز مكثف على المهارات البرمجية والخبرات والمشاريع العملية مع مساحة كود نظيفة.",
+    accent: "#7c3aed",
+    style: "clean-white",
+    format: "two-column-sidebar",
+    font: "Outfit",
+    fontSize: "compact",
+    margin: "compact",
+    spacing: "compact",
+  },
+  {
+    id: "ecommerce-operations",
+    title: "إدارة التجارة والعمليات (E-Commerce Ops)",
+    field: "فودكس، كتالوجات، مخازن، تطبيقات",
+    desc: "إبراز بالأرقام للنتائج المحققة ومزامنة التطبيقات والحلول المبتكرة للبيع الرقمي.",
+    accent: "#059669",
+    style: "clean-white",
+    format: "two-column-sidebar",
+    font: "Tajawal",
+    fontSize: "normal",
+    margin: "normal",
+    spacing: "normal",
+  },
+  {
+    id: "minimal-compact-fast",
+    title: "المختصر فائق الكثافة (Minimal Compact)",
+    field: "سيرة صفحة واحدة مكثفة جداً",
+    desc: "استغلال ذكي لكل مليمتر في الصفحة لاحتواء كافة التفاصيل دون تجاوز ورقة A4 واحدة.",
+    accent: "#334155",
+    style: "clean-white",
+    format: "minimal-compact",
+    font: "Tajawal",
+    fontSize: "compact",
+    margin: "compact",
+    spacing: "compact",
+  },
+  {
+    id: "networks-infrastructure",
+    title: "هندسة الشبكات والاتصالات (Telecom & FTTH)",
+    field: "سيسكو، ألياف ضوئية، أبراج",
+    desc: "تنسيق مخصص لمهندسي وفنيي الاتصالات مع إبراز الشهادات والخبرات الميدانية.",
+    accent: "#0284c7",
+    style: "clean-white",
+    format: "single-column",
+    font: "Tajawal",
+    fontSize: "normal",
+    margin: "normal",
+    spacing: "normal",
+  },
+  {
+    id: "modern-dark-luxury",
+    title: "الداكن الفاخر (Modern Dark Luxury)",
+    field: "عروض الشركات والملفات الرقمية التفاعلية",
+    desc: "خلفية داكنة فخمة مع لمسات نيون أنيقة للمشاركة الرقمية المباشرة.",
+    accent: "#38bdf8",
+    style: "modern-dark",
+    format: "two-column-sidebar",
+    font: "Tajawal",
+    fontSize: "normal",
+    margin: "normal",
+    spacing: "normal",
+  },
+  {
+    id: "creative-portfolio-hybrid",
+    title: "المعرض الهجين (Portfolio Hybrid)",
+    field: "فريلانسرز واستشاريي المشاريع",
+    desc: "يجمع بين السيرة الذاتية الرسمية وروابط المشاهدة المباشرة للأدوات والمعارض.",
+    accent: "#d97706",
+    style: "clean-white",
+    format: "two-column-sidebar",
+    font: "Tajawal",
+    fontSize: "normal",
+    margin: "normal",
+    spacing: "normal",
+  },
+];

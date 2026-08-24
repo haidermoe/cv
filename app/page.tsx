@@ -90,6 +90,10 @@ const translations = {
     tool2Title: "تنزيل وتسمية الصور من الإكسل (Image Downloader)",
     tool2Desc: "أداة لاستخراج روابط الصور من ملفات الإكسل والـ CSV، تنزيلها بالتوازي وتسميتها بأسماء المنتجات الصحيحة، وضغطها في ملف ZIP بضغطة زر واحدة.",
     tool2Action: "تشغيل أداة تنزيل الصور مباشرة",
+    tool3Badge: "محرك تفاعلي حي • 100% ATS Ready",
+    tool3Title: "محرك السيرة الذاتية الذكي ومولد الـ PDF",
+    tool3Desc: "أداة ويب تفاعلية ثنائية اللغة (عربي / إنجليزي) تتيح معاينة وتخصيص السيرة الذاتية عبر 9 قوالب متخصصة لمختلف المجالات، مع توليد فوري للـ QR Code وتصدير ملف PDF عالي الدقة مطابق لمعايير A4 و ATS.",
+    tool3Action: "تشغيل محرك السيرة الذاتية المباشر",
     eduTag: "04 — التعليم والشهادات",
     eduTitle: "المؤهلات الأكاديمية والتدريب المعتمد",
     edu1Year: "2022 - 2026",
@@ -174,6 +178,10 @@ const translations = {
     tool2Title: "Bulk Excel Image Downloader & Renamer",
     tool2Desc: "Extract image URLs from Excel or CSV catalogs, download concurrently, rename by product names, and package into a ZIP archive instantly.",
     tool2Action: "Launch Image Downloader Live",
+    tool3Badge: "Live Engine • 100% ATS Ready",
+    tool3Title: "Interactive ATS CV Studio & PDF Engine",
+    tool3Desc: "Interactive dual-language (AR/EN) CV generator with 9 industry-specialized presets, dynamic QR code studio, and instant print-ready ISO A4 PDF export.",
+    tool3Action: "Launch Interactive CV Studio Live",
     eduTag: "04 — EDUCATION & CERTIFICATES",
     eduTitle: "Academic Qualifications & Certified Training",
     edu1Year: "2022 - 2026",
@@ -817,11 +825,11 @@ export default function Home() {
             <p style={{ color: "#94a3b8", fontSize: "16.5px", marginTop: "12px", maxWidth: "680px", lineHeight: "1.6", fontWeight: "500" }}>{t.toolsSubtitle}</p>
           </div>
 
-          {/* 2 TOOLS RESPONSIVE GRID */}
+          {/* 3 TOOLS RESPONSIVE GRID */}
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
               gap: "28px",
             }}
           >
@@ -850,9 +858,9 @@ export default function Home() {
                   </span>
                 </div>
 
-                <h3 style={{ fontSize: "24px", fontWeight: "900", color: "#ffffff", marginBottom: "12px" }}>{t.tool1Title}</h3>
+                <h3 style={{ fontSize: "22px", fontWeight: "900", color: "#ffffff", marginBottom: "12px" }}>{t.tool1Title}</h3>
                 
-                <p style={{ color: "#94a3b8", fontSize: "15px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
+                <p style={{ color: "#94a3b8", fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
                   {t.tool1Desc}
                 </p>
               </div>
@@ -866,7 +874,7 @@ export default function Home() {
                     color: "#ffffff",
                     padding: "12px 28px",
                     borderRadius: "50px",
-                    fontSize: "14.5px",
+                    fontSize: "14px",
                     fontWeight: "800",
                     textDecoration: "none",
                     display: "inline-flex",
@@ -905,9 +913,9 @@ export default function Home() {
                   </span>
                 </div>
 
-                <h3 style={{ fontSize: "24px", fontWeight: "900", color: "#ffffff", marginBottom: "12px" }}>{t.tool2Title}</h3>
+                <h3 style={{ fontSize: "22px", fontWeight: "900", color: "#ffffff", marginBottom: "12px" }}>{t.tool2Title}</h3>
                 
-                <p style={{ color: "#94a3b8", fontSize: "15px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
+                <p style={{ color: "#94a3b8", fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
                   {t.tool2Desc}
                 </p>
               </div>
@@ -921,7 +929,7 @@ export default function Home() {
                     color: "#ffffff",
                     padding: "12px 28px",
                     borderRadius: "50px",
-                    fontSize: "14.5px",
+                    fontSize: "14px",
                     fontWeight: "800",
                     textDecoration: "none",
                     display: "inline-flex",
@@ -931,6 +939,61 @@ export default function Home() {
                   }}
                 >
                   <span>{t.tool2Action}</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* TOOL 3: INTERACTIVE ATS CV STUDIO & PDF ENGINE */}
+            <div
+              className="awsmd-dark-card"
+              style={{
+                background: "linear-gradient(145deg, #151728 0%, #0d0f1a 100%)",
+                padding: "36px 30px",
+                borderRadius: "28px",
+                border: "1.5px solid rgba(16, 185, 129, 0.4)",
+                boxShadow: "0 20px 45px rgba(16, 185, 129, 0.15)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                minHeight: "340px",
+              }}
+            >
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px", flexWrap: "wrap", gap: "10px" }}>
+                  <span style={{ background: "rgba(16, 185, 129, 0.15)", color: "#34d399", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
+                    {t.tool3Badge}
+                  </span>
+                  <span style={{ background: "rgba(255,255,255,0.06)", color: "#94a3b8", padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
+                    ISO A4 / 9 Presets
+                  </span>
+                </div>
+
+                <h3 style={{ fontSize: "22px", fontWeight: "900", color: "#ffffff", marginBottom: "12px" }}>{t.tool3Title}</h3>
+                
+                <p style={{ color: "#94a3b8", fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
+                  {t.tool3Desc}
+                </p>
+              </div>
+
+              <div style={{ marginTop: "28px" }}>
+                <Link
+                  href="/cv"
+                  className="awsmd-btn-glow"
+                  style={{
+                    background: "#059669",
+                    color: "#ffffff",
+                    padding: "12px 28px",
+                    borderRadius: "50px",
+                    fontSize: "14px",
+                    fontWeight: "800",
+                    textDecoration: "none",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    boxShadow: "0 8px 25px rgba(5, 150, 105, 0.4)",
+                  }}
+                >
+                  <span>{t.tool3Action}</span>
                 </Link>
               </div>
             </div>
