@@ -210,12 +210,28 @@ const translations = {
 
 export default function Home() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isClientDrawerOpen, setIsClientDrawerOpen] = useState(false);
   const [isClientDrawerClosing, setIsClientDrawerClosing] = useState(false);
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
   const [isNavMenuClosing, setIsNavMenuClosing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("haider_theme") as "light" | "dark" | null;
+    if (saved === "dark" || saved === "light") {
+      setTheme(saved);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme((prev) => {
+      const next = prev === "light" ? "dark" : "light";
+      localStorage.setItem("haider_theme", next);
+      return next;
+    });
+  };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const { clientX, clientY } = e;
@@ -375,17 +391,37 @@ export default function Home() {
     window.location.href = "/thanks";
   };
 
+  const isDark = theme === "dark";
+  const tColors = {
+    bg: isDark ? "#0e0d15" : "#f2f1f6",
+    text: isDark ? "#ffffff" : "#0f111a",
+    cardBg: isDark ? "#151624" : "#f2f0f1",
+    cardBorder: isDark ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid #e2e8f0",
+    cardShadow: isDark ? "0 10px 30px rgba(0,0,0,0.35)" : "0 10px 30px rgba(0,0,0,0.04)",
+    subtext: isDark ? "#94a3b8" : "#475569",
+    mutedText: isDark ? "#64748b" : "#64748b",
+    dotColor: isDark ? "rgba(255, 255, 255, 0.14)" : "rgba(15, 17, 26, 0.16)",
+    headerBg: isDark ? "rgba(21, 22, 36, 0.9)" : "rgba(255, 255, 255, 0.9)",
+    headerBorder: isDark ? "1px solid rgba(255, 255, 255, 0.12)" : "1px solid rgba(255, 255, 255, 0.8)",
+    marqueeBg: isDark ? "#0d0f19" : "#f2f0f1",
+    marqueeBorder: isDark ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid #e2e8f0",
+    footerBorder: isDark ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid #e2e8f0",
+    btnPillBg: isDark ? "#1e2235" : "#ffffff",
+    btnPillBorder: isDark ? "1px solid rgba(96, 165, 250, 0.3)" : "1.5px solid #2563eb",
+    btnPillColor: isDark ? "#60a5fa" : "#2563eb",
+  };
+
   const marqueeContent = (
-    <div style={{ display: "flex", gap: "30px", alignItems: "center", whiteSpace: "nowrap", fontSize: "16px", fontWeight: "900", letterSpacing: "1px", color: "#0f111a", fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif", paddingRight: "30px", flexShrink: 0 }}>
+    <div style={{ display: "flex", gap: "30px", alignItems: "center", whiteSpace: "nowrap", fontSize: "16px", fontWeight: "900", letterSpacing: "1px", color: tColors.text, fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif", paddingRight: "30px", flexShrink: 0 }}>
       {lang === "AR" ? (
         <>
-          <span style={{ color: "#0f111a" }}>تحليل البيانات</span> • <span style={{ color: "#2563eb" }}>التجارة الإلكترونية</span> • <span style={{ color: "#0f111a" }}>إدارة شبكات FTTH</span> • <span style={{ color: "#2563eb" }}>أتمتة PYTHON</span> • <span style={{ color: "#0f111a" }}>قواعد بيانات SQL</span> • 
-          <span style={{ color: "#2563eb" }}>DATA DRIVEN</span> • <span style={{ color: "#0f111a" }}>USER FOCUSED</span> • <span style={{ color: "#2563eb" }}>VALUE BASED</span> • <span style={{ color: "#0f111a" }}>E-COMMERCE OPS</span> • 
+          <span style={{ color: tColors.text }}>تحليل البيانات</span> • <span style={{ color: "#2563eb" }}>التجارة الإلكترونية</span> • <span style={{ color: tColors.text }}>إدارة شبكات FTTH</span> • <span style={{ color: "#2563eb" }}>أتمتة PYTHON</span> • <span style={{ color: tColors.text }}>قواعد بيانات SQL</span> • 
+          <span style={{ color: "#2563eb" }}>DATA DRIVEN</span> • <span style={{ color: tColors.text }}>USER FOCUSED</span> • <span style={{ color: "#2563eb" }}>VALUE BASED</span> • <span style={{ color: tColors.text }}>E-COMMERCE OPS</span> • 
         </>
       ) : (
         <>
-          <span style={{ color: "#0f111a" }}>DATA ANALYSIS</span> • <span style={{ color: "#2563eb" }}>E-COMMERCE OPS</span> • <span style={{ color: "#0f111a" }}>FTTH NETWORKS</span> • <span style={{ color: "#2563eb" }}>PYTHON AUTOMATION</span> • <span style={{ color: "#0f111a" }}>SQL DATABASES</span> • 
-          <span style={{ color: "#2563eb" }}>DATA DRIVEN</span> • <span style={{ color: "#0f111a" }}>USER FOCUSED</span> • <span style={{ color: "#2563eb" }}>VALUE BASED</span> • 
+          <span style={{ color: tColors.text }}>DATA ANALYSIS</span> • <span style={{ color: "#2563eb" }}>E-COMMERCE OPS</span> • <span style={{ color: tColors.text }}>FTTH NETWORKS</span> • <span style={{ color: "#2563eb" }}>PYTHON AUTOMATION</span> • <span style={{ color: tColors.text }}>SQL DATABASES</span> • 
+          <span style={{ color: "#2563eb" }}>DATA DRIVEN</span> • <span style={{ color: tColors.text }}>USER FOCUSED</span> • <span style={{ color: "#2563eb" }}>VALUE BASED</span> • 
         </>
       )}
     </div>
@@ -397,12 +433,13 @@ export default function Home() {
       className="main-layout"
       dir={lang === "AR" ? "rtl" : "ltr"}
       style={{
-        background: "#f2f1f6",
-        color: "#0f111a",
+        background: tColors.bg,
+        color: tColors.text,
         minHeight: "100vh",
         position: "relative",
         overflowX: "hidden",
-        fontFamily: lang === "AR" ? `'${portfolioData?.typography?.fontFamilyAR || "Tajawal"}', sans-serif` : `'${portfolioData?.typography?.fontFamilyEN || "Outfit"}', sans-serif`
+        fontFamily: lang === "AR" ? `'${portfolioData?.typography?.fontFamilyAR || "Tajawal"}', sans-serif` : `'${portfolioData?.typography?.fontFamilyEN || "Outfit"}', sans-serif`,
+        transition: "background 0.3s ease, color 0.3s ease"
       }}
     >
       {/* 3D CONCAVE DOT GRID BACKGROUND LAYER (MATCHING /images, /tekno & /cv) */}
@@ -420,11 +457,11 @@ export default function Home() {
           style={{
             width: "100%",
             height: "100%",
-            backgroundImage: "radial-gradient(rgba(15, 17, 26, 0.16) 1.5px, transparent 1.5px)",
+            backgroundImage: `radial-gradient(${tColors.dotColor} 1.5px, transparent 1.5px)`,
             backgroundSize: "20px 20px",
             transform: `perspective(1000px) rotateX(${16 + mousePos.y * 14}deg) rotateY(${mousePos.x * 16}deg) scale(1.25)`,
             transformOrigin: "center center",
-            transition: "transform 0.08s linear",
+            transition: "transform 0.08s linear, background-image 0.3s ease",
             maskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
             WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
           }}
@@ -458,13 +495,54 @@ export default function Home() {
           </span>
         </button>
 
+        {/* THEME TOGGLE BUTTON */}
+        <button
+          onClick={toggleTheme}
+          title={lang === "AR" ? "تبديل المظهر (فاتح / داكن)" : "Toggle Theme (Light / Dark)"}
+          style={{
+            background: tColors.btnPillBg,
+            border: tColors.btnPillBorder,
+            color: tColors.btnPillColor,
+            padding: "8px 14px",
+            borderRadius: "50px",
+            fontSize: "13px",
+            fontWeight: "800",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            cursor: "pointer",
+            fontFamily: "'Outfit', sans-serif",
+            boxShadow: "0 4px 15px rgba(0,0,0,0.06)",
+            transition: "all 0.3s ease"
+          }}
+        >
+          {isDark ? (
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+          ) : (
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          )}
+          <span>{isDark ? (lang === "AR" ? "فاتح" : "Light") : (lang === "AR" ? "داكن" : "Dark")}</span>
+        </button>
+
         {/* BORDERED LANGUAGE SELECTOR PILL */}
         <button
           onClick={handleLangSwitch}
           style={{
-            background: "#ffffff",
-            border: "1.5px solid #2563eb",
-            color: "#2563eb",
+            background: tColors.btnPillBg,
+            border: tColors.btnPillBorder,
+            color: tColors.btnPillColor,
             padding: "8px 18px",
             borderRadius: "50px",
             fontSize: "13.5px",
@@ -489,8 +567,8 @@ export default function Home() {
             width: "42px",
             height: "42px",
             borderRadius: "50%",
-            background: "#e2e8f0",
-            border: "none",
+            background: isDark ? "#1e2235" : "#e2e8f0",
+            border: isDark ? "1px solid rgba(255,255,255,0.1)" : "none",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -500,8 +578,8 @@ export default function Home() {
           }}
         >
           <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="18" height="2.5" rx="1.25" fill="#475569"/>
-            <rect y="6.5" width="13" height="2.5" rx="1.25" fill="#475569"/>
+            <rect width="18" height="2.5" rx="1.25" fill={isDark ? "#94a3b8" : "#475569"}/>
+            <rect y="6.5" width="13" height="2.5" rx="1.25" fill={isDark ? "#94a3b8" : "#475569"}/>
           </svg>
         </button>
       </div>
@@ -518,15 +596,15 @@ export default function Home() {
             gap: "10px",
             fontSize: "19px",
             fontWeight: "900",
-            color: isScrolledPastHero ? "#0f111a" : "#000000",
+            color: isDark ? "#ffffff" : (isScrolledPastHero ? "#0f111a" : "#000000"),
             textDecoration: "none",
             letterSpacing: "-0.01em",
             transition: "color 0.35s cubic-bezier(0.4, 0, 0.2, 1)"
           }}
         >
           <svg width="22" height="18" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="7" y="1" width="8" height="10" fill={isScrolledPastHero ? "#0f111a" : "#000000"} style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
-            <rect x="0" y="13" width="16" height="7" fill={isScrolledPastHero ? "#0f111a" : "#000000"} style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
+            <rect x="7" y="1" width="8" height="10" fill={isDark ? "#ffffff" : (isScrolledPastHero ? "#0f111a" : "#000000")} style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
+            <rect x="0" y="13" width="16" height="7" fill={isDark ? "#ffffff" : (isScrolledPastHero ? "#0f111a" : "#000000")} style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
             <rect x="10" y="13" width="15" height="7" fill="#2563eb" style={{ transition: "fill 0.35s cubic-bezier(0.4, 0, 0.2, 1)" }}/>
           </svg>
           <span>{t.logo}</span>
@@ -545,21 +623,21 @@ export default function Home() {
           display: "flex",
           alignItems: "center",
           gap: "24px",
-          background: "rgba(255, 255, 255, 0.9)",
+          background: tColors.headerBg,
           backdropFilter: "blur(16px)",
           padding: "8px 24px",
           borderRadius: "50px",
-          boxShadow: "0 15px 35px rgba(0,0,0,0.08)",
-          border: "1px solid rgba(255,255,255,0.8)"
+          boxShadow: isDark ? "0 15px 35px rgba(0,0,0,0.4)" : "0 15px 35px rgba(0,0,0,0.08)",
+          border: tColors.headerBorder
         }}
       >
         <nav style={{ display: "flex", alignItems: "center", gap: "18px" }}>
-          <FlipLink href="#home" color="#0f111a" hoverColor="#2563eb">{t.navHome}</FlipLink>
-          <FlipLink href="#stats" color="#475569" hoverColor="#2563eb">{t.navStats}</FlipLink>
-          <FlipLink href="#experience" color="#475569" hoverColor="#2563eb">{t.navExperience}</FlipLink>
-          <FlipLink href="#tools" color="#475569" hoverColor="#2563eb">{t.navTools}</FlipLink>
-          <FlipLink href="#education" color="#475569" hoverColor="#2563eb">{t.navEducation}</FlipLink>
-          <FlipLink href="#contact" color="#475569" hoverColor="#2563eb">{t.navContact}</FlipLink>
+          <FlipLink href="#home" color={tColors.text} hoverColor="#2563eb">{t.navHome}</FlipLink>
+          <FlipLink href="#stats" color={tColors.subtext} hoverColor="#2563eb">{t.navStats}</FlipLink>
+          <FlipLink href="#experience" color={tColors.subtext} hoverColor="#2563eb">{t.navExperience}</FlipLink>
+          <FlipLink href="#tools" color={tColors.subtext} hoverColor="#2563eb">{t.navTools}</FlipLink>
+          <FlipLink href="#education" color={tColors.subtext} hoverColor="#2563eb">{t.navEducation}</FlipLink>
+          <FlipLink href="#contact" color={tColors.subtext} hoverColor="#2563eb">{t.navContact}</FlipLink>
         </nav>
 
         <a
@@ -569,7 +647,7 @@ export default function Home() {
           rel="noopener noreferrer"
           className="awsmd-btn-glow"
           style={{
-            background: "#0f111a",
+            background: isDark ? "#2563eb" : "#0f111a",
             color: "#ffffff",
             padding: "8px 20px",
             borderRadius: "30px",
@@ -674,13 +752,14 @@ export default function Home() {
         style={{
           width: "100%",
           overflow: "hidden",
-          background: "#f2f0f1",
+          background: tColors.marqueeBg,
           padding: "20px 0",
-          borderTop: "1px solid #e2e8f0",
-          borderBottom: "1px solid #e2e8f0",
+          borderTop: tColors.marqueeBorder,
+          borderBottom: tColors.marqueeBorder,
           direction: "ltr",
           position: "relative",
-          zIndex: 2
+          zIndex: 2,
+          transition: "background 0.3s ease, border-color 0.3s ease"
         }}
       >
         <div className="news-ticker-track" style={{ display: "flex", width: "max-content", direction: "ltr" }}>
@@ -695,45 +774,45 @@ export default function Home() {
       <section className="section" id="stats" style={{ padding: "110px 40px", maxWidth: "1300px", margin: "0 auto", background: "transparent", position: "relative", zIndex: 2 }}>
         <div style={{ marginBottom: "60px", textAlign: lang === "AR" ? "right" : "left" }}>
           <span style={{ color: "#2563eb", fontSize: "15px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "1px" }}>{t.statsTag}</span>
-          <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: "#0f111a" }}>{t.statsTitle}</h2>
+          <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: tColors.text }}>{t.statsTitle}</h2>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "25px" }}>
           
           {/* STAT CARD 1 */}
-          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0" }}>
+          <div className="awsmd-stat-card" style={{ background: tColors.cardBg, padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: tColors.cardShadow, position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: tColors.cardBorder, transition: "all 0.3s ease" }}>
             <div style={{ position: "relative", zIndex: 2 }}>
-              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>+22K</span>
-              <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat1}</p>
+              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: tColors.text, display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>+22K</span>
+              <p style={{ color: tColors.subtext, fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat1}</p>
             </div>
-            <video src="media/volchek-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 0.9, transition: "transform 0.4s ease" }}></video>
+            <video src="media/volchek-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: isDark ? 0.8 : 0.9, transition: "transform 0.4s ease" }}></video>
           </div>
 
           {/* STAT CARD 2 */}
-          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0" }}>
+          <div className="awsmd-stat-card" style={{ background: tColors.cardBg, padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: tColors.cardShadow, position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: tColors.cardBorder, transition: "all 0.3s ease" }}>
             <div style={{ position: "relative", zIndex: 2 }}>
-              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>+3K</span>
-              <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat2}</p>
+              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: tColors.text, display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>+3K</span>
+              <p style={{ color: tColors.subtext, fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat2}</p>
             </div>
-            <video src="media/pruzina-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 0.9, transition: "transform 0.4s ease" }}></video>
+            <video src="media/pruzina-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: isDark ? 0.8 : 0.9, transition: "transform 0.4s ease" }}></video>
           </div>
 
           {/* STAT CARD 3 */}
-          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0" }}>
+          <div className="awsmd-stat-card" style={{ background: tColors.cardBg, padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: tColors.cardShadow, position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: tColors.cardBorder, transition: "all 0.3s ease" }}>
             <div style={{ position: "relative", zIndex: 2 }}>
-              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>3</span>
-              <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat3}</p>
+              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: tColors.text, display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>3</span>
+              <p style={{ color: tColors.subtext, fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat3}</p>
             </div>
-            <video src="media/time-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 0.9, transition: "transform 0.4s ease" }}></video>
+            <video src="media/time-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: isDark ? 0.8 : 0.9, transition: "transform 0.4s ease" }}></video>
           </div>
 
           {/* STAT CARD 4 */}
-          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0" }}>
+          <div className="awsmd-stat-card" style={{ background: tColors.cardBg, padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: tColors.cardShadow, position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: tColors.cardBorder, transition: "all 0.3s ease" }}>
             <div style={{ position: "relative", zIndex: 2 }}>
-              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>+2K</span>
-              <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat4}</p>
+              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: tColors.text, display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>+2K</span>
+              <p style={{ color: tColors.subtext, fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat4}</p>
             </div>
-            <video src="media/ball-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 0.9, transition: "transform 0.4s ease" }}></video>
+            <video src="media/ball-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: isDark ? 0.8 : 0.9, transition: "transform 0.4s ease" }}></video>
           </div>
 
         </div>
@@ -744,7 +823,7 @@ export default function Home() {
         <div style={{ maxWidth: "1300px", margin: "0 auto", position: "relative", zIndex: 2 }}>
           <div style={{ marginBottom: "60px", textAlign: lang === "AR" ? "right" : "left" }}>
             <span style={{ color: "#2563eb", fontSize: "15px", fontWeight: "800", textTransform: "uppercase" }}>{t.expTag}</span>
-            <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: "#0f111a" }}>{t.expTitle}</h2>
+            <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: tColors.text }}>{t.expTitle}</h2>
           </div>
 
           {/* 3 HIGH-IMPACT CARDS RESPONSIVE GRID */}
@@ -760,7 +839,7 @@ export default function Home() {
               href="/tekno"
               className="awsmd-dark-card"
               style={{
-                background: "#f2f0f1",
+                background: tColors.cardBg,
                 padding: "30px 26px",
                 borderRadius: "24px",
                 border: "1.5px solid rgba(37, 99, 235, 0.35)",
@@ -768,7 +847,7 @@ export default function Home() {
                 flexDirection: "column",
                 justifyContent: "space-between",
                 textDecoration: "none",
-                color: "#0f111a",
+                color: tColors.text,
                 cursor: "pointer",
                 transition: "all 0.3s ease",
                 boxShadow: "0 10px 30px rgba(37, 99, 235, 0.08)",
@@ -777,15 +856,15 @@ export default function Home() {
             >
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
-                  <span style={{ background: "rgba(37, 99, 235, 0.1)", color: "#2563eb", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800" }}>{t.exp1Date}</span>
+                  <span style={{ background: "rgba(37, 99, 235, 0.12)", color: "#2563eb", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800" }}>{t.exp1Date}</span>
                   <span style={{ background: "#2563eb", color: "#ffffff", padding: "5px 12px", borderRadius: "20px", fontSize: "11.5px", fontWeight: "800", display: "inline-flex", alignItems: "center", gap: "4px" }}>
                     <span>{lang === "AR" ? "تشغيل أداة تكنو" : "Launch Tekno Tool"}</span>
                   </span>
                 </div>
-                <h3 style={{ fontSize: "22px", fontWeight: "800", color: "#0f111a", marginBottom: "4px" }}>{t.exp1Company}</h3>
+                <h3 style={{ fontSize: "22px", fontWeight: "800", color: tColors.text, marginBottom: "4px" }}>{t.exp1Company}</h3>
                 <p style={{ color: "#2563eb", fontSize: "14px", fontWeight: "700", marginBottom: "14px" }}>{t.exp1Role}</p>
               </div>
-              <ul style={{ color: "#475569", fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
+              <ul style={{ color: tColors.subtext, fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
                 {t.exp1Bullets.map((b, i) => (
                   <li key={i}>{b}</li>
                 ))}
@@ -796,23 +875,24 @@ export default function Home() {
             <div
               className="awsmd-dark-card"
               style={{
-                background: "#f2f0f1",
+                background: tColors.cardBg,
                 padding: "30px 26px",
                 borderRadius: "24px",
-                border: "1px solid #e2e8f0",
+                border: tColors.cardBorder,
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
                 minHeight: "280px",
-                boxShadow: "0 10px 30px rgba(0,0,0,0.04)"
+                boxShadow: tColors.cardShadow,
+                transition: "all 0.3s ease"
               }}
             >
               <div>
-                <span style={{ background: "rgba(0, 0, 0, 0.06)", color: "#0f111a", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "14px" }}>{t.exp2Date}</span>
-                <h3 style={{ fontSize: "22px", fontWeight: "800", color: "#0f111a", marginBottom: "4px" }}>{t.exp2Company}</h3>
-                <p style={{ color: "#64748b", fontSize: "14px", fontWeight: "600", marginBottom: "14px" }}>{t.exp2Role}</p>
+                <span style={{ background: isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.06)", color: tColors.text, padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "14px" }}>{t.exp2Date}</span>
+                <h3 style={{ fontSize: "22px", fontWeight: "800", color: tColors.text, marginBottom: "4px" }}>{t.exp2Company}</h3>
+                <p style={{ color: tColors.mutedText, fontSize: "14px", fontWeight: "600", marginBottom: "14px" }}>{t.exp2Role}</p>
               </div>
-              <ul style={{ color: "#475569", fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
+              <ul style={{ color: tColors.subtext, fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
                 {t.exp2Bullets.map((b, i) => (
                   <li key={i}>{b}</li>
                 ))}
@@ -823,23 +903,24 @@ export default function Home() {
             <div
               className="awsmd-dark-card"
               style={{
-                background: "#f2f0f1",
+                background: tColors.cardBg,
                 padding: "30px 26px",
                 borderRadius: "24px",
-                border: "1px solid #e2e8f0",
+                border: tColors.cardBorder,
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
                 minHeight: "280px",
-                boxShadow: "0 10px 30px rgba(0,0,0,0.04)"
+                boxShadow: tColors.cardShadow,
+                transition: "all 0.3s ease"
               }}
             >
               <div>
-                <span style={{ background: "rgba(0, 0, 0, 0.06)", color: "#0f111a", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "14px" }}>{t.exp3Date}</span>
-                <h3 style={{ fontSize: "22px", fontWeight: "800", color: "#0f111a", marginBottom: "4px" }}>{t.exp3Company}</h3>
-                <p style={{ color: "#64748b", fontSize: "14px", fontWeight: "600", marginBottom: "14px" }}>{t.exp3Role}</p>
+                <span style={{ background: isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.06)", color: tColors.text, padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "14px" }}>{t.exp3Date}</span>
+                <h3 style={{ fontSize: "22px", fontWeight: "800", color: tColors.text, marginBottom: "4px" }}>{t.exp3Company}</h3>
+                <p style={{ color: tColors.mutedText, fontSize: "14px", fontWeight: "600", marginBottom: "14px" }}>{t.exp3Role}</p>
               </div>
-              <ul style={{ color: "#475569", fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
+              <ul style={{ color: tColors.subtext, fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
                 {t.exp3Bullets.map((b, i) => (
                   <li key={i}>{b}</li>
                 ))}
@@ -854,8 +935,8 @@ export default function Home() {
         <div style={{ maxWidth: "1300px", margin: "0 auto", position: "relative", zIndex: 2 }}>
           <div style={{ marginBottom: "60px", textAlign: lang === "AR" ? "right" : "left" }}>
             <span style={{ color: "#2563eb", fontSize: "15px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "1px" }}>{t.toolsTag}</span>
-            <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: "#0f111a" }}>{t.toolsTitle}</h2>
-            <p style={{ color: "#64748b", fontSize: "16.5px", marginTop: "12px", maxWidth: "680px", lineHeight: "1.6", fontWeight: "500" }}>{t.toolsSubtitle}</p>
+            <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: tColors.text }}>{t.toolsTitle}</h2>
+            <p style={{ color: tColors.mutedText, fontSize: "16.5px", marginTop: "12px", maxWidth: "680px", lineHeight: "1.6", fontWeight: "500" }}>{t.toolsSubtitle}</p>
           </div>
 
           {/* 3 TOOLS RESPONSIVE GRID */}
@@ -870,7 +951,7 @@ export default function Home() {
             <div
               className="awsmd-dark-card"
               style={{
-                background: "#f2f0f1",
+                background: tColors.cardBg,
                 padding: "36px 30px",
                 borderRadius: "28px",
                 border: "1.5px solid rgba(37, 99, 235, 0.35)",
@@ -879,6 +960,7 @@ export default function Home() {
                 flexDirection: "column",
                 justifyContent: "space-between",
                 minHeight: "340px",
+                transition: "all 0.3s ease"
               }}
             >
               <div>
@@ -886,14 +968,14 @@ export default function Home() {
                   <span style={{ background: "rgba(37, 99, 235, 0.12)", color: "#2563eb", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
                     {t.tool1Badge}
                   </span>
-                  <span style={{ background: "rgba(0,0,0,0.06)", color: "#64748b", padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
+                  <span style={{ background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)", color: tColors.mutedText, padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
                     XLSX / XLS / CSV
                   </span>
                 </div>
 
-                <h3 style={{ fontSize: "22px", fontWeight: "900", color: "#0f111a", marginBottom: "12px" }}>{t.tool1Title}</h3>
+                <h3 style={{ fontSize: "22px", fontWeight: "900", color: tColors.text, marginBottom: "12px" }}>{t.tool1Title}</h3>
                 
-                <p style={{ color: "#475569", fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
+                <p style={{ color: tColors.subtext, fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
                   {t.tool1Desc}
                 </p>
               </div>
@@ -925,7 +1007,7 @@ export default function Home() {
             <div
               className="awsmd-dark-card"
               style={{
-                background: "#f2f0f1",
+                background: tColors.cardBg,
                 padding: "36px 30px",
                 borderRadius: "28px",
                 border: "1.5px solid rgba(124, 58, 237, 0.35)",
@@ -934,6 +1016,7 @@ export default function Home() {
                 flexDirection: "column",
                 justifyContent: "space-between",
                 minHeight: "340px",
+                transition: "all 0.3s ease"
               }}
             >
               <div>
@@ -941,14 +1024,14 @@ export default function Home() {
                   <span style={{ background: "rgba(124, 58, 237, 0.12)", color: "#7c3aed", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
                     {t.tool2Badge}
                   </span>
-                  <span style={{ background: "rgba(0,0,0,0.06)", color: "#64748b", padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
+                  <span style={{ background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)", color: tColors.mutedText, padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
                     Multi-threading / ZIP
                   </span>
                 </div>
 
-                <h3 style={{ fontSize: "22px", fontWeight: "900", color: "#0f111a", marginBottom: "12px" }}>{t.tool2Title}</h3>
+                <h3 style={{ fontSize: "22px", fontWeight: "900", color: tColors.text, marginBottom: "12px" }}>{t.tool2Title}</h3>
                 
-                <p style={{ color: "#475569", fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
+                <p style={{ color: tColors.subtext, fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
                   {t.tool2Desc}
                 </p>
               </div>
@@ -980,7 +1063,7 @@ export default function Home() {
             <div
               className="awsmd-dark-card"
               style={{
-                background: "#f2f0f1",
+                background: tColors.cardBg,
                 padding: "36px 30px",
                 borderRadius: "28px",
                 border: "1.5px solid rgba(5, 150, 105, 0.35)",
@@ -989,6 +1072,7 @@ export default function Home() {
                 flexDirection: "column",
                 justifyContent: "space-between",
                 minHeight: "340px",
+                transition: "all 0.3s ease"
               }}
             >
               <div>
@@ -996,14 +1080,14 @@ export default function Home() {
                   <span style={{ background: "rgba(5, 150, 105, 0.12)", color: "#059669", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
                     {t.tool3Badge}
                   </span>
-                  <span style={{ background: "rgba(0,0,0,0.06)", color: "#64748b", padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
+                  <span style={{ background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)", color: tColors.mutedText, padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
                     ISO A4 / 9 Presets
                   </span>
                 </div>
 
-                <h3 style={{ fontSize: "22px", fontWeight: "900", color: "#0f111a", marginBottom: "12px" }}>{t.tool3Title}</h3>
+                <h3 style={{ fontSize: "22px", fontWeight: "900", color: tColors.text, marginBottom: "12px" }}>{t.tool3Title}</h3>
                 
-                <p style={{ color: "#475569", fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
+                <p style={{ color: tColors.subtext, fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
                   {t.tool3Desc}
                 </p>
               </div>
@@ -1040,48 +1124,48 @@ export default function Home() {
         <div style={{ maxWidth: "1300px", margin: "0 auto" }}>
           <div style={{ marginBottom: "60px", textAlign: lang === "AR" ? "right" : "left" }}>
             <span style={{ color: "#2563eb", fontSize: "15px", fontWeight: "800", textTransform: "uppercase" }}>{t.eduTag}</span>
-            <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: "#0f111a" }}>{t.eduTitle}</h2>
+            <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: tColors.text }}>{t.eduTitle}</h2>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "25px", marginBottom: "40px" }}>
-            <div className="awsmd-dark-card" style={{ background: "#f2f0f1", padding: "35px", borderRadius: "24px", border: "1px solid #e2e8f0", boxShadow: "0 10px 30px rgba(0,0,0,0.04)", position: "relative", overflow: "hidden" }}>
+            <div className="awsmd-dark-card" style={{ background: tColors.cardBg, padding: "35px", borderRadius: "24px", border: tColors.cardBorder, boxShadow: tColors.cardShadow, position: "relative", overflow: "hidden", transition: "all 0.3s ease" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ background: "rgba(37, 99, 235, 0.1)", color: "#2563eb", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.edu1Year}</span>
+                <span style={{ background: "rgba(37, 99, 235, 0.12)", color: "#2563eb", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.edu1Year}</span>
               </div>
-              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "16px", color: "#0f111a" }}>{t.edu1School}</h3>
-              <p style={{ color: "#475569", fontSize: "16.5px", marginTop: "8px", fontWeight: "500" }}>{t.edu1Degree}</p>
+              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "16px", color: tColors.text }}>{t.edu1School}</h3>
+              <p style={{ color: tColors.subtext, fontSize: "16.5px", marginTop: "8px", fontWeight: "500" }}>{t.edu1Degree}</p>
             </div>
 
-            <div className="awsmd-dark-card" style={{ background: "#f2f0f1", padding: "35px", borderRadius: "24px", border: "1px solid #e2e8f0", boxShadow: "0 10px 30px rgba(0,0,0,0.04)", position: "relative", overflow: "hidden" }}>
+            <div className="awsmd-dark-card" style={{ background: tColors.cardBg, padding: "35px", borderRadius: "24px", border: tColors.cardBorder, boxShadow: tColors.cardShadow, position: "relative", overflow: "hidden", transition: "all 0.3s ease" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ background: "rgba(0, 0, 0, 0.06)", color: "#0f111a", padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.edu2Year}</span>
+                <span style={{ background: isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.06)", color: tColors.text, padding: "6px 14px", borderRadius: "20px", fontSize: "13.5px", fontWeight: "800" }}>{t.edu2Year}</span>
               </div>
-              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "16px", color: "#0f111a" }}>{t.edu2School}</h3>
-              <p style={{ color: "#475569", fontSize: "16.5px", marginTop: "8px", fontWeight: "500" }}>{t.edu2Degree}</p>
+              <h3 style={{ fontSize: "26px", fontWeight: "800", marginTop: "16px", color: tColors.text }}>{t.edu2School}</h3>
+              <p style={{ color: tColors.subtext, fontSize: "16.5px", marginTop: "8px", fontWeight: "500" }}>{t.edu2Degree}</p>
             </div>
           </div>
 
           <div style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
-            <span className="awsmd-cert-pill" style={{ background: "#f2f0f1", border: "1px solid #e2e8f0", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#0f111a", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px", boxShadow: "0 4px 15px rgba(0,0,0,0.03)" }}><span>{t.cert1}</span></span>
-            <span className="awsmd-cert-pill" style={{ background: "#f2f0f1", border: "1px solid #e2e8f0", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#0f111a", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px", boxShadow: "0 4px 15px rgba(0,0,0,0.03)" }}><span>{t.cert2}</span></span>
-            <span className="awsmd-cert-pill" style={{ background: "#f2f0f1", border: "1px solid #e2e8f0", padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: "#0f111a", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px", boxShadow: "0 4px 15px rgba(0,0,0,0.03)" }}><span>{t.cert3}</span></span>
+            <span className="awsmd-cert-pill" style={{ background: tColors.cardBg, border: tColors.cardBorder, padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: tColors.text, fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px", boxShadow: tColors.cardShadow, transition: "all 0.3s ease" }}><span>{t.cert1}</span></span>
+            <span className="awsmd-cert-pill" style={{ background: tColors.cardBg, border: tColors.cardBorder, padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: tColors.text, fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px", boxShadow: tColors.cardShadow, transition: "all 0.3s ease" }}><span>{t.cert2}</span></span>
+            <span className="awsmd-cert-pill" style={{ background: tColors.cardBg, border: tColors.cardBorder, padding: "14px 28px", borderRadius: "30px", fontSize: "15.5px", color: tColors.text, fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "8px", boxShadow: tColors.cardShadow, transition: "all 0.3s ease" }}><span>{t.cert3}</span></span>
           </div>
         </div>
       </section>
 
       {/* Footer Contact Section */}
-      <footer className="footer" id="contact" style={{ background: "transparent", padding: "110px 40px 40px", borderTop: "1px solid #e2e8f0", textAlign: "center", position: "relative", zIndex: 2 }}>
+      <footer className="footer" id="contact" style={{ background: "transparent", padding: "110px 40px 40px", borderTop: tColors.footerBorder, textAlign: "center", position: "relative", zIndex: 2, transition: "border-color 0.3s ease" }}>
         <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-          <h2 style={{ fontSize: "68px", fontWeight: "900", letterSpacing: "-1px", marginBottom: "20px", color: "#0f111a" }}>LET&apos;S TALK</h2>
-          <p style={{ fontSize: "21px", color: "#64748b", marginBottom: "40px", fontWeight: "500" }}>{t.footerSubtitle}</p>
+          <h2 style={{ fontSize: "68px", fontWeight: "900", letterSpacing: "-1px", marginBottom: "20px", color: tColors.text }}>LET&apos;S TALK</h2>
+          <p style={{ fontSize: "21px", color: tColors.mutedText, marginBottom: "40px", fontWeight: "500" }}>{t.footerSubtitle}</p>
           <a
             href="mailto:haider.m.shwkat@outlook.com"
             className="awsmd-btn-glow"
-            style={{ fontSize: "24px", color: "#2563eb", fontWeight: "800", textDecoration: "none", background: "rgba(37, 99, 235, 0.08)", padding: "18px 38px", borderRadius: "40px", border: "1px solid rgba(37, 99, 235, 0.25)", display: "inline-block", marginBottom: "60px" }}
+            style={{ fontSize: "24px", color: "#2563eb", fontWeight: "800", textDecoration: "none", background: isDark ? "rgba(37, 99, 235, 0.15)" : "rgba(37, 99, 235, 0.08)", padding: "18px 38px", borderRadius: "40px", border: "1px solid rgba(37, 99, 235, 0.25)", display: "inline-block", marginBottom: "60px" }}
           >
             haider.m.shwkat@outlook.com
           </a>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", color: "#64748b", fontSize: "14.5px", borderTop: "1px solid #e2e8f0", paddingTop: "30px", fontWeight: "500" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", color: tColors.mutedText, fontSize: "14.5px", borderTop: tColors.footerBorder, paddingTop: "30px", fontWeight: "500" }}>
             <span>© {new Date().getFullYear()} Haider Mohamed Shwkat</span>
             <span>Baghdad, Iraq</span>
           </div>
