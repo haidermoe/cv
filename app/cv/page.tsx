@@ -1315,22 +1315,6 @@ export default function PublicCvBuilderPage() {
 
               <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
                 <button
-                  onClick={handleLoadSampleData}
-                  style={{
-                    background: "#eff6ff",
-                    color: "#2563eb",
-                    border: "1px solid #bfdbfe",
-                    padding: "5px 10px",
-                    borderRadius: "6px",
-                    fontSize: "11px",
-                    fontWeight: "800",
-                    cursor: "pointer",
-                  }}
-                >
-                  {isArabic ? "نموذج تجريبي" : "Load Sample"}
-                </button>
-
-                <button
                   onClick={handleClearCurrent}
                   style={{
                     background: "#fef2f2",
