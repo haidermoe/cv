@@ -892,8 +892,8 @@ export default function ImageDownloaderPage() {
         </nav>
 
         <a
-          href="/HAIDER-MOHAMED-SHWKAT-CV.pdf"
-          download="HAIDER-MOHAMED-SHWKAT-CV.pdf"
+          href="/HAIDER_M_SHWKAT_CV_2026.pdf"
+          download="HAIDER_M_SHWKAT_CV_2026.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className="awsmd-btn-glow"
@@ -1096,8 +1096,8 @@ export default function ImageDownloaderPage() {
               </div>
 
               <a
-                href="/HAIDER-MOHAMED-SHWKAT-CV.pdf"
-                download="HAIDER-MOHAMED-SHWKAT-CV.pdf"
+                href="/HAIDER_M_SHWKAT_CV_2026.pdf"
+                download="HAIDER_M_SHWKAT_CV_2026.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

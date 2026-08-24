@@ -42,44 +42,40 @@ const translations = {
     heroLine1: "نصنع أفضل",
     heroLine2: "النتائج",
     heroLine3: "الرقمية",
-    bio: "حيدر محمد شوكت — خبير متخصص في أتمتة العمليات بلغة Python، تطوير التجارة الإلكترونية، إدارة قواعد البيانات الضخمة (+22K سجل)، وبناء شبكات الـ FTTH.",
+    bio: "حيدر محمد شوكت — متخصص في علوم الحاسوب واستشاري عمليات البيانات والأتمتة بلغة Python، إدارة قواعد البيانات الضخمة (+22K سجل)، تكامل التجارة الإلكترونية، ونشر أنظمة ERP وشبكات FTTH.",
     statsTag: "01 — الإحصائيات والأرقام",
     statsTitle: "أرقام مثبتة من المسيرة المهنية",
-    stat1: "سجل بيانات تمت إدارتها وأرشفتها بدقة عالية لوزارة الدفاع",
-    stat2: "مشترك نشط تم تقديم الدعم الفني الكامل لهم",
-    stat3: "سنوات من الخبرة العملية المتنوعة في السوق العراقي",
-    stat4: "مستخدم تم تغطيتهم بشبكات الـ FTTH الحديثة",
+    stat1: "سجل بيانات متكامل تمت هندسته وأرشفته لمشروع في قطاع الدفاع",
+    stat2: "مشترك نشط تم تقديم الدعم الفني والصيانة الميدانية الكاملة لهم",
+    stat3: "مطاعم تعمل بنظام ERP & POS المتكامل الذي طوّره ونشره حيدر",
+    stat4: "مستخدم تم ربطهم وتغطيتهم بشبكات الـ FTTH الحديثة بنظام EPON",
     expTag: "02 — الخبرات العملية",
-    expTitle: "سجل مهني حافل بتحقيق الأهداف",
+    expTitle: "سجل مهني حافل بتحقيق الأهداف والنتائج",
     exp1Date: "2025 - حتى الآن",
-    exp1Company: "تكنو ستور",
-    exp1Role: "أخصائي عمليات التجارة الإلكترونية والبيانات",
+    exp1Company: "تكنو ستور — بغداد",
+    exp1Role: "أخصائي عمليات التجارة الإلكترونية، البيانات والمبيعات",
     exp1Bullets: [
-      "إدارة وتحديث كتالوجات المنتجات والتسعير.",
-      "أتمتة سير العمل باستخدام بايثون لرفع المنتجات.",
-      "فهرسة آلاف المنتجات بدقة خالية من الأخطاء."
+      "أتمتة وهندسة سكربتات بايثون وأدوات متصفح لرفع وتحديث آلاف المنتجات (SKUs)، مقلصاً زمن المعالجة من أيام إلى دقائق معدودة.",
+      "إدارة كتالوجات المنتجات والتسعير والمخزون لآلاف المنتجات النشطة مع الحفاظ على سلامة البيانات بنسبة خطأ 0%.",
+      "الربط والمزامنة الآلية للمخزون والمنتجات بين قواعد البيانات وتطبيقات التوصيل العراقية الكبرى (مسواك، طماطة، جاهز، الريان).",
+      "الإشراف على مبيعات الفروع اليومية، وإدارة التسويق الرقمي عبر الريلز، واستثمار ملاحظات الزبائن لزيادة الإيرادات."
     ],
-    exp2Date: "2024 - 2025",
-    exp2Company: "مكتبة محلية",
-    exp2Role: "مساعد مكتبة / إدخال بيانات",
+    exp2Date: "2023 - 2025",
+    exp2Company: "مشاريع متعددة / قطاع الدفاع والتجارة الإلكترونية",
+    exp2Role: "استشاري حر لعمليات البيانات والحلول التقنية",
     exp2Bullets: [
-      "تطوير قاعدة بيانات لوزارة الدفاع (أكثر من 22,000 سجل).",
-      "دمج وتصفية البيانات المتقدمة للاسترجاع السلس.",
-      "تبسيط أرشفة المستندات الورقية والرقمية."
+      "هندسة وبناء منظومة قواعد بيانات شاملة تضم أكثر من 22,000 سجل لقطاع الدفاع مع نظام فلترة للمناطق والاتصال.",
+      "تصميم ونشر نظام ERP و POS متكامل لإدارة المطاعم يعمل حالياً بنجاح ويقود العمليات في 3 مطاعم نشطة.",
+      "حل المشكلات التقنية الحرجة وتجاوز قيود الـ API وهيكلة الكتالوجات لمنصات تجارة إلكترونية كبرى مثل منصة الريان.",
+      "إنتاج وتنفيذ أكثر من 60 فيديو ترويجي وحملات ريلز تعليمية لشركاء التجزئة (Lito Store, Techno Store)."
     ],
-    exp3Date: "2021 - 2024",
-    exp3Company: "منسق فريق",
-    exp3Role: "مسؤول عمليات وتنظيم",
+    exp3Date: "2019 - 2023",
+    exp3Company: "قطاع الفعاليات والاتصالات — بغداد",
+    exp3Role: "مسؤول عمليات ومنسق دعم الشبكات",
     exp3Bullets: [
-      "قيادة فريق عمل وتنفيذ فعاليات لأكثر من 150 ضيفاً.",
-      "تحسين كفاءة سير العمل ومراقبة الجودة."
-    ],
-    exp4Date: "2019 - 2020",
-    exp4Company: "شركة إنترنت",
-    exp4Role: "خدمة الزبائن والدعم الفني",
-    exp4Bullets: [
-      "بناء شبكات FTTH لأكثر من 2000 مستخدم.",
-      "إدارة الدعم الفني لأكثر من 3000 مشترك نشط."
+      "قيادة وإدارة فرق العمل لتخطيط وتنفيذ فعاليات ومؤتمرات كبرى لأكثر من 150 ضيفاً بأعلى معايير الجودة.",
+      "الإشراف على مد وبناء شبكات الألياف الضوئية FTTH عبر 3 مناطق، وربط أكثر من 2000 مستخدم نشط بنظام EPON.",
+      "إدارة وتنسيق الدعم الفني والصيانة الميدانية لقاعدة مشتركين تضم أكثر من 3000 عميل شبكات."
     ],
     navTools: "الأدوات",
     toolsTag: "03 — الأدوات والنظم التفاعلية",
@@ -94,17 +90,17 @@ const translations = {
     tool2Desc: "أداة لاستخراج روابط الصور من ملفات الإكسل والـ CSV، تنزيلها بالتوازي وتسميتها بأسماء المنتجات الصحيحة، وضغطها في ملف ZIP بضغطة زر واحدة.",
     tool2Action: "تشغيل أداة تنزيل الصور مباشرة",
     eduTag: "04 — التعليم والشهادات",
-    eduTitle: "المؤهلات الأكاديمية والتدريب المستمر",
-    edu1Year: "2026",
+    eduTitle: "المؤهلات الأكاديمية والتدريب المعتمد",
+    edu1Year: "2022 - 2026",
     edu1School: "جامعة دجلة – بغداد",
-    edu1Degree: "بكالوريوس في علوم الحاسوب",
+    edu1Degree: "بكالوريوس في علوم الحاسوب (Computer Science)",
     edu2Year: "2019 - 2021",
     edu2School: "معهد التكنولوجيا – بغداد",
-    edu2Degree: "دبلوم في الصناعات الكيميائية",
-    cert1: "شهادة في السلامة المهنية",
-    cert2: "شهادة المبيعات - إيرثلنك",
-    cert3: "تدريب صيفي CCNA 1",
-    footerSubtitle: "جاهز لمساعدتك في بناء وإدارة أفضل نظام بيانات وتجارة إلكترونية.",
+    edu2Degree: "دبلوم في الصناعات الكيماوية (Chemical Industry)",
+    cert1: "شهادة CCNA 1: Introduction to Networks — جامعة دجلة",
+    cert2: "شهادة مهارات المبيعات وخدمة العملاء — شركة إيرثلنك",
+    cert3: "تدريب السلامة والصحة المهنية — معهد التكنولوجيا بغداد",
+    footerSubtitle: "جاهز لمساعدتك في بناء وإدارة أفضل نظام بيانات، أتمتة برمجية، وتجارة إلكترونية.",
     drawerTitle: "مرحباً! أخبرنا بكل التفاصيل",
     drawerSubtitle: "يسعدنا التعاون معك لبناء وتطوير حلول برمجية وبيانات استثنائية.",
     nameLabel: "الاسم والشركة / Name & Company",
@@ -131,44 +127,40 @@ const translations = {
     heroLine1: "WE CREATE",
     heroLine2: "AWESOME",
     heroLine3: "DIGITAL RESULTS",
-    bio: "Haider Mohamed Shwkat — Specialist in Python process automation, E-commerce operations, large-scale database management (+22K records), and FTTH network deployment.",
+    bio: "Haider M. Shwkat — Computer Science Specialist & Data Operations Consultant with extensive experience in workflow automation, large-scale database management (22K+ records), e-commerce catalog integrity, and network infrastructure.",
     statsTag: "01 — STATS & NUMBERS",
     statsTitle: "Proven Track Record Numbers",
-    stat1: "Data records managed and archived with high precision for the Ministry of Defense",
-    stat2: "Active subscribers provided with full technical support",
-    stat3: "Years of diverse practical experience in the Iraqi market",
-    stat4: "Users covered with modern FTTH fiber networks",
+    stat1: "Multi-platform data records engineered and managed for a Defense Sector project",
+    stat2: "Active network subscribers and clients provided with full technical support",
+    stat3: "Active restaurants powered by custom-built ERP & POS management system",
+    stat4: "Active users connected via modern FTTH / EPON fiber optic networks",
     expTag: "02 — WORK EXPERIENCE",
-    expTitle: "Proven Career Journey & Impact",
+    expTitle: "Proven Career Journey & High-Impact Results",
     exp1Date: "2025 - Present",
-    exp1Company: "Techno Store",
-    exp1Role: "E-Commerce Operations & Data Specialist",
+    exp1Company: "Techno Store — Baghdad, Iraq",
+    exp1Role: "E-Commerce, Data Operations & Sales Specialist",
     exp1Bullets: [
-      "Product catalog & pricing management.",
-      "Python workflow automation for bulk product uploads.",
-      "Error-free indexing of thousands of products."
+      "Engineered custom Python scripts and browser automation tools to streamline large-scale SKU uploads, cutting data processing time from days to minutes.",
+      "Managed cataloging, stock accuracy, and pricing across platforms for thousands of active SKUs with zero error rates.",
+      "Automated inventory feeds and content sync between internal databases and major Iraqi delivery apps (Miswag, Tamata, Jahez, Al-Rayan).",
+      "Supervised daily branch sales operations, managed digital video reels marketing, and leveraged customer insights to boost revenue."
     ],
-    exp2Date: "2024 - 2025",
-    exp2Company: "Local Library",
-    exp2Role: "Library Assistant / Data Entry Specialist",
+    exp2Date: "2023 - 2025",
+    exp2Company: "Multi-Client / Defense & E-commerce Projects",
+    exp2Role: "Freelance Data & Technical Operations Consultant",
     exp2Bullets: [
-      "Developed database system for MoD (+22,000 records).",
-      "Advanced data merging and filtering for seamless retrieval.",
-      "Streamlined physical and digital document archiving."
+      "Built a comprehensive database system of 22,000+ multi-platform records for a Defense Sector project with region and contact filtering.",
+      "Designed and deployed a fully functional ERP & POS restaurant management system currently driving operations across 3 active restaurants.",
+      "Resolved critical catalog structures, API rate limits, and product feature bugs for prominent Iraqi e-commerce platforms (e.g. Al-Rayan).",
+      "Produced and executed over 60 commercial reels, technical tutorials, and brand video campaigns for retail partners (Lito Store, Techno Store)."
     ],
-    exp3Date: "2021 - 2024",
-    exp3Company: "Team Coordinator",
-    exp3Role: "Operations & Event Coordinator",
+    exp3Date: "2019 - 2023",
+    exp3Company: "Events & Telecommunications Sector — Baghdad",
+    exp3Role: "Operations Lead & Network Support Coordinator",
     exp3Bullets: [
-      "Led teams and executed events for over 150 guests.",
-      "Optimized workflow efficiency and quality assurance."
-    ],
-    exp4Date: "2019 - 2020",
-    exp4Company: "ISP Company",
-    exp4Role: "Customer Service & Technical Support",
-    exp4Bullets: [
-      "Deployed FTTH fiber networks for 2,000+ users.",
-      "Managed technical support for 3,000+ active subscribers."
+      "Led operational teams to plan, coordinate, and execute large-scale corporate and public events for 150+ guests with high efficiency.",
+      "Directed the construction and deployment of FTTH networks across 3 districts, connecting 2,000+ active users using EPON systems.",
+      "Managed end-to-end troubleshooting and maintenance coordination for a subscriber base of 3,000+ active network clients."
     ],
     toolsTag: "03 — INTERACTIVE TOOLS",
     toolsTitle: "Custom-Built Software Tools & Automation",
@@ -182,17 +174,17 @@ const translations = {
     tool2Desc: "Extract image URLs from Excel or CSV catalogs, download concurrently, rename by product names, and package into a ZIP archive instantly.",
     tool2Action: "Launch Image Downloader Live",
     eduTag: "04 — EDUCATION & CERTIFICATES",
-    eduTitle: "Academic Qualifications & Training",
-    edu1Year: "2026",
-    edu1School: "Dijlah University College – Baghdad",
-    edu1Degree: "B.Sc. in Computer Science",
+    eduTitle: "Academic Qualifications & Certified Training",
+    edu1Year: "2022 - 2026",
+    edu1School: "Dijlah University – Baghdad",
+    edu1Degree: "Bachelor's Degree in Computer Science",
     edu2Year: "2019 - 2021",
     edu2School: "Institute of Technology – Baghdad",
-    edu2Degree: "Diploma in Chemical Industries",
-    cert1: "Occupational Safety Cert",
-    cert2: "Sales Cert - Earthlink",
-    cert3: "CCNA 1 Summer Training",
-    footerSubtitle: "Ready to help you build and scale data-driven software & e-commerce systems.",
+    edu2Degree: "Diploma in Chemical Industry",
+    cert1: "CCNA 1: Introduction to Networks — Dijlah University",
+    cert2: "Sales and Customer Service Skills — EarthLink Telecommunications",
+    cert3: "Occupational Safety Training — Institute of Technology Baghdad",
+    footerSubtitle: "Ready to help you build and scale data-driven software, automation pipelines & e-commerce systems.",
     drawerTitle: "Hey! Tell us all the things",
     drawerSubtitle: "We’d love to hear about your project and build something amazing together.",
     nameLabel: "Name & Company",
@@ -486,8 +478,8 @@ export default function Home() {
         </nav>
 
         <a
-          href="/HAIDER-MOHAMED-SHWKAT-CV.pdf"
-          download="HAIDER-MOHAMED-SHWKAT-CV.pdf"
+          href="/HAIDER_M_SHWKAT_CV_2026.pdf"
+          download="HAIDER_M_SHWKAT_CV_2026.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className="awsmd-btn-glow"
@@ -565,8 +557,8 @@ export default function Home() {
 
             <div className="mobile-only-cv-btn" style={{ marginTop: "25px" }}>
               <a
-                href="/HAIDER-MOHAMED-SHWKAT-CV.pdf"
-                download="HAIDER-MOHAMED-SHWKAT-CV.pdf"
+                href="/HAIDER_M_SHWKAT_CV_2026.pdf"
+                download="HAIDER_M_SHWKAT_CV_2026.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="awsmd-btn-glow"
@@ -642,7 +634,7 @@ export default function Home() {
           {/* STAT CARD 3 */}
           <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 15px 35px rgba(0,0,0,0.2)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0" }}>
             <div style={{ position: "relative", zIndex: 2 }}>
-              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>+6</span>
+              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>3</span>
               <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat3}</p>
             </div>
             <video src="media/time-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 0.9, transition: "transform 0.4s ease" }}></video>
@@ -677,11 +669,11 @@ export default function Home() {
             <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px" }}>{t.expTitle}</h2>
           </div>
 
-          {/* 4 CARDS CLEAN RESPONSIVE GRID */}
+          {/* 3 HIGH-IMPACT CARDS RESPONSIVE GRID */}
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
               gap: "24px",
             }}
           >
@@ -691,7 +683,7 @@ export default function Home() {
               className="awsmd-dark-card"
               style={{
                 background: "#151624",
-                padding: "28px 24px",
+                padding: "30px 26px",
                 borderRadius: "24px",
                 border: "1.5px solid rgba(96, 165, 250, 0.35)",
                 display: "flex",
@@ -702,7 +694,7 @@ export default function Home() {
                 cursor: "pointer",
                 transition: "all 0.3s ease",
                 boxShadow: "0 10px 30px rgba(37, 99, 235, 0.15)",
-                minHeight: "260px",
+                minHeight: "280px",
               }}
             >
               <div>
@@ -722,18 +714,18 @@ export default function Home() {
               </ul>
             </Link>
 
-            {/* CARD 2: LOCAL LIBRARY */}
+            {/* CARD 2: FREELANCE CONSULTANT / DEFENSE & E-COMMERCE */}
             <div
               className="awsmd-dark-card"
               style={{
                 background: "#151624",
-                padding: "28px 24px",
+                padding: "30px 26px",
                 borderRadius: "24px",
                 border: "1px solid rgba(255,255,255,0.08)",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                minHeight: "260px",
+                minHeight: "280px",
               }}
             >
               <div>
@@ -748,18 +740,18 @@ export default function Home() {
               </ul>
             </div>
 
-            {/* CARD 3: TEAM COORDINATOR */}
+            {/* CARD 3: EVENTS & TELECOMMUNICATIONS */}
             <div
               className="awsmd-dark-card"
               style={{
                 background: "#151624",
-                padding: "28px 24px",
+                padding: "30px 26px",
                 borderRadius: "24px",
                 border: "1px solid rgba(255,255,255,0.08)",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                minHeight: "260px",
+                minHeight: "280px",
               }}
             >
               <div>
@@ -769,32 +761,6 @@ export default function Home() {
               </div>
               <ul style={{ color: "#64748b", fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
                 {t.exp3Bullets.map((b, i) => (
-                  <li key={i}>{b}</li>
-                ))}
-              </ul>
-            </div>
-
-            {/* CARD 4: ISP COMPANY */}
-            <div
-              className="awsmd-dark-card"
-              style={{
-                background: "#151624",
-                padding: "28px 24px",
-                borderRadius: "24px",
-                border: "1px solid rgba(255,255,255,0.08)",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                minHeight: "260px",
-              }}
-            >
-              <div>
-                <span style={{ background: "rgba(255, 255, 255, 0.08)", color: "#ffffff", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "14px" }}>{t.exp4Date}</span>
-                <h3 style={{ fontSize: "22px", fontWeight: "800", color: "#ffffff", marginBottom: "4px" }}>{t.exp4Company}</h3>
-                <p style={{ color: "#94a3b8", fontSize: "14px", fontWeight: "600", marginBottom: "14px" }}>{t.exp4Role}</p>
-              </div>
-              <ul style={{ color: "#64748b", fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
-                {t.exp4Bullets.map((b, i) => (
                   <li key={i}>{b}</li>
                 ))}
               </ul>
@@ -1364,8 +1330,8 @@ export default function Home() {
             </div>
 
             <a
-              href="/HAIDER-MOHAMED-SHWKAT-CV.pdf"
-              download="HAIDER-MOHAMED-SHWKAT-CV.pdf"
+              href="/HAIDER_M_SHWKAT_CV_2026.pdf"
+              download="HAIDER_M_SHWKAT_CV_2026.pdf"
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -1382,7 +1348,6 @@ export default function Home() {
                 boxShadow: "0 4px 15px rgba(0,0,0,0.2)"
               }}
             >
-              <span>📥</span>
               <span>{t.downloadCV}</span>
             </a>
 
