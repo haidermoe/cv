@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { useTheme } from "@/app/hooks/useTheme";
 
 const JellyfishViewer = dynamic(() => import("../components/JellyfishViewer"), {
   ssr: false,
@@ -10,6 +11,7 @@ const JellyfishViewer = dynamic(() => import("../components/JellyfishViewer"), {
 
 export default function ThanksPage() {
   const [lang, setLang] = useState<"AR" | "EN">("EN");
+  const { theme, isDark, toggleTheme } = useTheme();
   const [jellyColor] = useState<string | null>("#ff007f");
   const [matMode] = useState<"solid" | "glass" | "wireframe">("solid");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -119,10 +121,11 @@ export default function ThanksPage() {
 
   return (
     <div
+      className={`thanks-layout ${isDark ? "theme-dark" : "theme-light"}`}
       dir={lang === "AR" ? "rtl" : "ltr"}
       style={{
-        background: "#f2f1f6",
-        color: "#0f111a",
+        background: isDark ? "#0e0d15" : "#f2f1f6",
+        color: isDark ? "#ffffff" : "#0f111a",
         minHeight: "100dvh",
         display: "flex",
         flexDirection: "column",
@@ -131,6 +134,7 @@ export default function ThanksPage() {
         position: "relative",
         fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif",
         overflowX: "hidden",
+        transition: "background 0.3s ease, color 0.3s ease",
       }}
     >
       {/* CIRCULAR LANGUAGE RIPPLE TRANSITION OVERLAY */}
@@ -180,11 +184,11 @@ export default function ThanksPage() {
           style={{
             width: "100%",
             height: "100%",
-            backgroundImage: "radial-gradient(rgba(15, 17, 26, 0.16) 1.5px, transparent 1.5px)",
+            backgroundImage: `radial-gradient(${isDark ? "rgba(255, 255, 255, 0.14)" : "rgba(15, 17, 26, 0.16)"} 1.5px, transparent 1.5px)`,
             backgroundSize: "20px 20px",
             transform: `perspective(1000px) rotateX(${16 + mousePos.y * 14}deg) rotateY(${mousePos.x * 16}deg) scale(1.25)`,
             transformOrigin: "center center",
-            transition: "transform 0.08s linear",
+            transition: "transform 0.08s linear, background-image 0.3s ease",
             maskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
             WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
           }}
@@ -210,15 +214,16 @@ export default function ThanksPage() {
             alignItems: "center",
             gap: "6px",
             textDecoration: "none",
-            color: "#0f111a",
+            color: isDark ? "#ffffff" : "#0f111a",
             fontSize: "clamp(14px, 3.6vw, 20px)",
             fontWeight: "900",
             flexShrink: 0,
+            transition: "color 0.3s ease",
           }}
         >
           <svg width="20" height="16" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="7" y="1" width="8" height="10" fill="#0f111a" />
-            <rect x="0" y="13" width="16" height="7" fill="#0f111a" />
+            <rect x="7" y="1" width="8" height="10" fill={isDark ? "#ffffff" : "#0f111a"} />
+            <rect x="0" y="13" width="16" height="7" fill={isDark ? "#ffffff" : "#0f111a"} />
             <rect x="10" y="13" width="15" height="7" fill="#4f46e5" />
           </svg>
           <span>{lang === "AR" ? "حيدر محمد" : "Haider Mohamed"}</span>
@@ -231,32 +236,33 @@ export default function ThanksPage() {
             display: isDesktop ? "flex" : "none",
             alignItems: "center",
             gap: "28px",
-            background: "#ffffff",
+            background: isDark ? "rgba(21, 22, 36, 0.9)" : "#ffffff",
             padding: "10px 28px",
             borderRadius: "50px",
-            boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
-            border: "1px solid rgba(15, 17, 26, 0.06)",
+            boxShadow: isDark ? "0 4px 20px rgba(0,0,0,0.3)" : "0 4px 20px rgba(0,0,0,0.04)",
+            border: isDark ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(15, 17, 26, 0.06)",
+            transition: "all 0.3s ease",
           }}
         >
-          <Link href="/#about" className="flip-link-group" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14.5px" }}>
+          <Link href="/#about" className="flip-link-group" style={{ textDecoration: "none", color: isDark ? "#94a3b8" : "#475569", fontWeight: "700", fontSize: "14.5px" }}>
             <span className="flip-wrapper">
               <span className="flip-text-primary">{lang === "AR" ? "النبذة" : "About Us"}</span>
               <span className="flip-text-secondary" style={{ color: "#2563eb" }}>{lang === "AR" ? "النبذة" : "About Us"}</span>
             </span>
           </Link>
-          <Link href="/#experience" className="flip-link-group" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14.5px" }}>
+          <Link href="/#experience" className="flip-link-group" style={{ textDecoration: "none", color: isDark ? "#94a3b8" : "#475569", fontWeight: "700", fontSize: "14.5px" }}>
             <span className="flip-wrapper">
               <span className="flip-text-primary">{lang === "AR" ? "الخبرات" : "Experience"}</span>
               <span className="flip-text-secondary" style={{ color: "#2563eb" }}>{lang === "AR" ? "الخبرات" : "Experience"}</span>
             </span>
           </Link>
-          <Link href="/#education" className="flip-link-group" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14.5px" }}>
+          <Link href="/#education" className="flip-link-group" style={{ textDecoration: "none", color: isDark ? "#94a3b8" : "#475569", fontWeight: "700", fontSize: "14.5px" }}>
             <span className="flip-wrapper">
               <span className="flip-text-primary">{lang === "AR" ? "التعليم" : "Education"}</span>
               <span className="flip-text-secondary" style={{ color: "#2563eb" }}>{lang === "AR" ? "التعليم" : "Education"}</span>
             </span>
           </Link>
-          <Link href="/#contact" className="flip-link-group" style={{ textDecoration: "none", color: "#475569", fontWeight: "700", fontSize: "14.5px" }}>
+          <Link href="/#contact" className="flip-link-group" style={{ textDecoration: "none", color: isDark ? "#94a3b8" : "#475569", fontWeight: "700", fontSize: "14.5px" }}>
             <span className="flip-wrapper">
               <span className="flip-text-primary">{lang === "AR" ? "تواصل معي" : "Contact Us"}</span>
               <span className="flip-text-secondary" style={{ color: "#2563eb" }}>{lang === "AR" ? "تواصل معي" : "Contact Us"}</span>
@@ -266,18 +272,61 @@ export default function ThanksPage() {
 
         {/* RIGHT TOP ACTIONS */}
         <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
+          
+          {/* THEME TOGGLE BUTTON */}
+          <button
+            onClick={toggleTheme}
+            title={lang === "AR" ? "تبديل المظهر (فاتح / داكن)" : "Toggle Theme (Light / Dark)"}
+            style={{
+              background: isDark ? "#1e2235" : "#ffffff",
+              border: isDark ? "1px solid rgba(96, 165, 250, 0.3)" : "1.5px solid #2563eb",
+              color: isDark ? "#60a5fa" : "#2563eb",
+              padding: isDesktop ? "7px 14px" : "6px 10px",
+              borderRadius: "50px",
+              fontSize: isDesktop ? "12px" : "11px",
+              fontWeight: "800",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              cursor: "pointer",
+              fontFamily: "'Outfit', sans-serif",
+              boxShadow: "0 4px 15px rgba(0,0,0,0.06)",
+              transition: "all 0.3s ease"
+            }}
+          >
+            {isDark ? (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+              </svg>
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+            )}
+            <span>{isDark ? (lang === "AR" ? "فاتح" : "Light") : (lang === "AR" ? "داكن" : "Dark")}</span>
+          </button>
+
           <button
             onClick={handleLangSwitch}
             className="awsmd-btn-glow"
             style={{
-              background: "#ffffff",
-              border: "1.5px solid #e2e8f0",
-              color: "#0f111a",
+              background: isDark ? "#1e2235" : "#ffffff",
+              border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1.5px solid #e2e8f0",
+              color: isDark ? "#ffffff" : "#0f111a",
               padding: isDesktop ? "7px 14px" : "6px 10px",
               borderRadius: "50px",
               fontSize: isDesktop ? "12px" : "11px",
               fontWeight: "800",
               cursor: "pointer",
+              transition: "all 0.3s ease",
             }}
           >
             {lang === "AR" ? "EN" : "عربي"} ∨

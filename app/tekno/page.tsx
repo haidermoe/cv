@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import * as XLSX from "xlsx";
+import { useTheme } from "@/app/hooks/useTheme";
 
 // REUSABLE FLIP-TEXT LINK COMPONENT
 function FlipLink({ children, href, style, color = "#0f111a", hoverColor = "#2563eb" }: { children: React.ReactNode; href: string; style?: React.CSSProperties; color?: string; hoverColor?: string }) {
@@ -59,6 +60,7 @@ const parseHeadersClientSide = async (file: File): Promise<string[]> => {
 
 export default function TeknoPage() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
+  const { theme, isDark, toggleTheme } = useTheme();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isDesktop, setIsDesktop] = useState(false);
 
@@ -370,10 +372,11 @@ export default function TeknoPage() {
 
   return (
     <div
+      className={`tekno-layout ${isDark ? "theme-dark" : "theme-light"}`}
       dir={lang === "AR" ? "rtl" : "ltr"}
       style={{
-        background: "#f2f1f6",
-        color: "#0f111a",
+        background: isDark ? "#0e0d15" : "#f2f1f6",
+        color: isDark ? "#ffffff" : "#0f111a",
         minHeight: "100dvh",
         display: "flex",
         flexDirection: "column",
@@ -382,6 +385,7 @@ export default function TeknoPage() {
         position: "relative",
         fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif",
         overflowX: "hidden",
+        transition: "background 0.3s ease, color 0.3s ease",
       }}
     >
       {/* CIRCULAR LANGUAGE RIPPLE TRANSITION OVERLAY */}
@@ -431,11 +435,11 @@ export default function TeknoPage() {
           style={{
             width: "100%",
             height: "100%",
-            backgroundImage: "radial-gradient(rgba(15, 17, 26, 0.16) 1.5px, transparent 1.5px)",
+            backgroundImage: `radial-gradient(${isDark ? "rgba(255, 255, 255, 0.14)" : "rgba(15, 17, 26, 0.16)"} 1.5px, transparent 1.5px)`,
             backgroundSize: "20px 20px",
             transform: `perspective(1000px) rotateX(${16 + mousePos.y * 14}deg) rotateY(${mousePos.x * 16}deg) scale(1.25)`,
             transformOrigin: "center center",
-            transition: "transform 0.08s linear",
+            transition: "transform 0.08s linear, background-image 0.3s ease",
             maskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
             WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
           }}
@@ -474,13 +478,54 @@ export default function TeknoPage() {
           </span>
         </button>
 
+        {/* THEME TOGGLE BUTTON */}
+        <button
+          onClick={toggleTheme}
+          title={lang === "AR" ? "تبديل المظهر (فاتح / داكن)" : "Toggle Theme (Light / Dark)"}
+          style={{
+            background: isDark ? "#1e2235" : "#ffffff",
+            border: isDark ? "1px solid rgba(96, 165, 250, 0.3)" : `1.5px solid ${activeColor}`,
+            color: isDark ? "#60a5fa" : activeColor,
+            padding: "8px 14px",
+            borderRadius: "50px",
+            fontSize: "13px",
+            fontWeight: "800",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            cursor: "pointer",
+            fontFamily: "'Outfit', sans-serif",
+            boxShadow: "0 4px 15px rgba(0,0,0,0.06)",
+            transition: "all 0.3s ease"
+          }}
+        >
+          {isDark ? (
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+          ) : (
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          )}
+          <span>{isDark ? (lang === "AR" ? "فاتح" : "Light") : (lang === "AR" ? "داكن" : "Dark")}</span>
+        </button>
+
         {/* DYNAMIC BORDERED LANGUAGE SELECTOR PILL */}
         <button
           onClick={handleLangSwitch}
           style={{
-            background: "#ffffff",
-            border: `1.5px solid ${activeColor}`,
-            color: activeColor,
+            background: isDark ? "#1e2235" : "#ffffff",
+            border: isDark ? "1px solid rgba(255,255,255,0.1)" : `1.5px solid ${activeColor}`,
+            color: isDark ? "#ffffff" : activeColor,
             padding: "8px 18px",
             borderRadius: "50px",
             fontSize: "13.5px",
@@ -505,8 +550,8 @@ export default function TeknoPage() {
             width: "42px",
             height: "42px",
             borderRadius: "50%",
-            background: "#e2e8f0",
-            border: "none",
+            background: isDark ? "#1e2235" : "#e2e8f0",
+            border: isDark ? "1px solid rgba(255,255,255,0.1)" : "none",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -516,8 +561,8 @@ export default function TeknoPage() {
           }}
         >
           <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="18" height="2.5" rx="1.25" fill="#475569"/>
-            <rect y="6.5" width="13" height="2.5" rx="1.25" fill="#475569"/>
+            <rect width="18" height="2.5" rx="1.25" fill={isDark ? "#ffffff" : "#475569"}/>
+            <rect y="6.5" width="13" height="2.5" rx="1.25" fill={isDark ? "#ffffff" : "#475569"}/>
           </svg>
         </button>
       </div>
@@ -534,15 +579,15 @@ export default function TeknoPage() {
             gap: "10px",
             fontSize: "19px",
             fontWeight: "900",
-            color: "#000000",
+            color: isDark ? "#ffffff" : "#000000",
             textDecoration: "none",
             letterSpacing: "-0.01em",
             transition: "color 0.3s ease"
           }}
         >
           <svg width="22" height="18" viewBox="0 0 25 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="7" y="1" width="8" height="10" fill="#000000"/>
-            <rect x="0" y="13" width="16" height="7" fill="#000000"/>
+            <rect x="7" y="1" width="8" height="10" fill={isDark ? "#ffffff" : "#000000"}/>
+            <rect x="0" y="13" width="16" height="7" fill={isDark ? "#ffffff" : "#000000"}/>
             <rect x="10" y="13" width="15" height="7" fill={activeColor} style={{ transition: "fill 0.3s ease" }}/>
           </svg>
           <span>{lang === "AR" ? "حيدر محمد" : "Haider Mohamed"}</span>
@@ -561,11 +606,11 @@ export default function TeknoPage() {
           display: "flex",
           alignItems: "center",
           gap: "24px",
-          background: "#ffffff",
+          background: isDark ? "rgba(21, 22, 36, 0.9)" : "#ffffff",
           padding: "8px 24px",
           borderRadius: "50px",
           boxShadow: `0 15px 35px ${mode === "pull" ? "rgba(22, 163, 74, 0.12)" : "rgba(37, 99, 235, 0.12)"}`,
-          border: `1.5px solid ${mode === "pull" ? "rgba(22, 163, 74, 0.25)" : "rgba(37, 99, 235, 0.2)"}`,
+          border: isDark ? "1.5px solid rgba(255, 255, 255, 0.1)" : `1.5px solid ${mode === "pull" ? "rgba(22, 163, 74, 0.25)" : "rgba(37, 99, 235, 0.2)"}`,
           transition: "all 0.35s ease"
         }}
       >

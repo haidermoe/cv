@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { PortfolioData } from "@/lib/portfolio";
+import { useTheme } from "./hooks/useTheme";
 
 // REUSABLE FLIP-TEXT LINK COMPONENT
 function FlipLink({ children, href, download, target, style, color = "#0f111a", hoverColor = "#2563eb" }: { children: React.ReactNode; href: string; download?: string; target?: string; style?: React.CSSProperties; color?: string; hoverColor?: string }) {
@@ -210,28 +211,13 @@ const translations = {
 
 export default function Home() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const { theme, isDark, toggleTheme } = useTheme();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isClientDrawerOpen, setIsClientDrawerOpen] = useState(false);
   const [isClientDrawerClosing, setIsClientDrawerClosing] = useState(false);
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
   const [isNavMenuClosing, setIsNavMenuClosing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("haider_theme") as "light" | "dark" | null;
-    if (saved === "dark" || saved === "light") {
-      setTheme(saved);
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    setTheme((prev) => {
-      const next = prev === "light" ? "dark" : "light";
-      localStorage.setItem("haider_theme", next);
-      return next;
-    });
-  };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const { clientX, clientY } = e;
@@ -391,7 +377,6 @@ export default function Home() {
     window.location.href = "/thanks";
   };
 
-  const isDark = theme === "dark";
   const tColors = {
     bg: isDark ? "#0e0d15" : "#f2f1f6",
     text: isDark ? "#ffffff" : "#0f111a",

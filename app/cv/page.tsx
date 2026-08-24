@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { CV_TEMPLATES_PRESETS } from "@/lib/cvPresets";
+import { useTheme } from "@/app/hooks/useTheme";
 
 interface CvExperience {
   id: string;
@@ -265,6 +266,7 @@ function translateText(text: string): string {
 
 export default function PublicCvBuilderPage() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
+  const { theme, isDark, toggleTheme } = useTheme();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [activeTab, setActiveTab] = useState<"personal" | "experience" | "education" | "skills" | "presets" | "styling">("personal");
 
@@ -948,14 +950,16 @@ export default function PublicCvBuilderPage() {
   return (
     <div
       onMouseMove={handleMouseMove}
+      className={`cv-studio-layout ${isDark ? "theme-dark" : "theme-light"}`}
       dir={isArabic ? "rtl" : "ltr"}
       style={{
-        background: "#f2f1f6",
-        color: "#0f111a",
+        background: isDark ? "#0e0d15" : "#f2f1f6",
+        color: isDark ? "#ffffff" : "#0f111a",
         minHeight: "100vh",
         position: "relative",
         overflowX: "hidden",
         fontFamily: isArabic ? "'Tajawal', sans-serif" : "'Outfit', sans-serif",
+        transition: "background 0.3s ease, color 0.3s ease",
       }}
     >
       {/* 3D CONCAVE DOT GRID BACKGROUND LAYER (MATCHING /images & /tekno) */}
@@ -973,11 +977,11 @@ export default function PublicCvBuilderPage() {
           style={{
             width: "100%",
             height: "100%",
-            backgroundImage: "radial-gradient(rgba(15, 17, 26, 0.16) 1.5px, transparent 1.5px)",
+            backgroundImage: `radial-gradient(${isDark ? "rgba(255, 255, 255, 0.14)" : "rgba(15, 17, 26, 0.16)"} 1.5px, transparent 1.5px)`,
             backgroundSize: "20px 20px",
             transform: `perspective(1000px) rotateX(${16 + mousePos.y * 14}deg) rotateY(${mousePos.x * 16}deg) scale(1.25)`,
             transformOrigin: "center center",
-            transition: "transform 0.08s linear",
+            transition: "transform 0.08s linear, background-image 0.3s ease",
             maskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
             WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
           }}
@@ -1154,14 +1158,15 @@ export default function PublicCvBuilderPage() {
       {/* TOP HEADER */}
       <header
         style={{
-          background: "rgba(255, 255, 255, 0.85)",
+          background: isDark ? "rgba(21, 22, 36, 0.9)" : "rgba(255, 255, 255, 0.85)",
           backdropFilter: "blur(16px)",
-          borderBottom: "1px solid rgba(0,0,0,0.06)",
+          borderBottom: isDark ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid rgba(0,0,0,0.06)",
           padding: "14px 24px",
           position: "sticky",
           top: 0,
           zIndex: 100,
-          boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
+          boxShadow: isDark ? "0 4px 20px rgba(0,0,0,0.4)" : "0 4px 20px rgba(0,0,0,0.03)",
+          transition: "background 0.3s ease, border-color 0.3s ease",
         }}
       >
         <div style={{ maxWidth: "1440px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
@@ -1172,9 +1177,9 @@ export default function PublicCvBuilderPage() {
               href="/"
               style={{
                 textDecoration: "none",
-                background: "#f1f5f9",
-                color: "#0f172a",
-                border: "1px solid #e2e8f0",
+                background: isDark ? "#1e2235" : "#f1f5f9",
+                color: isDark ? "#ffffff" : "#0f172a",
+                border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid #e2e8f0",
                 padding: "6px 12px",
                 borderRadius: "10px",
                 fontSize: "13px",
@@ -1182,6 +1187,7 @@ export default function PublicCvBuilderPage() {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "6px",
+                transition: "all 0.3s ease",
               }}
             >
               <span>←</span>
@@ -1190,28 +1196,68 @@ export default function PublicCvBuilderPage() {
 
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <h1 style={{ fontSize: "17px", fontWeight: "900", margin: 0, color: "#0f172a" }}>
+                <h1 style={{ fontSize: "17px", fontWeight: "900", margin: 0, color: isDark ? "#ffffff" : "#0f172a" }}>
                   {isArabic ? "صانع السيرة الذاتية ومولد الـ PDF الذكي" : "Interactive ATS CV Builder & PDF Engine"}
                 </h1>
                 <span style={{ background: "#16a34a", color: "#ffffff", padding: "2px 8px", borderRadius: "12px", fontSize: "10px", fontWeight: "900" }}>
                   BILINGUAL AR / EN
                 </span>
               </div>
-              <span style={{ fontSize: "11px", color: "#64748b" }}>
+              <span style={{ fontSize: "11px", color: isDark ? "#94a3b8" : "#64748b" }}>
                 {isArabic ? "أنشئ سيرتك وقم بالتحويل اللحظي بين اللغتين وتصدير ملفات PDF قياسية جاهزة للطباعة" : "Build your CV, switch languages instantly & download print-ready PDFs"}
               </span>
             </div>
           </div>
 
-          {/* ACTION BUTTONS: INSTANT SWITCH + UNIFIED DOWNLOAD BUTTON */}
+          {/* ACTION BUTTONS: THEME TOGGLE + INSTANT SWITCH + UNIFIED DOWNLOAD BUTTON */}
           <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
             
+            {/* THEME TOGGLE BUTTON */}
+            <button
+              onClick={toggleTheme}
+              title={isArabic ? "تبديل المظهر (فاتح / داكن)" : "Toggle Theme (Light / Dark)"}
+              style={{
+                background: isDark ? "#1e2235" : "#ffffff",
+                border: isDark ? "1px solid rgba(96, 165, 250, 0.3)" : "1.5px solid #2563eb",
+                color: isDark ? "#60a5fa" : "#2563eb",
+                padding: "8px 14px",
+                borderRadius: "10px",
+                fontSize: "13px",
+                fontWeight: "800",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                cursor: "pointer",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+                transition: "all 0.3s ease"
+              }}
+            >
+              {isDark ? (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="5"/>
+                  <line x1="12" y1="1" x2="12" y2="3"/>
+                  <line x1="12" y1="21" x2="12" y2="23"/>
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                  <line x1="1" y1="12" x2="3" y2="12"/>
+                  <line x1="21" y1="12" x2="23" y2="12"/>
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+              ) : (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+              )}
+              <span>{isDark ? (isArabic ? "فاتح" : "Light") : (isArabic ? "داكن" : "Dark")}</span>
+            </button>
+
             {/* INSTANT BILINGUAL TRANSLATE TOGGLE BUTTON */}
             <button
               onClick={() => handleInstantSwitchLanguage(isArabic ? "EN" : "AR")}
               style={{
-                background: "#ffffff",
-                color: "#0f172a",
+                background: isDark ? "#1e2235" : "#ffffff",
+                color: isDark ? "#ffffff" : "#0f172a",
                 border: "1.5px solid #2563eb",
                 padding: "9px 18px",
                 borderRadius: "10px",
@@ -1222,6 +1268,7 @@ export default function PublicCvBuilderPage() {
                 alignItems: "center",
                 gap: "8px",
                 boxShadow: "0 4px 12px rgba(37,99,235,0.12)",
+                transition: "all 0.3s ease",
               }}
             >
               <span>{isArabic ? "تحويل مباشر إلى الإنجليزية (EN)" : "تحويل مباشر إلى العربية (AR)"}</span>
