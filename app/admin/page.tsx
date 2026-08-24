@@ -194,6 +194,7 @@ export default function AdminPage() {
   const [a4Zoom, setA4Zoom] = useState<number>(0.9);
   const [isPreviewMinimized, setIsPreviewMinimized] = useState(false);
   const [previewSectionTab, setPreviewSectionTab] = useState<"auto" | "general" | "stats" | "experiences" | "education" | "cv" | "typography" | "all">("auto");
+  const [cvEditorTab, setCvEditorTab] = useState<"presets" | "personal" | "skills" | "formatting" | "qr" | "all">("presets");
   const [showShortcutsModal, setShowShortcutsModal] = useState(false);
   const [shortcutToast, setShortcutToast] = useState("");
 
@@ -1634,532 +1635,579 @@ export default function AdminPage() {
               {cvMode === "builder" && (
                 <div style={{ display: "grid", gridTemplateColumns: "minmax(380px, 480px) 1fr", gap: "30px", alignItems: "start" }}>
                   {/* RIGHT PANEL: EDITING CONTROLS */}
-                  <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                     
-                    {/* BILINGUAL LANGUAGE ENGINE HERO CARD */}
-                    <div style={{ background: "#0f172a", padding: "16px 20px", borderRadius: "16px", border: "2px solid #3b82f6", boxShadow: "0 4px 20px rgba(59,130,246,0.2)" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
-                        <div>
-                          <strong style={{ fontSize: "14px", color: "#60a5fa", fontWeight: "900" }}>لغة السيرة الذاتية (CV Language)</strong>
-                          <span style={{ display: "block", fontSize: "11px", color: "#cbd5e1" }}>حوّل السيرة ومحتواها تلقائياً بين العربية والإنجليزية بنقرة زر:</span>
-                        </div>
-                        <span style={{ fontSize: "11px", background: "#1e3a8a", color: "#93c5fd", padding: "3px 8px", borderRadius: "6px", fontWeight: "800" }}>
-                          {data.cvDocument?.cvLang === "AR" ? "العربية RTL" : "English LTR"}
-                        </span>
-                      </div>
-
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                    {/* CV EDITOR SUB-TABS NAVIGATION BAR */}
+                    <div style={{ position: "sticky", top: "0", zIndex: 30, background: "#0a0b12", padding: "8px", borderRadius: "14px", border: "1.5px solid #2563eb", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px", boxShadow: "0 8px 25px rgba(0,0,0,0.6)" }}>
+                      {[
+                        { id: "presets", label: "1. القوالب واللغة" },
+                        { id: "personal", label: "2. البيانات والنبذة" },
+                        { id: "skills", label: "3. المهارات والقدرات" },
+                        { id: "formatting", label: "4. الخطوط والتنسيق" },
+                        { id: "qr", label: "5. استوديو الـ QR" },
+                        { id: "all", label: "عرض الكل" },
+                      ].map((t) => (
                         <button
-                          onClick={() => handleSwitchCvLanguage("AR")}
+                          key={t.id}
+                          onClick={() => setCvEditorTab(t.id as any)}
                           style={{
-                            background: data.cvDocument?.cvLang === "AR" ? "#2563eb" : "#1e293b",
-                            color: "#ffffff",
-                            border: data.cvDocument?.cvLang === "AR" ? "2px solid #60a5fa" : "1px solid #334155",
-                            padding: "10px 14px",
-                            borderRadius: "10px",
-                            fontSize: "13px",
-                            fontWeight: "900",
+                            background: cvEditorTab === t.id ? "#2563eb" : "#151624",
+                            color: cvEditorTab === t.id ? "#ffffff" : "#94a3b8",
+                            border: cvEditorTab === t.id ? "1px solid #60a5fa" : "1px solid #334155",
+                            padding: "8px 4px",
+                            borderRadius: "8px",
+                            fontSize: "11.5px",
+                            fontWeight: "800",
                             cursor: "pointer",
                             textAlign: "center",
-                            boxShadow: data.cvDocument?.cvLang === "AR" ? "0 4px 12px rgba(37,99,235,0.4)" : "none",
+                            transition: "all 0.15s",
                           }}
                         >
-                          العربية (Arabic RTL)
+                          {t.label}
                         </button>
-                        <button
-                          onClick={() => handleSwitchCvLanguage("EN")}
-                          style={{
-                            background: (data.cvDocument?.cvLang || "EN") === "EN" ? "#2563eb" : "#1e293b",
-                            color: "#ffffff",
-                            border: (data.cvDocument?.cvLang || "EN") === "EN" ? "2px solid #60a5fa" : "1px solid #334155",
-                            padding: "10px 14px",
-                            borderRadius: "10px",
-                            fontSize: "13px",
-                            fontWeight: "900",
-                            cursor: "pointer",
-                            textAlign: "center",
-                            boxShadow: (data.cvDocument?.cvLang || "EN") === "EN" ? "0 4px 12px rgba(37,99,235,0.4)" : "none",
-                          }}
-                        >
-                          English (English LTR)
-                        </button>
-                      </div>
+                      ))}
                     </div>
 
-                    {/* SPECIALIZED TEMPLATES PRESETS SELECTOR */}
-                    <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "2px solid #2563eb", boxShadow: "0 8px 25px rgba(37,99,235,0.15)" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
-                        <div>
-                          <h4 style={{ fontSize: "15px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>مكتبة القوالب المتخصصة (9 مجالات)</h4>
-                          <span style={{ fontSize: "11px", color: "#94a3b8" }}>اختر القالب المخصص لمجالك المهني لتطبيقه فورياً:</span>
-                        </div>
-                      </div>
-
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "8px", maxHeight: "320px", overflowY: "auto", paddingRight: "4px" }}>
-                        {CV_TEMPLATES_PRESETS.map((p) => {
-                          const isSelected = (data.cvDocument?.templatePreset || "classic-ats-standard") === p.id;
-                          return (
-                            <button
-                              key={p.id}
-                              onClick={() => {
-                                setData({
-                                  ...data,
-                                  cvDocument: {
-                                    ...(data.cvDocument || ({} as any)),
-                                    templatePreset: p.id as any,
-                                    accentColor: p.accent,
-                                    templateStyle: p.style,
-                                    layoutFormat: p.format,
-                                    fontFamily: p.font,
-                                    fontSizeScale: p.fontSize,
-                                    pageMargin: p.margin,
-                                    lineSpacing: p.spacing,
-                                  },
-                                });
-                                showToast(`تم تفعيل: ${p.title}`);
-                              }}
-                              style={{
-                                background: isSelected ? "#172554" : "#151624",
-                                border: isSelected ? `2px solid ${p.accent}` : "1px solid #334155",
-                                borderRadius: "10px",
-                                padding: "10px 12px",
-                                textAlign: "right",
-                                cursor: "pointer",
-                                transition: "all 0.15s",
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "4px",
-                              }}
-                            >
-                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <strong style={{ fontSize: "12.5px", color: isSelected ? "#60a5fa" : "#ffffff", fontWeight: "800" }}>{p.title}</strong>
-                                <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: p.accent, display: "inline-block" }} />
-                              </div>
-                              <div style={{ fontSize: "11px", color: "#38bdf8", fontWeight: "700" }}>المجال: {p.field}</div>
-                              <p style={{ fontSize: "10.5px", color: "#94a3b8", margin: 0, lineHeight: "1.4" }}>{p.desc}</p>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* PHOTO & PERSONAL INFO */}
-                    <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
-                      <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#60a5fa", marginBottom: "14px" }}>المعلومات الأساسية والصورة</h4>
-
-                      <div style={{ display: "flex", gap: "14px", alignItems: "center", marginBottom: "16px", background: "#151624", padding: "12px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
-                        <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "#1e2130", overflow: "hidden", border: "2px solid #60a5fa", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                          {data.cvDocument?.photo ? (
-                            <img src={data.cvDocument.photo} alt="CV Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                          ) : (
-                            <span style={{ fontSize: "11px", color: "#94a3b8" }}>بدون صورة</span>
-                          )}
-                        </div>
-
-                        <div>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            id="cvPhotoInput"
-                            style={{ display: "none" }}
-                            onChange={handlePhotoUpload}
-                          />
-                          <label htmlFor="cvPhotoInput" style={{ cursor: "pointer" }}>
-                            <div style={{ background: "#2563eb", color: "#ffffff", padding: "6px 14px", borderRadius: "8px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "4px" }}>
-                              تغيير / رفع صورة السيرة
+                    {/* SECTION 1: PRESETS & BILINGUAL */}
+                    {(cvEditorTab === "presets" || cvEditorTab === "all") && (
+                      <>
+                        {/* BILINGUAL LANGUAGE ENGINE HERO CARD */}
+                        <div style={{ background: "#0f172a", padding: "16px 20px", borderRadius: "16px", border: "2px solid #3b82f6", boxShadow: "0 4px 20px rgba(59,130,246,0.2)" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                            <div>
+                              <strong style={{ fontSize: "14px", color: "#60a5fa", fontWeight: "900" }}>لغة السيرة الذاتية (CV Language)</strong>
+                              <span style={{ display: "block", fontSize: "11px", color: "#cbd5e1" }}>حوّل السيرة ومحتواها تلقائياً بين العربية والإنجليزية بنقرة زر:</span>
                             </div>
-                          </label>
-                          {data.cvDocument?.photo && (
+                            <span style={{ fontSize: "11px", background: "#1e3a8a", color: "#93c5fd", padding: "3px 8px", borderRadius: "6px", fontWeight: "800" }}>
+                              {data.cvDocument?.cvLang === "AR" ? "العربية RTL" : "English LTR"}
+                            </span>
+                          </div>
+
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                             <button
-                              onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), photo: "" } })}
-                              style={{ background: "none", border: "none", color: "#ef4444", fontSize: "11.5px", cursor: "pointer", display: "block" }}
-                            >
-                              إزالة الصورة
-                            </button>
-                          )}
-                        </div>
-                      </div>
-
-                      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                        <div>
-                          <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الاسم الكامل (Full Name)</label>
-                          <input
-                            type="text"
-                            value={data.cvDocument?.fullName || ""}
-                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), fullName: e.target.value } })}
-                            style={{ width: "100%", padding: "9px 12px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13.5px", fontWeight: "700" }}
-                          />
-                        </div>
-
-                        <div>
-                          <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>المسمى المهني (Job Title)</label>
-                          <input
-                            type="text"
-                            value={data.cvDocument?.jobTitle || ""}
-                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), jobTitle: e.target.value } })}
-                            style={{ width: "100%", padding: "9px 12px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13.5px" }}
-                          />
-                        </div>
-
-                        <div>
-                          <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الملخص المهني (Professional Summary)</label>
-                          <textarea
-                            rows={4}
-                            value={data.cvDocument?.summary || ""}
-                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), summary: e.target.value } })}
-                            style={{ width: "100%", padding: "9px 12px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12.5px", lineHeight: "1.6" }}
-                          />
-                        </div>
-
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                          <div>
-                            <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>البريد الإلكتروني</label>
-                            <input
-                              type="text"
-                              value={data.cvDocument?.email || ""}
-                              onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), email: e.target.value } })}
-                              style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
-                            />
-                          </div>
-
-                          <div>
-                            <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>رقم الهاتف</label>
-                            <input
-                              type="text"
-                              dir="ltr"
-                              value={data.cvDocument?.phone || ""}
-                              onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), phone: e.target.value } })}
-                              style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px", direction: "ltr", textAlign: "right" }}
-                            />
-                          </div>
-                        </div>
-
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                          <div>
-                            <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الموقع الجغرافي</label>
-                            <input
-                              type="text"
-                              value={data.cvDocument?.location || ""}
-                              onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), location: e.target.value } })}
-                              style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
-                            />
-                          </div>
-
-                          <div>
-                            <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>رابط LinkedIn</label>
-                            <input
-                              type="text"
-                              value={data.cvDocument?.linkedin || ""}
-                              onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), linkedin: e.target.value } })}
-                              style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* SKILLS TAGS */}
-                    <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-                        <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#60a5fa", margin: 0 }}>المهارات التقنية (Skills)</h4>
-                        <button
-                          onClick={() => {
-                            const newSkills = [...(data.cvDocument?.skills || []), "مهارة تقنية جديدة"];
-                            setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), skills: newSkills } });
-                          }}
-                          style={{ background: "#2563eb", color: "#ffffff", border: "none", padding: "5px 12px", borderRadius: "6px", fontSize: "12px", fontWeight: "800", cursor: "pointer" }}
-                        >
-                          + إضافة مهارة
-                        </button>
-                      </div>
-
-                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                        {(data.cvDocument?.skills || []).map((sk, idx) => (
-                          <div key={idx} style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                            <input
-                              type="text"
-                              value={sk}
-                              onChange={(e) => {
-                                const newSkills = [...(data.cvDocument?.skills || [])];
-                                newSkills[idx] = e.target.value;
-                                setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), skills: newSkills } });
-                              }}
-                              style={{ flex: 1, padding: "7px 10px", borderRadius: "6px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12.5px" }}
-                            />
-                            <button
-                              onClick={() => {
-                                const newSkills = (data.cvDocument?.skills || []).filter((_, i) => i !== idx);
-                                setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), skills: newSkills } });
-                              }}
-                              style={{ background: "rgba(239,68,68,0.2)", color: "#f87171", border: "none", padding: "6px 10px", borderRadius: "6px", fontSize: "12px", cursor: "pointer" }}
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* PAGE STRUCTURE & LAYOUT FORMAT CONTROLS */}
-                    <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
-                      <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#60a5fa", marginBottom: "14px" }}>هيكل وتنسيق الصفحة (Page Structure & Layout)</h4>
-
-                      {/* LAYOUT FORMAT SELECTOR */}
-                      <div style={{ marginBottom: "16px" }}>
-                        <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "6px" }}>نمط وهيكل الصفحة (Layout Format):</label>
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-                          {[
-                            { id: "single-column", label: "عمود واحد كلاسيكي (Single Column)" },
-                            { id: "two-column-sidebar", label: "عمودين مع شريط جانبي (Two-Column)" },
-                            { id: "modern-executive", label: "تنفيذي عريض (Executive)" },
-                            { id: "minimal-compact", label: "مضغوط مكثف (Minimal)" },
-                          ].map((fmt) => (
-                            <button
-                              key={fmt.id}
-                              onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), layoutFormat: fmt.id as any } })}
+                              onClick={() => handleSwitchCvLanguage("AR")}
                               style={{
-                                background: (data.cvDocument?.layoutFormat || "single-column") === fmt.id ? "#2563eb" : "#151624",
-                                color: (data.cvDocument?.layoutFormat || "single-column") === fmt.id ? "#ffffff" : "#94a3b8",
-                                border: "1px solid #334155",
-                                padding: "8px 10px",
-                                borderRadius: "8px",
-                                fontSize: "11.5px",
-                                fontWeight: "800",
+                                background: data.cvDocument?.cvLang === "AR" ? "#2563eb" : "#1e293b",
+                                color: "#ffffff",
+                                border: data.cvDocument?.cvLang === "AR" ? "2px solid #60a5fa" : "1px solid #334155",
+                                padding: "10px 14px",
+                                borderRadius: "10px",
+                                fontSize: "13px",
+                                fontWeight: "900",
                                 cursor: "pointer",
                                 textAlign: "center",
+                                boxShadow: data.cvDocument?.cvLang === "AR" ? "0 4px 12px rgba(37,99,235,0.4)" : "none",
                               }}
                             >
-                              {fmt.label}
+                              العربية (Arabic RTL)
                             </button>
+                            <button
+                              onClick={() => handleSwitchCvLanguage("EN")}
+                              style={{
+                                background: (data.cvDocument?.cvLang || "EN") === "EN" ? "#2563eb" : "#1e293b",
+                                color: "#ffffff",
+                                border: (data.cvDocument?.cvLang || "EN") === "EN" ? "2px solid #60a5fa" : "1px solid #334155",
+                                padding: "10px 14px",
+                                borderRadius: "10px",
+                                fontSize: "13px",
+                                fontWeight: "900",
+                                cursor: "pointer",
+                                textAlign: "center",
+                                boxShadow: (data.cvDocument?.cvLang || "EN") === "EN" ? "0 4px 12px rgba(37,99,235,0.4)" : "none",
+                              }}
+                            >
+                              English (English LTR)
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* SPECIALIZED TEMPLATES PRESETS SELECTOR */}
+                        <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "2px solid #2563eb", boxShadow: "0 8px 25px rgba(37,99,235,0.15)" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+                            <div>
+                              <h4 style={{ fontSize: "15px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>مكتبة القوالب المتخصصة (9 مجالات)</h4>
+                              <span style={{ fontSize: "11px", color: "#94a3b8" }}>اختر القالب المخصص لمجالك المهني لتطبيقه فورياً:</span>
+                            </div>
+                          </div>
+
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "8px", maxHeight: "320px", overflowY: "auto", paddingRight: "4px" }}>
+                            {CV_TEMPLATES_PRESETS.map((p) => {
+                              const isSelected = (data.cvDocument?.templatePreset || "classic-ats-standard") === p.id;
+                              return (
+                                <button
+                                  key={p.id}
+                                  onClick={() => {
+                                    setData({
+                                      ...data,
+                                      cvDocument: {
+                                        ...(data.cvDocument || ({} as any)),
+                                        templatePreset: p.id as any,
+                                        accentColor: p.accent,
+                                        templateStyle: p.style,
+                                        layoutFormat: p.format,
+                                        fontFamily: p.font,
+                                        fontSizeScale: p.fontSize,
+                                        pageMargin: p.margin,
+                                        lineSpacing: p.spacing,
+                                      },
+                                    });
+                                    showToast(`تم تفعيل: ${p.title}`);
+                                  }}
+                                  style={{
+                                    background: isSelected ? "#172554" : "#151624",
+                                    border: isSelected ? `2px solid ${p.accent}` : "1px solid #334155",
+                                    borderRadius: "10px",
+                                    padding: "10px 12px",
+                                    textAlign: "right",
+                                    cursor: "pointer",
+                                    transition: "all 0.15s",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: "4px",
+                                  }}
+                                >
+                                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                    <strong style={{ fontSize: "12.5px", color: isSelected ? "#60a5fa" : "#ffffff", fontWeight: "800" }}>{p.title}</strong>
+                                    <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: p.accent, display: "inline-block" }} />
+                                  </div>
+                                  <div style={{ fontSize: "11px", color: "#38bdf8", fontWeight: "700" }}>المجال: {p.field}</div>
+                                  <p style={{ fontSize: "10.5px", color: "#94a3b8", margin: 0, lineHeight: "1.4" }}>{p.desc}</p>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    {/* SECTION 2: PERSONAL INFO & PHOTO */}
+                    {(cvEditorTab === "personal" || cvEditorTab === "all") && (
+                      <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
+                        <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#60a5fa", marginBottom: "14px" }}>المعلومات الأساسية والصورة</h4>
+
+                        <div style={{ display: "flex", gap: "14px", alignItems: "center", marginBottom: "16px", background: "#151624", padding: "12px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                          <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "#1e2130", overflow: "hidden", border: "2px solid #60a5fa", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                            {data.cvDocument?.photo ? (
+                              <img src={data.cvDocument.photo} alt="CV Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                            ) : (
+                              <span style={{ fontSize: "11px", color: "#94a3b8" }}>بدون صورة</span>
+                            )}
+                          </div>
+
+                          <div>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              id="cvPhotoInput"
+                              style={{ display: "none" }}
+                              onChange={handlePhotoUpload}
+                            />
+                            <label htmlFor="cvPhotoInput" style={{ cursor: "pointer" }}>
+                              <div style={{ background: "#2563eb", color: "#ffffff", padding: "6px 14px", borderRadius: "8px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "4px" }}>
+                                تغيير / رفع صورة السيرة
+                              </div>
+                            </label>
+                            {data.cvDocument?.photo && (
+                              <button
+                                onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), photo: "" } })}
+                                style={{ background: "none", border: "none", color: "#ef4444", fontSize: "11.5px", cursor: "pointer", display: "block" }}
+                              >
+                                إزالة الصورة
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                          <div>
+                            <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الاسم الكامل (Full Name)</label>
+                            <input
+                              type="text"
+                              value={data.cvDocument?.fullName || ""}
+                              onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), fullName: e.target.value } })}
+                              style={{ width: "100%", padding: "9px 12px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13.5px", fontWeight: "700" }}
+                            />
+                          </div>
+
+                          <div>
+                            <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>المسمى المهني (Job Title)</label>
+                            <input
+                              type="text"
+                              value={data.cvDocument?.jobTitle || ""}
+                              onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), jobTitle: e.target.value } })}
+                              style={{ width: "100%", padding: "9px 12px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13.5px" }}
+                            />
+                          </div>
+
+                          <div>
+                            <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الملخص المهني (Professional Summary)</label>
+                            <textarea
+                              rows={4}
+                              value={data.cvDocument?.summary || ""}
+                              onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), summary: e.target.value } })}
+                              style={{ width: "100%", padding: "9px 12px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12.5px", lineHeight: "1.6" }}
+                            />
+                          </div>
+
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                            <div>
+                              <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>البريد الإلكتروني</label>
+                              <input
+                                type="text"
+                                value={data.cvDocument?.email || ""}
+                                onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), email: e.target.value } })}
+                                style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
+                              />
+                            </div>
+
+                            <div>
+                              <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>رقم الهاتف</label>
+                              <input
+                                type="text"
+                                dir="ltr"
+                                value={data.cvDocument?.phone || ""}
+                                onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), phone: e.target.value } })}
+                                style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px", direction: "ltr", textAlign: "right" }}
+                              />
+                            </div>
+                          </div>
+
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                            <div>
+                              <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الموقع الجغرافي</label>
+                              <input
+                                type="text"
+                                value={data.cvDocument?.location || ""}
+                                onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), location: e.target.value } })}
+                                style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
+                              />
+                            </div>
+
+                            <div>
+                              <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>رابط LinkedIn</label>
+                              <input
+                                type="text"
+                                value={data.cvDocument?.linkedin || ""}
+                                onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), linkedin: e.target.value } })}
+                                style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* SECTION 3: SKILLS TAGS */}
+                    {(cvEditorTab === "skills" || cvEditorTab === "all") && (
+                      <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                          <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#60a5fa", margin: 0 }}>المهارات التقنية (Skills)</h4>
+                          <button
+                            onClick={() => {
+                              const newSkills = [...(data.cvDocument?.skills || []), "مهارة تقنية جديدة"];
+                              setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), skills: newSkills } });
+                            }}
+                            style={{ background: "#2563eb", color: "#ffffff", border: "none", padding: "5px 12px", borderRadius: "6px", fontSize: "12px", fontWeight: "800", cursor: "pointer" }}
+                          >
+                            + إضافة مهارة
+                          </button>
+                        </div>
+
+                        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                          {(data.cvDocument?.skills || []).map((sk, idx) => (
+                            <div key={idx} style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                              <input
+                                type="text"
+                                value={sk}
+                                onChange={(e) => {
+                                  const newSkills = [...(data.cvDocument?.skills || [])];
+                                  newSkills[idx] = e.target.value;
+                                  setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), skills: newSkills } });
+                                }}
+                                style={{ flex: 1, padding: "7px 10px", borderRadius: "6px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12.5px" }}
+                              />
+                              <button
+                                onClick={() => {
+                                  const newSkills = (data.cvDocument?.skills || []).filter((_, i) => i !== idx);
+                                  setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), skills: newSkills } });
+                                }}
+                                style={{ background: "rgba(239,68,68,0.2)", color: "#f87171", border: "none", padding: "6px 10px", borderRadius: "6px", fontSize: "12px", cursor: "pointer" }}
+                              >
+                                ✕
+                              </button>
+                            </div>
                           ))}
                         </div>
                       </div>
+                    )}
 
-                      {/* TYPOGRAPHY, MARGINS & SPACING GRID */}
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "14px" }}>
-                        <div>
-                          <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>حجم الخط (Font Size):</label>
-                          <select
-                            value={data.cvDocument?.fontSizeScale || "normal"}
-                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), fontSizeScale: e.target.value as any } })}
-                            style={{ width: "100%", padding: "7px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
-                          >
-                            <option value="compact">مضغوط (10.5px)</option>
-                            <option value="normal">قياسي متوازن (11.5px)</option>
-                            <option value="large">كبير بارز (12.5px)</option>
-                          </select>
+                    {/* SECTION 4: FORMATTING & PAGE STRUCTURE */}
+                    {(cvEditorTab === "formatting" || cvEditorTab === "all") && (
+                      <>
+                        <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
+                          <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#60a5fa", marginBottom: "14px" }}>هيكل وتنسيق الصفحة (Page Structure & Layout)</h4>
+
+                          {/* LAYOUT FORMAT SELECTOR */}
+                          <div style={{ marginBottom: "16px" }}>
+                            <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "6px" }}>نمط وهيكل الصفحة (Layout Format):</label>
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+                              {[
+                                { id: "single-column", label: "عمود واحد كلاسيكي (Single Column)" },
+                                { id: "two-column-sidebar", label: "عمودين مع شريط جانبي (Two-Column)" },
+                                { id: "modern-executive", label: "تنفيذي عريض (Executive)" },
+                                { id: "minimal-compact", label: "مضغوط مكثف (Minimal)" },
+                              ].map((fmt) => (
+                                <button
+                                  key={fmt.id}
+                                  onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), layoutFormat: fmt.id as any } })}
+                                  style={{
+                                    background: (data.cvDocument?.layoutFormat || "single-column") === fmt.id ? "#2563eb" : "#151624",
+                                    color: (data.cvDocument?.layoutFormat || "single-column") === fmt.id ? "#ffffff" : "#94a3b8",
+                                    border: "1px solid #334155",
+                                    padding: "8px 10px",
+                                    borderRadius: "8px",
+                                    fontSize: "11.5px",
+                                    fontWeight: "800",
+                                    cursor: "pointer",
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  {fmt.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* TYPOGRAPHY, MARGINS & SPACING GRID */}
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "14px" }}>
+                            <div>
+                              <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>حجم الخط (Font Size):</label>
+                              <select
+                                value={data.cvDocument?.fontSizeScale || "normal"}
+                                onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), fontSizeScale: e.target.value as any } })}
+                                style={{ width: "100%", padding: "7px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
+                              >
+                                <option value="compact">مضغوط (10.5px)</option>
+                                <option value="normal">قياسي متوازن (11.5px)</option>
+                                <option value="large">كبير بارز (12.5px)</option>
+                              </select>
+                            </div>
+
+                            <div>
+                              <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>هوامش الصفحة (Margins):</label>
+                              <select
+                                value={data.cvDocument?.pageMargin || "normal"}
+                                onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), pageMargin: e.target.value as any } })}
+                                style={{ width: "100%", padding: "7px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
+                              >
+                                <option value="compact">ضيقة (28px - تتسع لمعلومات أكثر)</option>
+                                <option value="normal">متوازنة (44px - القياسية)</option>
+                                <option value="wide">واسعة ومريحة (56px)</option>
+                              </select>
+                            </div>
+
+                            <div>
+                              <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>تباعد الأسطر (Line Spacing):</label>
+                              <select
+                                value={data.cvDocument?.lineSpacing || "normal"}
+                                onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), lineSpacing: e.target.value as any } })}
+                                style={{ width: "100%", padding: "7px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
+                              >
+                                <option value="compact">مكثف ومضغوط (1.45)</option>
+                                <option value="normal">مريح متوازن (1.65)</option>
+                                <option value="relaxed">واسع ومفتوح (1.85)</option>
+                              </select>
+                            </div>
+
+                            <div>
+                              <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>نوع الخط للـ PDF (Font):</label>
+                              <select
+                                value={data.cvDocument?.fontFamily || "Outfit"}
+                                onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), fontFamily: e.target.value } })}
+                                style={{ width: "100%", padding: "7px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
+                              >
+                                <option value="Outfit">Outfit (حديث وعصري)</option>
+                                <option value="Inter">Inter (كلاسيكي ورسمي)</option>
+                                <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+                                <option value="Space Grotesk">Space Grotesk (تقني بارز)</option>
+                                <option value="Tajawal">Tajawal (عربي وأجنبي)</option>
+                                <option value="Cairo">Cairo (عريض وواضح)</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          {/* SECTION VISIBILITY TOGGLES */}
+                          <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                            <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "8px" }}>إظهار وإخفاء الأقسام (Sections Visibility):</label>
+                            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                              {[
+                                { key: "showPhoto", label: "الصورة", defaultVal: true },
+                                { key: "showSummary", label: "الملخص", defaultVal: true },
+                                { key: "showSkills", label: "المهارات", defaultVal: true },
+                                { key: "showEducation", label: "التعليم", defaultVal: true },
+                                { key: "showCertifications", label: "الشهادات", defaultVal: true },
+                              ].map((sec) => {
+                                const isChecked = (data.cvDocument as any)?.[sec.key] !== false;
+                                return (
+                                  <label key={sec.key} style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", color: isChecked ? "#ffffff" : "#64748b", cursor: "pointer", background: "#151624", padding: "4px 10px", borderRadius: "6px", border: "1px solid #334155" }}>
+                                    <input
+                                      type="checkbox"
+                                      checked={isChecked}
+                                      onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), [sec.key]: e.target.checked } })}
+                                    />
+                                    <span>{sec.label}</span>
+                                  </label>
+                                );
+                              })}
+                            </div>
+                          </div>
                         </div>
 
-                        <div>
-                          <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>هوامش الصفحة (Margins):</label>
-                          <select
-                            value={data.cvDocument?.pageMargin || "normal"}
-                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), pageMargin: e.target.value as any } })}
-                            style={{ width: "100%", padding: "7px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
-                          >
-                            <option value="compact">ضيقة (28px - تتسع لمعلومات أكثر)</option>
-                            <option value="normal">متوازنة (44px - القياسية)</option>
-                            <option value="wide">واسعة ومريحة (56px)</option>
-                          </select>
+                        {/* STYLING & ACCENT */}
+                        <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
+                          <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#60a5fa", marginBottom: "12px" }}>ثيم وتصميم الـ PDF</h4>
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginBottom: "12px" }}>
+                            {[
+                              { id: "clean-white", label: "أبيض بسيط (White)" },
+                              { id: "modern-dark", label: "داكن عصري (Dark)" },
+                              { id: "executive-blue", label: "أزرق ملكي (Executive)" },
+                            ].map((th) => (
+                              <button
+                                key={th.id}
+                                onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), templateStyle: th.id as any } })}
+                                style={{
+                                  background: data.cvDocument?.templateStyle === th.id ? "#2563eb" : "#151624",
+                                  color: data.cvDocument?.templateStyle === th.id ? "#ffffff" : "#94a3b8",
+                                  border: "1px solid #334155",
+                                  padding: "8px 6px",
+                                  borderRadius: "8px",
+                                  fontSize: "12px",
+                                  fontWeight: "800",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                {th.label}
+                              </button>
+                            ))}
+                          </div>
+
+                          <div>
+                            <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "6px" }}>لون التمييز (Accent Color):</label>
+                            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                              <input
+                                type="color"
+                                value={data.cvDocument?.accentColor || "#2563eb"}
+                                onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), accentColor: e.target.value } })}
+                                style={{ width: "36px", height: "36px", borderRadius: "6px", border: "none", cursor: "pointer", background: "none" }}
+                              />
+                              <input
+                                type="text"
+                                value={data.cvDocument?.accentColor || "#2563eb"}
+                                onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), accentColor: e.target.value } })}
+                                style={{ width: "120px", padding: "6px 10px", borderRadius: "6px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12.5px" }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    {/* SECTION 5: QR STUDIO */}
+                    {(cvEditorTab === "qr" || cvEditorTab === "all") && (
+                      <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                          <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#60a5fa", margin: 0 }}>مولد الـ QR Code التفاعلي (QR Studio)</h4>
+                          <span style={{ fontSize: "10.5px", background: "#1e293b", color: "#38bdf8", padding: "3px 8px", borderRadius: "6px", fontWeight: "700" }}>ماسح ذكي</span>
                         </div>
 
-                        <div>
-                          <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>تباعد الأسطر (Line Spacing):</label>
-                          <select
-                            value={data.cvDocument?.lineSpacing || "normal"}
-                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), lineSpacing: e.target.value as any } })}
-                            style={{ width: "100%", padding: "7px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
-                          >
-                            <option value="compact">مكثف ومضغوط (1.45)</option>
-                            <option value="normal">مريح متوازن (1.65)</option>
-                            <option value="relaxed">واسع ومفتوح (1.85)</option>
-                          </select>
-                        </div>
-
-                        <div>
-                          <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "4px" }}>نوع الخط للـ PDF (Font):</label>
-                          <select
-                            value={data.cvDocument?.fontFamily || "Outfit"}
-                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), fontFamily: e.target.value } })}
-                            style={{ width: "100%", padding: "7px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
-                          >
-                            <option value="Outfit">Outfit (حديث وعصري)</option>
-                            <option value="Inter">Inter (كلاسيكي ورسمي)</option>
-                            <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
-                            <option value="Space Grotesk">Space Grotesk (تقني بارز)</option>
-                            <option value="Tajawal">Tajawal (عربي وأجنبي)</option>
-                            <option value="Cairo">Cairo (عريض وواضح)</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      {/* SECTION VISIBILITY TOGGLES */}
-                      <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-                        <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "8px" }}>إظهار وإخفاء الأقسام (Sections Visibility):</label>
-                        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                          {[
-                            { key: "showPhoto", label: "الصورة", defaultVal: true },
-                            { key: "showSummary", label: "الملخص", defaultVal: true },
-                            { key: "showSkills", label: "المهارات", defaultVal: true },
-                            { key: "showEducation", label: "التعليم", defaultVal: true },
-                            { key: "showCertifications", label: "الشهادات", defaultVal: true },
-                          ].map((sec) => {
-                            const isChecked = (data.cvDocument as any)?.[sec.key] !== false;
-                            return (
-                              <label key={sec.key} style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", color: isChecked ? "#ffffff" : "#64748b", cursor: "pointer", background: "#151624", padding: "4px 10px", borderRadius: "6px", border: "1px solid #334155" }}>
-                                <input
-                                  type="checkbox"
-                                  checked={isChecked}
-                                  onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), [sec.key]: e.target.checked } })}
-                                />
-                                <span>{sec.label}</span>
-                              </label>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* INTERACTIVE QR CODE GENERATOR STUDIO */}
-                    <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-                        <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#60a5fa", margin: 0 }}>مولد الـ QR Code التفاعلي (QR Studio)</h4>
-                        <span style={{ fontSize: "10.5px", background: "#1e293b", color: "#38bdf8", padding: "3px 8px", borderRadius: "6px", fontWeight: "700" }}>ماسح ذكي</span>
-                      </div>
-
-                      {/* DIRECT LINK INPUT & QUICK PRESETS */}
-                      <div style={{ marginBottom: "14px" }}>
-                        <label style={{ display: "block", fontSize: "12px", color: "#60a5fa", fontWeight: "800", marginBottom: "6px" }}>
-                          رابط الـ QR Code (اكتب أو الصق أي رابط تريده مباشرة):
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="https://your-custom-link.com"
-                          value={data.cvDocument?.qrCodeCustomUrl !== undefined ? data.cvDocument.qrCodeCustomUrl : "https://cv-wine-tau.vercel.app"}
-                          onChange={(e) => {
-                            setData({
-                              ...data,
-                              cvDocument: {
-                                ...(data.cvDocument || ({} as any)),
-                                qrCodeCustomUrl: e.target.value,
-                              },
-                            });
-                          }}
-                          style={{ width: "100%", padding: "9px 12px", borderRadius: "8px", background: "#151624", border: "1.5px solid #3b82f6", color: "#ffffff", fontSize: "13px", fontWeight: "700", marginBottom: "8px", boxSizing: "border-box" }}
-                        />
-
-                        {/* QUICK PRESET BUTTONS */}
-                        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", alignItems: "center" }}>
-                          <span style={{ fontSize: "11px", color: "#94a3b8" }}>روابط سريعة:</span>
-                          <button
-                            onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeCustomUrl: "https://cv-wine-tau.vercel.app" } })}
-                            style={{ background: "#1e293b", color: "#38bdf8", border: "1px solid #334155", padding: "4px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: "700", cursor: "pointer" }}
-                          >
-                            الموقع الرسمي
-                          </button>
-                          <button
-                            onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeCustomUrl: data.cvDocument?.linkedin ? (data.cvDocument.linkedin.startsWith("http") ? data.cvDocument.linkedin : `https://${data.cvDocument.linkedin}`) : "https://linkedin.com/in/haidermoe" } })}
-                            style={{ background: "#1e293b", color: "#38bdf8", border: "1px solid #334155", padding: "4px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: "700", cursor: "pointer" }}
-                          >
-                            LinkedIn
-                          </button>
-                          <button
-                            onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeCustomUrl: "https://wa.me/9647718964778" } })}
-                            style={{ background: "#1e293b", color: "#38bdf8", border: "1px solid #334155", padding: "4px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: "700", cursor: "pointer" }}
-                          >
-                            WhatsApp
-                          </button>
-                          <button
-                            onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeCustomUrl: "https://github.com/haidermoe" } })}
-                            style={{ background: "#1e293b", color: "#38bdf8", border: "1px solid #334155", padding: "4px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: "700", cursor: "pointer" }}
-                          >
-                            GitHub
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* QR PREVIEW & DOWNLOAD */}
-                      <div style={{ display: "flex", gap: "14px", alignItems: "center", background: "#151624", padding: "12px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)", marginBottom: "12px" }}>
-                        <div style={{ width: "80px", height: "80px", background: qrBackgroundColor, padding: "4px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 12px rgba(0,0,0,0.3)" }}>
-                          {qrCodeDataUrl ? (
-                            <img src={qrCodeDataUrl} alt="QR Code" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-                          ) : (
-                            <span style={{ fontSize: "10px", color: "#64748b" }}>جاري التوليد...</span>
-                          )}
-                        </div>
-
-                        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px" }}>
-                          <button
-                            onClick={handleDownloadQrCode}
-                            style={{ background: "#2563eb", color: "#ffffff", border: "none", padding: "7px 12px", borderRadius: "8px", fontSize: "12px", fontWeight: "800", cursor: "pointer", display: "inline-block", textAlign: "center" }}
-                          >
-                            تنزيل الـ QR Code كصورة PNG
-                          </button>
-                          <span style={{ fontSize: "10.5px", color: "#94a3b8" }}>دقة عالية 300DPI جاهزة للطباعة أو الاستخدام الخارجي</span>
-                        </div>
-                      </div>
-
-                      {/* EMBED IN CV TOGGLE */}
-                      <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "#ffffff", cursor: "pointer", background: "#151624", padding: "8px 12px", borderRadius: "8px", border: "1px solid #334155" }}>
-                        <input
-                          type="checkbox"
-                          checked={data.cvDocument?.showQrCode !== false}
-                          onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), showQrCode: e.target.checked } })}
-                        />
-                        <span style={{ fontWeight: "700" }}>إدراج الـ QR Code الذكي داخل ورقة السيرة الذاتية (A4 Sheet)</span>
-                      </label>
-                    </div>
-
-                    {/* STYLING & ACCENT */}
-                    <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
-                      <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#60a5fa", marginBottom: "12px" }}>ثيم وتصميم الـ PDF</h4>
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginBottom: "12px" }}>
-                        {[
-                          { id: "clean-white", label: "أبيض بسيط (White)" },
-                          { id: "modern-dark", label: "داكن عصري (Dark)" },
-                          { id: "executive-blue", label: "أزرق ملكي (Executive)" },
-                        ].map((th) => (
-                          <button
-                            key={th.id}
-                            onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), templateStyle: th.id as any } })}
-                            style={{
-                              background: data.cvDocument?.templateStyle === th.id ? "#2563eb" : "#151624",
-                              color: data.cvDocument?.templateStyle === th.id ? "#ffffff" : "#94a3b8",
-                              border: "1px solid #334155",
-                              padding: "8px 6px",
-                              borderRadius: "8px",
-                              fontSize: "12px",
-                              fontWeight: "800",
-                              cursor: "pointer",
-                            }}
-                          >
-                            {th.label}
-                          </button>
-                        ))}
-                      </div>
-
-                      <div>
-                        <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "6px" }}>لون التمييز (Accent Color):</label>
-                        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                          <input
-                            type="color"
-                            value={data.cvDocument?.accentColor || "#2563eb"}
-                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), accentColor: e.target.value } })}
-                            style={{ width: "36px", height: "36px", borderRadius: "6px", border: "none", cursor: "pointer", background: "none" }}
-                          />
+                        {/* DIRECT LINK INPUT & QUICK PRESETS */}
+                        <div style={{ marginBottom: "14px" }}>
+                          <label style={{ display: "block", fontSize: "12px", color: "#60a5fa", fontWeight: "800", marginBottom: "6px" }}>
+                            رابط الـ QR Code (اكتب أو الصق أي رابط تريده مباشرة):
+                          </label>
                           <input
                             type="text"
-                            value={data.cvDocument?.accentColor || "#2563eb"}
-                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), accentColor: e.target.value } })}
-                            style={{ width: "120px", padding: "6px 10px", borderRadius: "6px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12.5px" }}
+                            placeholder="https://your-custom-link.com"
+                            value={data.cvDocument?.qrCodeCustomUrl !== undefined ? data.cvDocument.qrCodeCustomUrl : "https://cv-wine-tau.vercel.app"}
+                            onChange={(e) => {
+                              setData({
+                                ...data,
+                                cvDocument: {
+                                  ...(data.cvDocument || ({} as any)),
+                                  qrCodeCustomUrl: e.target.value,
+                                },
+                              });
+                            }}
+                            style={{ width: "100%", padding: "9px 12px", borderRadius: "8px", background: "#151624", border: "1.5px solid #3b82f6", color: "#ffffff", fontSize: "13px", fontWeight: "700", marginBottom: "8px", boxSizing: "border-box" }}
                           />
+
+                          {/* QUICK PRESET BUTTONS */}
+                          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", alignItems: "center" }}>
+                            <span style={{ fontSize: "11px", color: "#94a3b8" }}>روابط سريعة:</span>
+                            <button
+                              onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeCustomUrl: "https://cv-wine-tau.vercel.app" } })}
+                              style={{ background: "#1e293b", color: "#38bdf8", border: "1px solid #334155", padding: "4px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: "700", cursor: "pointer" }}
+                            >
+                              الموقع الرسمي
+                            </button>
+                            <button
+                              onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeCustomUrl: data.cvDocument?.linkedin ? (data.cvDocument.linkedin.startsWith("http") ? data.cvDocument.linkedin : `https://${data.cvDocument.linkedin}`) : "https://linkedin.com/in/haidermoe" } })}
+                              style={{ background: "#1e293b", color: "#38bdf8", border: "1px solid #334155", padding: "4px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: "700", cursor: "pointer" }}
+                            >
+                              LinkedIn
+                            </button>
+                            <button
+                              onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeCustomUrl: "https://wa.me/9647718964778" } })}
+                              style={{ background: "#1e293b", color: "#38bdf8", border: "1px solid #334155", padding: "4px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: "700", cursor: "pointer" }}
+                            >
+                              WhatsApp
+                            </button>
+                            <button
+                              onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeCustomUrl: "https://github.com/haidermoe" } })}
+                              style={{ background: "#1e293b", color: "#38bdf8", border: "1px solid #334155", padding: "4px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: "700", cursor: "pointer" }}
+                            >
+                              GitHub
+                            </button>
+                          </div>
                         </div>
+
+                        {/* QR PREVIEW & DOWNLOAD */}
+                        <div style={{ display: "flex", gap: "14px", alignItems: "center", background: "#151624", padding: "12px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)", marginBottom: "12px" }}>
+                          <div style={{ width: "80px", height: "80px", background: qrBackgroundColor, padding: "4px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 12px rgba(0,0,0,0.3)" }}>
+                            {qrCodeDataUrl ? (
+                              <img src={qrCodeDataUrl} alt="QR Code" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                            ) : (
+                              <span style={{ fontSize: "10px", color: "#64748b" }}>جاري التوليد...</span>
+                            )}
+                          </div>
+
+                          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px" }}>
+                            <button
+                              onClick={handleDownloadQrCode}
+                              style={{ background: "#2563eb", color: "#ffffff", border: "none", padding: "7px 12px", borderRadius: "8px", fontSize: "12px", fontWeight: "800", cursor: "pointer", display: "inline-block", textAlign: "center" }}
+                            >
+                              تنزيل الـ QR Code كصورة PNG
+                            </button>
+                            <span style={{ fontSize: "10.5px", color: "#94a3b8" }}>دقة عالية 300DPI جاهزة للطباعة أو الاستخدام الخارجي</span>
+                          </div>
+                        </div>
+
+                        {/* EMBED IN CV TOGGLE */}
+                        <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "#ffffff", cursor: "pointer", background: "#151624", padding: "8px 12px", borderRadius: "8px", border: "1px solid #334155" }}>
+                          <input
+                            type="checkbox"
+                            checked={data.cvDocument?.showQrCode !== false}
+                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), showQrCode: e.target.checked } })}
+                          />
+                          <span style={{ fontWeight: "700" }}>إدراج الـ QR Code الذكي داخل ورقة السيرة الذاتية (A4 Sheet)</span>
+                        </label>
                       </div>
-                    </div>
+                    )}
+
                   </div>
 
                   {/* LEFT PANEL: TRUE A4 DOCUMENT WORKSPACE DESK */}
-                  <div style={{ background: "#06070d", padding: "24px 16px", borderRadius: "20px", border: "1px solid #334155", display: "flex", flexDirection: "column", alignItems: "center", minHeight: "950px", overflowX: "auto" }}>
+                  <div style={{ position: "sticky", top: "20px", alignSelf: "start", background: "#06070d", padding: "24px 16px", borderRadius: "20px", border: "1px solid #334155", display: "flex", flexDirection: "column", alignItems: "center", maxHeight: "calc(100vh - 40px)", overflowY: "auto", overflowX: "auto" }}>
                     {/* DESK TOOLBAR */}
                     <div style={{ width: "100%", maxWidth: "794px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginBottom: "20px", borderBottom: "1px solid rgba(255,255,255,0.08)", paddingBottom: "12px" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
