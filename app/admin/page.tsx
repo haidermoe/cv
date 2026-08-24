@@ -1826,9 +1826,10 @@ export default function AdminPage() {
                             <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>رقم الهاتف</label>
                             <input
                               type="text"
+                              dir="ltr"
                               value={data.cvDocument?.phone || ""}
                               onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), phone: e.target.value } })}
-                              style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px" }}
+                              style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px", direction: "ltr", textAlign: "right" }}
                             />
                           </div>
                         </div>
@@ -2233,10 +2234,10 @@ export default function AdminPage() {
                                       {isArabic ? "بيانات الاتصال" : "Contact Info"}
                                     </div>
                                     <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "10px", color: data.cvDocument?.templateStyle === "clean-white" ? "#475569" : "#94a3b8" }}>
-                                      <div>📧 {data.cvDocument?.email || data.general.email}</div>
-                                      <div>📞 {data.cvDocument?.phone || data.general.phone}</div>
+                                      <div>📧 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{data.cvDocument?.email || data.general.email}</span></div>
+                                      <div>📞 <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{data.cvDocument?.phone || data.general.phone}</span></div>
                                       <div>📍 {data.cvDocument?.location || (isArabic ? data.general.locationAR : data.general.locationEN)}</div>
-                                      <div>🔗 {data.cvDocument?.linkedin || "linkedin.com/in/haidermoe"}</div>
+                                      <div>🔗 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{data.cvDocument?.linkedin || "linkedin.com/in/haidermoe"}</span></div>
                                     </div>
                                   </div>
 
@@ -2369,10 +2370,10 @@ export default function AdminPage() {
                                     </div>
 
                                     <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", fontSize: "11px", color: data.cvDocument?.templateStyle === "clean-white" ? "#475569" : "#94a3b8", fontWeight: "600" }}>
-                                      <div>📧 {data.cvDocument?.email || data.general.email}</div>
-                                      <div>📞 {data.cvDocument?.phone || data.general.phone}</div>
+                                      <div>📧 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{data.cvDocument?.email || data.general.email}</span></div>
+                                      <div>📞 <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{data.cvDocument?.phone || data.general.phone}</span></div>
                                       <div>📍 {data.cvDocument?.location || (isArabic ? data.general.locationAR : data.general.locationEN)}</div>
-                                      <div>🔗 {data.cvDocument?.linkedin || "linkedin.com/in/haidermoe"}</div>
+                                      <div>🔗 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{data.cvDocument?.linkedin || "linkedin.com/in/haidermoe"}</span></div>
                                     </div>
                                   </div>
 
