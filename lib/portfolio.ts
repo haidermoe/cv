@@ -59,6 +59,9 @@ export interface PortfolioData {
     bodyLineHeight: string;
     headingWeight: string;
     letterSpacing: string;
+    textColorPrimary?: string;
+    textColorAccent?: string;
+    textColorMuted?: string;
   };
 }
 
@@ -108,6 +111,9 @@ export function getPortfolioData(): PortfolioData {
       bodyLineHeight: "1.7",
       headingWeight: "900",
       letterSpacing: "normal",
+      textColorPrimary: "#ffffff",
+      textColorAccent: "#60a5fa",
+      textColorMuted: "#94a3b8",
     },
   };
 }

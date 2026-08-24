@@ -1210,6 +1210,217 @@ export default function AdminPage() {
                   </select>
                 </div>
               </div>
+
+              {/* 4. FONT & TEXT COLORS */}
+              <div style={{ marginTop: "28px", background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
+                  <div>
+                    <label style={{ fontSize: "14px", fontWeight: "800", color: "#ffffff", display: "block" }}>
+                      ألوان الخطوط والنصوص (Font & Text Colors)
+                    </label>
+                    <span style={{ fontSize: "12px", color: "#94a3b8" }}>تحكم بلون العناوين، النصوص الفرعية، وألوان التمييز التفاعلية</span>
+                  </div>
+
+                  {/* QUICK PALETTE PRESETS */}
+                  <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                    {[
+                      { name: "الأزرق التقني", primary: "#ffffff", accent: "#60a5fa", muted: "#94a3b8" },
+                      { name: "الزمردي النيون", primary: "#f0fdf4", accent: "#34d399", muted: "#94a3b8" },
+                      { name: "الذهبي الملكي", primary: "#fffbeb", accent: "#fbbf24", muted: "#a8a29e" },
+                      { name: "البنفسجي المستقبلي", primary: "#faf5ff", accent: "#a78bfa", muted: "#a1a1aa" },
+                      { name: "السيان المتوهج", primary: "#ecfeff", accent: "#22d3ee", muted: "#94a3b8" },
+                      { name: "الوردي المتألق", primary: "#fff1f2", accent: "#fb7185", muted: "#9ca3af" },
+                    ].map((pal) => (
+                      <button
+                        key={pal.name}
+                        onClick={() => setData({
+                          ...data,
+                          typography: {
+                            ...(data.typography || {
+                              fontFamilyAR: "Tajawal",
+                              fontFamilyEN: "Outfit",
+                              heroTitleScale: "normal",
+                              bioFontSize: "18px",
+                              bodyLineHeight: "1.7",
+                              headingWeight: "900",
+                              letterSpacing: "normal",
+                            }),
+                            textColorPrimary: pal.primary,
+                            textColorAccent: pal.accent,
+                            textColorMuted: pal.muted,
+                          }
+                        })}
+                        style={{
+                          background: "#151624",
+                          border: `1px solid ${pal.accent}`,
+                          color: "#ffffff",
+                          padding: "6px 10px",
+                          borderRadius: "8px",
+                          fontSize: "11px",
+                          fontWeight: "800",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "6px",
+                        }}
+                      >
+                        <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: pal.accent, display: "inline-block" }} />
+                        {pal.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* INDIVIDUAL COLOR PICKERS */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
+                  {/* PRIMARY TEXT COLOR */}
+                  <div style={{ background: "#151624", padding: "14px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                    <label style={{ display: "block", fontSize: "12.5px", fontWeight: "700", color: "#ffffff", marginBottom: "8px" }}>
+                      لون العناوين والنصوص الأساسية
+                    </label>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <input
+                        type="color"
+                        value={data.typography?.textColorPrimary || "#ffffff"}
+                        onChange={(e) => setData({
+                          ...data,
+                          typography: {
+                            ...(data.typography || {
+                              fontFamilyAR: "Tajawal",
+                              fontFamilyEN: "Outfit",
+                              heroTitleScale: "normal",
+                              bioFontSize: "18px",
+                              bodyLineHeight: "1.7",
+                              headingWeight: "900",
+                              letterSpacing: "normal",
+                            }),
+                            textColorPrimary: e.target.value,
+                          }
+                        })}
+                        style={{ width: "42px", height: "42px", borderRadius: "8px", border: "none", cursor: "pointer", background: "none" }}
+                      />
+                      <input
+                        type="text"
+                        value={data.typography?.textColorPrimary || "#ffffff"}
+                        onChange={(e) => setData({
+                          ...data,
+                          typography: {
+                            ...(data.typography || {
+                              fontFamilyAR: "Tajawal",
+                              fontFamilyEN: "Outfit",
+                              heroTitleScale: "normal",
+                              bioFontSize: "18px",
+                              bodyLineHeight: "1.7",
+                              headingWeight: "900",
+                              letterSpacing: "normal",
+                            }),
+                            textColorPrimary: e.target.value,
+                          }
+                        })}
+                        style={{ flex: 1, padding: "8px 12px", borderRadius: "8px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "13px", fontWeight: "700", fontFamily: "monospace" }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* ACCENT / HIGHLIGHT COLOR */}
+                  <div style={{ background: "#151624", padding: "14px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                    <label style={{ display: "block", fontSize: "12.5px", fontWeight: "700", color: "#60a5fa", marginBottom: "8px" }}>
+                      لون التمييز والروابط (Accent Color)
+                    </label>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <input
+                        type="color"
+                        value={data.typography?.textColorAccent || "#60a5fa"}
+                        onChange={(e) => setData({
+                          ...data,
+                          typography: {
+                            ...(data.typography || {
+                              fontFamilyAR: "Tajawal",
+                              fontFamilyEN: "Outfit",
+                              heroTitleScale: "normal",
+                              bioFontSize: "18px",
+                              bodyLineHeight: "1.7",
+                              headingWeight: "900",
+                              letterSpacing: "normal",
+                            }),
+                            textColorAccent: e.target.value,
+                          }
+                        })}
+                        style={{ width: "42px", height: "42px", borderRadius: "8px", border: "none", cursor: "pointer", background: "none" }}
+                      />
+                      <input
+                        type="text"
+                        value={data.typography?.textColorAccent || "#60a5fa"}
+                        onChange={(e) => setData({
+                          ...data,
+                          typography: {
+                            ...(data.typography || {
+                              fontFamilyAR: "Tajawal",
+                              fontFamilyEN: "Outfit",
+                              heroTitleScale: "normal",
+                              bioFontSize: "18px",
+                              bodyLineHeight: "1.7",
+                              headingWeight: "900",
+                              letterSpacing: "normal",
+                            }),
+                            textColorAccent: e.target.value,
+                          }
+                        })}
+                        style={{ flex: 1, padding: "8px 12px", borderRadius: "8px", background: "#0a0b12", border: "1px solid #334155", color: "#60a5fa", fontSize: "13px", fontWeight: "700", fontFamily: "monospace" }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* MUTED / SECONDARY TEXT COLOR */}
+                  <div style={{ background: "#151624", padding: "14px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                    <label style={{ display: "block", fontSize: "12.5px", fontWeight: "700", color: "#94a3b8", marginBottom: "8px" }}>
+                      لون النصوص الفرعية والوصف (Muted Text)
+                    </label>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <input
+                        type="color"
+                        value={data.typography?.textColorMuted || "#94a3b8"}
+                        onChange={(e) => setData({
+                          ...data,
+                          typography: {
+                            ...(data.typography || {
+                              fontFamilyAR: "Tajawal",
+                              fontFamilyEN: "Outfit",
+                              heroTitleScale: "normal",
+                              bioFontSize: "18px",
+                              bodyLineHeight: "1.7",
+                              headingWeight: "900",
+                              letterSpacing: "normal",
+                            }),
+                            textColorMuted: e.target.value,
+                          }
+                        })}
+                        style={{ width: "42px", height: "42px", borderRadius: "8px", border: "none", cursor: "pointer", background: "none" }}
+                      />
+                      <input
+                        type="text"
+                        value={data.typography?.textColorMuted || "#94a3b8"}
+                        onChange={(e) => setData({
+                          ...data,
+                          typography: {
+                            ...(data.typography || {
+                              fontFamilyAR: "Tajawal",
+                              fontFamilyEN: "Outfit",
+                              heroTitleScale: "normal",
+                              bioFontSize: "18px",
+                              bodyLineHeight: "1.7",
+                              headingWeight: "900",
+                              letterSpacing: "normal",
+                            }),
+                            textColorMuted: e.target.value,
+                          }
+                        })}
+                        style={{ flex: 1, padding: "8px 12px", borderRadius: "8px", background: "#0a0b12", border: "1px solid #334155", color: "#94a3b8", fontSize: "13px", fontWeight: "700", fontFamily: "monospace" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -1414,17 +1625,17 @@ export default function AdminPage() {
 
               {/* TYPOGRAPHY SAMPLE PREVIEW */}
               {((previewSectionTab === "auto" && activeTab === "typography") || previewSectionTab === "typography") && (
-                <div style={{ background: "#11121d", padding: "16px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.06)" }}>
-                  <span style={{ fontSize: "11px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
-                    معاينة عينة الخط النشط (Active Typography Sample)
+                <div style={{ background: "#11121d", padding: "16px", borderRadius: "14px", border: `1px solid ${data.typography?.textColorAccent || "rgba(255,255,255,0.06)"}` }}>
+                  <span style={{ fontSize: "11px", fontWeight: "900", color: data.typography?.textColorAccent || "#60a5fa", display: "block", marginBottom: "8px" }}>
+                    معاينة عينة الخط والألوان (Active Typography & Colors)
                   </span>
-                  <div style={{ fontSize: "18px", fontWeight: data.typography?.headingWeight || "900", color: "#ffffff", marginBottom: "6px" }}>
+                  <div style={{ fontSize: "18px", fontWeight: data.typography?.headingWeight || "900", color: data.typography?.textColorPrimary || "#ffffff", marginBottom: "6px" }}>
                     {previewLang === "AR" ? "نصنع أفضل النتائج الرقمية" : "WE CREATE AWESOME DIGITAL RESULTS"}
                   </div>
-                  <div style={{ fontSize: "13px", color: "#60a5fa", fontWeight: "700", marginBottom: "10px" }}>
-                    الخط الحالي: {previewLang === "AR" ? data.typography?.fontFamilyAR || "Tajawal" : data.typography?.fontFamilyEN || "Outfit"} | السُمك: {data.typography?.headingWeight || "900"}
+                  <div style={{ fontSize: "13px", color: data.typography?.textColorAccent || "#60a5fa", fontWeight: "700", marginBottom: "10px" }}>
+                    الخط: {previewLang === "AR" ? data.typography?.fontFamilyAR || "Tajawal" : data.typography?.fontFamilyEN || "Outfit"} | السُمك: {data.typography?.headingWeight || "900"}
                   </div>
-                  <p style={{ fontSize: data.typography?.bioFontSize || "16px", color: "#cbd5e1", lineHeight: data.typography?.bodyLineHeight || "1.7", margin: 0 }}>
+                  <p style={{ fontSize: data.typography?.bioFontSize || "16px", color: data.typography?.textColorMuted || "#cbd5e1", lineHeight: data.typography?.bodyLineHeight || "1.7", margin: 0 }}>
                     {data.translations[previewLang]?.bio || (previewLang === "AR" ? data.translations.AR.bio : data.translations.EN.bio)}
                   </p>
                 </div>
@@ -1433,24 +1644,24 @@ export default function AdminPage() {
               {/* 1. LIVE HERO & BIO SECTION */}
               {((previewSectionTab === "auto" && activeTab === "general") || previewSectionTab === "general" || previewSectionTab === "all") && (
                 <div style={{ background: "#11121d", padding: "16px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.06)" }}>
-                  <span style={{ fontSize: "11px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
+                  <span style={{ fontSize: "11px", fontWeight: "900", color: data.typography?.textColorAccent || "#60a5fa", display: "block", marginBottom: "8px" }}>
                     قسم النبذة والهيرو (Bio & Hero)
                   </span>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-                    <span style={{ fontSize: "15px", fontWeight: data.typography?.headingWeight || "900", color: "#ffffff" }}>
+                    <span style={{ fontSize: "15px", fontWeight: data.typography?.headingWeight || "900", color: data.typography?.textColorPrimary || "#ffffff" }}>
                       {previewLang === "AR" ? data.general.nameAR : data.general.nameEN}
                     </span>
-                    <span style={{ background: "#ffffff", color: "#000000", padding: "4px 10px", borderRadius: "20px", fontSize: "10.5px", fontWeight: "900" }}>
+                    <span style={{ background: data.typography?.textColorPrimary || "#ffffff", color: "#000000", padding: "4px 10px", borderRadius: "20px", fontSize: "10.5px", fontWeight: "900" }}>
                       {previewLang === "AR" ? "تحميل السيرة الذاتية" : "Download CV"}
                     </span>
                   </div>
 
-                  <p style={{ fontSize: data.typography?.bioFontSize || "14px", color: "#94a3b8", lineHeight: data.typography?.bodyLineHeight || "1.6", margin: "0 0 10px 0" }}>
+                  <p style={{ fontSize: data.typography?.bioFontSize || "14px", color: data.typography?.textColorMuted || "#94a3b8", lineHeight: data.typography?.bodyLineHeight || "1.6", margin: "0 0 10px 0" }}>
                     {data.translations[previewLang]?.bio || (previewLang === "AR" ? data.translations.AR.bio : data.translations.EN.bio)}
                   </p>
 
-                  <div style={{ background: "#0a0b12", padding: "8px 10px", borderRadius: "8px", fontSize: "11px", color: "#cbd5e1" }}>
-                    <div>فيديو الخلفية: <code style={{ color: "#60a5fa" }}>{data.general.heroVideo}</code></div>
+                  <div style={{ background: "#0a0b12", padding: "8px 10px", borderRadius: "8px", fontSize: "11px", color: data.typography?.textColorMuted || "#cbd5e1" }}>
+                    <div>فيديو الخلفية: <code style={{ color: data.typography?.textColorAccent || "#60a5fa" }}>{data.general.heroVideo}</code></div>
                     <div>الموقع: {previewLang === "AR" ? data.general.locationAR : data.general.locationEN} | الهاتف: {data.general.phone}</div>
                   </div>
                 </div>
@@ -1459,19 +1670,19 @@ export default function AdminPage() {
               {/* 2. LIVE STATS SECTION */}
               {((previewSectionTab === "auto" && activeTab === "stats") || previewSectionTab === "stats" || previewSectionTab === "all") && (
                 <div>
-                  <span style={{ fontSize: "12px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
+                  <span style={{ fontSize: "12px", fontWeight: "900", color: data.typography?.textColorAccent || "#60a5fa", display: "block", marginBottom: "8px" }}>
                     {previewLang === "AR" ? "الإحصائيات والأرقام" : "Stats & Numbers"} ({data.stats.length})
                   </span>
                   <div style={{ display: "grid", gridTemplateColumns: previewDevice === "mobile" ? "1fr 1fr" : "1fr 1fr", gap: "8px" }}>
                     {data.stats.map((st, i) => (
                       <div key={st.id || i} style={{ background: "#11121d", padding: "12px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
-                        <div style={{ fontSize: "16px", fontWeight: "900", color: "#ffffff", marginBottom: "4px" }}>
+                        <div style={{ fontSize: "16px", fontWeight: "900", color: data.typography?.textColorPrimary || "#ffffff", marginBottom: "4px" }}>
                           {st.value}
                         </div>
-                        <div style={{ fontSize: "11px", color: "#94a3b8", lineHeight: "1.4", marginBottom: "6px" }}>
+                        <div style={{ fontSize: "11px", color: data.typography?.textColorMuted || "#94a3b8", lineHeight: "1.4", marginBottom: "6px" }}>
                           {previewLang === "AR" ? st.textAR : st.textEN}
                         </div>
-                        <div style={{ fontSize: "9.5px", color: "#60a5fa", opacity: 0.8 }}>
+                        <div style={{ fontSize: "9.5px", color: data.typography?.textColorAccent || "#60a5fa", opacity: 0.8 }}>
                           فيديو: {st.video}
                         </div>
                       </div>
@@ -1483,7 +1694,7 @@ export default function AdminPage() {
               {/* 3. LIVE EXPERIENCES SECTION */}
               {((previewSectionTab === "auto" && activeTab === "experiences") || previewSectionTab === "experiences" || previewSectionTab === "all") && (
                 <div>
-                  <span style={{ fontSize: "12px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
+                  <span style={{ fontSize: "12px", fontWeight: "900", color: data.typography?.textColorAccent || "#60a5fa", display: "block", marginBottom: "8px" }}>
                     {previewLang === "AR" ? "الخبرات العملية" : "Work Experience"} ({data.experiences.length})
                   </span>
                   <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -1491,19 +1702,19 @@ export default function AdminPage() {
                       <div key={exp.id || i} style={{ background: "#11121d", padding: "14px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.06)" }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "6px", flexWrap: "wrap", gap: "6px" }}>
                           <div>
-                            <div style={{ fontSize: "13px", fontWeight: "900", color: "#ffffff" }}>
+                            <div style={{ fontSize: "13px", fontWeight: "900", color: data.typography?.textColorPrimary || "#ffffff" }}>
                               {previewLang === "AR" ? exp.companyAR : exp.companyEN}
                             </div>
-                            <div style={{ fontSize: "11.5px", fontWeight: "700", color: "#60a5fa" }}>
+                            <div style={{ fontSize: "11.5px", fontWeight: "700", color: data.typography?.textColorAccent || "#60a5fa" }}>
                               {previewLang === "AR" ? exp.roleAR : exp.roleEN}
                             </div>
                           </div>
-                          <span style={{ fontSize: "10px", color: "#94a3b8", background: "#1c1e2e", padding: "3px 6px", borderRadius: "6px" }}>
+                          <span style={{ fontSize: "10px", color: data.typography?.textColorMuted || "#94a3b8", background: "#1c1e2e", padding: "3px 6px", borderRadius: "6px" }}>
                             {previewLang === "AR" ? exp.dateAR : exp.dateEN}
                           </span>
                         </div>
 
-                        <ul style={{ margin: "6px 0 0 0", paddingInlineStart: "16px", fontSize: "11px", color: "#cbd5e1", lineHeight: "1.5" }}>
+                        <ul style={{ margin: "6px 0 0 0", paddingInlineStart: "16px", fontSize: "11px", color: data.typography?.textColorMuted || "#cbd5e1", lineHeight: "1.5" }}>
                           {(previewLang === "AR" ? exp.bulletsAR : exp.bulletsEN).map((b, bi) => (
                             <li key={bi} style={{ marginBottom: "3px" }}>{b}</li>
                           ))}
