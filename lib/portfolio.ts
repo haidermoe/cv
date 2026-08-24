@@ -97,6 +97,17 @@ export interface PortfolioData {
     }>;
     templateStyle: "modern-dark" | "clean-white" | "executive-blue";
     accentColor: string;
+    layoutFormat?: "single-column" | "two-column-sidebar" | "modern-executive" | "minimal-compact";
+    headerAlignment?: "left" | "center" | "split";
+    fontSizeScale?: "compact" | "normal" | "large";
+    pageMargin?: "compact" | "normal" | "wide";
+    lineSpacing?: "compact" | "normal" | "relaxed";
+    showPhoto?: boolean;
+    showSummary?: boolean;
+    showSkills?: boolean;
+    showEducation?: boolean;
+    showCertifications?: boolean;
+    fontFamily?: string;
   };
 }
 
