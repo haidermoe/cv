@@ -1,0 +1,938 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { PortfolioData } from "@/lib/portfolio";
+
+export default function AdminPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  const [data, setData] = useState<PortfolioData | null>(null);
+  const [isLoadingData, setIsLoadingData] = useState(false);
+  const [activeTab, setActiveTab] = useState<"general" | "stats" | "experiences" | "education" | "cv">("general");
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [saveMessage, setSaveMessage] = useState("");
+
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [isUploadingCv, setIsUploadingCv] = useState(false);
+  const [uploadCvStatus, setUploadCvStatus] = useState("");
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    try {
+      const res = await fetch("/api/admin/auth");
+      const json = await res.json();
+      if (json.authenticated) {
+        setIsAuthenticated(true);
+        loadPortfolioData();
+      } else {
+        setIsAuthenticated(false);
+      }
+    } catch {
+      setIsAuthenticated(false);
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!password) return;
+
+    setIsLoggingIn(true);
+    setLoginError("");
+
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      const json = await res.json();
+
+      if (json.ok) {
+        setIsAuthenticated(true);
+        loadPortfolioData();
+      } else {
+        setLoginError(json.message || "كلمة المرور غير صحيحة");
+      }
+    } catch {
+      setLoginError("فشل الاتصال بالخادم، يرجى المحاولة لاحقاً");
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/admin/auth", { method: "DELETE" });
+      setIsAuthenticated(false);
+      setPassword("");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const loadPortfolioData = async () => {
+    setIsLoadingData(true);
+    try {
+      const res = await fetch("/api/admin/portfolio");
+      const json = await res.json();
+      if (json.ok && json.data) {
+        setData(json.data);
+      }
+    } catch (err) {
+      console.error("Failed to load portfolio data:", err);
+    } finally {
+      setIsLoadingData(false);
+    }
+  };
+
+  const handleSaveData = async () => {
+    if (!data) return;
+
+    setSaveStatus("saving");
+    setSaveMessage("جاري حفظ التعديلات في قاعدة البيانات...");
+
+    try {
+      const res = await fetch("/api/admin/portfolio", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+
+      if (json.ok) {
+        setSaveStatus("saved");
+        setSaveMessage("تم حفظ وتحديث جميع البيانات بنجاح في الموقع!");
+        setTimeout(() => setSaveStatus("idle"), 4000);
+      } else {
+        setSaveStatus("error");
+        setSaveMessage("حدث خطأ أثناء الحفظ: " + (json.message || ""));
+      }
+    } catch {
+      setSaveStatus("error");
+      setSaveMessage("فشل الاتصال بالخادم لحفظ التعديلات");
+    }
+  };
+
+  const handleUploadCv = async () => {
+    if (!cvFile) return;
+
+    setIsUploadingCv(true);
+    setUploadCvStatus("جاري رفع واستبدال ملف السيرة الذاتية...");
+
+    try {
+      const formData = new FormData();
+      formData.append("file", cvFile);
+      formData.append("customName", "HAIDER_M_SHWKAT_CV_2026.pdf");
+
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const json = await res.json();
+
+      if (json.ok) {
+        setUploadCvStatus("تم رفع ملف السيرة الذاتية بنجاح وتحديثه لجميع الزوار!");
+        if (data) {
+          setData({
+            ...data,
+            general: {
+              ...data.general,
+              cvPdfPath: "/HAIDER_M_SHWKAT_CV_2026.pdf",
+            },
+          });
+        }
+        setCvFile(null);
+      } else {
+        setUploadCvStatus("فشل الرفع: " + (json.message || ""));
+      }
+    } catch {
+      setUploadCvStatus("حدث خطأ أثناء رفع الملف");
+    } finally {
+      setIsUploadingCv(false);
+    }
+  };
+
+  const updateStat = (index: number, field: string, value: string) => {
+    if (!data) return;
+    const newStats = [...data.stats];
+    newStats[index] = { ...newStats[index], [field]: value };
+    setData({ ...data, stats: newStats });
+  };
+
+  const addStat = () => {
+    if (!data) return;
+    const newStat = {
+      id: `stat-${Date.now()}`,
+      value: "+10",
+      textAR: "وصف الإحصائية بالعربية",
+      textEN: "Stat description in English",
+      video: "media/volchek-color.mp4",
+    };
+    setData({ ...data, stats: [...data.stats, newStat] });
+  };
+
+  const deleteStat = (index: number) => {
+    if (!data) return;
+    const newStats = data.stats.filter((_, i) => i !== index);
+    setData({ ...data, stats: newStats });
+  };
+
+  const updateExp = (index: number, field: string, value: any) => {
+    if (!data) return;
+    const newExp = [...data.experiences];
+    newExp[index] = { ...newExp[index], [field]: value };
+    setData({ ...data, experiences: newExp });
+  };
+
+  const addExpBullet = (expIndex: number, lang: "AR" | "EN") => {
+    if (!data) return;
+    const newExp = [...data.experiences];
+    const key = lang === "AR" ? "bulletsAR" : "bulletsEN";
+    newExp[expIndex] = {
+      ...newExp[expIndex],
+      [key]: [...newExp[expIndex][key], lang === "AR" ? "نقطة إنجاز جديدة..." : "New achievement bullet..."],
+    };
+    setData({ ...data, experiences: newExp });
+  };
+
+  const updateExpBullet = (expIndex: number, bulletIndex: number, lang: "AR" | "EN", value: string) => {
+    if (!data) return;
+    const newExp = [...data.experiences];
+    const key = lang === "AR" ? "bulletsAR" : "bulletsEN";
+    const updatedBullets = [...newExp[expIndex][key]];
+    updatedBullets[bulletIndex] = value;
+    newExp[expIndex] = { ...newExp[expIndex], [key]: updatedBullets };
+    setData({ ...data, experiences: newExp });
+  };
+
+  const deleteExpBullet = (expIndex: number, bulletIndex: number, lang: "AR" | "EN") => {
+    if (!data) return;
+    const newExp = [...data.experiences];
+    const key = lang === "AR" ? "bulletsAR" : "bulletsEN";
+    const updatedBullets = newExp[expIndex][key].filter((_, i) => i !== bulletIndex);
+    newExp[expIndex] = { ...newExp[expIndex], [key]: updatedBullets };
+    setData({ ...data, experiences: newExp });
+  };
+
+  const addExperience = () => {
+    if (!data) return;
+    const newExp = {
+      id: `exp-${Date.now()}`,
+      dateAR: "2026 - حتى الآن",
+      dateEN: "2026 - Present",
+      companyAR: "اسم الشركة أو المشروع",
+      companyEN: "Company or Project Name",
+      roleAR: "المسمى الوظيفي بالعربية",
+      roleEN: "Job Role in English",
+      link: "",
+      actionAR: "",
+      actionEN: "",
+      bulletsAR: ["إنجاز أو مسؤولية رئيسية..."],
+      bulletsEN: ["Key achievement or responsibility..."],
+    };
+    setData({ ...data, experiences: [...data.experiences, newExp] });
+  };
+
+  const deleteExperience = (index: number) => {
+    if (!data) return;
+    const newExp = data.experiences.filter((_, i) => i !== index);
+    setData({ ...data, experiences: newExp });
+  };
+
+  const updateEdu = (index: number, field: string, value: string) => {
+    if (!data) return;
+    const newEdu = [...data.education];
+    newEdu[index] = { ...newEdu[index], [field]: value };
+    setData({ ...data, education: newEdu });
+  };
+
+  const addEdu = () => {
+    if (!data) return;
+    const newEdu = {
+      id: `edu-${Date.now()}`,
+      yearAR: "2026",
+      yearEN: "2026",
+      schoolAR: "اسم الجامعة أو المعهد",
+      schoolEN: "University or College Name",
+      degreeAR: "الدرجة الأكاديمية والتخصص",
+      degreeEN: "Academic Degree & Major",
+    };
+    setData({ ...data, education: [...data.education, newEdu] });
+  };
+
+  const deleteEdu = (index: number) => {
+    if (!data) return;
+    const newEdu = data.education.filter((_, i) => i !== index);
+    setData({ ...data, education: newEdu });
+  };
+
+  const updateCert = (index: number, field: string, value: string) => {
+    if (!data) return;
+    const newCerts = [...data.certifications];
+    newCerts[index] = { ...newCerts[index], [field]: value };
+    setData({ ...data, certifications: newCerts });
+  };
+
+  const addCert = () => {
+    if (!data) return;
+    const newCert = {
+      id: `cert-${Date.now()}`,
+      titleAR: "اسم الشهادة والجهة المانحة بالعربية",
+      titleEN: "Certificate Title & Provider in English",
+    };
+    setData({ ...data, certifications: [...data.certifications, newCert] });
+  };
+
+  const deleteCert = (index: number) => {
+    if (!data) return;
+    const newCerts = data.certifications.filter((_, i) => i !== index);
+    setData({ ...data, certifications: newCerts });
+  };
+
+  if (isAuthenticated === null) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#090a10", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffffff", fontFamily: "Tajawal, sans-serif" }}>
+        <p style={{ fontSize: "18px", fontWeight: "700" }}>جاري التحقق من الصلاحيات...</p>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#090a10", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", fontFamily: "Tajawal, sans-serif" }}>
+        <div style={{ background: "#12131f", padding: "40px 35px", borderRadius: "24px", border: "1px solid rgba(255,255,255,0.08)", width: "100%", maxWidth: "440px", boxShadow: "0 20px 50px rgba(0,0,0,0.5)", textAlign: "center" }}>
+          <h2 style={{ fontSize: "26px", fontWeight: "900", color: "#ffffff", marginBottom: "8px" }}>لوحة التحكم الإدارية</h2>
+          <p style={{ fontSize: "14px", color: "#94a3b8", marginBottom: "28px" }}>يرجى إدخال رمز المرور للوصول إلى إدارة السيرة الذاتية والمحتوى</p>
+
+          <form onSubmit={handleLogin}>
+            <div style={{ marginBottom: "20px", textAlign: "right" }}>
+              <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#cbd5e1", marginBottom: "8px" }}>رمز المرور (Admin Password)</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                style={{ width: "100%", padding: "14px 16px", borderRadius: "14px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "16px", outline: "none" }}
+                autoFocus
+              />
+            </div>
+
+            {loginError && (
+              <div style={{ background: "rgba(239, 68, 68, 0.15)", border: "1px solid rgba(239, 68, 68, 0.3)", color: "#f87171", padding: "10px 14px", borderRadius: "12px", fontSize: "13px", fontWeight: "700", marginBottom: "18px", textAlign: "right" }}>
+                {loginError}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={isLoggingIn}
+              style={{ width: "100%", padding: "14px", borderRadius: "14px", background: "#2563eb", color: "#ffffff", fontSize: "15px", fontWeight: "800", border: "none", cursor: "pointer", boxShadow: "0 8px 25px rgba(37, 99, 235, 0.4)" }}
+            >
+              {isLoggingIn ? "جاري التحقق..." : "تسجيل الدخول"}
+            </button>
+          </form>
+
+          <div style={{ marginTop: "25px", paddingTop: "20px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+            <Link href="/" style={{ color: "#60a5fa", fontSize: "13.5px", textDecoration: "none", fontWeight: "700" }}>
+              الرجوع إلى الموقع الرئيسي
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#090a10", color: "#ffffff", fontFamily: "Tajawal, sans-serif", paddingBottom: "80px" }} dir="rtl">
+      <header style={{ background: "#12131f", borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "18px 30px", position: "sticky", top: 0, zIndex: 100, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "15px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+          <h1 style={{ fontSize: "20px", fontWeight: "900", color: "#ffffff", margin: 0 }}>لوحة تحكم السيرة الذاتية (CMS)</h1>
+          <span style={{ background: "rgba(37, 99, 235, 0.2)", color: "#60a5fa", padding: "4px 10px", borderRadius: "20px", fontSize: "12px", fontWeight: "800" }}>مدير النظام</span>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <Link
+            href="/"
+            target="_blank"
+            style={{ background: "#1e2130", color: "#cbd5e1", border: "1px solid #334155", padding: "9px 16px", borderRadius: "12px", fontSize: "13.5px", fontWeight: "700", textDecoration: "none" }}
+          >
+            معاينة الموقع الحي
+          </Link>
+
+          <button
+            onClick={handleSaveData}
+            disabled={saveStatus === "saving"}
+            style={{ background: "#2563eb", color: "#ffffff", border: "none", padding: "10px 22px", borderRadius: "12px", fontSize: "14px", fontWeight: "800", cursor: "pointer", boxShadow: "0 4px 15px rgba(37, 99, 235, 0.4)" }}
+          >
+            {saveStatus === "saving" ? "جاري الحفظ..." : "حفظ جميع التعديلات"}
+          </button>
+
+          <button
+            onClick={handleLogout}
+            style={{ background: "#ef4444", color: "#ffffff", border: "none", padding: "9px 14px", borderRadius: "12px", fontSize: "13px", fontWeight: "800", cursor: "pointer" }}
+          >
+            خروج
+          </button>
+        </div>
+      </header>
+
+      {saveMessage && (
+        <div style={{ background: saveStatus === "saved" ? "rgba(22, 163, 74, 0.9)" : saveStatus === "error" ? "rgba(220, 38, 38, 0.9)" : "rgba(37, 99, 235, 0.9)", color: "#ffffff", padding: "12px 24px", textAlign: "center", fontWeight: "800", fontSize: "14px" }}>
+          {saveMessage}
+        </div>
+      )}
+
+      <div style={{ maxWidth: "1200px", margin: "30px auto", padding: "0 20px" }}>
+        <div style={{ display: "flex", gap: "10px", overflowX: "auto", paddingBottom: "12px", borderBottom: "1px solid rgba(255,255,255,0.08)", marginBottom: "30px" }}>
+          {[
+            { id: "general", label: "النبذة والمعلومات الأساسية" },
+            { id: "stats", label: "الإحصائيات والأرقام" },
+            { id: "experiences", label: "الخبرات العملية" },
+            { id: "education", label: "التعليم والشهادات" },
+            { id: "cv", label: "ملف السيرة الذاتية (PDF)" },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              style={{
+                background: activeTab === tab.id ? "#2563eb" : "#151624",
+                color: activeTab === tab.id ? "#ffffff" : "#94a3b8",
+                border: "1px solid rgba(255,255,255,0.08)",
+                padding: "11px 20px",
+                borderRadius: "14px",
+                fontSize: "14px",
+                fontWeight: "800",
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+                transition: "all 0.2s",
+              }}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {activeTab === "general" && data && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
+            <div style={{ background: "#12131f", padding: "28px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <h3 style={{ fontSize: "18px", fontWeight: "900", marginBottom: "20px", color: "#60a5fa" }}>معلومات الاتصال والنبذة</h3>
+              
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "18px", marginBottom: "20px" }}>
+                <div>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#94a3b8", marginBottom: "6px" }}>الاسم بالعربية</label>
+                  <input
+                    type="text"
+                    value={data.general.nameAR}
+                    onChange={(e) => setData({ ...data, general: { ...data.general, nameAR: e.target.value } })}
+                    style={{ width: "100%", padding: "12px 14px", borderRadius: "12px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "14px" }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#94a3b8", marginBottom: "6px" }}>الاسم بالإنجليزية</label>
+                  <input
+                    type="text"
+                    value={data.general.nameEN}
+                    onChange={(e) => setData({ ...data, general: { ...data.general, nameEN: e.target.value } })}
+                    style={{ width: "100%", padding: "12px 14px", borderRadius: "12px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "14px" }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#94a3b8", marginBottom: "6px" }}>البريد الإلكتروني</label>
+                  <input
+                    type="text"
+                    value={data.general.email}
+                    onChange={(e) => setData({ ...data, general: { ...data.general, email: e.target.value } })}
+                    style={{ width: "100%", padding: "12px 14px", borderRadius: "12px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "14px" }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#94a3b8", marginBottom: "6px" }}>رقم الهاتف</label>
+                  <input
+                    type="text"
+                    value={data.general.phone}
+                    onChange={(e) => setData({ ...data, general: { ...data.general, phone: e.target.value } })}
+                    style={{ width: "100%", padding: "12px 14px", borderRadius: "12px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "14px" }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#94a3b8", marginBottom: "6px" }}>الموقع الجغرافي (عربي)</label>
+                  <input
+                    type="text"
+                    value={data.general.locationAR}
+                    onChange={(e) => setData({ ...data, general: { ...data.general, locationAR: e.target.value } })}
+                    style={{ width: "100%", padding: "12px 14px", borderRadius: "12px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "14px" }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#94a3b8", marginBottom: "6px" }}>الموقع الجغرافي (إنجليزي)</label>
+                  <input
+                    type="text"
+                    value={data.general.locationEN}
+                    onChange={(e) => setData({ ...data, general: { ...data.general, locationEN: e.target.value } })}
+                    style={{ width: "100%", padding: "12px 14px", borderRadius: "12px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "14px" }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ marginBottom: "20px" }}>
+                <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#94a3b8", marginBottom: "6px" }}>مسار فيديو الهيرو (Hero Video Path or URL)</label>
+                <input
+                  type="text"
+                  value={data.general.heroVideo}
+                  onChange={(e) => setData({ ...data, general: { ...data.general, heroVideo: e.target.value } })}
+                  placeholder="media/hero.mp4"
+                  style={{ width: "100%", padding: "12px 14px", borderRadius: "12px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "14px" }}
+                />
+              </div>
+
+              <div style={{ marginBottom: "20px" }}>
+                <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#94a3b8", marginBottom: "6px" }}>النبذة التعريفية (Bio بالعربية)</label>
+                <textarea
+                  rows={3}
+                  value={data.translations.AR.bio || ""}
+                  onChange={(e) => setData({ ...data, translations: { ...data.translations, AR: { ...data.translations.AR, bio: e.target.value } } })}
+                  style={{ width: "100%", padding: "12px 14px", borderRadius: "12px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "14px", lineHeight: "1.6" }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#94a3b8", marginBottom: "6px" }}>النبذة التعريفية (Bio بالإنجليزية)</label>
+                <textarea
+                  rows={3}
+                  value={data.translations.EN.bio || ""}
+                  onChange={(e) => setData({ ...data, translations: { ...data.translations, EN: { ...data.translations.EN, bio: e.target.value } } })}
+                  style={{ width: "100%", padding: "12px 14px", borderRadius: "12px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "14px", lineHeight: "1.6" }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "stats" && data && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h3 style={{ fontSize: "18px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>بطاقات الإحصائيات والأرقام ({data.stats.length})</h3>
+              <button
+                onClick={addStat}
+                style={{ background: "#16a34a", color: "#ffffff", border: "none", padding: "8px 18px", borderRadius: "10px", fontSize: "13.5px", fontWeight: "800", cursor: "pointer" }}
+              >
+                + إضافة بطاقة إحصائية
+              </button>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "20px" }}>
+              {data.stats.map((st, idx) => (
+                <div key={st.id || idx} style={{ background: "#12131f", padding: "24px", borderRadius: "18px", border: "1px solid rgba(255,255,255,0.08)", position: "relative" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+                    <span style={{ background: "#1e2130", color: "#60a5fa", padding: "4px 10px", borderRadius: "12px", fontSize: "12px", fontWeight: "800" }}>بطاقة رقم {idx + 1}</span>
+                    <button
+                      onClick={() => deleteStat(idx)}
+                      style={{ background: "rgba(239,68,68,0.2)", color: "#f87171", border: "1px solid rgba(239,68,68,0.4)", padding: "4px 10px", borderRadius: "8px", fontSize: "12px", fontWeight: "800", cursor: "pointer" }}
+                    >
+                      حذف
+                    </button>
+                  </div>
+
+                  <div style={{ marginBottom: "12px" }}>
+                    <label style={{ display: "block", fontSize: "12.5px", fontWeight: "700", color: "#94a3b8", marginBottom: "4px" }}>الرقم / القيمة (مثل: +22K, 3)</label>
+                    <input
+                      type="text"
+                      value={st.value}
+                      onChange={(e) => updateStat(idx, "value", e.target.value)}
+                      style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "16px", fontWeight: "800" }}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: "12px" }}>
+                    <label style={{ display: "block", fontSize: "12.5px", fontWeight: "700", color: "#94a3b8", marginBottom: "4px" }}>الوصف بالعربية</label>
+                    <textarea
+                      rows={2}
+                      value={st.textAR}
+                      onChange={(e) => updateStat(idx, "textAR", e.target.value)}
+                      style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "13.5px" }}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: "12px" }}>
+                    <label style={{ display: "block", fontSize: "12.5px", fontWeight: "700", color: "#94a3b8", marginBottom: "4px" }}>الوصف بالإنجليزية</label>
+                    <textarea
+                      rows={2}
+                      value={st.textEN}
+                      onChange={(e) => updateStat(idx, "textEN", e.target.value)}
+                      style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "13.5px" }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: "block", fontSize: "12.5px", fontWeight: "700", color: "#94a3b8", marginBottom: "4px" }}>مقطع الفيديو الخلفي (Video)</label>
+                    <input
+                      type="text"
+                      value={st.video}
+                      onChange={(e) => updateStat(idx, "video", e.target.value)}
+                      placeholder="media/volchek-color.mp4"
+                      style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "13px" }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === "experiences" && data && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h3 style={{ fontSize: "18px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>بطاقات الخبرات العملية ({data.experiences.length})</h3>
+              <button
+                onClick={addExperience}
+                style={{ background: "#16a34a", color: "#ffffff", border: "none", padding: "8px 18px", borderRadius: "10px", fontSize: "13.5px", fontWeight: "800", cursor: "pointer" }}
+              >
+                + إضافة خبرة جديدة
+              </button>
+            </div>
+
+            {data.experiences.map((exp, expIdx) => (
+              <div key={exp.id || expIdx} style={{ background: "#12131f", padding: "26px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.08)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px", flexWrap: "wrap", gap: "10px" }}>
+                  <span style={{ background: "#2563eb", color: "#ffffff", padding: "5px 14px", borderRadius: "14px", fontSize: "13px", fontWeight: "800" }}>
+                    الخبرة {expIdx + 1}: {exp.companyAR}
+                  </span>
+                  <button
+                    onClick={() => deleteExperience(expIdx)}
+                    style={{ background: "rgba(239,68,68,0.2)", color: "#f87171", border: "1px solid rgba(239,68,68,0.4)", padding: "5px 12px", borderRadius: "10px", fontSize: "12.5px", fontWeight: "800", cursor: "pointer" }}
+                  >
+                    حذف الخبرة بالكامل
+                  </button>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "16px", marginBottom: "18px" }}>
+                  <div>
+                    <label style={{ display: "block", fontSize: "12.5px", fontWeight: "700", color: "#94a3b8", marginBottom: "4px" }}>الفترة الزمنية (عربي)</label>
+                    <input
+                      type="text"
+                      value={exp.dateAR}
+                      onChange={(e) => updateExp(expIdx, "dateAR", e.target.value)}
+                      style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "13.5px" }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: "block", fontSize: "12.5px", fontWeight: "700", color: "#94a3b8", marginBottom: "4px" }}>الفترة الزمنية (إنجليزي)</label>
+                    <input
+                      type="text"
+                      value={exp.dateEN}
+                      onChange={(e) => updateExp(expIdx, "dateEN", e.target.value)}
+                      style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "13.5px" }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: "block", fontSize: "12.5px", fontWeight: "700", color: "#94a3b8", marginBottom: "4px" }}>اسم الشركة / الجهة (عربي)</label>
+                    <input
+                      type="text"
+                      value={exp.companyAR}
+                      onChange={(e) => updateExp(expIdx, "companyAR", e.target.value)}
+                      style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "13.5px", fontWeight: "700" }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: "block", fontSize: "12.5px", fontWeight: "700", color: "#94a3b8", marginBottom: "4px" }}>اسم الشركة / الجهة (إنجليزي)</label>
+                    <input
+                      type="text"
+                      value={exp.companyEN}
+                      onChange={(e) => updateExp(expIdx, "companyEN", e.target.value)}
+                      style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", background: "#0a0b12", border: "1px solid #334155", color: "#ffffff", fontSize: "13.5px", fontWeight: "700" }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: "block", fontSize: "12.5px", fontWeight: "700", color: "#94a3b8", marginBottom: "4px" }}>المسمى الوظيفي (عربي)</label>
+                    <input
+                      type="text"
+                      value={exp.roleAR}
+                      onChange={(e) => updateExp(expIdx, "roleAR", e.target.value)}
+                      style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", background: "#0a0b12", border: "1px solid #334155", color: "#60a5fa", fontSize: "13.5px", fontWeight: "700" }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: "block", fontSize: "12.5px", fontWeight: "700", color: "#94a3b8", marginBottom: "4px" }}>المسمى الوظيفي (إنجليزي)</label>
+                    <input
+                      type="text"
+                      value={exp.roleEN}
+                      onChange={(e) => updateExp(expIdx, "roleEN", e.target.value)}
+                      style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", background: "#0a0b12", border: "1px solid #334155", color: "#60a5fa", fontSize: "13.5px", fontWeight: "700" }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: "18px", background: "#0d0e17", padding: "16px", borderRadius: "14px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                    <span style={{ fontSize: "13px", fontWeight: "800", color: "#cbd5e1" }}>نقاط الإنجاز والمسؤوليات (بالعربية)</span>
+                    <button
+                      onClick={() => addExpBullet(expIdx, "AR")}
+                      style={{ background: "#1e293b", color: "#60a5fa", border: "1px solid #3b82f6", padding: "4px 10px", borderRadius: "8px", fontSize: "11.5px", fontWeight: "800", cursor: "pointer" }}
+                    >
+                      + إضافة نقطة
+                    </button>
+                  </div>
+                  {exp.bulletsAR.map((b, bIdx) => (
+                    <div key={bIdx} style={{ display: "flex", gap: "8px", marginBottom: "8px" }}>
+                      <input
+                        type="text"
+                        value={b}
+                        onChange={(e) => updateExpBullet(expIdx, bIdx, "AR", e.target.value)}
+                        style={{ flex: 1, padding: "8px 12px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13px" }}
+                      />
+                      <button
+                        onClick={() => deleteExpBullet(expIdx, bIdx, "AR")}
+                        style={{ background: "rgba(239,68,68,0.2)", color: "#f87171", border: "none", padding: "0 10px", borderRadius: "8px", cursor: "pointer" }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ background: "#0d0e17", padding: "16px", borderRadius: "14px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                    <span style={{ fontSize: "13px", fontWeight: "800", color: "#cbd5e1" }}>نقاط الإنجاز والمسؤوليات (بالإنجليزية)</span>
+                    <button
+                      onClick={() => addExpBullet(expIdx, "EN")}
+                      style={{ background: "#1e293b", color: "#60a5fa", border: "1px solid #3b82f6", padding: "4px 10px", borderRadius: "8px", fontSize: "11.5px", fontWeight: "800", cursor: "pointer" }}
+                    >
+                      + إضافة نقطة
+                    </button>
+                  </div>
+                  {exp.bulletsEN.map((b, bIdx) => (
+                    <div key={bIdx} style={{ display: "flex", gap: "8px", marginBottom: "8px" }}>
+                      <input
+                        type="text"
+                        value={b}
+                        onChange={(e) => updateExpBullet(expIdx, bIdx, "EN", e.target.value)}
+                        style={{ flex: 1, padding: "8px 12px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13px" }}
+                      />
+                      <button
+                        onClick={() => deleteExpBullet(expIdx, bIdx, "EN")}
+                        style={{ background: "rgba(239,68,68,0.2)", color: "#f87171", border: "none", padding: "0 10px", borderRadius: "8px", cursor: "pointer" }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {activeTab === "education" && data && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+            <div style={{ background: "#12131f", padding: "26px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                <h3 style={{ fontSize: "18px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>المؤهلات الأكاديمية (التعليم)</h3>
+                <button
+                  onClick={addEdu}
+                  style={{ background: "#16a34a", color: "#ffffff", border: "none", padding: "8px 16px", borderRadius: "10px", fontSize: "13px", fontWeight: "800", cursor: "pointer" }}
+                >
+                  + إضافة مؤهل
+                </button>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                {data.education.map((edu, idx) => (
+                  <div key={edu.id || idx} style={{ background: "#0a0b12", padding: "18px", borderRadius: "14px", border: "1px solid #334155" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                      <span style={{ fontSize: "13px", fontWeight: "800", color: "#60a5fa" }}>مؤهل {idx + 1}</span>
+                      <button
+                        onClick={() => deleteEdu(idx)}
+                        style={{ background: "rgba(239,68,68,0.2)", color: "#f87171", border: "none", padding: "4px 10px", borderRadius: "8px", fontSize: "12px", fontWeight: "800", cursor: "pointer" }}
+                      >
+                        حذف
+                      </button>
+                    </div>
+
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "12px" }}>
+                      <div>
+                        <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>السنوات (عربي)</label>
+                        <input
+                          type="text"
+                          value={edu.yearAR}
+                          onChange={(e) => updateEdu(idx, "yearAR", e.target.value)}
+                          style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13px" }}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>السنوات (إنجليزي)</label>
+                        <input
+                          type="text"
+                          value={edu.yearEN}
+                          onChange={(e) => updateEdu(idx, "yearEN", e.target.value)}
+                          style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13px" }}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الجامعة / الكلية (عربي)</label>
+                        <input
+                          type="text"
+                          value={edu.schoolAR}
+                          onChange={(e) => updateEdu(idx, "schoolAR", e.target.value)}
+                          style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13px" }}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الجامعة / الكلية (إنجليزي)</label>
+                        <input
+                          type="text"
+                          value={edu.schoolEN}
+                          onChange={(e) => updateEdu(idx, "schoolEN", e.target.value)}
+                          style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13px" }}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الدرجة والتخصص (عربي)</label>
+                        <input
+                          type="text"
+                          value={edu.degreeAR}
+                          onChange={(e) => updateEdu(idx, "degreeAR", e.target.value)}
+                          style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13px" }}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الدرجة والتخصص (إنجليزي)</label>
+                        <input
+                          type="text"
+                          value={edu.degreeEN}
+                          onChange={(e) => updateEdu(idx, "degreeEN", e.target.value)}
+                          style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13px" }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ background: "#12131f", padding: "26px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                <h3 style={{ fontSize: "18px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>الشهادات المهنية المعتمدة</h3>
+                <button
+                  onClick={addCert}
+                  style={{ background: "#16a34a", color: "#ffffff", border: "none", padding: "8px 16px", borderRadius: "10px", fontSize: "13px", fontWeight: "800", cursor: "pointer" }}
+                >
+                  + إضافة شهادة
+                </button>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                {data.certifications.map((cert, idx) => (
+                  <div key={cert.id || idx} style={{ background: "#0a0b12", padding: "14px", borderRadius: "12px", border: "1px solid #334155", display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+                    <div style={{ flex: 1, minWidth: "220px" }}>
+                      <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الشهادة (بالعربية)</label>
+                      <input
+                        type="text"
+                        value={cert.titleAR}
+                        onChange={(e) => updateCert(idx, "titleAR", e.target.value)}
+                        style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13px" }}
+                      />
+                    </div>
+                    <div style={{ flex: 1, minWidth: "220px" }}>
+                      <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الشهادة (بالإنجليزية)</label>
+                      <input
+                        type="text"
+                        value={cert.titleEN}
+                        onChange={(e) => updateCert(idx, "titleEN", e.target.value)}
+                        style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13px" }}
+                      />
+                    </div>
+                    <button
+                      onClick={() => deleteCert(idx)}
+                      style={{ background: "rgba(239,68,68,0.2)", color: "#f87171", border: "none", padding: "8px 12px", borderRadius: "8px", fontSize: "12px", fontWeight: "800", cursor: "pointer", marginTop: "18px" }}
+                    >
+                      حذف
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "cv" && data && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
+            <div style={{ background: "#12131f", padding: "30px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <h3 style={{ fontSize: "18px", fontWeight: "900", marginBottom: "14px", color: "#60a5fa" }}>إدارة وتحديث ملف السيرة الذاتية (CV PDF)</h3>
+              <p style={{ fontSize: "14px", color: "#94a3b8", lineHeight: "1.6", marginBottom: "24px" }}>
+                يمكنك رفع وتحديث ملف السيرة الذاتية (PDF) مباشرة من هنا. سيتم استبدال الملف فوراً وتحديث رابط التحميل في جميع صفحات الموقع.
+              </p>
+
+              <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155", marginBottom: "25px" }}>
+                <span style={{ fontSize: "13px", fontWeight: "700", color: "#94a3b8", display: "block", marginBottom: "6px" }}>رابط الملف الحالي المعتمد:</span>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
+                  <code style={{ background: "#1e293b", color: "#60a5fa", padding: "8px 14px", borderRadius: "8px", fontSize: "14px" }}>{data.general.cvPdfPath}</code>
+                  <a
+                    href={data.general.cvPdfPath}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ background: "#2563eb", color: "#ffffff", padding: "8px 16px", borderRadius: "8px", fontSize: "13px", fontWeight: "800", textDecoration: "none" }}
+                  >
+                    فتح ومعاينة الملف الحالي
+                  </a>
+                </div>
+              </div>
+
+              <div style={{ border: "2px dashed #475569", borderRadius: "18px", padding: "30px 20px", textAlign: "center", background: "rgba(255,255,255,0.02)" }}>
+                <input
+                  type="file"
+                  accept=".pdf"
+                  id="cvFileInput"
+                  style={{ display: "none" }}
+                  onChange={(e) => setCvFile(e.target.files?.[0] || null)}
+                />
+                <label htmlFor="cvFileInput" style={{ cursor: "pointer", display: "inline-block" }}>
+                  <div style={{ background: "#2563eb", color: "#ffffff", padding: "12px 26px", borderRadius: "12px", fontSize: "14px", fontWeight: "800", marginBottom: "12px", display: "inline-block" }}>
+                    اختر ملف PDF جديد من جهازك
+                  </div>
+                </label>
+                <div style={{ fontSize: "13.5px", color: "#cbd5e1", fontWeight: "600" }}>
+                  {cvFile ? `الملف المختار: ${cvFile.name} (${(cvFile.size / 1024).toFixed(1)} KB)` : "أو اسحب ملف الـ PDF هنا"}
+                </div>
+
+                {cvFile && (
+                  <div style={{ marginTop: "20px" }}>
+                    <button
+                      onClick={handleUploadCv}
+                      disabled={isUploadingCv}
+                      style={{ background: "#16a34a", color: "#ffffff", border: "none", padding: "12px 28px", borderRadius: "12px", fontSize: "14.5px", fontWeight: "800", cursor: "pointer", boxShadow: "0 6px 20px rgba(22, 163, 74, 0.4)" }}
+                    >
+                      {isUploadingCv ? "جاري الرفع والاستبدال..." : "تأكيد رفع واستبدال الملف فوراً"}
+                    </button>
+                  </div>
+                )}
+
+                {uploadCvStatus && (
+                  <div style={{ marginTop: "16px", fontSize: "14px", fontWeight: "800", color: uploadCvStatus.includes("نجاح") ? "#4ade80" : "#f87171" }}>
+                    {uploadCvStatus}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

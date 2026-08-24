@@ -1,0 +1,243 @@
+{
+  "general": {
+    "nameAR": "حيدر محمد شوكت",
+    "nameEN": "Haider M. Shwkat",
+    "email": "haider.m.shwkat@outlook.com",
+    "phone": "+964 771 896 4778",
+    "locationAR": "بغداد، العراق",
+    "locationEN": "Baghdad, Iraq",
+    "heroVideo": "media/hero.mp4",
+    "cvPdfPath": "/HAIDER_M_SHWKAT_CV_2026.pdf"
+  },
+  "translations": {
+    "AR": {
+      "logo": "حيدر محمد",
+      "navHome": "الرئيسية",
+      "navStats": "الإحصائيات والمهارات",
+      "navAbout": "النبذة",
+      "navExperience": "الخبرات",
+      "navTools": "الأدوات",
+      "navEducation": "التعليم",
+      "navContact": "تواصل معي",
+      "downloadCV": "تحميل ملف السيرة PDF",
+      "becomeClient": "كُن عميلاً",
+      "heroLine1": "نصنع أفضل",
+      "heroLine2": "النتائج",
+      "heroLine3": "الرقمية",
+      "bio": "حيدر محمد شوكت — متخصص في علوم الحاسوب واستشاري عمليات البيانات والأتمتة بلغة Python، إدارة قواعد البيانات الضخمة (+22K سجل)، تكامل التجارة الإلكترونية، ونشر أنظمة ERP وشبكات FTTH.",
+      "statsTag": "01 — الإحصائيات والأرقام",
+      "statsTitle": "أرقام مثبتة من المسيرة المهنية",
+      "expTag": "02 — الخبرات العملية",
+      "expTitle": "سجل مهني حافل بتحقيق الأهداف والنتائج",
+      "toolsTag": "03 — الأدوات والنظم التفاعلية",
+      "toolsTitle": "أدوات برمجية طوّرتها لتسريع وأتمتة العمليات",
+      "toolsSubtitle": "حلول ويب وأتمتة سريعة صممتها لمعالجة ملفات الإكسل الضخمة وتنزيل الصور وتحديث الأسعار والمخزون.",
+      "tool1Badge": "أداة حية تفاعلية • 0ms Engine",
+      "tool1Title": "مقارنة وتحديث أسعار إكسل (Tekno Diff)",
+      "tool1Desc": "أداة ويب تفاعلية فائقة السرعة تعمل داخل المتصفح مباشرة، لمقارنة ملفات الإكسل الكبيرة، كشف فروقات الأسعار والمخزون، وتحديث آلاف المنتجات بنقرة زر بدون أي تأخير.",
+      "tool1Action": "تشغيل أداة مقارنة الإكسل مباشرة",
+      "tool2Badge": "أتمتة سريعة • Bulk Downloader",
+      "tool2Title": "تنزيل وتسمية الصور من الإكسل (Image Downloader)",
+      "tool2Desc": "أداة لاستخراج روابط الصور من ملفات الإكسل والـ CSV، تنزيلها بالتوازي وتسميتها بأسماء المنتجات الصحيحة، وضغطها في ملف ZIP بضغطة زر واحدة.",
+      "tool2Action": "تشغيل أداة تنزيل الصور مباشرة",
+      "eduTag": "04 — التعليم والشهادات",
+      "eduTitle": "المؤهلات الأكاديمية والتدريب المعتمد",
+      "footerSubtitle": "جاهز لمساعدتك في بناء وإدارة أفضل نظام بيانات، أتمتة برمجية، وتجارة إلكترونية.",
+      "drawerTitle": "مرحباً! أخبرنا بكل التفاصيل",
+      "drawerSubtitle": "يسعدنا التعاون معك لبناء وتطوير حلول برمجية وبيانات استثنائية.",
+      "nameLabel": "الاسم والشركة / Name & Company",
+      "emailLabel": "البريد الإلكتروني / Your Email",
+      "projectLabel": "أخبرنا المزيد عن مشروعك / Tell us more about your project",
+      "namePlaceholder": "حيدر من تكنو ستور",
+      "emailPlaceholder": "haider@example.com",
+      "projectPlaceholder": "اكتب تفاصيل مشروعك أو فكرتك المميزة هنا...",
+      "submitBtn": "إرسال الطلب",
+      "submittedTitle": "تم إرسال طلبك بنجاح!",
+      "submittedText": "سنقوم بالتواصل معك في أسرع وقت ممكن."
+    },
+    "EN": {
+      "logo": "Haider Mohamed",
+      "navHome": "Home",
+      "navStats": "Stats & Skills",
+      "navAbout": "About",
+      "navExperience": "Experience",
+      "navTools": "Tools",
+      "navEducation": "Education",
+      "navContact": "Contact Us",
+      "downloadCV": "Download PDF",
+      "becomeClient": "Become a Client",
+      "heroLine1": "WE CREATE",
+      "heroLine2": "AWESOME",
+      "heroLine3": "DIGITAL RESULTS",
+      "bio": "Haider M. Shwkat — Computer Science Specialist & Data Operations Consultant with extensive experience in workflow automation, large-scale database management (22K+ records), e-commerce catalog integrity, and network infrastructure.",
+      "statsTag": "01 — STATS & NUMBERS",
+      "statsTitle": "Proven Track Record Numbers",
+      "expTag": "02 — WORK EXPERIENCE",
+      "expTitle": "Proven Career Journey & High-Impact Results",
+      "toolsTag": "03 — INTERACTIVE TOOLS",
+      "toolsTitle": "Custom-Built Software Tools & Automation",
+      "toolsSubtitle": "High-performance browser-based tools built for large-scale Excel processing, bulk image downloads, and data syncing.",
+      "tool1Badge": "Live Interactive Tool • 0ms Engine",
+      "tool1Title": "Tekno Excel Diff & Price Matcher",
+      "tool1Desc": "Instant client-side web tool to compare massive Excel sheets, detect price & inventory discrepancies, and sync thousands of products in milliseconds.",
+      "tool1Action": "Launch Excel Diff Tool Live",
+      "tool2Badge": "Fast Automation • Bulk Downloader",
+      "tool2Title": "Bulk Excel Image Downloader & Renamer",
+      "tool2Desc": "Extract image URLs from Excel or CSV catalogs, download concurrently, rename by product names, and package into a ZIP archive instantly.",
+      "tool2Action": "Launch Image Downloader Live",
+      "eduTag": "04 — EDUCATION & CERTIFICATES",
+      "eduTitle": "Academic Qualifications & Certified Training",
+      "footerSubtitle": "Ready to help you build and scale data-driven software, automation pipelines & e-commerce systems.",
+      "drawerTitle": "Hey! Tell us all the things",
+      "drawerSubtitle": "We’d love to hear about your project and build something amazing together.",
+      "nameLabel": "Name & Company",
+      "emailLabel": "Your Email",
+      "projectLabel": "Tell us more about your project",
+      "namePlaceholder": "Haider from Techno Store",
+      "emailPlaceholder": "haider@example.com",
+      "projectPlaceholder": "Write your project details or great ideas here...",
+      "submitBtn": "Submit Request",
+      "submittedTitle": "Request Submitted Successfully!",
+      "submittedText": "We will get back to you as soon as possible."
+    }
+  },
+  "stats": [
+    {
+      "id": "stat-1",
+      "value": "+22K",
+      "textAR": "سجل بيانات متكامل تمت هندسته وأرشفته لمشروع في قطاع الدفاع",
+      "textEN": "Multi-platform data records engineered and managed for a Defense Sector project",
+      "video": "media/volchek-color.mp4"
+    },
+    {
+      "id": "stat-2",
+      "value": "+3K",
+      "textAR": "مشترك نشط تم تقديم الدعم الفني والصيانة الميدانية الكاملة لهم",
+      "textEN": "Active network subscribers and clients provided with full technical support",
+      "video": "media/pruzina-color.mp4"
+    },
+    {
+      "id": "stat-3",
+      "value": "3",
+      "textAR": "مطاعم تعمل بنظام ERP & POS المتكامل الذي طوّره ونشره حيدر",
+      "textEN": "Active restaurants powered by custom-built ERP & POS management system",
+      "video": "media/time-color.mp4"
+    },
+    {
+      "id": "stat-4",
+      "value": "+2K",
+      "textAR": "مستخدم تم ربطهم وتغطيتهم بشبكات الـ FTTH الحديثة بنظام EPON",
+      "textEN": "Active users connected via modern FTTH / EPON fiber optic networks",
+      "video": "media/ball-color.mp4"
+    }
+  ],
+  "experiences": [
+    {
+      "id": "exp-1",
+      "dateAR": "2025 - حتى الآن",
+      "dateEN": "2025 - Present",
+      "companyAR": "تكنو ستور — بغداد",
+      "companyEN": "Techno Store — Baghdad, Iraq",
+      "roleAR": "أخصائي عمليات التجارة الإلكترونية، البيانات والمبيعات",
+      "roleEN": "E-Commerce, Data Operations & Sales Specialist",
+      "link": "/tekno",
+      "actionAR": "تشغيل أداة تكنو",
+      "actionEN": "Launch Tekno Tool",
+      "bulletsAR": [
+        "أتمتة وهندسة سكربتات بايثون وأدوات متصفح لرفع وتحديث آلاف المنتجات (SKUs)، مقلصاً زمن المعالجة من أيام إلى دقائق معدودة.",
+        "إدارة كتالوجات المنتجات والتسعير والمخزون لآلاف المنتجات النشطة مع الحفاظ على سلامة البيانات بنسبة خطأ 0%.",
+        "الربط والمزامنة الآلية للمخزون والمنتجات بين قواعد البيانات وتطبيقات التوصيل العراقية الكبرى (مسواك، طماطة، جاهز، الريان).",
+        "الإشراف على مبيعات الفروع اليومية، وإدارة التسويق الرقمي عبر الريلز، واستثمار ملاحظات الزبائن لزيادة الإيرادات."
+      ],
+      "bulletsEN": [
+        "Engineered custom Python scripts and browser automation tools to streamline large-scale SKU uploads, cutting data processing time from days to minutes.",
+        "Managed cataloging, stock accuracy, and pricing across platforms for thousands of active SKUs with zero error rates.",
+        "Automated inventory feeds and content sync between internal databases and major Iraqi delivery apps (Miswag, Tamata, Jahez, Al-Rayan).",
+        "Supervised daily branch sales operations, managed digital video reels marketing, and leveraged customer insights to boost revenue."
+      ]
+    },
+    {
+      "id": "exp-2",
+      "dateAR": "2023 - 2025",
+      "dateEN": "2023 - 2025",
+      "companyAR": "مشاريع متعددة / قطاع الدفاع والتجارة الإلكترونية",
+      "companyEN": "Multi-Client / Defense & E-commerce Projects",
+      "roleAR": "استشاري حر لعمليات البيانات والحلول التقنية",
+      "roleEN": "Freelance Data & Technical Operations Consultant",
+      "link": "",
+      "actionAR": "",
+      "actionEN": "",
+      "bulletsAR": [
+        "هندسة وبناء منظومة قواعد بيانات شاملة تضم أكثر من 22,000 سجل لقطاع الدفاع مع نظام فلترة للمناطق والاتصال.",
+        "تصميم ونشر نظام ERP و POS متكامل لإدارة المطاعم يعمل حالياً بنجاح ويقود العمليات في 3 مطاعم نشطة.",
+        "حل المشكلات التقنية الحرجة وتجاوز قيود الـ API وهيكلة الكتالوجات لمنصات تجارة إلكترونية كبرى مثل منصة الريان.",
+        "إنتاج وتنفيذ أكثر من 60 فيديو ترويجي وحملات ريلز تعليمية لشركاء التجزئة (Lito Store, Techno Store)."
+      ],
+      "bulletsEN": [
+        "Built a comprehensive database system of 22,000+ multi-platform records for a Defense Sector project with region and contact filtering.",
+        "Designed and deployed a fully functional ERP & POS restaurant management system currently driving operations across 3 active restaurants.",
+        "Resolved critical catalog structures, API rate limits, and product feature bugs for prominent Iraqi e-commerce platforms (e.g. Al-Rayan).",
+        "Produced and executed over 60 commercial reels, technical tutorials, and brand video campaigns for retail partners (Lito Store, Techno Store)."
+      ]
+    },
+    {
+      "id": "exp-3",
+      "dateAR": "2019 - 2023",
+      "dateEN": "2019 - 2023",
+      "companyAR": "قطاع الفعاليات والاتصالات — بغداد",
+      "companyEN": "Events & Telecommunications Sector — Baghdad",
+      "roleAR": "مسؤول عمليات ومنسق دعم الشبكات",
+      "roleEN": "Operations Lead & Network Support Coordinator",
+      "link": "",
+      "actionAR": "",
+      "actionEN": "",
+      "bulletsAR": [
+        "قيادة وإدارة فرق العمل لتخطيط وتنفيذ فعاليات ومؤتمرات كبرى لأكثر من 150 ضيفاً بأعلى معايير الجودة.",
+        "الإشراف على مد وبناء شبكات الألياف الضوئية FTTH عبر 3 مناطق، وربط أكثر من 2000 مستخدم نشط بنظام EPON.",
+        "إدارة وتنسيق الدعم الفني والصيانة الميدانية لقاعدة مشتركين تضم أكثر من 3000 عميل شبكات."
+      ],
+      "bulletsEN": [
+        "Led operational teams to plan, coordinate, and execute large-scale corporate and public events for 150+ guests with high efficiency.",
+        "Directed the construction and deployment of FTTH networks across 3 districts, connecting 2,000+ active users using EPON systems.",
+        "Managed end-to-end troubleshooting and maintenance coordination for a subscriber base of 3,000+ active network clients."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "id": "edu-1",
+      "yearAR": "2022 - 2026",
+      "yearEN": "2022 - 2026",
+      "schoolAR": "جامعة دجلة – بغداد",
+      "schoolEN": "Dijlah University – Baghdad",
+      "degreeAR": "بكالوريوس في علوم الحاسوب (Computer Science)",
+      "degreeEN": "Bachelor's Degree in Computer Science"
+    },
+    {
+      "id": "edu-2",
+      "yearAR": "2019 - 2021",
+      "yearEN": "2019 - 2021",
+      "schoolAR": "معهد التكنولوجيا – بغداد",
+      "schoolEN": "Institute of Technology – Baghdad",
+      "degreeAR": "دبلوم في الصناعات الكيماوية (Chemical Industry)",
+      "degreeEN": "Diploma in Chemical Industry"
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cert-1",
+      "titleAR": "شهادة CCNA 1: Introduction to Networks — جامعة دجلة",
+      "titleEN": "CCNA 1: Introduction to Networks — Dijlah University"
+    },
+    {
+      "id": "cert-2",
+      "titleAR": "شهادة مهارات المبيعات وخدمة العملاء — شركة إيرثلنك",
+      "titleEN": "Sales and Customer Service Skills — EarthLink Telecommunications"
+    },
+    {
+      "id": "cert-3",
+      "titleAR": "تدريب السلامة والصحة المهنية — معهد التكنولوجيا بغداد",
+      "titleEN": "Occupational Safety Training — Institute of Technology Baghdad"
+    }
+  ]
+}

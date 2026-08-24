@@ -1,0 +1,110 @@
+import fs from 'fs';
+import path from 'path';
+
+export interface PortfolioData {
+  general: {
+    nameAR: string;
+    nameEN: string;
+    email: string;
+    phone: string;
+    locationAR: string;
+    locationEN: string;
+    heroVideo: string;
+    cvPdfPath: string;
+  };
+  translations: {
+    AR: Record<string, string>;
+    EN: Record<string, string>;
+  };
+  stats: Array<{
+    id: string;
+    value: string;
+    textAR: string;
+    textEN: string;
+    video: string;
+  }>;
+  experiences: Array<{
+    id: string;
+    dateAR: string;
+    dateEN: string;
+    companyAR: string;
+    companyEN: string;
+    roleAR: string;
+    roleEN: string;
+    link?: string;
+    actionAR?: string;
+    actionEN?: string;
+    bulletsAR: string[];
+    bulletsEN: string[];
+  }>;
+  education: Array<{
+    id: string;
+    yearAR: string;
+    yearEN: string;
+    schoolAR: string;
+    schoolEN: string;
+    degreeAR: string;
+    degreeEN: string;
+  }>;
+  certifications: Array<{
+    id: string;
+    titleAR: string;
+    titleEN: string;
+  }>;
+}
+
+const DATA_FILE_PATH = path.join(process.cwd(), 'data', 'portfolio.json');
+
+// In-memory cache for fast response and fallback in serverless environments
+let memoryCache: PortfolioData | null = null;
+
+export function getPortfolioData(): PortfolioData {
+  if (memoryCache) {
+    return memoryCache;
+  }
+
+  try {
+    if (fs.existsSync(DATA_FILE_PATH)) {
+      const fileContents = fs.readFileSync(DATA_FILE_PATH, 'utf8');
+      const data = JSON.parse(fileContents) as PortfolioData;
+      memoryCache = data;
+      return data;
+    }
+  } catch (error) {
+    console.error('Error reading portfolio.json:', error);
+  }
+
+  // Fallback default
+  return {
+    general: {
+      nameAR: 'حيدر محمد شوكت',
+      nameEN: 'Haider M. Shwkat',
+      email: 'haider.m.shwkat@outlook.com',
+      phone: '+964 771 896 4778',
+      locationAR: 'بغداد، العراق',
+      locationEN: 'Baghdad, Iraq',
+      heroVideo: 'media/hero.mp4',
+      cvPdfPath: '/HAIDER_M_SHWKAT_CV_2026.pdf',
+    },
+    translations: { AR: {}, EN: {} },
+    stats: [],
+    experiences: [],
+    education: [],
+    certifications: [],
+  };
+}
+
+export function savePortfolioData(newData: PortfolioData): boolean {
+  try {
+    memoryCache = newData;
+    const dir = path.dirname(DATA_FILE_PATH);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(newData, null, 2), 'utf8');
+    return true;
+  } catch (error) {
+    console.error('Error saving portfolio.json:', error);
+    return false;
+  }
+}
