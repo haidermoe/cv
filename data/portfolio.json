@@ -253,24 +253,24 @@
     "textColorMuted": "#94a3b8"
   },
   "cvDocument": {
+    "cvLang": "AR",
     "photo": "/cv-photo.png",
-    "fullName": "HAIDER M. SHWKAT",
-    "jobTitle": "Computer Science Specialist | Data Operations & Workflow Consultant",
-    "summary": "Computer Science Specialist and Data Operations Consultant with extensive experience in workflow automation, large-scale database management (+22K records), e-commerce catalog integrity, and network infrastructure (EPON / FTTH). Proven track record of reducing system downtimes, automating multi-branch restaurant ERPs, and supporting enterprise-level operations across Baghdad, Iraq.",
+    "fullName": "حيدر محمد شوكت",
+    "jobTitle": "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة",
+    "summary": "حيدر محمد شوكت — متخصص في علوم الحاسوب واستشاري عمليات البيانات والأتمتة بلغة Python، إدارة قواعد البيانات الضخمة (+22K سجل)، تكامل التجارة الإلكترونية، ونشر أنظمة ERP وشبكات FTTH.",
     "email": "haider.m.shwkat@outlook.com",
     "phone": "+964 771 896 4778",
-    "location": "Baghdad, Iraq",
+    "location": "بغداد، العراق",
     "linkedin": "linkedin.com/in/haidermoe",
     "website": "cv-wine-tau.vercel.app",
     "skills": [
-      "Python Automation & Scripting",
-      "SQL & High-Volume Database Architecture",
-      "E-Commerce & Foodics ERP Workflows",
-      "FTTH & EPON Optical Network Management",
-      "Data Cleansing & Integrity Verification",
-      "Linux Server Operations & Bash",
-      "Security Compliance & Defense Sector Workflows",
-      "Agile Project & Team Leadership"
+      "أتمتة بايثون وبرمجة السكربتات",
+      "هيكلة وإدارة قواعد البيانات الضخمة SQL",
+      "تكامل أنظمة ERP وفودكس للتجارة الإلكترونية",
+      "إدارة وتشغيل شبكات FTTH و EPON الضوئية",
+      "تنظيف وتدقيق وضمان جودة البيانات",
+      "إدارة خوادم لينكس والـ Bash Scripts",
+      "إدارة المشاريع بالمنهجيات المرنة Agile"
     ],
     "languages": [
       "Arabic (Native / Bilingual)",
@@ -279,64 +279,60 @@
     "experiences": [
       {
         "id": "exp-1",
-        "role": "Technical Project Manager & Security Data Specialist",
-        "company": "Confidential / Defense Sector Projects",
-        "date": "2023 - 2025",
-        "location": "Baghdad, Iraq",
+        "role": "أخصائي عمليات التجارة الإلكترونية، البيانات والمبيعات",
+        "company": "تكنو ستور — بغداد",
+        "date": "2025 - حتى الآن",
+        "location": "بغداد، العراق",
         "bullets": [
-          "Engineered secure, high-integrity database pipelines processing 22,000+ sensitive records with strict zero-loss verification.",
-          "Administered mission-critical network and system architecture with automated failover and daily integrity audit scripts.",
-          "Supervised cross-functional IT and security operations teams, enforcing automated logging and threat mitigation."
+          "أتمتة وهندسة سكربتات بايثون وأدوات متصفح لرفع وتحديث آلاف المنتجات (SKUs)، مقلصاً زمن المعالجة من أيام إلى دقائق معدودة.",
+          "إدارة كتالوجات المنتجات والتسعير والمخزون لآلاف المنتجات النشطة مع الحفاظ على سلامة البيانات بنسبة خطأ 0%.",
+          "الربط والمزامنة الآلية للمخزون والمنتجات بين قواعد البيانات وتطبيقات التوصيل العراقية الكبرى (مسواك، طماطة، جاهز، الريان).",
+          "الإشراف على مبيعات الفروع اليومية، وإدارة التسويق الرقمي عبر الريلز، واستثمار ملاحظات الزبائن لزيادة الإيرادات."
         ]
       },
       {
         "id": "exp-2",
-        "role": "E-Commerce Operations Lead & ERP Systems Integrator",
-        "company": "Multiple Enterprise Hospitality & Retail Clients",
-        "date": "2021 - 2024",
-        "location": "Baghdad, Iraq",
+        "role": "استشاري حر لعمليات البيانات والحلول التقنية",
+        "company": "مشاريع متعددة / قطاع الدفاع والتجارة الإلكترونية",
+        "date": "2023 - 2025",
+        "location": "بغداد، العراق",
         "bullets": [
-          "Successfully deployed and synchronized Foodics POS & ERP ecosystems across 3 high-volume restaurant brands.",
-          "Streamlined multi-channel food delivery platform integrations (Talabat, Alsaree3), cutting order fulfillment latency by 35%.",
-          "Developed customized Python inventory synchronization scripts, maintaining real-time SKU accuracy across 15,000+ items."
+          "هندسة وبناء منظومة قواعد بيانات شاملة تضم أكثر من 22,000 سجل لقطاع الدفاع مع نظام فلترة للمناطق والاتصال.",
+          "تصميم ونشر نظام ERP و POS متكامل لإدارة المطاعم يعمل حالياً بنجاح ويقود العمليات في 3 مطاعم نشطة.",
+          "حل المشكلات التقنية الحرجة وتجاوز قيود الـ API وهيكلة الكتالوجات لمنصات تجارة إلكترونية كبرى مثل منصة الريان.",
+          "إنتاج وتنفيذ أكثر من 60 فيديو ترويجي وحملات ريلز تعليمية لشركاء التجزئة (Lito Store, Techno Store)."
         ]
       },
       {
         "id": "exp-3",
-        "role": "FTTH & EPON Infrastructure Project Engineer",
-        "company": "Modern Fiber Optics & ISP Deployments",
-        "date": "2019 - 2022",
-        "location": "Baghdad, Iraq",
+        "role": "مسؤول عمليات ومنسق دعم الشبكات",
+        "company": "قطاع الفعاليات والاتصالات — بغداد",
+        "date": "2019 - 2023",
+        "location": "بغداد، العراق",
         "bullets": [
-          "Architected and rolled out fiber-to-the-home (FTTH) network infrastructure serving 2,000+ residential and commercial subscribers.",
-          "Maintained EPON OLT and ONU distribution nodes with 99.8% network uptime and proactive telemetry monitoring.",
-          "Trained and managed tier-2 technical support personnel, establishing rapid incident diagnostic protocols."
+          "قيادة وإدارة فرق العمل لتخطيط وتنفيذ فعاليات ومؤتمرات كبرى لأكثر من 150 ضيفاً بأعلى معايير الجودة.",
+          "الإشراف على مد وبناء شبكات الألياف الضوئية FTTH عبر 3 مناطق، وربط أكثر من 2000 مستخدم نشط بنظام EPON.",
+          "إدارة وتنسيق الدعم الفني والصيانة الميدانية لقاعدة مشتركين تضم أكثر من 3000 عميل شبكات."
         ]
       }
     ],
     "education": [
       {
         "id": "edu-1",
-        "degree": "Bachelor of Science (B.Sc.) in Computer Science",
-        "school": "University of Technology / Baghdad",
-        "year": "2019"
+        "degree": "بكالوريوس في علوم الحاسوب",
+        "school": "جامعة دجلة – بغداد",
+        "year": "2022 - 2026"
       }
     ],
     "certifications": [
       {
         "id": "cert-1",
-        "title": "Certified Network Systems Administrator (FTTH & Optical Networks)",
-        "issuer": "Fiber Infrastructure Academy",
-        "year": "2021"
-      },
-      {
-        "id": "cert-2",
-        "title": "Advanced Python Data Automation & Security Protocols",
-        "issuer": "Enterprise Data Institute",
+        "title": "شهادة مقدمة في الشبكات CCNA v7",
+        "issuer": "Cisco Networking Academy",
         "year": "2023"
       }
     ],
-    "templateStyle": "modern-dark",
+    "templateStyle": "clean-white",
     "accentColor": "#2563eb"
   }
 }

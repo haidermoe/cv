@@ -456,6 +456,14 @@ export default function AdminPage() {
   const handleSwitchCvLanguage = (lang: "AR" | "EN") => {
     if (!data) return;
     if (lang === "AR") {
+      const arabicExperiences = (data.experiences || []).map((exp) => ({
+        id: exp.id,
+        role: exp.roleAR || exp.roleEN,
+        company: exp.companyAR || exp.companyEN,
+        date: exp.dateAR || exp.dateEN,
+        bullets: exp.bulletsAR && exp.bulletsAR.length > 0 ? exp.bulletsAR : exp.bulletsEN,
+      }));
+
       setData({
         ...data,
         cvDocument: {
@@ -464,8 +472,9 @@ export default function AdminPage() {
           fullName: data.general.nameAR || "حيدر محمد شوكت",
           jobTitle: "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة",
           location: data.general.locationAR || "بغداد، العراق",
-          summary: data.translations.AR?.bio || "",
+          summary: data.translations.AR?.bio || "حيدر محمد شوكت — متخصص في علوم الحاسوب واستشاري عمليات البيانات والأتمتة بلغة Python، إدارة قواعد البيانات الضخمة (+22K سجل)، تكامل التجارة الإلكترونية، ونشر أنظمة ERP وشبكات FTTH.",
           fontFamily: "Tajawal",
+          experiences: arabicExperiences,
           skills: [
             "أتمتة بايثون وبرمجة السكربتات",
             "هيكلة وإدارة قواعد البيانات الضخمة SQL",
@@ -477,8 +486,16 @@ export default function AdminPage() {
           ],
         },
       });
-      showToast("تم تحويل وتعبئة السيرة الذاتية باللغة العربية بنجاح");
+      showToast("تم تحويل وتعبئة السيرة الذاتية وكافة الخبرات بالعربية بنجاح");
     } else {
+      const englishExperiences = (data.experiences || []).map((exp) => ({
+        id: exp.id,
+        role: exp.roleEN || exp.roleAR,
+        company: exp.companyEN || exp.companyAR,
+        date: exp.dateEN || exp.dateAR,
+        bullets: exp.bulletsEN && exp.bulletsEN.length > 0 ? exp.bulletsEN : exp.bulletsAR,
+      }));
+
       setData({
         ...data,
         cvDocument: {
@@ -487,8 +504,9 @@ export default function AdminPage() {
           fullName: data.general.nameEN || "HAIDER M. SHWKAT",
           jobTitle: "Computer Science Specialist | Data Operations & Workflow Consultant",
           location: data.general.locationEN || "Baghdad, Iraq",
-          summary: data.translations.EN?.bio || "",
+          summary: data.translations.EN?.bio || "Haider M. Shwkat — Computer Science Specialist & Data Operations Consultant with extensive experience in workflow automation, large-scale database management (22K+ records), e-commerce catalog integrity, and network infrastructure.",
           fontFamily: "Outfit",
+          experiences: englishExperiences,
           skills: [
             "Python Automation & Scripting",
             "SQL & High-Volume Database Architecture",
@@ -2303,10 +2321,11 @@ export default function AdminPage() {
                                     </div>
                                     <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
                                       {(data.cvDocument?.experiences?.length ? data.cvDocument.experiences : data.experiences).map((exp, i) => {
-                                        const role = isArabic ? ((exp as any).roleAR || (exp as any).role || (exp as any).roleEN) : ((exp as any).roleEN || (exp as any).role || (exp as any).roleAR);
-                                        const company = isArabic ? ((exp as any).companyAR || (exp as any).company || (exp as any).companyEN) : ((exp as any).companyEN || (exp as any).company || (exp as any).companyAR);
-                                        const date = isArabic ? ((exp as any).dateAR || (exp as any).date || (exp as any).dateEN) : ((exp as any).dateEN || (exp as any).date || (exp as any).dateAR);
-                                        const bullets = isArabic ? ((exp as any).bulletsAR || (exp as any).bullets || (exp as any).bulletsEN || []) : ((exp as any).bulletsEN || (exp as any).bullets || (exp as any).bulletsAR || []);
+                                        const matchingExp = data.experiences?.find((e) => e.id === exp.id || e.companyEN === (exp as any).company || e.roleEN === (exp as any).role);
+                                        const role = isArabic ? (matchingExp?.roleAR || (exp as any).roleAR || (exp as any).role) : (matchingExp?.roleEN || (exp as any).roleEN || (exp as any).role);
+                                        const company = isArabic ? (matchingExp?.companyAR || (exp as any).companyAR || (exp as any).company) : (matchingExp?.companyEN || (exp as any).companyEN || (exp as any).company);
+                                        const date = isArabic ? (matchingExp?.dateAR || (exp as any).dateAR || (exp as any).date) : (matchingExp?.dateEN || (exp as any).dateEN || (exp as any).date);
+                                        const bullets = isArabic ? (matchingExp?.bulletsAR || (exp as any).bulletsAR || (exp as any).bullets || []) : (matchingExp?.bulletsEN || (exp as any).bulletsEN || (exp as any).bullets || []);
 
                                         return (
                                           <div key={exp.id || i}>
@@ -2395,10 +2414,11 @@ export default function AdminPage() {
 
                                   <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
                                     {(data.cvDocument?.experiences?.length ? data.cvDocument.experiences : data.experiences).map((exp, i) => {
-                                      const role = isArabic ? ((exp as any).roleAR || (exp as any).role || (exp as any).roleEN) : ((exp as any).roleEN || (exp as any).role || (exp as any).roleAR);
-                                      const company = isArabic ? ((exp as any).companyAR || (exp as any).company || (exp as any).companyEN) : ((exp as any).companyEN || (exp as any).company || (exp as any).companyAR);
-                                      const date = isArabic ? ((exp as any).dateAR || (exp as any).date || (exp as any).dateEN) : ((exp as any).dateEN || (exp as any).date || (exp as any).dateAR);
-                                      const bullets = isArabic ? ((exp as any).bulletsAR || (exp as any).bullets || (exp as any).bulletsEN || []) : ((exp as any).bulletsEN || (exp as any).bullets || (exp as any).bulletsAR || []);
+                                      const matchingExp = data.experiences?.find((e) => e.id === exp.id || e.companyEN === (exp as any).company || e.roleEN === (exp as any).role);
+                                      const role = isArabic ? (matchingExp?.roleAR || (exp as any).roleAR || (exp as any).role) : (matchingExp?.roleEN || (exp as any).roleEN || (exp as any).role);
+                                      const company = isArabic ? (matchingExp?.companyAR || (exp as any).companyAR || (exp as any).company) : (matchingExp?.companyEN || (exp as any).companyEN || (exp as any).company);
+                                      const date = isArabic ? (matchingExp?.dateAR || (exp as any).dateAR || (exp as any).date) : (matchingExp?.dateEN || (exp as any).dateEN || (exp as any).date);
+                                      const bullets = isArabic ? (matchingExp?.bulletsAR || (exp as any).bulletsAR || (exp as any).bullets || []) : (matchingExp?.bulletsEN || (exp as any).bulletsEN || (exp as any).bullets || []);
 
                                       return (
                                         <div key={exp.id || i}>
