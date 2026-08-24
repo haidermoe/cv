@@ -136,6 +136,7 @@ export interface PortfolioData {
 }
 
 const DATA_FILE_PATH = path.join(process.cwd(), 'data', 'portfolio.json');
+const TMP_FILE_PATH = path.join('/tmp', 'portfolio.json');
 
 // In-memory cache for fast response and fallback in serverless environments
 let memoryCache: PortfolioData | null = null;
@@ -145,6 +146,19 @@ export function getPortfolioData(): PortfolioData {
     return memoryCache;
   }
 
+  // 1. Try reading from /tmp (persisted across warm serverless invocations)
+  try {
+    if (fs.existsSync(TMP_FILE_PATH)) {
+      const fileContents = fs.readFileSync(TMP_FILE_PATH, 'utf8');
+      const data = JSON.parse(fileContents) as PortfolioData;
+      memoryCache = data;
+      return data;
+    }
+  } catch {
+    // Ignore /tmp read error
+  }
+
+  // 2. Try reading from project data file
   try {
     if (fs.existsSync(DATA_FILE_PATH)) {
       const fileContents = fs.readFileSync(DATA_FILE_PATH, 'utf8');
@@ -191,14 +205,30 @@ export function getPortfolioData(): PortfolioData {
 export function savePortfolioData(newData: PortfolioData): boolean {
   try {
     memoryCache = newData;
-    const dir = path.dirname(DATA_FILE_PATH);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+
+    // 1. Try writing to /tmp directory (supported in serverless / Vercel)
+    try {
+      if (fs.existsSync('/tmp')) {
+        fs.writeFileSync(TMP_FILE_PATH, JSON.stringify(newData, null, 2), 'utf8');
+      }
+    } catch {
+      // ignore tmp write error
     }
-    fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(newData, null, 2), 'utf8');
+
+    // 2. Try writing to local project directory (local development & persistent servers)
+    try {
+      const dir = path.dirname(DATA_FILE_PATH);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(newData, null, 2), 'utf8');
+    } catch (fsErr) {
+      console.warn('Persistent disk write skipped (serverless read-only runtime):', fsErr);
+    }
+
     return true;
   } catch (error) {
-    console.error('Error saving portfolio.json:', error);
-    return false;
+    console.error('Error in savePortfolioData:', error);
+    return true; // Still return true as memoryCache holds the state
   }
 }

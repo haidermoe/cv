@@ -279,14 +279,31 @@ export default function Home() {
   const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null);
 
   useEffect(() => {
-    fetch("/api/admin/portfolio")
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.ok && json.data) {
-          setPortfolioData(json.data);
+    const updateFromLocalOrApi = () => {
+      try {
+        const localBackup = localStorage.getItem("haider_portfolio_admin_backup");
+        if (localBackup) {
+          const parsed = JSON.parse(localBackup);
+          setPortfolioData(parsed);
         }
-      })
-      .catch(() => {});
+      } catch {}
+
+      fetch("/api/admin/portfolio")
+        .then((res) => res.json())
+        .then((json) => {
+          if (json.ok && json.data) {
+            const localBackup = localStorage.getItem("haider_portfolio_admin_backup");
+            if (!localBackup) {
+              setPortfolioData(json.data);
+            }
+          }
+        })
+        .catch(() => {});
+    };
+
+    updateFromLocalOrApi();
+    window.addEventListener("haider-portfolio-updated", updateFromLocalOrApi);
+    return () => window.removeEventListener("haider-portfolio-updated", updateFromLocalOrApi);
   }, []);
 
   useEffect(() => {
