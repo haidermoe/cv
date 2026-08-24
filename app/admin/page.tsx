@@ -10,11 +10,45 @@ export default function AdminPage() {
   const [loginError, setLoginError] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const [data, setData] = useState<PortfolioData | null>(null);
+  const [data, setInternalData] = useState<PortfolioData | null>(null);
+  const [undoStack, setUndoStack] = useState<PortfolioData[]>([]);
+  const [redoStack, setRedoStack] = useState<PortfolioData[]>([]);
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [activeTab, setActiveTab] = useState<"general" | "stats" | "experiences" | "education" | "cv" | "typography">("general");
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [saveMessage, setSaveMessage] = useState("");
+
+  // Function to update data while recording undo history
+  const setData = (updater: PortfolioData | ((prev: PortfolioData | null) => PortfolioData | null), skipHistory = false) => {
+    setInternalData((prev) => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      if (!skipHistory && prev && next && JSON.stringify(prev) !== JSON.stringify(next)) {
+        setUndoStack((u) => [...u.slice(-50), prev]);
+        setRedoStack([]);
+      }
+      return next;
+    });
+  };
+
+  const handleUndo = () => {
+    if (undoStack.length === 0 || !data) return;
+    const previous = undoStack[undoStack.length - 1];
+    const newUndo = undoStack.slice(0, -1);
+    setRedoStack((r) => [...r, data]);
+    setUndoStack(newUndo);
+    setInternalData(previous);
+    showToast("تراجع عن آخر تعديل (Undo: Ctrl + Z)");
+  };
+
+  const handleRedo = () => {
+    if (redoStack.length === 0 || !data) return;
+    const next = redoStack[redoStack.length - 1];
+    const newRedo = redoStack.slice(0, -1);
+    setUndoStack((u) => [...u, data]);
+    setRedoStack(newRedo);
+    setInternalData(next);
+    showToast("إعادة التعديل (Redo: Ctrl + Y)");
+  };
 
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [isUploadingCv, setIsUploadingCv] = useState(false);
@@ -92,7 +126,7 @@ export default function AdminPage() {
       const res = await fetch("/api/admin/portfolio");
       const json = await res.json();
       if (json.ok && json.data) {
-        setData(json.data);
+        setData(json.data, true);
       }
     } catch (err) {
       console.error("Failed to load portfolio data:", err);
@@ -139,6 +173,24 @@ export default function AdminPage() {
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
       const isInput = target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
+
+      // Ctrl+Z or Cmd+Z -> Undo (if shift is also pressed, then Redo)
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
+        e.preventDefault();
+        if (e.shiftKey) {
+          handleRedo();
+        } else {
+          handleUndo();
+        }
+        return;
+      }
+
+      // Ctrl+Y or Cmd+Y -> Redo
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") {
+        e.preventDefault();
+        handleRedo();
+        return;
+      }
 
       // Ctrl+S or Cmd+S -> Save all data
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
@@ -437,7 +489,54 @@ export default function AdminPage() {
           <span style={{ background: "rgba(37, 99, 235, 0.2)", color: "#60a5fa", padding: "4px 10px", borderRadius: "20px", fontSize: "12px", fontWeight: "800" }}>مدير النظام</span>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+          {/* UNDO & REDO BUTTONS */}
+          <button
+            onClick={handleUndo}
+            disabled={undoStack.length === 0}
+            style={{
+              background: undoStack.length > 0 ? "#1e2130" : "#11121d",
+              color: undoStack.length > 0 ? "#ffffff" : "#475569",
+              border: "1px solid #334155",
+              padding: "8px 12px",
+              borderRadius: "10px",
+              fontSize: "12.5px",
+              fontWeight: "800",
+              cursor: undoStack.length > 0 ? "pointer" : "not-allowed",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              opacity: undoStack.length > 0 ? 1 : 0.5,
+            }}
+            title="تراجع عن آخر تعديل (Ctrl + Z)"
+          >
+            <span>تراجع</span>
+            <kbd style={{ background: "#0a0b12", border: "1px solid #475569", padding: "1px 5px", borderRadius: "4px", fontSize: "10.5px", color: undoStack.length > 0 ? "#60a5fa" : "#475569" }}>Ctrl+Z</kbd>
+          </button>
+
+          <button
+            onClick={handleRedo}
+            disabled={redoStack.length === 0}
+            style={{
+              background: redoStack.length > 0 ? "#1e2130" : "#11121d",
+              color: redoStack.length > 0 ? "#ffffff" : "#475569",
+              border: "1px solid #334155",
+              padding: "8px 12px",
+              borderRadius: "10px",
+              fontSize: "12.5px",
+              fontWeight: "800",
+              cursor: redoStack.length > 0 ? "pointer" : "not-allowed",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              opacity: redoStack.length > 0 ? 1 : 0.5,
+            }}
+            title="إعادة التعديل (Ctrl + Y)"
+          >
+            <span>إعادة</span>
+            <kbd style={{ background: "#0a0b12", border: "1px solid #475569", padding: "1px 5px", borderRadius: "4px", fontSize: "10.5px", color: redoStack.length > 0 ? "#60a5fa" : "#475569" }}>Ctrl+Y</kbd>
+          </button>
+
           {/* SHORTCUTS HELP BUTTON */}
           <button
             onClick={() => setShowShortcutsModal(true)}
@@ -445,9 +544,9 @@ export default function AdminPage() {
               background: "#151728",
               color: "#93c5fd",
               border: "1px solid #334155",
-              padding: "9px 14px",
-              borderRadius: "12px",
-              fontSize: "13px",
+              padding: "8px 12px",
+              borderRadius: "10px",
+              fontSize: "12.5px",
               fontWeight: "800",
               cursor: "pointer",
               display: "flex",
@@ -456,8 +555,8 @@ export default function AdminPage() {
             }}
             title="عرض اختصارات لوحة المفاتيح (Shift + ?)"
           >
-            <span>اختصارات الكيبورد</span>
-            <kbd style={{ background: "#0a0b12", border: "1px solid #475569", padding: "1px 5px", borderRadius: "4px", fontSize: "11px", color: "#60a5fa" }}>?</kbd>
+            <span>الاختصارات</span>
+            <kbd style={{ background: "#0a0b12", border: "1px solid #475569", padding: "1px 5px", borderRadius: "4px", fontSize: "10.5px", color: "#60a5fa" }}>?</kbd>
           </button>
 
           <button
@@ -466,9 +565,9 @@ export default function AdminPage() {
               background: showLivePreview ? "#10b981" : "#1e2130",
               color: "#ffffff",
               border: "1px solid #059669",
-              padding: "9px 16px",
-              borderRadius: "12px",
-              fontSize: "13.5px",
+              padding: "8px 14px",
+              borderRadius: "10px",
+              fontSize: "13px",
               fontWeight: "800",
               cursor: "pointer",
               display: "flex",
@@ -476,30 +575,30 @@ export default function AdminPage() {
               gap: "6px"
             }}
           >
-            <span>{showLivePreview ? "إخفاء المعاينة الحية" : "إظهار المعاينة الحية"}</span>
-            <kbd style={{ background: "rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.2)", padding: "1px 5px", borderRadius: "4px", fontSize: "10.5px", color: "#ffffff" }}>Ctrl+P</kbd>
+            <span>{showLivePreview ? "إخفاء المعاينة" : "إظهار المعاينة"}</span>
+            <kbd style={{ background: "rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.2)", padding: "1px 5px", borderRadius: "4px", fontSize: "10px", color: "#ffffff" }}>Ctrl+P</kbd>
           </button>
 
           <Link
             href="/"
             target="_blank"
-            style={{ background: "#1e2130", color: "#cbd5e1", border: "1px solid #334155", padding: "9px 16px", borderRadius: "12px", fontSize: "13.5px", fontWeight: "700", textDecoration: "none" }}
+            style={{ background: "#1e2130", color: "#cbd5e1", border: "1px solid #334155", padding: "8px 14px", borderRadius: "10px", fontSize: "13px", fontWeight: "700", textDecoration: "none" }}
           >
-            معاينة الموقع الحي
+            معاينة الموقع
           </Link>
 
           <button
             onClick={handleSaveData}
             disabled={saveStatus === "saving"}
-            style={{ background: "#2563eb", color: "#ffffff", border: "none", padding: "10px 22px", borderRadius: "12px", fontSize: "14px", fontWeight: "800", cursor: "pointer", boxShadow: "0 4px 15px rgba(37, 99, 235, 0.4)", display: "flex", alignItems: "center", gap: "8px" }}
+            style={{ background: "#2563eb", color: "#ffffff", border: "none", padding: "9px 20px", borderRadius: "10px", fontSize: "13.5px", fontWeight: "800", cursor: "pointer", boxShadow: "0 4px 15px rgba(37, 99, 235, 0.4)", display: "flex", alignItems: "center", gap: "8px" }}
           >
-            <span>{saveStatus === "saving" ? "جاري الحفظ..." : "حفظ جميع التعديلات"}</span>
-            <kbd style={{ background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.3)", padding: "1px 6px", borderRadius: "4px", fontSize: "11px", color: "#ffffff" }}>Ctrl+S</kbd>
+            <span>{saveStatus === "saving" ? "جاري الحفظ..." : "حفظ التعديلات"}</span>
+            <kbd style={{ background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.3)", padding: "1px 6px", borderRadius: "4px", fontSize: "10.5px", color: "#ffffff" }}>Ctrl+S</kbd>
           </button>
 
           <button
             onClick={handleLogout}
-            style={{ background: "#ef4444", color: "#ffffff", border: "none", padding: "9px 14px", borderRadius: "12px", fontSize: "13px", fontWeight: "800", cursor: "pointer" }}
+            style={{ background: "#ef4444", color: "#ffffff", border: "none", padding: "8px 12px", borderRadius: "10px", fontSize: "12.5px", fontWeight: "800", cursor: "pointer" }}
           >
             خروج
           </button>
@@ -1927,8 +2026,10 @@ export default function AdminPage() {
               </button>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "9px" }}>
               {[
+                { shortcut: "Ctrl + Z", desc: "تراجع عن آخر تعديل (Undo)" },
+                { shortcut: "Ctrl + Y / Ctrl+Shift+Z", desc: "إعادة التعديل المتراجع عنه (Redo)" },
                 { shortcut: "Ctrl + S", desc: "حفظ ونشر جميع التعديلات فوراً" },
                 { shortcut: "Ctrl + P", desc: "إظهار أو إخفاء نافذة المعاينة الحية" },
                 { shortcut: "Ctrl + L", desc: "تبديل لغة المعاينة بين العربية والإنجليزية" },
