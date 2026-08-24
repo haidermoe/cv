@@ -1618,6 +1618,56 @@ export default function AdminPage() {
                   {/* RIGHT PANEL: EDITING CONTROLS */}
                   <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
                     
+                    {/* BILINGUAL LANGUAGE ENGINE HERO CARD */}
+                    <div style={{ background: "#0f172a", padding: "16px 20px", borderRadius: "16px", border: "2px solid #3b82f6", boxShadow: "0 4px 20px rgba(59,130,246,0.2)" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                        <div>
+                          <strong style={{ fontSize: "14px", color: "#60a5fa", fontWeight: "900" }}>لغة السيرة الذاتية (CV Language)</strong>
+                          <span style={{ display: "block", fontSize: "11px", color: "#cbd5e1" }}>حوّل السيرة ومحتواها تلقائياً بين العربية والإنجليزية بنقرة زر:</span>
+                        </div>
+                        <span style={{ fontSize: "11px", background: "#1e3a8a", color: "#93c5fd", padding: "3px 8px", borderRadius: "6px", fontWeight: "800" }}>
+                          {data.cvDocument?.cvLang === "AR" ? "العربية RTL" : "English LTR"}
+                        </span>
+                      </div>
+
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                        <button
+                          onClick={() => handleSwitchCvLanguage("AR")}
+                          style={{
+                            background: data.cvDocument?.cvLang === "AR" ? "#2563eb" : "#1e293b",
+                            color: "#ffffff",
+                            border: data.cvDocument?.cvLang === "AR" ? "2px solid #60a5fa" : "1px solid #334155",
+                            padding: "10px 14px",
+                            borderRadius: "10px",
+                            fontSize: "13px",
+                            fontWeight: "900",
+                            cursor: "pointer",
+                            textAlign: "center",
+                            boxShadow: data.cvDocument?.cvLang === "AR" ? "0 4px 12px rgba(37,99,235,0.4)" : "none",
+                          }}
+                        >
+                          العربية (Arabic RTL)
+                        </button>
+                        <button
+                          onClick={() => handleSwitchCvLanguage("EN")}
+                          style={{
+                            background: (data.cvDocument?.cvLang || "EN") === "EN" ? "#2563eb" : "#1e293b",
+                            color: "#ffffff",
+                            border: (data.cvDocument?.cvLang || "EN") === "EN" ? "2px solid #60a5fa" : "1px solid #334155",
+                            padding: "10px 14px",
+                            borderRadius: "10px",
+                            fontSize: "13px",
+                            fontWeight: "900",
+                            cursor: "pointer",
+                            textAlign: "center",
+                            boxShadow: (data.cvDocument?.cvLang || "EN") === "EN" ? "0 4px 12px rgba(37,99,235,0.4)" : "none",
+                          }}
+                        >
+                          English (English LTR)
+                        </button>
+                      </div>
+                    </div>
+
                     {/* SPECIALIZED TEMPLATES PRESETS SELECTOR */}
                     <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "2px solid #2563eb", boxShadow: "0 8px 25px rgba(37,99,235,0.15)" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
