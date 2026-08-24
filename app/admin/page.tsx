@@ -25,6 +25,7 @@ export default function AdminPage() {
   const [previewLang, setPreviewLang] = useState<"AR" | "EN">("AR");
   const [previewDevice, setPreviewDevice] = useState<"mobile" | "desktop">("mobile");
   const [isPreviewMinimized, setIsPreviewMinimized] = useState(false);
+  const [previewSectionTab, setPreviewSectionTab] = useState<"auto" | "general" | "stats" | "experiences" | "education" | "cv" | "all">("auto");
 
   useEffect(() => {
     checkAuth();
@@ -1071,6 +1072,52 @@ export default function AdminPage() {
             </div>
           </div>
 
+          {/* SECTION FILTER PILLS */}
+          {!isPreviewMinimized && (
+            <div
+              style={{
+                background: "#0f101d",
+                padding: "8px 12px",
+                borderBottom: "1px solid rgba(255,255,255,0.06)",
+                display: "flex",
+                gap: "6px",
+                overflowX: "auto",
+              }}
+            >
+              {[
+                { id: "auto", label: "القسم الحالي (تلقائي)" },
+                { id: "general", label: "النبذة" },
+                { id: "stats", label: "الإحصائيات" },
+                { id: "experiences", label: "الخبرات" },
+                { id: "education", label: "التعليم" },
+                { id: "cv", label: "ملف السيرة" },
+                { id: "all", label: "عرض الكل" },
+              ].map((pill) => {
+                const isPillActive = previewSectionTab === pill.id;
+                return (
+                  <button
+                    key={pill.id}
+                    onClick={() => setPreviewSectionTab(pill.id as any)}
+                    style={{
+                      background: isPillActive ? "#2563eb" : "#1a1c2e",
+                      color: isPillActive ? "#ffffff" : "#94a3b8",
+                      border: "none",
+                      padding: "4px 10px",
+                      borderRadius: "6px",
+                      fontSize: "11px",
+                      fontWeight: "800",
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                      transition: "background 0.2s",
+                    }}
+                  >
+                    {pill.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
           {/* PREVIEW CONTENT BODY */}
           {!isPreviewMinimized && (
             <div
@@ -1081,124 +1128,161 @@ export default function AdminPage() {
                 background: "#08090f",
                 display: "flex",
                 flexDirection: "column",
-                gap: "18px",
+                gap: "16px",
               }}
               dir={previewLang === "AR" ? "rtl" : "ltr"}
             >
               {/* NOTICE PILL */}
               <div
                 style={{
-                  background: "rgba(37, 99, 235, 0.15)",
-                  border: "1px solid rgba(37, 99, 235, 0.3)",
-                  borderRadius: "12px",
-                  padding: "8px 12px",
-                  fontSize: "11.5px",
+                  background: "rgba(37, 99, 235, 0.12)",
+                  border: "1px solid rgba(37, 99, 235, 0.25)",
+                  borderRadius: "10px",
+                  padding: "6px 10px",
+                  fontSize: "11px",
                   color: "#93c5fd",
                   fontWeight: "700",
                   textAlign: "center",
                   lineHeight: "1.4",
                 }}
               >
-                المعاينة تتحدث فوراً مع كل حرف تكتبه. لن يتم النشر على الموقع الحقيقي إلا عند الضغط على "حفظ جميع التعديلات".
+                معاينة مباشرة للقسم: {
+                  (previewSectionTab === "auto" ? activeTab : previewSectionTab) === "general" ? "النبذة والمعلومات الأساسية" :
+                  (previewSectionTab === "auto" ? activeTab : previewSectionTab) === "stats" ? "الإحصائيات والأرقام" :
+                  (previewSectionTab === "auto" ? activeTab : previewSectionTab) === "experiences" ? "الخبرات العملية" :
+                  (previewSectionTab === "auto" ? activeTab : previewSectionTab) === "education" ? "التعليم والشهادات" :
+                  (previewSectionTab === "auto" ? activeTab : previewSectionTab) === "cv" ? "ملف السيرة الذاتية" : "كل الأقسام"
+                }
               </div>
 
-              {/* LIVE HERO PREVIEW */}
-              <div style={{ background: "#11121d", padding: "16px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.06)" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-                  <span style={{ fontSize: "14px", fontWeight: "900", color: "#ffffff" }}>
-                    {previewLang === "AR" ? data.general.nameAR : data.general.nameEN}
+              {/* 1. LIVE HERO & BIO SECTION */}
+              {((previewSectionTab === "auto" && activeTab === "general") || previewSectionTab === "general" || previewSectionTab === "all") && (
+                <div style={{ background: "#11121d", padding: "16px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                  <span style={{ fontSize: "11px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
+                    قسم النبذة والهيرو (Bio & Hero)
                   </span>
-                  <span style={{ background: "#ffffff", color: "#000000", padding: "4px 10px", borderRadius: "20px", fontSize: "10.5px", fontWeight: "900" }}>
-                    {previewLang === "AR" ? "تحميل السيرة الذاتية" : "Download CV"}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                    <span style={{ fontSize: "14px", fontWeight: "900", color: "#ffffff" }}>
+                      {previewLang === "AR" ? data.general.nameAR : data.general.nameEN}
+                    </span>
+                    <span style={{ background: "#ffffff", color: "#000000", padding: "4px 10px", borderRadius: "20px", fontSize: "10.5px", fontWeight: "900" }}>
+                      {previewLang === "AR" ? "تحميل السيرة الذاتية" : "Download CV"}
+                    </span>
+                  </div>
+
+                  <p style={{ fontSize: "12px", color: "#94a3b8", lineHeight: "1.6", margin: "0 0 10px 0" }}>
+                    {data.translations[previewLang]?.bio || (previewLang === "AR" ? data.translations.AR.bio : data.translations.EN.bio)}
+                  </p>
+
+                  <div style={{ background: "#0a0b12", padding: "8px 10px", borderRadius: "8px", fontSize: "11px", color: "#cbd5e1" }}>
+                    <div>فيديو الخلفية: <code style={{ color: "#60a5fa" }}>{data.general.heroVideo}</code></div>
+                    <div>الموقع: {previewLang === "AR" ? data.general.locationAR : data.general.locationEN} | الهاتف: {data.general.phone}</div>
+                  </div>
+                </div>
+              )}
+
+              {/* 2. LIVE STATS SECTION */}
+              {((previewSectionTab === "auto" && activeTab === "stats") || previewSectionTab === "stats" || previewSectionTab === "all") && (
+                <div>
+                  <span style={{ fontSize: "12px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
+                    {previewLang === "AR" ? "الإحصائيات والأرقام" : "Stats & Numbers"} ({data.stats.length})
                   </span>
-                </div>
-
-                <p style={{ fontSize: "12px", color: "#94a3b8", lineHeight: "1.6", margin: "0 0 10px 0" }}>
-                  {data.translations[previewLang]?.bio || (previewLang === "AR" ? data.translations.AR.bio : data.translations.EN.bio)}
-                </p>
-
-                <div style={{ fontSize: "11px", color: "#60a5fa", fontWeight: "700" }}>
-                  فيديو الهيرو: {data.general.heroVideo}
-                </div>
-              </div>
-
-              {/* LIVE STATS PREVIEW */}
-              <div>
-                <span style={{ fontSize: "12px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
-                  {previewLang === "AR" ? "الإحصائيات والأرقام" : "Stats & Numbers"} ({data.stats.length})
-                </span>
-                <div style={{ display: "grid", gridTemplateColumns: previewDevice === "mobile" ? "1fr 1fr" : "1fr 1fr", gap: "8px" }}>
-                  {data.stats.map((st, i) => (
-                    <div key={st.id || i} style={{ background: "#11121d", padding: "12px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
-                      <div style={{ fontSize: "16px", fontWeight: "900", color: "#ffffff", marginBottom: "4px" }}>
-                        {st.value}
-                      </div>
-                      <div style={{ fontSize: "11px", color: "#94a3b8", lineHeight: "1.4" }}>
-                        {previewLang === "AR" ? st.textAR : st.textEN}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* LIVE EXPERIENCE PREVIEW */}
-              <div>
-                <span style={{ fontSize: "12px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
-                  {previewLang === "AR" ? "الخبرات العملية" : "Work Experience"} ({data.experiences.length})
-                </span>
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                  {data.experiences.map((exp, i) => (
-                    <div key={exp.id || i} style={{ background: "#11121d", padding: "14px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.06)" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "6px" }}>
-                        <div>
-                          <div style={{ fontSize: "13px", fontWeight: "900", color: "#ffffff" }}>
-                            {previewLang === "AR" ? exp.companyAR : exp.companyEN}
-                          </div>
-                          <div style={{ fontSize: "11.5px", fontWeight: "700", color: "#60a5fa" }}>
-                            {previewLang === "AR" ? exp.roleAR : exp.roleEN}
-                          </div>
+                  <div style={{ display: "grid", gridTemplateColumns: previewDevice === "mobile" ? "1fr 1fr" : "1fr 1fr", gap: "8px" }}>
+                    {data.stats.map((st, i) => (
+                      <div key={st.id || i} style={{ background: "#11121d", padding: "12px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                        <div style={{ fontSize: "16px", fontWeight: "900", color: "#ffffff", marginBottom: "4px" }}>
+                          {st.value}
                         </div>
-                        <span style={{ fontSize: "10px", color: "#94a3b8", background: "#1c1e2e", padding: "3px 6px", borderRadius: "6px" }}>
-                          {previewLang === "AR" ? exp.dateAR : exp.dateEN}
-                        </span>
+                        <div style={{ fontSize: "11px", color: "#94a3b8", lineHeight: "1.4", marginBottom: "6px" }}>
+                          {previewLang === "AR" ? st.textAR : st.textEN}
+                        </div>
+                        <div style={{ fontSize: "9.5px", color: "#60a5fa", opacity: 0.8 }}>
+                          فيديو: {st.video}
+                        </div>
                       </div>
-
-                      <ul style={{ margin: "6px 0 0 0", paddingInlineStart: "16px", fontSize: "11px", color: "#cbd5e1", lineHeight: "1.5" }}>
-                        {(previewLang === "AR" ? exp.bulletsAR : exp.bulletsEN).map((b, bi) => (
-                          <li key={bi} style={{ marginBottom: "3px" }}>{b}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* LIVE EDUCATION & CERTS PREVIEW */}
-              <div>
-                <span style={{ fontSize: "12px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
-                  {previewLang === "AR" ? "التعليم والشهادات" : "Education & Certifications"}
-                </span>
-                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                  {data.education.map((edu, i) => (
-                    <div key={edu.id || i} style={{ background: "#11121d", padding: "10px 12px", borderRadius: "10px", fontSize: "11px" }}>
-                      <strong style={{ color: "#ffffff", display: "block" }}>{previewLang === "AR" ? edu.degreeAR : edu.degreeEN}</strong>
-                      <span style={{ color: "#94a3b8" }}>{previewLang === "AR" ? edu.schoolAR : edu.schoolEN} ({previewLang === "AR" ? edu.yearAR : edu.yearEN})</span>
-                    </div>
-                  ))}
-                  {data.certifications.map((cert, i) => (
-                    <div key={cert.id || i} style={{ background: "#11121d", padding: "8px 12px", borderRadius: "8px", fontSize: "11px", color: "#cbd5e1" }}>
-                      • {previewLang === "AR" ? cert.titleAR : cert.titleEN}
-                    </div>
-                  ))}
+              {/* 3. LIVE EXPERIENCES SECTION */}
+              {((previewSectionTab === "auto" && activeTab === "experiences") || previewSectionTab === "experiences" || previewSectionTab === "all") && (
+                <div>
+                  <span style={{ fontSize: "12px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
+                    {previewLang === "AR" ? "الخبرات العملية" : "Work Experience"} ({data.experiences.length})
+                  </span>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                    {data.experiences.map((exp, i) => (
+                      <div key={exp.id || i} style={{ background: "#11121d", padding: "14px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "6px", flexWrap: "wrap", gap: "6px" }}>
+                          <div>
+                            <div style={{ fontSize: "13px", fontWeight: "900", color: "#ffffff" }}>
+                              {previewLang === "AR" ? exp.companyAR : exp.companyEN}
+                            </div>
+                            <div style={{ fontSize: "11.5px", fontWeight: "700", color: "#60a5fa" }}>
+                              {previewLang === "AR" ? exp.roleAR : exp.roleEN}
+                            </div>
+                          </div>
+                          <span style={{ fontSize: "10px", color: "#94a3b8", background: "#1c1e2e", padding: "3px 6px", borderRadius: "6px" }}>
+                            {previewLang === "AR" ? exp.dateAR : exp.dateEN}
+                          </span>
+                        </div>
+
+                        <ul style={{ margin: "6px 0 0 0", paddingInlineStart: "16px", fontSize: "11px", color: "#cbd5e1", lineHeight: "1.5" }}>
+                          {(previewLang === "AR" ? exp.bulletsAR : exp.bulletsEN).map((b, bi) => (
+                            <li key={bi} style={{ marginBottom: "3px" }}>{b}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* FOOTER INFO PREVIEW */}
-              <div style={{ background: "#11121d", padding: "12px", borderRadius: "12px", borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: "11px", color: "#94a3b8" }}>
-                <div>البريد: {data.general.email}</div>
-                <div>الهاتف: {data.general.phone}</div>
-                <div>الموقع: {previewLang === "AR" ? data.general.locationAR : data.general.locationEN}</div>
-              </div>
+              {/* 4. LIVE EDUCATION & CERTS SECTION */}
+              {((previewSectionTab === "auto" && activeTab === "education") || previewSectionTab === "education" || previewSectionTab === "all") && (
+                <div>
+                  <span style={{ fontSize: "12px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
+                    {previewLang === "AR" ? "التعليم والشهادات" : "Education & Certifications"}
+                  </span>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <div style={{ fontSize: "11px", fontWeight: "800", color: "#cbd5e1" }}>المؤهلات:</div>
+                    {data.education.map((edu, i) => (
+                      <div key={edu.id || i} style={{ background: "#11121d", padding: "10px 12px", borderRadius: "10px", fontSize: "11px" }}>
+                        <strong style={{ color: "#ffffff", display: "block" }}>{previewLang === "AR" ? edu.degreeAR : edu.degreeEN}</strong>
+                        <span style={{ color: "#94a3b8" }}>{previewLang === "AR" ? edu.schoolAR : edu.schoolEN} ({previewLang === "AR" ? edu.yearAR : edu.yearEN})</span>
+                      </div>
+                    ))}
+
+                    <div style={{ fontSize: "11px", fontWeight: "800", color: "#cbd5e1", marginTop: "6px" }}>الشهادات:</div>
+                    {data.certifications.map((cert, i) => (
+                      <div key={cert.id || i} style={{ background: "#11121d", padding: "8px 12px", borderRadius: "8px", fontSize: "11px", color: "#cbd5e1" }}>
+                        • {previewLang === "AR" ? cert.titleAR : cert.titleEN}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 5. LIVE CV PDF SECTION */}
+              {((previewSectionTab === "auto" && activeTab === "cv") || previewSectionTab === "cv" || previewSectionTab === "all") && (
+                <div style={{ background: "#11121d", padding: "14px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                  <span style={{ fontSize: "11px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "6px" }}>
+                    ملف السيرة الذاتية النشط
+                  </span>
+                  <div style={{ fontSize: "12px", color: "#ffffff", fontWeight: "700", marginBottom: "8px" }}>
+                    المسار: <code style={{ color: "#60a5fa" }}>{data.general.cvPdfPath}</code>
+                  </div>
+                  <a
+                    href={data.general.cvPdfPath}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ background: "#2563eb", color: "#ffffff", padding: "6px 12px", borderRadius: "8px", fontSize: "11px", fontWeight: "800", textDecoration: "none", display: "inline-block" }}
+                  >
+                    معاينة ملف الـ PDF الحالي
+                  </a>
+                </div>
+              )}
             </div>
           )}
         </div>
