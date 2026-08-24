@@ -63,6 +63,41 @@ export interface PortfolioData {
     textColorAccent?: string;
     textColorMuted?: string;
   };
+  cvDocument?: {
+    photo?: string;
+    fullName: string;
+    jobTitle: string;
+    summary: string;
+    email: string;
+    phone: string;
+    location: string;
+    linkedin: string;
+    website: string;
+    skills: string[];
+    languages: string[];
+    experiences: Array<{
+      id: string;
+      role: string;
+      company: string;
+      date: string;
+      location?: string;
+      bullets: string[];
+    }>;
+    education: Array<{
+      id: string;
+      degree: string;
+      school: string;
+      year: string;
+    }>;
+    certifications: Array<{
+      id: string;
+      title: string;
+      issuer?: string;
+      year?: string;
+    }>;
+    templateStyle: "modern-dark" | "clean-white" | "executive-blue";
+    accentColor: string;
+  };
 }
 
 const DATA_FILE_PATH = path.join(process.cwd(), 'data', 'portfolio.json');

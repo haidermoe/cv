@@ -53,6 +53,9 @@ export default function AdminPage() {
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [isUploadingCv, setIsUploadingCv] = useState(false);
   const [uploadCvStatus, setUploadCvStatus] = useState("");
+  const [cvMode, setCvMode] = useState<"builder" | "upload">("builder");
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [generatePdfStatus, setGeneratePdfStatus] = useState("");
 
   // Live Instant Preview States
   const [showLivePreview, setShowLivePreview] = useState(true);
@@ -251,6 +254,113 @@ export default function AdminPage() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [data]);
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !data) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const base64 = ev.target?.result as string;
+      setData({
+        ...data,
+        cvDocument: {
+          ...(data.cvDocument || {
+            fullName: data.general.nameEN || "HAIDER M. SHWKAT",
+            jobTitle: "Computer Science Specialist | Data Operations & Workflow Consultant",
+            summary: data.translations.EN?.bio || "",
+            email: data.general.email,
+            phone: data.general.phone,
+            location: data.general.locationEN,
+            linkedin: "linkedin.com/in/haidermoe",
+            website: "cv-wine-tau.vercel.app",
+            skills: [],
+            languages: ["Arabic (Native)", "English (Professional)"],
+            experiences: [],
+            education: [],
+            certifications: [],
+            templateStyle: "modern-dark",
+            accentColor: "#2563eb",
+          }),
+          photo: base64,
+        }
+      });
+      showToast("تم تحديث صورة السيرة الذاتية");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleGeneratePdf = async (downloadLocal = false) => {
+    const element = document.getElementById("cv-pdf-canvas");
+    if (!element) {
+      setGeneratePdfStatus("تعذر العثور على ورقة السيرة الذاتية لتوليدها.");
+      return;
+    }
+
+    setIsGeneratingPdf(true);
+    setGeneratePdfStatus(downloadLocal ? "جاري توليد ملف الـ PDF وتنزيله..." : "جاري توليد ملف الـ PDF وحفظه في الموقع...");
+
+    try {
+      const html2canvas = (await import("html2canvas")).default;
+      const { jsPDF } = await import("jspdf");
+
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: null,
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+      if (downloadLocal) {
+        pdf.save("HAIDER_M_SHWKAT_CV_2026.pdf");
+        setGeneratePdfStatus("تم تنزيل ملف الـ PDF إلى جهازك بنجاح!");
+      } else {
+        const blob = pdf.output("blob");
+        const file = new File([blob], "HAIDER_M_SHWKAT_CV_2026.pdf", { type: "application/pdf" });
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("customName", "HAIDER_M_SHWKAT_CV_2026.pdf");
+
+        const res = await fetch("/api/admin/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const json = await res.json();
+
+        if (json.ok) {
+          setGeneratePdfStatus("تم توليد ملف الـ PDF بنجاح واعتماده كملف السيرة الرسمي للموقع!");
+          if (data) {
+            setData({
+              ...data,
+              general: {
+                ...data.general,
+                cvPdfPath: "/HAIDER_M_SHWKAT_CV_2026.pdf",
+              }
+            });
+          }
+        } else {
+          setGeneratePdfStatus("حدث خطأ أثناء حفظ الملف: " + (json.message || ""));
+        }
+      }
+    } catch (err: any) {
+      console.error(err);
+      setGeneratePdfStatus("فشل توليد ملف الـ PDF: " + (err?.message || ""));
+    } finally {
+      setIsGeneratingPdf(false);
+      setTimeout(() => setGeneratePdfStatus(""), 6000);
+    }
+  };
 
   const handleUploadCv = async () => {
     if (!cvFile) return;
@@ -1115,61 +1225,501 @@ export default function AdminPage() {
         {activeTab === "cv" && data && (
           <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
             <div style={{ background: "#12131f", padding: "30px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <h3 style={{ fontSize: "18px", fontWeight: "900", marginBottom: "14px", color: "#60a5fa" }}>إدارة وتحديث ملف السيرة الذاتية (CV PDF)</h3>
-              <p style={{ fontSize: "14px", color: "#94a3b8", lineHeight: "1.6", marginBottom: "24px" }}>
-                يمكنك رفع وتحديث ملف السيرة الذاتية (PDF) مباشرة من هنا. سيتم استبدال الملف فوراً وتحديث رابط التحميل في جميع صفحات الموقع.
-              </p>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "12px" }}>
+                <div>
+                  <h3 style={{ fontSize: "18px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>محرر ومصمم السيرة الذاتية (Visual PDF Editor & Builder)</h3>
+                  <p style={{ fontSize: "13.5px", color: "#94a3b8", margin: "4px 0 0 0" }}>
+                    عدّل النصوص، الصورة، الخبرات، والمهارات مباشرة في ورقة الـ PDF، وولّد الملف بنقرة زر ليتم حفظه وتحديثه لجميع زوار الموقع فوراً.
+                  </p>
+                </div>
 
-              <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155", marginBottom: "25px" }}>
-                <span style={{ fontSize: "13px", fontWeight: "700", color: "#94a3b8", display: "block", marginBottom: "6px" }}>رابط الملف الحالي المعتمد:</span>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
-                  <code style={{ background: "#1e293b", color: "#60a5fa", padding: "8px 14px", borderRadius: "8px", fontSize: "14px" }}>{data.general.cvPdfPath}</code>
+                {/* MODE TOGGLE */}
+                <div style={{ display: "flex", background: "#0a0b12", padding: "4px", borderRadius: "10px", border: "1px solid #334155" }}>
+                  <button
+                    onClick={() => setCvMode("builder")}
+                    style={{
+                      background: cvMode === "builder" ? "#2563eb" : "transparent",
+                      color: cvMode === "builder" ? "#ffffff" : "#94a3b8",
+                      border: "none",
+                      padding: "6px 14px",
+                      borderRadius: "8px",
+                      fontSize: "12.5px",
+                      fontWeight: "800",
+                      cursor: "pointer",
+                    }}
+                  >
+                    محرر الـ PDF المباشر
+                  </button>
+                  <button
+                    onClick={() => setCvMode("upload")}
+                    style={{
+                      background: cvMode === "upload" ? "#2563eb" : "transparent",
+                      color: cvMode === "upload" ? "#ffffff" : "#94a3b8",
+                      border: "none",
+                      padding: "6px 14px",
+                      borderRadius: "8px",
+                      fontSize: "12.5px",
+                      fontWeight: "800",
+                      cursor: "pointer",
+                    }}
+                  >
+                    رفع ملف PDF خارجي
+                  </button>
+                </div>
+              </div>
+
+              {/* ACTION TOOLBAR */}
+              {cvMode === "builder" && (
+                <div style={{ background: "#0a0b12", padding: "16px 20px", borderRadius: "14px", border: "1px solid #334155", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", marginBottom: "25px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <button
+                      onClick={() => handleGeneratePdf(false)}
+                      disabled={isGeneratingPdf}
+                      style={{ background: "#16a34a", color: "#ffffff", border: "none", padding: "10px 22px", borderRadius: "10px", fontSize: "14px", fontWeight: "800", cursor: "pointer", boxShadow: "0 4px 15px rgba(22, 163, 74, 0.4)", display: "flex", alignItems: "center", gap: "8px" }}
+                    >
+                      <span>{isGeneratingPdf ? "جاري التوليد والحفظ..." : "توليد وحفظ الـ PDF كملف الموقع الرسمي"}</span>
+                    </button>
+
+                    <button
+                      onClick={() => handleGeneratePdf(true)}
+                      disabled={isGeneratingPdf}
+                      style={{ background: "#1e293b", color: "#60a5fa", border: "1px solid #3b82f6", padding: "10px 18px", borderRadius: "10px", fontSize: "13.5px", fontWeight: "800", cursor: "pointer" }}
+                    >
+                      تنزيل نسخة PDF إلى جهازي
+                    </button>
+                  </div>
+
                   <a
                     href={data.general.cvPdfPath}
                     target="_blank"
                     rel="noreferrer"
-                    style={{ background: "#2563eb", color: "#ffffff", padding: "8px 16px", borderRadius: "8px", fontSize: "13px", fontWeight: "800", textDecoration: "none" }}
+                    style={{ background: "#151624", color: "#cbd5e1", border: "1px solid #334155", padding: "9px 16px", borderRadius: "10px", fontSize: "13px", fontWeight: "700", textDecoration: "none" }}
                   >
-                    فتح ومعاينة الملف الحالي
+                    معاينة الملف الحالي: <code style={{ color: "#60a5fa" }}>{data.general.cvPdfPath}</code>
                   </a>
                 </div>
-              </div>
+              )}
 
-              <div style={{ border: "2px dashed #475569", borderRadius: "18px", padding: "30px 20px", textAlign: "center", background: "rgba(255,255,255,0.02)" }}>
-                <input
-                  type="file"
-                  accept=".pdf"
-                  id="cvFileInput"
-                  style={{ display: "none" }}
-                  onChange={(e) => setCvFile(e.target.files?.[0] || null)}
-                />
-                <label htmlFor="cvFileInput" style={{ cursor: "pointer", display: "inline-block" }}>
-                  <div style={{ background: "#2563eb", color: "#ffffff", padding: "12px 26px", borderRadius: "12px", fontSize: "14px", fontWeight: "800", marginBottom: "12px", display: "inline-block" }}>
-                    اختر ملف PDF جديد من جهازك
-                  </div>
-                </label>
-                <div style={{ fontSize: "13.5px", color: "#cbd5e1", fontWeight: "600" }}>
-                  {cvFile ? `الملف المختار: ${cvFile.name} (${(cvFile.size / 1024).toFixed(1)} KB)` : "أو اسحب ملف الـ PDF هنا"}
+              {generatePdfStatus && (
+                <div style={{ marginBottom: "20px", background: generatePdfStatus.includes("نجاح") ? "rgba(22, 163, 74, 0.2)" : "rgba(37, 99, 235, 0.2)", border: `1px solid ${generatePdfStatus.includes("نجاح") ? "#22c55e" : "#3b82f6"}`, color: generatePdfStatus.includes("نجاح") ? "#4ade80" : "#93c5fd", padding: "12px 18px", borderRadius: "12px", fontSize: "13.5px", fontWeight: "800", textAlign: "center" }}>
+                  {generatePdfStatus}
                 </div>
+              )}
 
-                {cvFile && (
-                  <div style={{ marginTop: "20px" }}>
-                    <button
-                      onClick={handleUploadCv}
-                      disabled={isUploadingCv}
-                      style={{ background: "#16a34a", color: "#ffffff", border: "none", padding: "12px 28px", borderRadius: "12px", fontSize: "14.5px", fontWeight: "800", cursor: "pointer", boxShadow: "0 6px 20px rgba(22, 163, 74, 0.4)" }}
+              {/* BUILDER MODE */}
+              {cvMode === "builder" && (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: "25px", alignItems: "start" }}>
+                  {/* LEFT: FORM CONTROLS */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+                    {/* PHOTO & BASIC HEADER */}
+                    <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
+                      <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#ffffff", marginBottom: "14px" }}>الصورة والمعلومات الشخصية</h4>
+
+                      <div style={{ display: "flex", gap: "16px", alignItems: "center", marginBottom: "16px" }}>
+                        <div style={{ width: "70px", height: "70px", borderRadius: "50%", background: "#1e2130", overflow: "hidden", border: "2px solid #60a5fa", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                          {data.cvDocument?.photo ? (
+                            <img src={data.cvDocument.photo} alt="CV Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                          ) : (
+                            <span style={{ fontSize: "11px", color: "#94a3b8" }}>بدون صورة</span>
+                          )}
+                        </div>
+
+                        <div>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            id="cvPhotoInput"
+                            style={{ display: "none" }}
+                            onChange={handlePhotoUpload}
+                          />
+                          <label htmlFor="cvPhotoInput" style={{ cursor: "pointer" }}>
+                            <div style={{ background: "#2563eb", color: "#ffffff", padding: "7px 14px", borderRadius: "8px", fontSize: "12.5px", fontWeight: "800", display: "inline-block", marginBottom: "6px" }}>
+                              تغيير / رفع صورة السيرة
+                            </div>
+                          </label>
+                          {data.cvDocument?.photo && (
+                            <button
+                              onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), photo: "" } })}
+                              style={{ background: "none", border: "none", color: "#ef4444", fontSize: "12px", cursor: "pointer", display: "block" }}
+                            >
+                              إزالة الصورة
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                        <div>
+                          <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الاسم الكامل (Full Name)</label>
+                          <input
+                            type="text"
+                            value={data.cvDocument?.fullName || ""}
+                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), fullName: e.target.value } })}
+                            style={{ width: "100%", padding: "9px 12px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13.5px", fontWeight: "700" }}
+                          />
+                        </div>
+
+                        <div>
+                          <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>المسمى المهني (Job Title)</label>
+                          <input
+                            type="text"
+                            value={data.cvDocument?.jobTitle || ""}
+                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), jobTitle: e.target.value } })}
+                            style={{ width: "100%", padding: "9px 12px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13.5px" }}
+                          />
+                        </div>
+
+                        <div>
+                          <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الملخص المهني (Professional Summary)</label>
+                          <textarea
+                            rows={4}
+                            value={data.cvDocument?.summary || ""}
+                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), summary: e.target.value } })}
+                            style={{ width: "100%", padding: "9px 12px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "13px", lineHeight: "1.6" }}
+                          />
+                        </div>
+
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                          <div>
+                            <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>البريد الإلكتروني</label>
+                            <input
+                              type="text"
+                              value={data.cvDocument?.email || ""}
+                              onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), email: e.target.value } })}
+                              style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12.5px" }}
+                            />
+                          </div>
+
+                          <div>
+                            <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>رقم الهاتف</label>
+                            <input
+                              type="text"
+                              value={data.cvDocument?.phone || ""}
+                              onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), phone: e.target.value } })}
+                              style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12.5px" }}
+                            />
+                          </div>
+                        </div>
+
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                          <div>
+                            <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>الموقع الجغرافي</label>
+                            <input
+                              type="text"
+                              value={data.cvDocument?.location || ""}
+                              onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), location: e.target.value } })}
+                              style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12.5px" }}
+                            />
+                          </div>
+
+                          <div>
+                            <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "4px" }}>رابط LinkedIn</label>
+                            <input
+                              type="text"
+                              value={data.cvDocument?.linkedin || ""}
+                              onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), linkedin: e.target.value } })}
+                              style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12.5px" }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* SKILLS TAGS */}
+                    <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                        <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#ffffff", margin: 0 }}>المهارات التقنية (Skills)</h4>
+                        <button
+                          onClick={() => {
+                            const newSkills = [...(data.cvDocument?.skills || []), "مهارة تقنية جديدة"];
+                            setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), skills: newSkills } });
+                          }}
+                          style={{ background: "#2563eb", color: "#ffffff", border: "none", padding: "5px 12px", borderRadius: "6px", fontSize: "12px", fontWeight: "800", cursor: "pointer" }}
+                        >
+                          + إضافة مهارة
+                        </button>
+                      </div>
+
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {(data.cvDocument?.skills || []).map((sk, idx) => (
+                          <div key={idx} style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                            <input
+                              type="text"
+                              value={sk}
+                              onChange={(e) => {
+                                const newSkills = [...(data.cvDocument?.skills || [])];
+                                newSkills[idx] = e.target.value;
+                                setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), skills: newSkills } });
+                              }}
+                              style={{ flex: 1, padding: "7px 10px", borderRadius: "6px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12.5px" }}
+                            />
+                            <button
+                              onClick={() => {
+                                const newSkills = (data.cvDocument?.skills || []).filter((_, i) => i !== idx);
+                                setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), skills: newSkills } });
+                              }}
+                              style={{ background: "rgba(239,68,68,0.2)", color: "#f87171", border: "none", padding: "6px 10px", borderRadius: "6px", fontSize: "12px", cursor: "pointer" }}
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* STYLING & ACCENT */}
+                    <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
+                      <h4 style={{ fontSize: "15px", fontWeight: "800", color: "#ffffff", marginBottom: "12px" }}>ثيم وتصميم الـ PDF</h4>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginBottom: "12px" }}>
+                        {[
+                          { id: "modern-dark", label: "داكن عصري (Dark)" },
+                          { id: "clean-white", label: "أبيض بسيط (White)" },
+                          { id: "executive-blue", label: "أزرق ملكي (Executive)" },
+                        ].map((th) => (
+                          <button
+                            key={th.id}
+                            onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), templateStyle: th.id as any } })}
+                            style={{
+                              background: data.cvDocument?.templateStyle === th.id ? "#2563eb" : "#151624",
+                              color: data.cvDocument?.templateStyle === th.id ? "#ffffff" : "#94a3b8",
+                              border: "1px solid #334155",
+                              padding: "8px 6px",
+                              borderRadius: "8px",
+                              fontSize: "12px",
+                              fontWeight: "800",
+                              cursor: "pointer",
+                            }}
+                          >
+                            {th.label}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div>
+                        <label style={{ display: "block", fontSize: "12px", color: "#94a3b8", marginBottom: "6px" }}>لون التمييز (Accent Color):</label>
+                        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                          <input
+                            type="color"
+                            value={data.cvDocument?.accentColor || "#2563eb"}
+                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), accentColor: e.target.value } })}
+                            style={{ width: "36px", height: "36px", borderRadius: "6px", border: "none", cursor: "pointer", background: "none" }}
+                          />
+                          <input
+                            type="text"
+                            value={data.cvDocument?.accentColor || "#2563eb"}
+                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), accentColor: e.target.value } })}
+                            style={{ width: "120px", padding: "6px 10px", borderRadius: "6px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12.5px" }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* RIGHT: LIVE A4 SHEET CANVAS PREVIEW */}
+                  <div style={{ background: "#05060a", padding: "16px", borderRadius: "18px", border: "1px solid #334155", overflowX: "auto" }}>
+                    <div style={{ fontSize: "12px", fontWeight: "800", color: "#60a5fa", marginBottom: "12px", display: "flex", justifyContent: "space-between" }}>
+                      <span>معاينة ورقة الـ PDF الحقيقية (A4 Sheet):</span>
+                      <span>210mm x 297mm</span>
+                    </div>
+
+                    {/* THE EXACT A4 CANVAS ELEMENT TO BE RENDERED INTO PDF */}
+                    <div
+                      id="cv-pdf-canvas"
+                      style={{
+                        width: "100%",
+                        maxWidth: "680px",
+                        margin: "0 auto",
+                        minHeight: "880px",
+                        background: data.cvDocument?.templateStyle === "clean-white" ? "#ffffff" : data.cvDocument?.templateStyle === "executive-blue" ? "#0f172a" : "#0d0f18",
+                        color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#ffffff",
+                        padding: "36px 32px",
+                        boxSizing: "border-box",
+                        fontFamily: "'Outfit', 'Tajawal', sans-serif",
+                        border: "1px solid rgba(255,255,255,0.1)",
+                        boxShadow: "0 10px 40px rgba(0,0,0,0.8)",
+                      }}
+                      dir="ltr"
                     >
-                      {isUploadingCv ? "جاري الرفع والاستبدال..." : "تأكيد رفع واستبدال الملف فوراً"}
-                    </button>
-                  </div>
-                )}
+                      {/* HEADER ROW */}
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: `2px solid ${data.cvDocument?.accentColor || "#2563eb"}`, paddingBottom: "18px", marginBottom: "20px", gap: "16px" }}>
+                        <div style={{ flex: 1 }}>
+                          <h1 style={{ fontSize: "26px", fontWeight: "900", margin: "0 0 4px 0", letterSpacing: "0.5px", color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                            {data.cvDocument?.fullName || "HAIDER M. SHWKAT"}
+                          </h1>
+                          <div style={{ fontSize: "13px", fontWeight: "700", color: data.cvDocument?.accentColor || "#2563eb", marginBottom: "10px" }}>
+                            {data.cvDocument?.jobTitle || "Computer Science Specialist | Data Operations & Workflow Consultant"}
+                          </div>
 
-                {uploadCvStatus && (
-                  <div style={{ marginTop: "16px", fontSize: "14px", fontWeight: "800", color: uploadCvStatus.includes("نجاح") ? "#4ade80" : "#f87171" }}>
-                    {uploadCvStatus}
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", fontSize: "11px", color: data.cvDocument?.templateStyle === "clean-white" ? "#475569" : "#94a3b8" }}>
+                            <div>📧 {data.cvDocument?.email || data.general.email}</div>
+                            <div>📞 {data.cvDocument?.phone || data.general.phone}</div>
+                            <div>📍 {data.cvDocument?.location || data.general.locationEN}</div>
+                            <div>🔗 {data.cvDocument?.linkedin || "linkedin.com/in/haidermoe"}</div>
+                          </div>
+                        </div>
+
+                        {data.cvDocument?.photo && (
+                          <div style={{ width: "80px", height: "80px", borderRadius: "12px", overflow: "hidden", border: `2px solid ${data.cvDocument.accentColor || "#2563eb"}`, flexShrink: 0 }}>
+                            <img src={data.cvDocument.photo} alt="Photo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* SUMMARY BOX */}
+                      {data.cvDocument?.summary && (
+                        <div style={{ marginBottom: "20px" }}>
+                          <div style={{ fontSize: "13px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
+                            Executive Summary
+                          </div>
+                          <p style={{ fontSize: "11.5px", lineHeight: "1.6", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0 }}>
+                            {data.cvDocument.summary}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* WORK EXPERIENCE */}
+                      <div style={{ marginBottom: "20px" }}>
+                        <div style={{ fontSize: "13px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.2)", paddingBottom: "4px", marginBottom: "12px" }}>
+                          Professional Work Experience
+                        </div>
+
+                        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                          {(data.cvDocument?.experiences?.length ? data.cvDocument.experiences : data.experiences).map((exp, i) => (
+                            <div key={exp.id || i}>
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "3px" }}>
+                                <div>
+                                  <strong style={{ fontSize: "12.5px", color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                                    {(exp as any).role || (exp as any).roleEN}
+                                  </strong>
+                                  <span style={{ fontSize: "11.5px", color: data.cvDocument?.accentColor || "#2563eb", marginLeft: "6px" }}>
+                                    | {(exp as any).company || (exp as any).companyEN}
+                                  </span>
+                                </div>
+                                <span style={{ fontSize: "10.5px", color: data.cvDocument?.templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
+                                  {(exp as any).date || (exp as any).dateEN}
+                                </span>
+                              </div>
+
+                              <ul style={{ margin: "4px 0 0 0", paddingLeft: "16px", fontSize: "11px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.5" }}>
+                                {((exp as any).bullets || (exp as any).bulletsEN || []).map((b: string, bi: number) => (
+                                  <li key={bi} style={{ marginBottom: "2px" }}>{b}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* SKILLS GRID */}
+                      <div style={{ marginBottom: "20px" }}>
+                        <div style={{ fontSize: "13px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.2)", paddingBottom: "4px", marginBottom: "10px" }}>
+                          Technical Skills & Core Competencies
+                        </div>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                          {(data.cvDocument?.skills || []).map((sk, i) => (
+                            <span
+                              key={i}
+                              style={{
+                                background: data.cvDocument?.templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)",
+                                border: `1px solid ${data.cvDocument?.accentColor || "#2563eb"}40`,
+                                color: data.cvDocument?.templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0",
+                                padding: "3px 8px",
+                                borderRadius: "6px",
+                                fontSize: "10px",
+                                fontWeight: "700",
+                              }}
+                            >
+                              {sk}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* EDUCATION & CERTS */}
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                        <div>
+                          <div style={{ fontSize: "12px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", borderBottom: "1px solid rgba(148,163,184,0.2)", paddingBottom: "3px", marginBottom: "6px" }}>
+                            Education
+                          </div>
+                          {data.education.map((edu, i) => (
+                            <div key={i} style={{ fontSize: "10.5px", marginBottom: "4px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                              <strong>{edu.degreeEN}</strong>
+                              <div>{edu.schoolEN} ({edu.yearEN})</div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div>
+                          <div style={{ fontSize: "12px", fontWeight: "900", color: data.cvDocument?.accentColor || "#2563eb", textTransform: "uppercase", borderBottom: "1px solid rgba(148,163,184,0.2)", paddingBottom: "3px", marginBottom: "6px" }}>
+                            Certifications
+                          </div>
+                          {data.certifications.map((cert, i) => (
+                            <div key={i} style={{ fontSize: "10.5px", marginBottom: "3px", color: data.cvDocument?.templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                              • {cert.titleEN}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
+
+              {/* MANUAL UPLOAD MODE */}
+              {cvMode === "upload" && (
+                <div>
+                  <div style={{ background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155", marginBottom: "25px" }}>
+                    <span style={{ fontSize: "13px", fontWeight: "700", color: "#94a3b8", display: "block", marginBottom: "6px" }}>رابط الملف الحالي المعتمد:</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
+                      <code style={{ background: "#1e293b", color: "#60a5fa", padding: "8px 14px", borderRadius: "8px", fontSize: "14px" }}>{data.general.cvPdfPath}</code>
+                      <a
+                        href={data.general.cvPdfPath}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ background: "#2563eb", color: "#ffffff", padding: "8px 16px", borderRadius: "8px", fontSize: "13px", fontWeight: "800", textDecoration: "none" }}
+                      >
+                        فتح ومعاينة الملف الحالي
+                      </a>
+                    </div>
+                  </div>
+
+                  <div style={{ border: "2px dashed #475569", borderRadius: "18px", padding: "30px 20px", textAlign: "center", background: "rgba(255,255,255,0.02)" }}>
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      id="cvFileInput"
+                      style={{ display: "none" }}
+                      onChange={(e) => setCvFile(e.target.files?.[0] || null)}
+                    />
+                    <label htmlFor="cvFileInput" style={{ cursor: "pointer", display: "inline-block" }}>
+                      <div style={{ background: "#2563eb", color: "#ffffff", padding: "12px 26px", borderRadius: "12px", fontSize: "14px", fontWeight: "800", marginBottom: "12px", display: "inline-block" }}>
+                        اختر ملف PDF جديد من جهازك
+                      </div>
+                    </label>
+                    <div style={{ fontSize: "13.5px", color: "#cbd5e1", fontWeight: "600" }}>
+                      {cvFile ? `الملف المختار: ${cvFile.name} (${(cvFile.size / 1024).toFixed(1)} KB)` : "أو اسحب ملف الـ PDF هنا"}
+                    </div>
+
+                    {cvFile && (
+                      <div style={{ marginTop: "20px" }}>
+                        <button
+                          onClick={handleUploadCv}
+                          disabled={isUploadingCv}
+                          style={{ background: "#16a34a", color: "#ffffff", border: "none", padding: "12px 28px", borderRadius: "12px", fontSize: "14.5px", fontWeight: "800", cursor: "pointer", boxShadow: "0 6px 20px rgba(22, 163, 74, 0.4)" }}
+                        >
+                          {isUploadingCv ? "جاري الرفع والاستبدال..." : "تأكيد رفع واستبدال الملف فوراً"}
+                        </button>
+                      </div>
+                    )}
+
+                    {uploadCvStatus && (
+                      <div style={{ marginTop: "16px", fontSize: "14px", fontWeight: "800", color: uploadCvStatus.includes("نجاح") ? "#4ade80" : "#f87171" }}>
+                        {uploadCvStatus}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}

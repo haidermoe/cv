@@ -251,5 +251,92 @@
     "textColorPrimary": "#ffffff",
     "textColorAccent": "#60a5fa",
     "textColorMuted": "#94a3b8"
+  },
+  "cvDocument": {
+    "photo": "/cv-photo.png",
+    "fullName": "HAIDER M. SHWKAT",
+    "jobTitle": "Computer Science Specialist | Data Operations & Workflow Consultant",
+    "summary": "Computer Science Specialist and Data Operations Consultant with extensive experience in workflow automation, large-scale database management (+22K records), e-commerce catalog integrity, and network infrastructure (EPON / FTTH). Proven track record of reducing system downtimes, automating multi-branch restaurant ERPs, and supporting enterprise-level operations across Baghdad, Iraq.",
+    "email": "haider.m.shwkat@outlook.com",
+    "phone": "+964 771 896 4778",
+    "location": "Baghdad, Iraq",
+    "linkedin": "linkedin.com/in/haidermoe",
+    "website": "cv-wine-tau.vercel.app",
+    "skills": [
+      "Python Automation & Scripting",
+      "SQL & High-Volume Database Architecture",
+      "E-Commerce & Foodics ERP Workflows",
+      "FTTH & EPON Optical Network Management",
+      "Data Cleansing & Integrity Verification",
+      "Linux Server Operations & Bash",
+      "Security Compliance & Defense Sector Workflows",
+      "Agile Project & Team Leadership"
+    ],
+    "languages": [
+      "Arabic (Native / Bilingual)",
+      "English (Professional Working Proficiency)"
+    ],
+    "experiences": [
+      {
+        "id": "exp-1",
+        "role": "Technical Project Manager & Security Data Specialist",
+        "company": "Confidential / Defense Sector Projects",
+        "date": "2023 - 2025",
+        "location": "Baghdad, Iraq",
+        "bullets": [
+          "Engineered secure, high-integrity database pipelines processing 22,000+ sensitive records with strict zero-loss verification.",
+          "Administered mission-critical network and system architecture with automated failover and daily integrity audit scripts.",
+          "Supervised cross-functional IT and security operations teams, enforcing automated logging and threat mitigation."
+        ]
+      },
+      {
+        "id": "exp-2",
+        "role": "E-Commerce Operations Lead & ERP Systems Integrator",
+        "company": "Multiple Enterprise Hospitality & Retail Clients",
+        "date": "2021 - 2024",
+        "location": "Baghdad, Iraq",
+        "bullets": [
+          "Successfully deployed and synchronized Foodics POS & ERP ecosystems across 3 high-volume restaurant brands.",
+          "Streamlined multi-channel food delivery platform integrations (Talabat, Alsaree3), cutting order fulfillment latency by 35%.",
+          "Developed customized Python inventory synchronization scripts, maintaining real-time SKU accuracy across 15,000+ items."
+        ]
+      },
+      {
+        "id": "exp-3",
+        "role": "FTTH & EPON Infrastructure Project Engineer",
+        "company": "Modern Fiber Optics & ISP Deployments",
+        "date": "2019 - 2022",
+        "location": "Baghdad, Iraq",
+        "bullets": [
+          "Architected and rolled out fiber-to-the-home (FTTH) network infrastructure serving 2,000+ residential and commercial subscribers.",
+          "Maintained EPON OLT and ONU distribution nodes with 99.8% network uptime and proactive telemetry monitoring.",
+          "Trained and managed tier-2 technical support personnel, establishing rapid incident diagnostic protocols."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "id": "edu-1",
+        "degree": "Bachelor of Science (B.Sc.) in Computer Science",
+        "school": "University of Technology / Baghdad",
+        "year": "2019"
+      }
+    ],
+    "certifications": [
+      {
+        "id": "cert-1",
+        "title": "Certified Network Systems Administrator (FTTH & Optical Networks)",
+        "issuer": "Fiber Infrastructure Academy",
+        "year": "2021"
+      },
+      {
+        "id": "cert-2",
+        "title": "Advanced Python Data Automation & Security Protocols",
+        "issuer": "Enterprise Data Institute",
+        "year": "2023"
+      }
+    ],
+    "templateStyle": "modern-dark",
+    "accentColor": "#2563eb"
   }
 }
