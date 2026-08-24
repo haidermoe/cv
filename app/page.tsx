@@ -430,7 +430,7 @@ export default function Home() {
   return (
     <div
       onMouseMove={handleMouseMove}
-      className="main-layout"
+      className={`main-layout ${isDark ? "theme-dark" : "theme-light"}`}
       dir={lang === "AR" ? "rtl" : "ltr"}
       style={{
         background: tColors.bg,
