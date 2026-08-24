@@ -26,6 +26,8 @@ export default function AdminPage() {
   const [previewDevice, setPreviewDevice] = useState<"mobile" | "desktop">("mobile");
   const [isPreviewMinimized, setIsPreviewMinimized] = useState(false);
   const [previewSectionTab, setPreviewSectionTab] = useState<"auto" | "general" | "stats" | "experiences" | "education" | "cv" | "typography" | "all">("auto");
+  const [showShortcutsModal, setShowShortcutsModal] = useState(false);
+  const [shortcutToast, setShortcutToast] = useState("");
 
   useEffect(() => {
     checkAuth();
@@ -126,6 +128,77 @@ export default function AdminPage() {
       setSaveMessage("فشل الاتصال بالخادم لحفظ التعديلات");
     }
   };
+
+  const showToast = (msg: string) => {
+    setShortcutToast(msg);
+    setTimeout(() => setShortcutToast(""), 2800);
+  };
+
+  // KEYBOARD SHORTCUTS LISTENER
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      const isInput = target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
+
+      // Ctrl+S or Cmd+S -> Save all data
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        handleSaveData();
+        showToast("تم الحفظ عبر الاختصار: (Ctrl + S)");
+        return;
+      }
+
+      // Ctrl+P or Cmd+P -> Toggle Live Preview
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "p") {
+        e.preventDefault();
+        setShowLivePreview((prev) => !prev);
+        showToast("تبديل المعاينة الحية: (Ctrl + P)");
+        return;
+      }
+
+      // Ctrl+L or Cmd+L -> Toggle Language in preview
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "l") {
+        e.preventDefault();
+        setPreviewLang((prev) => (prev === "AR" ? "EN" : "AR"));
+        showToast("تبديل لغة المعاينة: (Ctrl + L)");
+        return;
+      }
+
+      // Ctrl + 1..6 -> Switch Tabs
+      if ((e.ctrlKey || e.metaKey) && ["1", "2", "3", "4", "5", "6"].includes(e.key)) {
+        e.preventDefault();
+        const tabList: Array<"general" | "stats" | "experiences" | "education" | "cv" | "typography"> = [
+          "general",
+          "stats",
+          "experiences",
+          "education",
+          "cv",
+          "typography",
+        ];
+        const idx = parseInt(e.key, 10) - 1;
+        if (tabList[idx]) {
+          setActiveTab(tabList[idx]);
+          showToast(`الانتقال للتبويب ${idx + 1}: (Ctrl + ${e.key})`);
+        }
+        return;
+      }
+
+      // '?' -> Toggle Shortcuts Help Modal (when not typing in an input)
+      if (e.key === "?" && !isInput) {
+        e.preventDefault();
+        setShowShortcutsModal((prev) => !prev);
+        return;
+      }
+
+      // Escape -> Close Shortcuts Modal
+      if (e.key === "Escape") {
+        setShowShortcutsModal(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [data]);
 
   const handleUploadCv = async () => {
     if (!cvFile) return;
@@ -364,7 +437,29 @@ export default function AdminPage() {
           <span style={{ background: "rgba(37, 99, 235, 0.2)", color: "#60a5fa", padding: "4px 10px", borderRadius: "20px", fontSize: "12px", fontWeight: "800" }}>مدير النظام</span>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+          {/* SHORTCUTS HELP BUTTON */}
+          <button
+            onClick={() => setShowShortcutsModal(true)}
+            style={{
+              background: "#151728",
+              color: "#93c5fd",
+              border: "1px solid #334155",
+              padding: "9px 14px",
+              borderRadius: "12px",
+              fontSize: "13px",
+              fontWeight: "800",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+            }}
+            title="عرض اختصارات لوحة المفاتيح (Shift + ?)"
+          >
+            <span>اختصارات الكيبورد</span>
+            <kbd style={{ background: "#0a0b12", border: "1px solid #475569", padding: "1px 5px", borderRadius: "4px", fontSize: "11px", color: "#60a5fa" }}>?</kbd>
+          </button>
+
           <button
             onClick={() => setShowLivePreview(!showLivePreview)}
             style={{
@@ -381,7 +476,8 @@ export default function AdminPage() {
               gap: "6px"
             }}
           >
-            <span>{showLivePreview ? "إخفاء نافذة المعاينة الحية" : "إظهار نافذة المعاينة الحية"}</span>
+            <span>{showLivePreview ? "إخفاء المعاينة الحية" : "إظهار المعاينة الحية"}</span>
+            <kbd style={{ background: "rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.2)", padding: "1px 5px", borderRadius: "4px", fontSize: "10.5px", color: "#ffffff" }}>Ctrl+P</kbd>
           </button>
 
           <Link
@@ -395,9 +491,10 @@ export default function AdminPage() {
           <button
             onClick={handleSaveData}
             disabled={saveStatus === "saving"}
-            style={{ background: "#2563eb", color: "#ffffff", border: "none", padding: "10px 22px", borderRadius: "12px", fontSize: "14px", fontWeight: "800", cursor: "pointer", boxShadow: "0 4px 15px rgba(37, 99, 235, 0.4)" }}
+            style={{ background: "#2563eb", color: "#ffffff", border: "none", padding: "10px 22px", borderRadius: "12px", fontSize: "14px", fontWeight: "800", cursor: "pointer", boxShadow: "0 4px 15px rgba(37, 99, 235, 0.4)", display: "flex", alignItems: "center", gap: "8px" }}
           >
-            {saveStatus === "saving" ? "جاري الحفظ..." : "حفظ جميع التعديلات"}
+            <span>{saveStatus === "saving" ? "جاري الحفظ..." : "حفظ جميع التعديلات"}</span>
+            <kbd style={{ background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.3)", padding: "1px 6px", borderRadius: "4px", fontSize: "11px", color: "#ffffff" }}>Ctrl+S</kbd>
           </button>
 
           <button
@@ -409,6 +506,13 @@ export default function AdminPage() {
         </div>
       </header>
 
+      {/* TOAST NOTIFICATION FOR SHORTCUTS */}
+      {shortcutToast && (
+        <div style={{ position: "fixed", top: "85px", right: "30px", zIndex: 9999, background: "#1e293b", border: "1px solid #60a5fa", color: "#60a5fa", padding: "10px 20px", borderRadius: "12px", fontWeight: "800", fontSize: "13.5px", boxShadow: "0 10px 30px rgba(0,0,0,0.6)", animation: "fadeIn 0.2s ease-out" }}>
+          {shortcutToast}
+        </div>
+      )}
+
       {saveMessage && (
         <div style={{ background: saveStatus === "saved" ? "rgba(22, 163, 74, 0.9)" : saveStatus === "error" ? "rgba(220, 38, 38, 0.9)" : "rgba(37, 99, 235, 0.9)", color: "#ffffff", padding: "12px 24px", textAlign: "center", fontWeight: "800", fontSize: "14px" }}>
           {saveMessage}
@@ -418,12 +522,12 @@ export default function AdminPage() {
       <div style={{ maxWidth: "1600px", margin: "25px auto", padding: "0 24px" }}>
         <div style={{ display: "flex", gap: "10px", overflowX: "auto", paddingBottom: "12px", borderBottom: "1px solid rgba(255,255,255,0.08)", marginBottom: "25px" }}>
           {[
-            { id: "general", label: "النبذة والمعلومات الأساسية" },
-            { id: "stats", label: "الإحصائيات والأرقام" },
-            { id: "experiences", label: "الخبرات العملية" },
-            { id: "education", label: "التعليم والشهادات" },
-            { id: "cv", label: "ملف السيرة الذاتية (PDF)" },
-            { id: "typography", label: "الخطوط والطباعة" },
+            { id: "general", label: "النبذة والمعلومات الأساسية", key: "1" },
+            { id: "stats", label: "الإحصائيات والأرقام", key: "2" },
+            { id: "experiences", label: "الخبرات العملية", key: "3" },
+            { id: "education", label: "التعليم والشهادات", key: "4" },
+            { id: "cv", label: "ملف السيرة الذاتية (PDF)", key: "5" },
+            { id: "typography", label: "الخطوط والطباعة", key: "6" },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -432,16 +536,22 @@ export default function AdminPage() {
                 background: activeTab === tab.id ? "#2563eb" : "#151624",
                 color: activeTab === tab.id ? "#ffffff" : "#94a3b8",
                 border: "1px solid rgba(255,255,255,0.08)",
-                padding: "11px 20px",
+                padding: "11px 18px",
                 borderRadius: "14px",
                 fontSize: "14px",
                 fontWeight: "800",
                 cursor: "pointer",
                 whiteSpace: "nowrap",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
                 transition: "all 0.2s",
               }}
             >
-              {tab.label}
+              <span>{tab.label}</span>
+              <kbd style={{ background: activeTab === tab.id ? "rgba(255,255,255,0.25)" : "#0c0d17", border: "1px solid rgba(255,255,255,0.1)", padding: "1px 5px", borderRadius: "4px", fontSize: "10.5px", color: activeTab === tab.id ? "#ffffff" : "#64748b" }}>
+                Ctrl+{tab.key}
+              </kbd>
             </button>
           ))}
         </div>
@@ -1775,6 +1885,82 @@ export default function AdminPage() {
       )}
         </div>
       </div>
+
+      {/* KEYBOARD SHORTCUTS CHEAT SHEET MODAL */}
+      {showShortcutsModal && (
+        <div
+          onClick={() => setShowShortcutsModal(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.8)",
+            backdropFilter: "blur(6px)",
+            zIndex: 10000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "#11121e",
+              border: "1px solid #3b82f6",
+              borderRadius: "20px",
+              padding: "28px",
+              maxWidth: "540px",
+              width: "100%",
+              boxShadow: "0 25px 60px rgba(0, 0, 0, 0.9)",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", borderBottom: "1px solid rgba(255,255,255,0.08)", paddingBottom: "12px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#60a5fa" }} />
+                <h3 style={{ fontSize: "17px", fontWeight: "900", color: "#ffffff", margin: 0 }}>اختصارات لوحة المفاتيح (Keyboard Shortcuts)</h3>
+              </div>
+              <button
+                onClick={() => setShowShortcutsModal(false)}
+                style={{ background: "none", border: "none", color: "#ef4444", fontSize: "16px", fontWeight: "900", cursor: "pointer" }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {[
+                { shortcut: "Ctrl + S", desc: "حفظ ونشر جميع التعديلات فوراً" },
+                { shortcut: "Ctrl + P", desc: "إظهار أو إخفاء نافذة المعاينة الحية" },
+                { shortcut: "Ctrl + L", desc: "تبديل لغة المعاينة بين العربية والإنجليزية" },
+                { shortcut: "Ctrl + 1", desc: "الذهاب لتبويب: النبذة والمعلومات الأساسية" },
+                { shortcut: "Ctrl + 2", desc: "الذهاب لتبويب: الإحصائيات والأرقام" },
+                { shortcut: "Ctrl + 3", desc: "الذهاب لتبويب: الخبرات العملية" },
+                { shortcut: "Ctrl + 4", desc: "الذهاب لتبويب: التعليم والشهادات" },
+                { shortcut: "Ctrl + 5", desc: "الذهاب لتبويب: ملف السيرة الذاتية (PDF)" },
+                { shortcut: "Ctrl + 6", desc: "الذهاب لتبويب: الخطوط والطباعة" },
+                { shortcut: "Shift + ?", desc: "فتح / إغلاق نافذة الاختصارات" },
+                { shortcut: "Escape", desc: "إغلاق النوافذ المنبثقة" },
+              ].map((item, i) => (
+                <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", background: "#0a0b12", borderRadius: "10px", border: "1px solid rgba(255,255,255,0.04)" }}>
+                  <span style={{ fontSize: "13.5px", color: "#cbd5e1", fontWeight: "600" }}>{item.desc}</span>
+                  <kbd style={{ background: "#1e2130", border: "1px solid #475569", color: "#60a5fa", padding: "3px 8px", borderRadius: "6px", fontSize: "12px", fontWeight: "800", fontFamily: "monospace" }}>
+                    {item.shortcut}
+                  </kbd>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ marginTop: "20px", textAlign: "center" }}>
+              <button
+                onClick={() => setShowShortcutsModal(false)}
+                style={{ background: "#2563eb", color: "#ffffff", border: "none", padding: "10px 24px", borderRadius: "10px", fontSize: "13.5px", fontWeight: "800", cursor: "pointer" }}
+              >
+                فهمت ذلك (إغلاق)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

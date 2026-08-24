@@ -292,6 +292,32 @@ export default function Home() {
     });
   }, []);
 
+  // PORTFOLIO KEYBOARD SHORTCUTS
+  useEffect(() => {
+    const handleSiteKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      const isInput = target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
+      if (isInput || e.ctrlKey || e.metaKey || e.altKey) return;
+
+      const key = e.key.toLowerCase();
+      if (key === "l") {
+        setLang((prev) => (prev === "AR" ? "EN" : "AR"));
+      } else if (key === "d" || key === "c") {
+        const cvLink = document.createElement("a");
+        cvLink.href = portfolioData?.general.cvPdfPath || "/HAIDER_M_SHWKAT_CV_2026.pdf";
+        cvLink.download = "HAIDER_M_SHWKAT_CV_2026.pdf";
+        cvLink.click();
+      } else if (key === "s") {
+        document.getElementById("stats")?.scrollIntoView({ behavior: "smooth" });
+      } else if (key === "e") {
+        document.getElementById("experience")?.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+
+    window.addEventListener("keydown", handleSiteKeyDown);
+    return () => window.removeEventListener("keydown", handleSiteKeyDown);
+  }, [portfolioData]);
+
   const toggleLanguage = () => {
     setLang((prev) => (prev === "AR" ? "EN" : "AR"));
   };
