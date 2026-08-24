@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { CV_TEMPLATES_PRESETS, CvTemplatePreset } from "@/lib/cvPresets";
+import { CV_TEMPLATES_PRESETS } from "@/lib/cvPresets";
 
 interface CvExperience {
   id: string;
@@ -24,7 +24,21 @@ interface CvCertification {
   title: string;
 }
 
-const SAMPLE_AR_DATA = {
+interface LanguageSpecificData {
+  fullName: string;
+  jobTitle: string;
+  summary: string;
+  email: string;
+  phone: string;
+  location: string;
+  linkedin: string;
+  skills: string[];
+  experiences: CvExperience[];
+  education: CvEducation[];
+  certifications: CvCertification[];
+}
+
+const DEFAULT_AR_DATA: LanguageSpecificData = {
   fullName: "حيدر محمد شوكت",
   jobTitle: "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة",
   summary: "متخصص في علوم الحاسوب وهندسة نظم البيانات وإدارة العمليات التقنية، بخبرة عملية مثبتة في أتمتة العمليات البرمجية وبناء وتطوير قواعد البيانات الضخمة (+22,000 سجل) وتكامل منصات التجارة الإلكترونية وإدارة شبكات الألياف الضوئية FTTH.",
@@ -32,8 +46,6 @@ const SAMPLE_AR_DATA = {
   phone: "+964 771 896 4778",
   location: "بغداد، العراق",
   linkedin: "linkedin.com/in/haidermoe",
-  photo: "/cv-photo.png",
-  qrUrl: "https://cv-wine-tau.vercel.app",
   skills: [
     "أتمتة بايثون وبرمجة السكربتات",
     "هيكلة وإدارة قواعد البيانات الضخمة SQL",
@@ -101,7 +113,7 @@ const SAMPLE_AR_DATA = {
   ]
 };
 
-const SAMPLE_EN_DATA = {
+const DEFAULT_EN_DATA: LanguageSpecificData = {
   fullName: "Haider M. Shwkat",
   jobTitle: "Computer Science Specialist | Data Operations & Workflow Consultant",
   summary: "Computer Science Specialist & Data Operations Consultant with extensive experience in workflow automation, large-scale database management (22K+ records), e-commerce catalog integrity, and optical network infrastructure (FTTH/EPON).",
@@ -109,8 +121,6 @@ const SAMPLE_EN_DATA = {
   phone: "+964 771 896 4778",
   location: "Baghdad, Iraq",
   linkedin: "linkedin.com/in/haidermoe",
-  photo: "/cv-photo.png",
-  qrUrl: "https://cv-wine-tau.vercel.app",
   skills: [
     "Python Automation & Scripting",
     "SQL & High-Volume Database Architecture",
@@ -180,32 +190,22 @@ const SAMPLE_EN_DATA = {
 
 export default function PublicCvBuilderPage() {
   const [lang, setLang] = useState<"AR" | "EN">("AR");
-  const [activeTab, setActiveTab] = useState<"presets" | "personal" | "experience" | "education" | "skills" | "styling" | "qr">("presets");
+  const [activeTab, setActiveTab] = useState<"presets" | "personal" | "experience" | "education" | "skills" | "styling" | "qr">("personal");
 
-  // User Document States
-  const [fullName, setFullName] = useState(SAMPLE_AR_DATA.fullName);
-  const [jobTitle, setJobTitle] = useState(SAMPLE_AR_DATA.jobTitle);
-  const [summary, setSummary] = useState(SAMPLE_AR_DATA.summary);
-  const [email, setEmail] = useState(SAMPLE_AR_DATA.email);
-  const [phone, setPhone] = useState(SAMPLE_AR_DATA.phone);
-  const [location, setLocation] = useState(SAMPLE_AR_DATA.location);
-  const [linkedin, setLinkedin] = useState(SAMPLE_AR_DATA.linkedin);
-  const [photo, setPhoto] = useState(SAMPLE_AR_DATA.photo);
-  const [showPhoto, setShowPhoto] = useState(true);
-  const [qrUrl, setQrUrl] = useState(SAMPLE_AR_DATA.qrUrl);
-  const [showQrCode, setShowQrCode] = useState(true);
+  // SEPARATE BILINGUAL STATE STORES
+  const [docAR, setDocAR] = useState<LanguageSpecificData>(DEFAULT_AR_DATA);
+  const [docEN, setDocEN] = useState<LanguageSpecificData>(DEFAULT_EN_DATA);
 
-  const [skills, setSkills] = useState<string[]>(SAMPLE_AR_DATA.skills);
-  const [newSkillInput, setNewSkillInput] = useState("");
-  const [showSkills, setShowSkills] = useState(true);
+  // SHARED ASSET & VISIBILITY STATES
+  const [photo, setPhoto] = useState<string>("/cv-photo.png");
+  const [showPhoto, setShowPhoto] = useState<boolean>(true);
+  const [qrUrl, setQrUrl] = useState<string>("https://cv-wine-tau.vercel.app");
+  const [showQrCode, setShowQrCode] = useState<boolean>(true);
+  const [showSkills, setShowSkills] = useState<boolean>(true);
+  const [showEducation, setShowEducation] = useState<boolean>(true);
+  const [showCertifications, setShowCertifications] = useState<boolean>(true);
 
-  const [experiences, setExperiences] = useState<CvExperience[]>(SAMPLE_AR_DATA.experiences);
-  const [education, setEducation] = useState<CvEducation[]>(SAMPLE_AR_DATA.education);
-  const [showEducation, setShowEducation] = useState(true);
-  const [certifications, setCertifications] = useState<CvCertification[]>(SAMPLE_AR_DATA.certifications);
-  const [showCertifications, setShowCertifications] = useState(true);
-
-  // Formatting States
+  // FORMATTING & PRESET STATES
   const [activePreset, setActivePreset] = useState<string>("arabic-modern-blue");
   const [layoutFormat, setLayoutFormat] = useState<"single-column" | "two-column-sidebar" | "modern-executive" | "minimal-compact">("two-column-sidebar");
   const [templateStyle, setTemplateStyle] = useState<"clean-white" | "modern-dark" | "executive-blue">("clean-white");
@@ -216,14 +216,25 @@ export default function PublicCvBuilderPage() {
   const [lineSpacing, setLineSpacing] = useState<"compact" | "normal" | "relaxed">("normal");
 
   const [a4Zoom, setA4Zoom] = useState<number>(0.85);
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-  const [qrCodeDataUrl, setQrCodeDataUrl] = useState("");
-  const [toastMessage, setToastMessage] = useState("");
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState<boolean>(false);
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
+  const [newSkillInput, setNewSkillInput] = useState<string>("");
+  const [toastMessage, setToastMessage] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(""), 3500);
+  };
+
+  // Active current document based on selected language
+  const curDoc = lang === "AR" ? docAR : docEN;
+  const setCurDoc = (updater: (prev: LanguageSpecificData) => LanguageSpecificData) => {
+    if (lang === "AR") {
+      setDocAR(updater);
+    } else {
+      setDocEN(updater);
+    }
   };
 
   // Generate QR Code dynamically
@@ -246,56 +257,52 @@ export default function PublicCvBuilderPage() {
 
   // Track visitor
   useEffect(() => {
-    fetch("/api/track?path=/cv&page=Public_CV_Maker").catch(() => {});
+    fetch("/api/track?path=/cv&page=Public_Bilingual_CV_Builder").catch(() => {});
   }, []);
 
   const handleSwitchLanguage = (newLang: "AR" | "EN") => {
     setLang(newLang);
-    if (newLang === "AR") {
-      setFontFamily("Tajawal");
-      showToast("تم تحويل اتجاه الصفحة والتنسيق إلى اللغة العربية");
+    setFontFamily(newLang === "AR" ? "Tajawal" : "Outfit");
+    showToast(newLang === "AR" ? "تم التحويل إلى وضع السيرة باللغة العربية (RTL)" : "Switched to English Resume mode (LTR)");
+  };
+
+  const handleCopyCurrentToOther = () => {
+    if (lang === "AR") {
+      setDocEN({ ...docAR });
+      showToast("تم نسخ البيانات العربية إلى النموذج الإنجليزي بنجاح");
     } else {
-      setFontFamily("Outfit");
-      showToast("Switched page direction and typography to English");
+      setDocAR({ ...docEN });
+      showToast("Copied English data to Arabic resume template");
     }
   };
 
-  const handleLoadSampleData = (targetLang: "AR" | "EN") => {
-    const sample = targetLang === "AR" ? SAMPLE_AR_DATA : SAMPLE_EN_DATA;
-    setFullName(sample.fullName);
-    setJobTitle(sample.jobTitle);
-    setSummary(sample.summary);
-    setEmail(sample.email);
-    setPhone(sample.phone);
-    setLocation(sample.location);
-    setLinkedin(sample.linkedin);
-    setPhoto(sample.photo);
-    setQrUrl(sample.qrUrl);
-    setSkills(sample.skills);
-    setExperiences(sample.experiences);
-    setEducation(sample.education);
-    setCertifications(sample.certifications);
-    setLang(targetLang);
-    setFontFamily(targetLang === "AR" ? "Tajawal" : "Outfit");
-    showToast(targetLang === "AR" ? "تم تحميل نموذج سيرة ذاتية جاهز باللغة العربية" : "Loaded ready English sample CV");
+  const handleLoadSampleData = () => {
+    if (lang === "AR") {
+      setDocAR({ ...DEFAULT_AR_DATA });
+      showToast("تم تحميل نموذج سيرة ذاتية جاهز باللغة العربية");
+    } else {
+      setDocEN({ ...DEFAULT_EN_DATA });
+      showToast("Loaded ready English sample resume");
+    }
   };
 
-  const handleClearAll = () => {
-    if (window.confirm(lang === "AR" ? "هل أنت متأكد من تفريغ كافة الحقول للبدء من الصفر؟" : "Are you sure you want to clear all fields to start from scratch?")) {
-      setFullName("");
-      setJobTitle("");
-      setSummary("");
-      setEmail("");
-      setPhone("");
-      setLocation("");
-      setLinkedin("");
-      setPhoto("");
-      setQrUrl("");
-      setSkills([]);
-      setExperiences([]);
-      setEducation([]);
-      setCertifications([]);
-      showToast(lang === "AR" ? "تم تفريغ النموذج بنجاح" : "Cleared all fields");
+  const handleClearCurrent = () => {
+    if (window.confirm(lang === "AR" ? "هل أنت متأكد من تفريغ كافة الحقول للغة الحالية؟" : "Are you sure you want to clear all fields for the active language?")) {
+      const emptyDoc: LanguageSpecificData = {
+        fullName: "",
+        jobTitle: "",
+        summary: "",
+        email: "",
+        phone: "",
+        location: "",
+        linkedin: "",
+        skills: [],
+        experiences: [],
+        education: [],
+        certifications: []
+      };
+      setCurDoc(() => emptyDoc);
+      showToast(lang === "AR" ? "تم تفريغ الحقول" : "Cleared all fields");
     }
   };
 
@@ -319,13 +326,14 @@ export default function PublicCvBuilderPage() {
     setAccentColor(p.accent);
     setTemplateStyle(p.style);
     setLayoutFormat(p.format);
-    setFontFamily(p.font);
+    setFontFamily(lang === "AR" ? "Tajawal" : p.font);
     setFontSizeScale(p.fontSize);
     setPageMargin(p.margin);
     setLineSpacing(p.spacing);
     showToast(lang === "AR" ? `تم تطبيق قالب: ${p.title}` : `Applied preset: ${p.title}`);
   };
 
+  // EXPERIENCE HANDLERS
   const handleAddExperience = () => {
     const newExp: CvExperience = {
       id: `exp-${Date.now()}`,
@@ -334,47 +342,51 @@ export default function PublicCvBuilderPage() {
       date: lang === "AR" ? "2024 - الحالي" : "2024 - Present",
       bullets: [lang === "AR" ? "أدخل نقطة إنجاز أو مهمة وظيفية هنا..." : "Describe a key achievement or responsibility here..."]
     };
-    setExperiences([newExp, ...experiences]);
+    setCurDoc((prev) => ({ ...prev, experiences: [newExp, ...prev.experiences] }));
     showToast(lang === "AR" ? "تمت إضافة خبرة جديدة" : "Added new experience");
   };
 
   const handleRemoveExperience = (id: string) => {
-    setExperiences(experiences.filter((e) => e.id !== id));
+    setCurDoc((prev) => ({ ...prev, experiences: prev.experiences.filter((e) => e.id !== id) }));
   };
 
   const handleAddBullet = (expId: string) => {
-    setExperiences(experiences.map((exp) => {
-      if (exp.id === expId) {
-        return {
-          ...exp,
-          bullets: [...exp.bullets, lang === "AR" ? "مهمة أو إنجاز جديد..." : "New bullet point..."]
-        };
-      }
-      return exp;
+    setCurDoc((prev) => ({
+      ...prev,
+      experiences: prev.experiences.map((exp) =>
+        exp.id === expId ? { ...exp, bullets: [...exp.bullets, lang === "AR" ? "مهمة أو إنجاز جديد..." : "New bullet point..."] } : exp
+      )
     }));
   };
 
   const handleUpdateBullet = (expId: string, bIndex: number, text: string) => {
-    setExperiences(experiences.map((exp) => {
-      if (exp.id === expId) {
-        const nextBullets = [...exp.bullets];
-        nextBullets[bIndex] = text;
-        return { ...exp, bullets: nextBullets };
-      }
-      return exp;
+    setCurDoc((prev) => ({
+      ...prev,
+      experiences: prev.experiences.map((exp) => {
+        if (exp.id === expId) {
+          const nextBullets = [...exp.bullets];
+          nextBullets[bIndex] = text;
+          return { ...exp, bullets: nextBullets };
+        }
+        return exp;
+      })
     }));
   };
 
   const handleRemoveBullet = (expId: string, bIndex: number) => {
-    setExperiences(experiences.map((exp) => {
-      if (exp.id === expId) {
-        const nextBullets = exp.bullets.filter((_, idx) => idx !== bIndex);
-        return { ...exp, bullets: nextBullets };
-      }
-      return exp;
+    setCurDoc((prev) => ({
+      ...prev,
+      experiences: prev.experiences.map((exp) => {
+        if (exp.id === expId) {
+          const nextBullets = exp.bullets.filter((_, idx) => idx !== bIndex);
+          return { ...exp, bullets: nextBullets };
+        }
+        return exp;
+      })
     }));
   };
 
+  // EDUCATION & CERTS HANDLERS
   const handleAddEducation = () => {
     const newEdu: CvEducation = {
       id: `edu-${Date.now()}`,
@@ -382,11 +394,11 @@ export default function PublicCvBuilderPage() {
       degree: lang === "AR" ? "اسم الشهادة أو التخصص" : "Degree / Field",
       year: lang === "AR" ? "2022 - 2026" : "2022 - 2026"
     };
-    setEducation([...education, newEdu]);
+    setCurDoc((prev) => ({ ...prev, education: [...prev.education, newEdu] }));
   };
 
   const handleRemoveEducation = (id: string) => {
-    setEducation(education.filter((edu) => edu.id !== id));
+    setCurDoc((prev) => ({ ...prev, education: prev.education.filter((e) => e.id !== id) }));
   };
 
   const handleAddCertification = () => {
@@ -394,33 +406,45 @@ export default function PublicCvBuilderPage() {
       id: `cert-${Date.now()}`,
       title: lang === "AR" ? "اسم الشهادة التدريبية أو المهنية" : "Certificate Title"
     };
-    setCertifications([...certifications, newCert]);
+    setCurDoc((prev) => ({ ...prev, certifications: [...prev.certifications, newCert] }));
   };
 
   const handleRemoveCertification = (id: string) => {
-    setCertifications(certifications.filter((c) => c.id !== id));
+    setCurDoc((prev) => ({ ...prev, certifications: prev.certifications.filter((c) => c.id !== id) }));
   };
 
+  // SKILLS HANDLERS
   const handleAddSkill = () => {
     if (!newSkillInput.trim()) return;
-    setSkills([...skills, newSkillInput.trim()]);
+    setCurDoc((prev) => ({ ...prev, skills: [...prev.skills, newSkillInput.trim()] }));
     setNewSkillInput("");
   };
 
   const handleRemoveSkill = (skillIndex: number) => {
-    setSkills(skills.filter((_, idx) => idx !== skillIndex));
+    setCurDoc((prev) => ({ ...prev, skills: prev.skills.filter((_, idx) => idx !== skillIndex) }));
   };
 
-  const handleDownloadPdf = async () => {
+  // DUAL EXPORT PDF FUNCTION (SUPPORTS ARABIC & ENGLISH DIRECTLY)
+  const handleDownloadPdf = async (targetLang: "AR" | "EN") => {
+    const isTargetArabic = targetLang === "AR";
+    
+    // Switch active view to the export language if different
+    if (lang !== targetLang) {
+      setLang(targetLang);
+      setFontFamily(isTargetArabic ? "Tajawal" : "Outfit");
+      // Wait a tick for DOM re-render
+      await new Promise((resolve) => setTimeout(resolve, 150));
+    }
+
     const element = document.getElementById("cv-pdf-canvas");
     if (!element) return;
 
-    const isArabic = lang === "AR";
-    const sanitizedName = (fullName || "My_CV").replace(/[^a-zA-Z0-9_\u0600-\u06FF]/g, "_");
-    const pdfFileName = `${sanitizedName}_CV_2026.pdf`;
+    const activeData = isTargetArabic ? docAR : docEN;
+    const sanitizedName = (activeData.fullName || "My_CV").replace(/[^a-zA-Z0-9_\u0600-\u06FF]/g, "_");
+    const pdfFileName = `${sanitizedName}_CV_${targetLang}_2026.pdf`;
 
     setIsGeneratingPdf(true);
-    showToast(isArabic ? "جاري تحويل السيرة وتجهيز ملف الـ PDF عالي الدقة..." : "Rendering print-ready PDF...");
+    showToast(isTargetArabic ? "جاري تحويل وتجهيز ملف الـ PDF باللغة العربية..." : "Rendering English PDF file...");
 
     try {
       const html2canvas = (await import("html2canvas")).default;
@@ -451,7 +475,7 @@ export default function PublicCvBuilderPage() {
       pdf.addImage(imgData, "PNG", 0, position, pdfWidth, totalPdfHeight);
       heightLeft -= pdfPageHeight;
 
-      // Multi-page loop
+      // Multi-page protection loop
       while (heightLeft > 5) {
         position = position - pdfPageHeight;
         pdf.addPage();
@@ -460,10 +484,10 @@ export default function PublicCvBuilderPage() {
       }
 
       pdf.save(pdfFileName);
-      showToast(isArabic ? "تم تنزيل السيرة الذاتية بنجاح" : "CV PDF Downloaded successfully");
+      showToast(isTargetArabic ? `تم تنزيل السيرة الذاتية (بالعربية) بنجاح` : `Successfully downloaded English CV PDF`);
     } catch (err) {
       console.error("PDF generation error:", err);
-      showToast(isArabic ? "حدث خطأ أثناء تنزيل الـ PDF" : "Error generating PDF");
+      showToast(isTargetArabic ? "حدث خطأ أثناء تنزيل الـ PDF" : "Error generating PDF");
     } finally {
       setIsGeneratingPdf(false);
     }
@@ -512,7 +536,7 @@ export default function PublicCvBuilderPage() {
         </div>
       )}
 
-      {/* TOP HEADER */}
+      {/* TOP HEADER WITH DUAL EXPORT CONTROLS */}
       <header
         style={{
           background: "rgba(10, 11, 18, 0.9)",
@@ -551,69 +575,37 @@ export default function PublicCvBuilderPage() {
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <h1 style={{ fontSize: "17px", fontWeight: "900", margin: 0, color: "#ffffff" }}>
-                  {isArabic ? "صانع السيرة الذاتية الذكي ومولد الـ PDF" : "Interactive ATS CV Builder & PDF Engine"}
+                  {isArabic ? "صانع السيرة الذاتية ثنائي اللغة (عربي / English)" : "Bilingual ATS CV Builder & PDF Studio"}
                 </h1>
                 <span style={{ background: "#16a34a", color: "#ffffff", padding: "2px 8px", borderRadius: "12px", fontSize: "10px", fontWeight: "900" }}>
-                  100% مجاني ومباشر
+                  BILINGUAL AR / EN
                 </span>
               </div>
               <span style={{ fontSize: "11px", color: "#94a3b8" }}>
-                {isArabic ? "أنشئ سيرتك الذاتية المهنية وخصص القوالب وتنزيل ملف PDF قياسي مجاناً" : "Create your professional ATS-compliant CV, customize templates & export print-ready PDF"}
+                {isArabic ? "صمم سيرتك الذاتية وصدر ملف PDF منفصل بالعربية أو بالإنجليزية بنقرة زر واحدة" : "Build your CV and export dedicated print-ready PDFs in Arabic or English with 1-click"}
               </span>
             </div>
           </div>
 
-          {/* ACTION BUTTONS & LANGUAGE SWITCHER */}
+          {/* DUAL LANGUAGE TOGGLE & DUAL PDF EXPORT BUTTONS */}
           <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-            {/* SAMPLE DATA BUTTONS */}
-            <button
-              onClick={() => handleLoadSampleData(isArabic ? "AR" : "EN")}
-              style={{
-                background: "#1e293b",
-                color: "#93c5fd",
-                border: "1px solid #3b82f640",
-                padding: "8px 14px",
-                borderRadius: "8px",
-                fontSize: "12px",
-                fontWeight: "800",
-                cursor: "pointer",
-              }}
-            >
-              {isArabic ? "استعادة نموذج تجريبي" : "Load Sample CV"}
-            </button>
-
-            <button
-              onClick={handleClearAll}
-              style={{
-                background: "#1e1e2d",
-                color: "#f87171",
-                border: "1px solid #ef444440",
-                padding: "8px 12px",
-                borderRadius: "8px",
-                fontSize: "12px",
-                fontWeight: "800",
-                cursor: "pointer",
-              }}
-            >
-              {isArabic ? "تفريغ الحقول" : "Clear All"}
-            </button>
-
-            {/* LANGUAGE SWITCHER */}
-            <div style={{ display: "flex", background: "#151624", padding: "3px", borderRadius: "8px", border: "1px solid #334155" }}>
+            
+            {/* ACTIVE EDITING LANGUAGE SELECTOR */}
+            <div style={{ display: "flex", background: "#151624", padding: "3px", borderRadius: "8px", border: "1.5px solid #3b82f6" }}>
               <button
                 onClick={() => handleSwitchLanguage("AR")}
                 style={{
                   background: isArabic ? "#2563eb" : "transparent",
                   color: isArabic ? "#ffffff" : "#94a3b8",
                   border: "none",
-                  padding: "6px 12px",
+                  padding: "6px 14px",
                   borderRadius: "6px",
                   fontSize: "12px",
-                  fontWeight: "800",
+                  fontWeight: "900",
                   cursor: "pointer",
                 }}
               >
-                عربي (AR)
+                تعديل العربية (AR)
               </button>
               <button
                 onClick={() => handleSwitchLanguage("EN")}
@@ -621,37 +613,59 @@ export default function PublicCvBuilderPage() {
                   background: !isArabic ? "#2563eb" : "transparent",
                   color: !isArabic ? "#ffffff" : "#94a3b8",
                   border: "none",
-                  padding: "6px 12px",
+                  padding: "6px 14px",
                   borderRadius: "6px",
                   fontSize: "12px",
-                  fontWeight: "800",
+                  fontWeight: "900",
                   cursor: "pointer",
                 }}
               >
-                EN
+                Edit English (EN)
               </button>
             </div>
 
-            {/* DOWNLOAD PDF BUTTON */}
+            {/* DIRECT EXPORT BUTTON 1: ARABIC PDF */}
             <button
-              onClick={handleDownloadPdf}
+              onClick={() => handleDownloadPdf("AR")}
               disabled={isGeneratingPdf}
               style={{
-                background: "#16a34a",
+                background: "#15803d",
                 color: "#ffffff",
                 border: "none",
-                padding: "9px 20px",
-                borderRadius: "10px",
-                fontSize: "13.5px",
+                padding: "8px 14px",
+                borderRadius: "8px",
+                fontSize: "12.5px",
                 fontWeight: "900",
                 cursor: "pointer",
-                boxShadow: "0 4px 15px rgba(22, 163, 74, 0.4)",
+                boxShadow: "0 4px 12px rgba(21, 128, 61, 0.35)",
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "8px",
+                gap: "6px",
               }}
             >
-              <span>{isGeneratingPdf ? (isArabic ? "جاري التصدير..." : "Exporting...") : (isArabic ? "تنزيل الـ PDF الآن" : "Download PDF")}</span>
+              <span>تصدير PDF (بالعربية)</span>
+            </button>
+
+            {/* DIRECT EXPORT BUTTON 2: ENGLISH PDF */}
+            <button
+              onClick={() => handleDownloadPdf("EN")}
+              disabled={isGeneratingPdf}
+              style={{
+                background: "#0284c7",
+                color: "#ffffff",
+                border: "none",
+                padding: "8px 14px",
+                borderRadius: "8px",
+                fontSize: "12.5px",
+                fontWeight: "900",
+                cursor: "pointer",
+                boxShadow: "0 4px 12px rgba(2, 132, 199, 0.35)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <span>Export PDF (English)</span>
             </button>
           </div>
         </div>
@@ -659,11 +673,72 @@ export default function PublicCvBuilderPage() {
 
       {/* MAIN WORKSPACE */}
       <main style={{ maxWidth: "1440px", margin: "0 auto", padding: "20px 16px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "minmax(340px, 420px) 1fr", gap: "24px", alignItems: "start" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "minmax(340px, 430px) 1fr", gap: "24px", alignItems: "start" }}>
           
           {/* LEFT INTERACTIVE EDITOR PANEL */}
           <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             
+            {/* TOP BAR ACTIONS (COPY TO OTHER LANG, LOAD SAMPLE, CLEAR) */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0e101d", padding: "10px 14px", borderRadius: "12px", border: "1px solid #334155", flexWrap: "wrap", gap: "8px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <span style={{ fontSize: "11px", color: "#94a3b8" }}>{isArabic ? "الوضع النشط:" : "Active:"}</span>
+                <span style={{ fontSize: "12px", fontWeight: "900", color: "#60a5fa" }}>
+                  {isArabic ? "النسخة العربية" : "English Version"}
+                </span>
+              </div>
+
+              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                <button
+                  onClick={handleCopyCurrentToOther}
+                  title={isArabic ? "نسخ البيانات الحالية إلى النموذج الإنجليزي" : "Copy current data to Arabic model"}
+                  style={{
+                    background: "#1e293b",
+                    color: "#38bdf8",
+                    border: "1px solid #0284c740",
+                    padding: "5px 10px",
+                    borderRadius: "6px",
+                    fontSize: "11px",
+                    fontWeight: "800",
+                    cursor: "pointer",
+                  }}
+                >
+                  {isArabic ? "نسخ إلى الإنجليزية ⇄" : "Copy to Arabic ⇄"}
+                </button>
+
+                <button
+                  onClick={handleLoadSampleData}
+                  style={{
+                    background: "#1e293b",
+                    color: "#93c5fd",
+                    border: "1px solid #3b82f640",
+                    padding: "5px 10px",
+                    borderRadius: "6px",
+                    fontSize: "11px",
+                    fontWeight: "800",
+                    cursor: "pointer",
+                  }}
+                >
+                  {isArabic ? "نموذج تجريبي" : "Load Sample"}
+                </button>
+
+                <button
+                  onClick={handleClearCurrent}
+                  style={{
+                    background: "#1e1e2d",
+                    color: "#f87171",
+                    border: "1px solid #ef444440",
+                    padding: "5px 10px",
+                    borderRadius: "6px",
+                    fontSize: "11px",
+                    fontWeight: "800",
+                    cursor: "pointer",
+                  }}
+                >
+                  {isArabic ? "تفريغ" : "Clear"}
+                </button>
+              </div>
+            </div>
+
             {/* SUB-TABS NAVIGATION BAR */}
             <div
               style={{
@@ -677,12 +752,12 @@ export default function PublicCvBuilderPage() {
               }}
             >
               {[
-                { id: "presets", label: isArabic ? "1. القوالب" : "1. Presets" },
-                { id: "personal", label: isArabic ? "2. البيانات" : "2. Personal" },
-                { id: "experience", label: isArabic ? "3. الخبرات" : "3. Experience" },
-                { id: "education", label: isArabic ? "4. التعليم" : "4. Education" },
-                { id: "skills", label: isArabic ? "5. المهارات" : "5. Skills" },
-                { id: "styling", label: isArabic ? "6. التنسيق" : "6. Style & QR" },
+                { id: "personal", label: isArabic ? "1. البيانات والنبذة" : "1. Personal & Bio" },
+                { id: "experience", label: isArabic ? "2. الخبرات المهنية" : "2. Experience" },
+                { id: "education", label: isArabic ? "3. التعليم والشهادات" : "3. Education & Certs" },
+                { id: "skills", label: isArabic ? "4. المهارات" : "4. Skills" },
+                { id: "presets", label: isArabic ? "5. القوالب الـ 9" : "5. Templates" },
+                { id: "styling", label: isArabic ? "6. التنسيق والـ QR" : "6. Style & QR" },
               ].map((tb) => (
                 <button
                   key={tb.id}
@@ -693,7 +768,7 @@ export default function PublicCvBuilderPage() {
                     border: "none",
                     padding: "8px 4px",
                     borderRadius: "8px",
-                    fontSize: "11.5px",
+                    fontSize: "11px",
                     fontWeight: "800",
                     cursor: "pointer",
                     textAlign: "center",
@@ -705,57 +780,17 @@ export default function PublicCvBuilderPage() {
               ))}
             </div>
 
-            {/* TAB 1: PRESETS */}
-            {activeTab === "presets" && (
-              <div style={{ background: "#0e101d", padding: "20px", borderRadius: "18px", border: "1.5px solid #2563eb", boxShadow: "0 8px 25px rgba(37,99,235,0.15)" }}>
-                <div style={{ marginBottom: "14px" }}>
-                  <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#60a5fa", margin: "0 0 4px 0" }}>
-                    {isArabic ? "مكتبة القوالب المتخصصة (9 مجالات)" : "Specialized Industry Presets (9 Domains)"}
-                  </h3>
-                  <span style={{ fontSize: "11.5px", color: "#94a3b8" }}>
-                    {isArabic ? "اختر قالباً يتناسب مع مجالك المهني:" : "Select a preset tailored to your professional domain:"}
-                  </span>
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "8px", maxHeight: "460px", overflowY: "auto", paddingRight: "4px" }}>
-                  {CV_TEMPLATES_PRESETS.map((p) => {
-                    const isSelected = activePreset === p.id;
-                    return (
-                      <button
-                        key={p.id}
-                        onClick={() => handleApplyPreset(p.id)}
-                        style={{
-                          background: isSelected ? "#1e293b" : "#151624",
-                          border: isSelected ? `2px solid ${p.accent}` : "1px solid #334155",
-                          borderRadius: "10px",
-                          padding: "10px 12px",
-                          textAlign: isArabic ? "right" : "left",
-                          cursor: "pointer",
-                          transition: "all 0.15s",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "3px",
-                        }}
-                      >
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                          <strong style={{ fontSize: "13px", color: isSelected ? "#60a5fa" : "#ffffff", fontWeight: "800" }}>{p.title}</strong>
-                          <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: p.accent, display: "inline-block" }} />
-                        </div>
-                        <div style={{ fontSize: "11px", color: "#38bdf8", fontWeight: "700" }}>{p.field}</div>
-                        <p style={{ fontSize: "10.5px", color: "#94a3b8", margin: 0, lineHeight: "1.35" }}>{p.desc}</p>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* TAB 2: PERSONAL INFO */}
+            {/* TAB 1: PERSONAL INFO */}
             {activeTab === "personal" && (
               <div style={{ background: "#0e101d", padding: "20px", borderRadius: "18px", border: "1px solid #334155", display: "flex", flexDirection: "column", gap: "14px" }}>
-                <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>
-                  {isArabic ? "البيانات الشخصية والنبذة" : "Personal Info & Summary"}
-                </h3>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#60a5fa", margin: 0 }}>
+                    {isArabic ? "البيانات الشخصية (النسخة العربية)" : "Personal Information (English Version)"}
+                  </h3>
+                  <span style={{ fontSize: "11px", color: isArabic ? "#34d399" : "#60a5fa", fontWeight: "800" }}>
+                    {isArabic ? "وضع الكتابة: عربي" : "Mode: English"}
+                  </span>
+                </div>
 
                 {/* PHOTO UPLOAD */}
                 <div style={{ display: "flex", alignItems: "center", gap: "14px", padding: "12px", background: "#151624", borderRadius: "12px", border: "1px solid #334155" }}>
@@ -801,8 +836,8 @@ export default function PublicCvBuilderPage() {
                   </label>
                   <input
                     type="text"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
+                    value={curDoc.fullName}
+                    onChange={(e) => setCurDoc((prev) => ({ ...prev, fullName: e.target.value }))}
                     placeholder={isArabic ? "مثال: حيدر محمد شوكت" : "e.g. Haider M. Shwkat"}
                     style={{ width: "100%", padding: "8px 12px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "13px", outline: "none" }}
                   />
@@ -814,9 +849,9 @@ export default function PublicCvBuilderPage() {
                   </label>
                   <input
                     type="text"
-                    value={jobTitle}
-                    onChange={(e) => setJobTitle(e.target.value)}
-                    placeholder={isArabic ? "مثال: مبرمج بايثون ومحلل بيانات" : "e.g. Software Engineer"}
+                    value={curDoc.jobTitle}
+                    onChange={(e) => setCurDoc((prev) => ({ ...prev, jobTitle: e.target.value }))}
+                    placeholder={isArabic ? "مثال: مبرمج بايثون ومحلل بيانات" : "e.g. Computer Science Specialist"}
                     style={{ width: "100%", padding: "8px 12px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "13px", outline: "none" }}
                   />
                 </div>
@@ -828,8 +863,8 @@ export default function PublicCvBuilderPage() {
                     </label>
                     <input
                       type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      value={curDoc.email}
+                      onChange={(e) => setCurDoc((prev) => ({ ...prev, email: e.target.value }))}
                       placeholder="name@example.com"
                       style={{ width: "100%", padding: "8px 10px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "12px", outline: "none" }}
                     />
@@ -842,8 +877,8 @@ export default function PublicCvBuilderPage() {
                     <input
                       type="text"
                       dir="ltr"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      value={curDoc.phone}
+                      onChange={(e) => setCurDoc((prev) => ({ ...prev, phone: e.target.value }))}
                       placeholder="+964 770 000 0000"
                       style={{ width: "100%", padding: "8px 10px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "12px", outline: "none" }}
                     />
@@ -857,8 +892,8 @@ export default function PublicCvBuilderPage() {
                     </label>
                     <input
                       type="text"
-                      value={location}
-                      onChange={(e) => setLocation(e.target.value)}
+                      value={curDoc.location}
+                      onChange={(e) => setCurDoc((prev) => ({ ...prev, location: e.target.value }))}
                       placeholder={isArabic ? "بغداد، العراق" : "Baghdad, Iraq"}
                       style={{ width: "100%", padding: "8px 10px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "12px", outline: "none" }}
                     />
@@ -871,8 +906,8 @@ export default function PublicCvBuilderPage() {
                     <input
                       type="text"
                       dir="ltr"
-                      value={linkedin}
-                      onChange={(e) => setLinkedin(e.target.value)}
+                      value={curDoc.linkedin}
+                      onChange={(e) => setCurDoc((prev) => ({ ...prev, linkedin: e.target.value }))}
                       placeholder="linkedin.com/in/username"
                       style={{ width: "100%", padding: "8px 10px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "12px", outline: "none" }}
                     />
@@ -885,8 +920,8 @@ export default function PublicCvBuilderPage() {
                   </label>
                   <textarea
                     rows={4}
-                    value={summary}
-                    onChange={(e) => setSummary(e.target.value)}
+                    value={curDoc.summary}
+                    onChange={(e) => setCurDoc((prev) => ({ ...prev, summary: e.target.value }))}
                     placeholder={isArabic ? "اكتب نبذة موجزة عن خبرتك وأهدافك المهنية..." : "Write a concise summary of your background and achievements..."}
                     style={{ width: "100%", padding: "8px 12px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "12px", outline: "none", resize: "vertical", lineHeight: "1.5" }}
                   />
@@ -894,7 +929,7 @@ export default function PublicCvBuilderPage() {
               </div>
             )}
 
-            {/* TAB 3: WORK EXPERIENCE */}
+            {/* TAB 2: WORK EXPERIENCE */}
             {activeTab === "experience" && (
               <div style={{ background: "#0e101d", padding: "20px", borderRadius: "18px", border: "1px solid #334155", display: "flex", flexDirection: "column", gap: "14px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -920,7 +955,7 @@ export default function PublicCvBuilderPage() {
                 </div>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: "14px", maxHeight: "460px", overflowY: "auto" }}>
-                  {experiences.map((exp, expIdx) => (
+                  {curDoc.experiences.map((exp, expIdx) => (
                     <div
                       key={exp.id}
                       style={{
@@ -958,7 +993,10 @@ export default function PublicCvBuilderPage() {
                           value={exp.role}
                           onChange={(e) => {
                             const val = e.target.value;
-                            setExperiences(experiences.map((x) => x.id === exp.id ? { ...x, role: val } : x));
+                            setCurDoc((prev) => ({
+                              ...prev,
+                              experiences: prev.experiences.map((x) => x.id === exp.id ? { ...x, role: val } : x)
+                            }));
                           }}
                           placeholder={isArabic ? "المسمى الوظيفي" : "Role"}
                           style={{ padding: "6px 10px", background: "#0e101d", border: "1px solid #334155", borderRadius: "6px", color: "#ffffff", fontSize: "12px" }}
@@ -968,7 +1006,10 @@ export default function PublicCvBuilderPage() {
                           value={exp.company}
                           onChange={(e) => {
                             const val = e.target.value;
-                            setExperiences(experiences.map((x) => x.id === exp.id ? { ...x, company: val } : x));
+                            setCurDoc((prev) => ({
+                              ...prev,
+                              experiences: prev.experiences.map((x) => x.id === exp.id ? { ...x, company: val } : x)
+                            }));
                           }}
                           placeholder={isArabic ? "اسم الشركة" : "Company"}
                           style={{ padding: "6px 10px", background: "#0e101d", border: "1px solid #334155", borderRadius: "6px", color: "#ffffff", fontSize: "12px" }}
@@ -981,7 +1022,10 @@ export default function PublicCvBuilderPage() {
                           value={exp.date}
                           onChange={(e) => {
                             const val = e.target.value;
-                            setExperiences(experiences.map((x) => x.id === exp.id ? { ...x, date: val } : x));
+                            setCurDoc((prev) => ({
+                              ...prev,
+                              experiences: prev.experiences.map((x) => x.id === exp.id ? { ...x, date: val } : x)
+                            }));
                           }}
                           placeholder={isArabic ? "الفترة (مثال: 2023 - الحالي)" : "Date range"}
                           style={{ width: "100%", padding: "6px 10px", background: "#0e101d", border: "1px solid #334155", borderRadius: "6px", color: "#ffffff", fontSize: "12px" }}
@@ -1030,7 +1074,7 @@ export default function PublicCvBuilderPage() {
               </div>
             )}
 
-            {/* TAB 4: EDUCATION & CERTS */}
+            {/* TAB 3: EDUCATION & CERTS */}
             {activeTab === "education" && (
               <div style={{ background: "#0e101d", padding: "20px", borderRadius: "18px", border: "1px solid #334155", display: "flex", flexDirection: "column", gap: "16px" }}>
                 
@@ -1060,14 +1104,17 @@ export default function PublicCvBuilderPage() {
                   </div>
 
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    {education.map((edu) => (
+                    {curDoc.education.map((edu) => (
                       <div key={edu.id} style={{ background: "#151624", padding: "10px", borderRadius: "8px", border: "1px solid #334155", display: "grid", gridTemplateColumns: "1fr 1fr auto", gap: "6px", alignItems: "center" }}>
                         <input
                           type="text"
                           value={edu.degree}
                           onChange={(e) => {
                             const val = e.target.value;
-                            setEducation(education.map((x) => x.id === edu.id ? { ...x, degree: val } : x));
+                            setCurDoc((prev) => ({
+                              ...prev,
+                              education: prev.education.map((x) => x.id === edu.id ? { ...x, degree: val } : x)
+                            }));
                           }}
                           placeholder={isArabic ? "الشهادة والتخصص" : "Degree"}
                           style={{ padding: "5px 8px", background: "#0e101d", border: "1px solid #334155", borderRadius: "5px", color: "#ffffff", fontSize: "11.5px" }}
@@ -1077,7 +1124,10 @@ export default function PublicCvBuilderPage() {
                           value={edu.school}
                           onChange={(e) => {
                             const val = e.target.value;
-                            setEducation(education.map((x) => x.id === edu.id ? { ...x, school: val } : x));
+                            setCurDoc((prev) => ({
+                              ...prev,
+                              education: prev.education.map((x) => x.id === edu.id ? { ...x, school: val } : x)
+                            }));
                           }}
                           placeholder={isArabic ? "الجامعة / المعهد" : "School"}
                           style={{ padding: "5px 8px", background: "#0e101d", border: "1px solid #334155", borderRadius: "5px", color: "#ffffff", fontSize: "11.5px" }}
@@ -1119,14 +1169,17 @@ export default function PublicCvBuilderPage() {
                   </div>
 
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    {certifications.map((cert) => (
+                    {curDoc.certifications.map((cert) => (
                       <div key={cert.id} style={{ background: "#151624", padding: "8px 10px", borderRadius: "8px", border: "1px solid #334155", display: "flex", gap: "6px", alignItems: "center" }}>
                         <input
                           type="text"
                           value={cert.title}
                           onChange={(e) => {
                             const val = e.target.value;
-                            setCertifications(certifications.map((x) => x.id === cert.id ? { ...x, title: val } : x));
+                            setCurDoc((prev) => ({
+                              ...prev,
+                              certifications: prev.certifications.map((x) => x.id === cert.id ? { ...x, title: val } : x)
+                            }));
                           }}
                           placeholder={isArabic ? "اسم الشهادة المعتمدة" : "Certification Title"}
                           style={{ flex: 1, padding: "5px 8px", background: "#0e101d", border: "1px solid #334155", borderRadius: "5px", color: "#ffffff", fontSize: "11.5px" }}
@@ -1145,7 +1198,7 @@ export default function PublicCvBuilderPage() {
               </div>
             )}
 
-            {/* TAB 5: SKILLS */}
+            {/* TAB 4: SKILLS */}
             {activeTab === "skills" && (
               <div style={{ background: "#0e101d", padding: "20px", borderRadius: "18px", border: "1px solid #334155", display: "flex", flexDirection: "column", gap: "14px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -1169,7 +1222,7 @@ export default function PublicCvBuilderPage() {
                     value={newSkillInput}
                     onChange={(e) => setNewSkillInput(e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter") handleAddSkill(); }}
-                    placeholder={isArabic ? "أدخل مهارة جديدة واضغط Enter..." : "Enter skill and press Enter..."}
+                    placeholder={isArabic ? "أدخل مهارة واضغط Enter..." : "Enter skill and press Enter..."}
                     style={{ flex: 1, padding: "8px 12px", background: "#151624", border: "1px solid #334155", borderRadius: "8px", color: "#ffffff", fontSize: "12px" }}
                   />
                   <button
@@ -1190,7 +1243,7 @@ export default function PublicCvBuilderPage() {
                 </div>
 
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", maxHeight: "300px", overflowY: "auto" }}>
-                  {skills.map((sk, skIdx) => (
+                  {curDoc.skills.map((sk, skIdx) => (
                     <span
                       key={skIdx}
                       style={{
@@ -1215,6 +1268,51 @@ export default function PublicCvBuilderPage() {
                       </button>
                     </span>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {/* TAB 5: PRESETS */}
+            {activeTab === "presets" && (
+              <div style={{ background: "#0e101d", padding: "20px", borderRadius: "18px", border: "1.5px solid #2563eb", boxShadow: "0 8px 25px rgba(37,99,235,0.15)" }}>
+                <div style={{ marginBottom: "14px" }}>
+                  <h3 style={{ fontSize: "15px", fontWeight: "900", color: "#60a5fa", margin: "0 0 4px 0" }}>
+                    {isArabic ? "مكتبة القوالب المتخصصة (9 مجالات)" : "Specialized Industry Presets (9 Domains)"}
+                  </h3>
+                  <span style={{ fontSize: "11.5px", color: "#94a3b8" }}>
+                    {isArabic ? "اختر قالباً يتناسب مع مجالك المهني:" : "Select a preset tailored to your professional domain:"}
+                  </span>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "8px", maxHeight: "460px", overflowY: "auto", paddingRight: "4px" }}>
+                  {CV_TEMPLATES_PRESETS.map((p) => {
+                    const isSelected = activePreset === p.id;
+                    return (
+                      <button
+                        key={p.id}
+                        onClick={() => handleApplyPreset(p.id)}
+                        style={{
+                          background: isSelected ? "#1e293b" : "#151624",
+                          border: isSelected ? `2px solid ${p.accent}` : "1px solid #334155",
+                          borderRadius: "10px",
+                          padding: "10px 12px",
+                          textAlign: isArabic ? "right" : "left",
+                          cursor: "pointer",
+                          transition: "all 0.15s",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "3px",
+                        }}
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <strong style={{ fontSize: "13px", color: isSelected ? "#60a5fa" : "#ffffff", fontWeight: "800" }}>{p.title}</strong>
+                          <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: p.accent, display: "inline-block" }} />
+                        </div>
+                        <div style={{ fontSize: "11px", color: "#38bdf8", fontWeight: "700" }}>{p.field}</div>
+                        <p style={{ fontSize: "10.5px", color: "#94a3b8", margin: 0, lineHeight: "1.35" }}>{p.desc}</p>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -1358,9 +1456,9 @@ export default function PublicCvBuilderPage() {
             {/* DESK TOOLBAR */}
             <div style={{ width: "100%", maxWidth: "794px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginBottom: "16px", borderBottom: "1px solid rgba(255,255,255,0.08)", paddingBottom: "10px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#60a5fa" }} />
+                <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: isArabic ? "#16a34a" : "#0284c7" }} />
                 <span style={{ fontSize: "12.5px", fontWeight: "900", color: "#ffffff" }}>
-                  {isArabic ? "ورقة السيرة الذاتية القياسية (ISO A4: 210mm × 297mm)" : "Standard Document (ISO A4: 210mm × 297mm)"}
+                  {isArabic ? "معاينة السيرة (بالعربية AR: ISO A4)" : "Live Preview (English EN: ISO A4)"}
                 </span>
               </div>
 
@@ -1428,20 +1526,20 @@ export default function PublicCvBuilderPage() {
                           {isArabic ? "بيانات الاتصال" : "Contact Info"}
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "10px", color: templateStyle === "clean-white" ? "#475569" : "#94a3b8" }}>
-                          {email && <div>📧 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{email}</span></div>}
-                          {phone && <div>📞 <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{phone}</span></div>}
-                          {location && <div>📍 {location}</div>}
-                          {linkedin && <div>🔗 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{linkedin}</span></div>}
+                          {curDoc.email && <div>📧 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{curDoc.email}</span></div>}
+                          {curDoc.phone && <div>📞 <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{curDoc.phone}</span></div>}
+                          {curDoc.location && <div>📍 {curDoc.location}</div>}
+                          {curDoc.linkedin && <div>🔗 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{curDoc.linkedin}</span></div>}
                         </div>
                       </div>
 
-                      {showSkills && skills.length > 0 && (
+                      {showSkills && curDoc.skills.length > 0 && (
                         <div>
                           <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
                             {isArabic ? "المهارات والقدرات" : "Skills & Competencies"}
                           </div>
                           <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
-                            {skills.map((sk, i) => (
+                            {curDoc.skills.map((sk, i) => (
                               <span key={i} style={{ background: templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${accentColor}40`, color: templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "2px 7px", borderRadius: "5px", fontSize: "9.5px", fontWeight: "700" }}>
                                 {sk}
                               </span>
@@ -1450,12 +1548,12 @@ export default function PublicCvBuilderPage() {
                         </div>
                       )}
 
-                      {showEducation && education.length > 0 && (
+                      {showEducation && curDoc.education.length > 0 && (
                         <div>
                           <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
                             {isArabic ? "المؤهلات العلمية" : "Education"}
                           </div>
-                          {education.map((edu, i) => (
+                          {curDoc.education.map((edu, i) => (
                             <div key={i} style={{ fontSize: "10px", marginBottom: "6px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
                               <strong>{edu.degree}</strong>
                               <div style={{ color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8" }}>{edu.school} {edu.year ? `(${edu.year})` : ""}</div>
@@ -1464,12 +1562,12 @@ export default function PublicCvBuilderPage() {
                         </div>
                       )}
 
-                      {showCertifications && certifications.length > 0 && (
+                      {showCertifications && curDoc.certifications.length > 0 && (
                         <div>
                           <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
                             {isArabic ? "الشهادات والاعتمادات" : "Certifications"}
                           </div>
-                          {certifications.map((cert, i) => (
+                          {curDoc.certifications.map((cert, i) => (
                             <div key={i} style={{ fontSize: "10px", marginBottom: "4px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
                               • {cert.title}
                             </div>
@@ -1491,31 +1589,31 @@ export default function PublicCvBuilderPage() {
                     <div>
                       <div style={{ borderBottom: `2.5px solid ${accentColor}`, paddingBottom: "14px", marginBottom: "18px" }}>
                         <h2 style={{ fontSize: "28px", fontWeight: "900", margin: "0 0 4px 0", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
-                          {fullName || (isArabic ? "الاسم الكامل" : "Your Name")}
+                          {curDoc.fullName || (isArabic ? "الاسم الكامل" : "Your Name")}
                         </h2>
                         <div style={{ fontSize: "13.5px", fontWeight: "700", color: accentColor }}>
-                          {jobTitle || (isArabic ? "المسمى الوظيفي" : "Professional Title")}
+                          {curDoc.jobTitle || (isArabic ? "المسمى الوظيفي" : "Professional Title")}
                         </div>
                       </div>
 
-                      {summary && (
+                      {curDoc.summary && (
                         <div style={{ marginBottom: "18px" }}>
                           <div style={{ fontSize: "12px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
                             {isArabic ? "الهدف المهني والملخص التنفيذي" : "Executive Summary"}
                           </div>
                           <p style={{ fontSize: "11px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
-                            {summary}
+                            {curDoc.summary}
                           </p>
                         </div>
                       )}
 
-                      {experiences.length > 0 && (
+                      {curDoc.experiences.length > 0 && (
                         <div>
                           <div style={{ fontSize: "12px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
                             {isArabic ? "الخبرات المهنية والعملية" : "Work Experience"}
                           </div>
                           <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-                            {experiences.map((exp, i) => (
+                            {curDoc.experiences.map((exp, i) => (
                               <div key={exp.id || i}>
                                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
                                   <div>
@@ -1550,17 +1648,17 @@ export default function PublicCvBuilderPage() {
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: `2.5px solid ${accentColor}`, paddingBottom: "16px", marginBottom: "20px", gap: "20px" }}>
                       <div style={{ flex: 1 }}>
                         <h2 style={{ fontSize: "28px", fontWeight: "900", margin: "0 0 4px 0", letterSpacing: "0.5px", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
-                          {fullName || (isArabic ? "الاسم الكامل" : "Your Name")}
+                          {curDoc.fullName || (isArabic ? "الاسم الكامل" : "Your Name")}
                         </h2>
                         <div style={{ fontSize: "13.5px", fontWeight: "700", color: accentColor, marginBottom: "10px" }}>
-                          {jobTitle || (isArabic ? "المسمى الوظيفي" : "Professional Title")}
+                          {curDoc.jobTitle || (isArabic ? "المسمى الوظيفي" : "Professional Title")}
                         </div>
 
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", fontSize: "11px", color: templateStyle === "clean-white" ? "#475569" : "#94a3b8", fontWeight: "600" }}>
-                          {email && <div>📧 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{email}</span></div>}
-                          {phone && <div>📞 <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{phone}</span></div>}
-                          {location && <div>📍 {location}</div>}
-                          {linkedin && <div>🔗 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{linkedin}</span></div>}
+                          {curDoc.email && <div>📧 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{curDoc.email}</span></div>}
+                          {curDoc.phone && <div>📞 <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{curDoc.phone}</span></div>}
+                          {curDoc.location && <div>📍 {curDoc.location}</div>}
+                          {curDoc.linkedin && <div>🔗 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{curDoc.linkedin}</span></div>}
                         </div>
                       </div>
 
@@ -1583,26 +1681,26 @@ export default function PublicCvBuilderPage() {
                     </div>
 
                     {/* EXECUTIVE SUMMARY */}
-                    {summary && (
+                    {curDoc.summary && (
                       <div style={{ marginBottom: "20px" }}>
                         <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
                           {isArabic ? "الهدف المهني والملخص التنفيذي" : "Executive Summary"}
                         </div>
                         <p style={{ fontSize: "11px", lineHeight: "1.65", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
-                          {summary}
+                          {curDoc.summary}
                         </p>
                       </div>
                     )}
 
                     {/* WORK EXPERIENCE */}
-                    {experiences.length > 0 && (
+                    {curDoc.experiences.length > 0 && (
                       <div style={{ marginBottom: "20px" }}>
                         <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
                           {isArabic ? "الخبرات المهنية والعملية" : "Professional Work Experience"}
                         </div>
 
                         <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-                          {experiences.map((exp, i) => (
+                          {curDoc.experiences.map((exp, i) => (
                             <div key={exp.id || i}>
                               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
                                 <div>
@@ -1630,13 +1728,13 @@ export default function PublicCvBuilderPage() {
                     )}
 
                     {/* TECHNICAL SKILLS */}
-                    {showSkills && skills.length > 0 && (
+                    {showSkills && curDoc.skills.length > 0 && (
                       <div style={{ marginBottom: "20px" }}>
                         <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "10px" }}>
                           {isArabic ? "المهارات التقنية والقدرات" : "Core Technical Skills"}
                         </div>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                          {skills.map((sk, i) => (
+                          {curDoc.skills.map((sk, i) => (
                             <span key={i} style={{ background: templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${accentColor}40`, color: templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "3px 9px", borderRadius: "6px", fontSize: "10.5px", fontWeight: "700" }}>
                               {sk}
                             </span>
@@ -1647,12 +1745,12 @@ export default function PublicCvBuilderPage() {
 
                     {/* EDUCATION & CERTIFICATIONS DUAL ROW */}
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-                      {showEducation && education.length > 0 && (
+                      {showEducation && curDoc.education.length > 0 && (
                         <div>
                           <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "8px" }}>
                             {isArabic ? "المؤهلات العلمية" : "Academic Education"}
                           </div>
-                          {education.map((edu, i) => (
+                          {curDoc.education.map((edu, i) => (
                             <div key={i} style={{ fontSize: "11px", marginBottom: "6px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
                               <strong>{edu.degree}</strong>
                               <div style={{ color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontSize: "10.5px" }}>{edu.school} {edu.year ? `(${edu.year})` : ""}</div>
@@ -1661,12 +1759,12 @@ export default function PublicCvBuilderPage() {
                         </div>
                       )}
 
-                      {showCertifications && certifications.length > 0 && (
+                      {showCertifications && curDoc.certifications.length > 0 && (
                         <div>
                           <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "8px" }}>
                             {isArabic ? "الشهادات والاعتمادات" : "Certified Training"}
                           </div>
-                          {certifications.map((cert, i) => (
+                          {curDoc.certifications.map((cert, i) => (
                             <div key={i} style={{ fontSize: "10.5px", marginBottom: "4px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
                               • {cert.title}
                             </div>
