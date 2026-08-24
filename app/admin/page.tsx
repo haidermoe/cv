@@ -319,14 +319,28 @@ export default function AdminPage() {
         format: "a4",
       });
 
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      const pdfWidth = pdf.internal.pageSize.getWidth(); // 210mm
+      const pdfPageHeight = pdf.internal.pageSize.getHeight(); // 297mm
+      const totalPdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      let heightLeft = totalPdfHeight;
+      let position = 0;
+
+      // Render First Page
+      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, totalPdfHeight);
+      heightLeft -= pdfPageHeight;
+
+      // Render Additional Pages if content extends beyond 1 A4 Page
+      while (heightLeft > 5) {
+        position = position - pdfPageHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, totalPdfHeight);
+        heightLeft -= pdfPageHeight;
+      }
 
       if (downloadLocal) {
         pdf.save("HAIDER_M_SHWKAT_CV_2026.pdf");
-        setGeneratePdfStatus("تم تنزيل ملف الـ PDF إلى جهازك بنجاح!");
+        setGeneratePdfStatus("تم توليد وتنزيل ملف الـ PDF متعدّد الصفحات بنجاح!");
       } else {
         const blob = pdf.output("blob");
         const file = new File([blob], "HAIDER_M_SHWKAT_CV_2026.pdf", { type: "application/pdf" });
