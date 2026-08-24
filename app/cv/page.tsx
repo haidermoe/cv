@@ -40,7 +40,6 @@ interface LanguageSpecificData {
 
 // BUILT-IN BIDIRECTIONAL TRANSLATION DICTIONARY
 const TRANSLATION_MAP: Record<string, string> = {
-  // Roles & Titles
   "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة": "Computer Science Specialist | Data Operations & Workflow Consultant",
   "Computer Science Specialist | Data Operations & Workflow Consultant": "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة",
   "حيدر محمد شوكت": "Haider M. Shwkat",
@@ -61,8 +60,6 @@ const TRANSLATION_MAP: Record<string, string> = {
   "Project Manager": "مدير مشاريع",
   "مهندس شبكات": "Network Engineer",
   "Network Engineer": "مهندس شبكات",
-
-  // Companies & Locations
   "تكنو ستور — بغداد، العراق": "Techno Store — Baghdad, Iraq",
   "Techno Store — Baghdad, Iraq": "تكنو ستور — بغداد، العراق",
   "مشاريع قطاع الدفاع والتجارة الإلكترونية": "Multi-Client / Defense & E-commerce Projects",
@@ -83,22 +80,16 @@ const TRANSLATION_MAP: Record<string, string> = {
   "2019 - 2023": "2019 - 2023",
   "2022 - 2026": "2022 - 2026",
   "2019 - 2021": "2019 - 2021",
-
-  // Degrees
   "بكالوريوس في علوم الحاسوب (Computer Science)": "Bachelor's Degree in Computer Science",
   "Bachelor's Degree in Computer Science": "بكالوريوس في علوم الحاسوب (Computer Science)",
   "دبلوم في الصناعات الكيماوية (Chemical Industry)": "Diploma in Chemical Industry",
   "Diploma in Chemical Industry": "دبلوم في الصناعات الكيماوية (Chemical Industry)",
-
-  // Certifications
   "شهادة CCNA 1: Introduction to Networks — جامعة دجلة": "CCNA 1: Introduction to Networks — Dijlah University",
   "CCNA 1: Introduction to Networks — Dijlah University": "شهادة CCNA 1: Introduction to Networks — جامعة دجلة",
   "شهادة مهارات المبيعات وخدمة العملاء — شركة إيرثلنك": "Sales and Customer Service Skills — EarthLink Telecommunications",
   "Sales and Customer Service Skills — EarthLink Telecommunications": "شهادة مهارات المبيعات وخدمة العملاء — شركة إيرثلنك",
   "تدريب السلامة والصحة المهنية — معهد التكنولوجيا بغداد": "Occupational Safety Training — Institute of Technology Baghdad",
   "Occupational Safety Training — Institute of Technology Baghdad": "تدريب السلامة والصحة المهنية — معهد التكنولوجيا بغداد",
-
-  // Skills
   "أتمتة بايثون وبرمجة السكربتات": "Python Automation & Scripting",
   "Python Automation & Scripting": "أتمتة بايثون وبرمجة السكربتات",
   "هيكلة وإدارة قواعد البيانات الضخمة SQL": "SQL & High-Volume Database Architecture",
@@ -265,7 +256,6 @@ const DEFAULT_EN_DATA: LanguageSpecificData = {
   ]
 };
 
-// HELPER: Auto-translate text using dictionary mapping
 function translateText(text: string): string {
   if (!text || !text.trim()) return "";
   const trimmed = text.trim();
@@ -313,7 +303,6 @@ export default function PublicCvBuilderPage() {
     setTimeout(() => setToastMessage(""), 3500);
   };
 
-  // Active current document based on selected language
   const curDoc = lang === "AR" ? docAR : docEN;
   const setCurDoc = (updater: (prev: LanguageSpecificData) => LanguageSpecificData) => {
     if (lang === "AR") {
@@ -351,8 +340,6 @@ export default function PublicCvBuilderPage() {
     if (targetLang === lang) return;
 
     if (targetLang === "EN") {
-      // Switching from Arabic to English:
-      // If docEN is untouched or empty, translate docAR into docEN automatically!
       if (!docEN.fullName || docEN.fullName === DEFAULT_EN_DATA.fullName) {
         if (docAR.fullName && docAR.fullName !== DEFAULT_AR_DATA.fullName) {
           const autoTranslatedEN: LanguageSpecificData = {
@@ -389,7 +376,6 @@ export default function PublicCvBuilderPage() {
       setFontFamily("Outfit");
       showToast("تم التحويل الفوري إلى النسخة الإنجليزية (English Mode)");
     } else {
-      // Switching from English to Arabic:
       if (!docAR.fullName || docAR.fullName === DEFAULT_AR_DATA.fullName) {
         if (docEN.fullName && docEN.fullName !== DEFAULT_EN_DATA.fullName) {
           const autoTranslatedAR: LanguageSpecificData = {
@@ -550,7 +536,7 @@ export default function PublicCvBuilderPage() {
   };
 
   const handleRemoveEducation = (id: string) => {
-    setCurDoc((prev) => ({ ...prev, education: prev.education.filter((e) => e.id !== id) }));
+    setCurDoc((prev) => ({ ...prev, education: prev.education.filter((edu) => edu.id !== id) }));
   };
 
   const handleAddCertification = () => {
@@ -576,18 +562,11 @@ export default function PublicCvBuilderPage() {
     setCurDoc((prev) => ({ ...prev, skills: prev.skills.filter((_, idx) => idx !== skillIndex) }));
   };
 
-  // SINGLE PDF GENERATION CORE HELPER
-  const generateSinglePdf = async (targetLang: "AR" | "EN") => {
+  // FLAWLESS CAPTURE DIRECTLY FROM DEDICATED UNSCALED EXPORT ELEMENT
+  const generateSinglePdfFromExportDom = async (targetLang: "AR" | "EN") => {
     const isTargetArabic = targetLang === "AR";
-    
-    // Switch canvas to target language
-    if (lang !== targetLang) {
-      setLang(targetLang);
-      setFontFamily(isTargetArabic ? "Tajawal" : "Outfit");
-      await new Promise((resolve) => setTimeout(resolve, 200));
-    }
-
-    const element = document.getElementById("cv-pdf-canvas");
+    const elementId = isTargetArabic ? "cv-export-arabic-desk" : "cv-export-english-desk";
+    const element = document.getElementById(elementId);
     if (!element) return;
 
     const activeData = isTargetArabic ? docAR : docEN;
@@ -598,10 +577,10 @@ export default function PublicCvBuilderPage() {
     const { jsPDF } = await import("jspdf");
 
     const canvas = await html2canvas(element, {
-      scale: 2.2,
+      scale: 2,
       useCORS: true,
       logging: false,
-      backgroundColor: null,
+      backgroundColor: templateStyle === "clean-white" ? "#ffffff" : templateStyle === "executive-blue" ? "#0f172a" : "#0d0f18",
     });
 
     const imgData = canvas.toDataURL("image/png");
@@ -618,7 +597,7 @@ export default function PublicCvBuilderPage() {
     let heightLeft = totalPdfHeight;
     let position = 0;
 
-    // First Page
+    // Render First Page
     pdf.addImage(imgData, "PNG", 0, position, pdfWidth, totalPdfHeight);
     heightLeft -= pdfPageHeight;
 
@@ -641,19 +620,19 @@ export default function PublicCvBuilderPage() {
     try {
       if (choice === "AR") {
         showToast("جاري تنزيل ملف الـ PDF باللغة العربية...");
-        await generateSinglePdf("AR");
+        await generateSinglePdfFromExportDom("AR");
         showToast("تم تنزيل النسخة العربية بنجاح");
       } else if (choice === "EN") {
         showToast("Generating English PDF resume...");
-        await generateSinglePdf("EN");
+        await generateSinglePdfFromExportDom("EN");
         showToast("English PDF Downloaded successfully");
       } else if (choice === "BOTH") {
         showToast("جاري تجهيز وتنزيل النسختين (العربية والإنجليزية)...");
         // 1. Download Arabic
-        await generateSinglePdf("AR");
+        await generateSinglePdfFromExportDom("AR");
         await new Promise((res) => setTimeout(res, 600));
         // 2. Download English
-        await generateSinglePdf("EN");
+        await generateSinglePdfFromExportDom("EN");
         showToast("تم تنزيل النسختين العربية والإنجليزية بنجاح");
       }
     } catch (err) {
@@ -665,6 +644,297 @@ export default function PublicCvBuilderPage() {
   };
 
   const isArabic = lang === "AR";
+
+  // REUSABLE DOCUMENT RENDERER (USED FOR BOTH PREVIEW AND ZERO-SCALE EXPORT CANVAS)
+  const renderDocumentContent = (docData: LanguageSpecificData, isDocArabic: boolean, canvasId?: string) => {
+    const docFontFamily = isDocArabic ? "'Tajawal', sans-serif" : "'Outfit', sans-serif";
+
+    return (
+      <div
+        id={canvasId}
+        style={{
+          width: "794px",
+          minHeight: "1123px",
+          background: templateStyle === "clean-white" ? "#ffffff" : templateStyle === "executive-blue" ? "#0f172a" : "#0d0f18",
+          color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff",
+          padding: pageMargin === "compact" ? "28px 32px" : pageMargin === "wide" ? "56px 60px" : "44px 48px",
+          boxSizing: "border-box",
+          fontFamily: docFontFamily,
+          fontSize: fontSizeScale === "compact" ? "10.5px" : fontSizeScale === "large" ? "12.5px" : "11.5px",
+          lineHeight: lineSpacing === "compact" ? "1.45" : lineSpacing === "relaxed" ? "1.85" : "1.65",
+          letterSpacing: "normal",
+          textRendering: "geometricPrecision",
+        }}
+        dir={isDocArabic ? "rtl" : "ltr"}
+      >
+        {/* TWO COLUMN SIDEBAR LAYOUT MODE */}
+        {layoutFormat === "two-column-sidebar" ? (
+          <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", gap: "28px", alignItems: "start" }}>
+            
+            {/* SIDEBAR */}
+            <div style={{ borderRight: isDocArabic ? "none" : `2px solid ${accentColor}30`, borderLeft: isDocArabic ? `2px solid ${accentColor}30` : "none", paddingRight: isDocArabic ? "0" : "20px", paddingLeft: isDocArabic ? "20px" : "0", display: "flex", flexDirection: "column", gap: "18px" }}>
+              {showPhoto && photo && (
+                <div style={{ width: "100px", height: "100px", borderRadius: "14px", overflow: "hidden", border: `2.5px solid ${accentColor}`, margin: "0 auto", boxShadow: "0 4px 15px rgba(0,0,0,0.15)" }}>
+                  <img src={photo} alt="Photo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
+              )}
+
+              <div>
+                <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                  {isDocArabic ? "بيانات الاتصال" : "Contact Info"}
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "10px", color: templateStyle === "clean-white" ? "#475569" : "#94a3b8" }}>
+                  {docData.email && <div>📧 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{docData.email}</span></div>}
+                  {docData.phone && <div>📞 <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{docData.phone}</span></div>}
+                  {docData.location && <div>📍 {docData.location}</div>}
+                  {docData.linkedin && <div>🔗 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{docData.linkedin}</span></div>}
+                </div>
+              </div>
+
+              {showSkills && docData.skills.length > 0 && (
+                <div>
+                  <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                    {isDocArabic ? "المهارات والقدرات" : "Skills & Competencies"}
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
+                    {docData.skills.map((sk, i) => (
+                      <span key={i} style={{ background: templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${accentColor}40`, color: templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "2px 7px", borderRadius: "5px", fontSize: "9.5px", fontWeight: "700" }}>
+                        {sk}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {showEducation && docData.education.length > 0 && (
+                <div>
+                  <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                    {isDocArabic ? "المؤهلات العلمية" : "Education"}
+                  </div>
+                  {docData.education.map((edu, i) => (
+                    <div key={i} style={{ fontSize: "10px", marginBottom: "6px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                      <strong>{edu.degree}</strong>
+                      <div style={{ color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8" }}>{edu.school} {edu.year ? `(${edu.year})` : ""}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {showCertifications && docData.certifications.length > 0 && (
+                <div>
+                  <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                    {isDocArabic ? "الشهادات والاعتمادات" : "Certifications"}
+                  </div>
+                  {docData.certifications.map((cert, i) => (
+                    <div key={i} style={{ fontSize: "10px", marginBottom: "4px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                      • {cert.title}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {showQrCode && qrCodeDataUrl && (
+                <div style={{ marginTop: "12px", padding: "8px", background: templateStyle === "clean-white" ? "#f8fafc" : "rgba(255,255,255,0.05)", borderRadius: "10px", border: `1.5px solid ${accentColor}40`, display: "flex", flexDirection: "column", alignItems: "center", gap: "3px" }}>
+                  <img src={qrCodeDataUrl} alt="QR Code" style={{ width: "68px", height: "68px", objectFit: "contain" }} />
+                  <span style={{ fontSize: "8px", fontWeight: "900", color: accentColor }}>
+                    {isDocArabic ? "الموقع التفاعلي" : "LIVE PORTFOLIO"}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* MAIN BODY */}
+            <div>
+              <div style={{ borderBottom: `2.5px solid ${accentColor}`, paddingBottom: "14px", marginBottom: "18px" }}>
+                <h2 style={{ fontSize: "28px", fontWeight: "900", margin: "0 0 4px 0", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                  {docData.fullName || (isDocArabic ? "الاسم الكامل" : "Your Name")}
+                </h2>
+                <div style={{ fontSize: "13.5px", fontWeight: "700", color: accentColor }}>
+                  {docData.jobTitle || (isDocArabic ? "المسمى الوظيفي" : "Professional Title")}
+                </div>
+              </div>
+
+              {docData.summary && (
+                <div style={{ marginBottom: "18px" }}>
+                  <div style={{ fontSize: "12px", fontWeight: "900", color: accentColor, marginBottom: "6px" }}>
+                    {isDocArabic ? "الهدف المهني والملخص التنفيذي" : "Executive Summary"}
+                  </div>
+                  <p style={{ fontSize: "11px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
+                    {docData.summary}
+                  </p>
+                </div>
+              )}
+
+              {docData.experiences.length > 0 && (
+                <div>
+                  <div style={{ fontSize: "12px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
+                    {isDocArabic ? "الخبرات المهنية والعملية" : "Work Experience"}
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                    {docData.experiences.map((exp, i) => (
+                      <div key={exp.id || i}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
+                          <div>
+                            <strong style={{ fontSize: "12.5px", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                              {exp.role}
+                            </strong>
+                            <span style={{ fontSize: "11.5px", color: accentColor, marginLeft: isDocArabic ? "0" : "6px", marginRight: isDocArabic ? "6px" : "0", fontWeight: "700" }}>
+                              | {exp.company}
+                            </span>
+                          </div>
+                          <span style={{ fontSize: "10.5px", color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
+                            {exp.date}
+                          </span>
+                        </div>
+
+                        <ul style={{ margin: "3px 0 0 0", paddingLeft: isDocArabic ? "0" : "16px", paddingRight: isDocArabic ? "16px" : "0", fontSize: "10.5px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.5" }}>
+                          {exp.bullets.map((b: string, bi: number) => (
+                            <li key={bi} style={{ marginBottom: "2px" }}>{b}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          /* SINGLE COLUMN / EXECUTIVE / MINIMAL LAYOUT */
+          <div>
+            {/* HEADER ROW */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: `2.5px solid ${accentColor}`, paddingBottom: "16px", marginBottom: "20px", gap: "20px" }}>
+              <div style={{ flex: 1 }}>
+                <h2 style={{ fontSize: "28px", fontWeight: "900", margin: "0 0 4px 0", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                  {docData.fullName || (isDocArabic ? "الاسم الكامل" : "Your Name")}
+                </h2>
+                <div style={{ fontSize: "13.5px", fontWeight: "700", color: accentColor, marginBottom: "10px" }}>
+                  {docData.jobTitle || (isDocArabic ? "المسمى الوظيفي" : "Professional Title")}
+                </div>
+
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", fontSize: "11px", color: templateStyle === "clean-white" ? "#475569" : "#94a3b8", fontWeight: "600" }}>
+                  {docData.email && <div>📧 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{docData.email}</span></div>}
+                  {docData.phone && <div>📞 <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{docData.phone}</span></div>}
+                  {docData.location && <div>📍 {docData.location}</div>}
+                  {docData.linkedin && <div>🔗 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{docData.linkedin}</span></div>}
+                </div>
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
+                {showQrCode && qrCodeDataUrl && (
+                  <div style={{ padding: "4px", background: "#ffffff", borderRadius: "8px", border: `1.5px solid ${accentColor}`, display: "flex", flexDirection: "column", alignItems: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+                    <img src={qrCodeDataUrl} alt="QR" style={{ width: "55px", height: "55px", objectFit: "contain" }} />
+                    <span style={{ fontSize: "6.5px", fontWeight: "900", color: "#0f172a", marginTop: "1px" }}>
+                      {isDocArabic ? "الموقع" : "PORTFOLIO"}
+                    </span>
+                  </div>
+                )}
+
+                {showPhoto && photo && (
+                  <div style={{ width: "75px", height: "75px", borderRadius: "12px", overflow: "hidden", border: `2px solid ${accentColor}`, flexShrink: 0, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
+                    <img src={photo} alt="Photo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* EXECUTIVE SUMMARY */}
+            {docData.summary && (
+              <div style={{ marginBottom: "20px" }}>
+                <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, marginBottom: "6px" }}>
+                  {isDocArabic ? "الهدف المهني والملخص التنفيذي" : "Executive Summary"}
+                </div>
+                <p style={{ fontSize: "11px", lineHeight: "1.65", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
+                  {docData.summary}
+                </p>
+              </div>
+            )}
+
+            {/* WORK EXPERIENCE */}
+            {docData.experiences.length > 0 && (
+              <div style={{ marginBottom: "20px" }}>
+                <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
+                  {isDocArabic ? "الخبرات المهنية والعملية" : "Professional Work Experience"}
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+                  {docData.experiences.map((exp, i) => (
+                    <div key={exp.id || i}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
+                        <div>
+                          <strong style={{ fontSize: "13px", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                            {exp.role}
+                          </strong>
+                          <span style={{ fontSize: "12px", color: accentColor, marginLeft: isDocArabic ? "0" : "8px", marginRight: isDocArabic ? "8px" : "0", fontWeight: "700" }}>
+                            | {exp.company}
+                          </span>
+                        </div>
+                        <span style={{ fontSize: "11px", color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
+                          {exp.date}
+                        </span>
+                      </div>
+
+                      <ul style={{ margin: "4px 0 0 0", paddingLeft: isDocArabic ? "0" : "18px", paddingRight: isDocArabic ? "18px" : "0", fontSize: "11px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.55" }}>
+                        {exp.bullets.map((b: string, bi: number) => (
+                          <li key={bi} style={{ marginBottom: "2px" }}>{b}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* TECHNICAL SKILLS */}
+            {showSkills && docData.skills.length > 0 && (
+              <div style={{ marginBottom: "20px" }}>
+                <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "10px" }}>
+                  {isDocArabic ? "المهارات التقنية والقدرات" : "Core Technical Skills"}
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                  {docData.skills.map((sk, i) => (
+                    <span key={i} style={{ background: templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${accentColor}40`, color: templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "3px 9px", borderRadius: "6px", fontSize: "10.5px", fontWeight: "700" }}>
+                      {sk}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* EDUCATION & CERTIFICATIONS DUAL ROW */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+              {showEducation && docData.education.length > 0 && (
+                <div>
+                  <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "8px" }}>
+                    {isDocArabic ? "المؤهلات العلمية" : "Academic Education"}
+                  </div>
+                  {docData.education.map((edu, i) => (
+                    <div key={i} style={{ fontSize: "11px", marginBottom: "6px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                      <strong>{edu.degree}</strong>
+                      <div style={{ color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontSize: "10.5px" }}>{edu.school} {edu.year ? `(${edu.year})` : ""}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {showCertifications && docData.certifications.length > 0 && (
+                <div>
+                  <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "8px" }}>
+                    {isDocArabic ? "الشهادات والاعتمادات" : "Certified Training"}
+                  </div>
+                  {docData.certifications.map((cert, i) => (
+                    <div key={i} style={{ fontSize: "10.5px", marginBottom: "4px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                      • {cert.title}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div
@@ -706,6 +976,12 @@ export default function PublicCvBuilderPage() {
           {toastMessage}
         </div>
       )}
+
+      {/* DEDICATED HIDDEN FULL-SCALE (100% UNSCALED) EXPORT ELEMENTS FOR FLAWLESS PDF RENDERING */}
+      <div style={{ position: "fixed", left: "-9999px", top: "-9999px", opacity: 0, pointerEvents: "none", zIndex: -100 }}>
+        {renderDocumentContent(docAR, true, "cv-export-arabic-desk")}
+        {renderDocumentContent(docEN, false, "cv-export-english-desk")}
+      </div>
 
       {/* DOWNLOAD CHOICE MODAL */}
       {isExportModalOpen && (
@@ -837,7 +1113,7 @@ export default function PublicCvBuilderPage() {
         </div>
       )}
 
-      {/* TOP HEADER WITH INSTANT TRANSLATE TOGGLE & MAIN DOWNLOAD BUTTON */}
+      {/* TOP HEADER */}
       <header
         style={{
           background: "rgba(10, 11, 18, 0.9)",
@@ -1741,288 +2017,8 @@ export default function PublicCvBuilderPage() {
 
             {/* SCALABLE TRUE A4 CANVAS */}
             <div style={{ transform: `scale(${a4Zoom})`, transformOrigin: "top center", transition: "transform 0.2s ease", marginBottom: `${(1 - a4Zoom) * -1123}px` }}>
-              <div
-                id="cv-pdf-canvas"
-                style={{
-                  width: "794px",
-                  minHeight: "1123px",
-                  background: templateStyle === "clean-white" ? "#ffffff" : templateStyle === "executive-blue" ? "#0f172a" : "#0d0f18",
-                  color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff",
-                  padding: pageMargin === "compact" ? "28px 32px" : pageMargin === "wide" ? "56px 60px" : "44px 48px",
-                  boxSizing: "border-box",
-                  fontFamily: `'${fontFamily}', 'Tajawal', sans-serif`,
-                  fontSize: fontSizeScale === "compact" ? "10.5px" : fontSizeScale === "large" ? "12.5px" : "11.5px",
-                  lineHeight: lineSpacing === "compact" ? "1.45" : lineSpacing === "relaxed" ? "1.85" : "1.65",
-                  boxShadow: "0 25px 70px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06)",
-                  borderRadius: "4px",
-                }}
-                dir={isArabic ? "rtl" : "ltr"}
-              >
-                {/* TWO COLUMN SIDEBAR LAYOUT MODE */}
-                {layoutFormat === "two-column-sidebar" ? (
-                  <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", gap: "28px", alignItems: "start" }}>
-                    
-                    {/* SIDEBAR */}
-                    <div style={{ borderRight: isArabic ? "none" : `2px solid ${accentColor}30`, borderLeft: isArabic ? `2px solid ${accentColor}30` : "none", paddingRight: isArabic ? "0" : "20px", paddingLeft: isArabic ? "20px" : "0", display: "flex", flexDirection: "column", gap: "18px" }}>
-                      {showPhoto && photo && (
-                        <div style={{ width: "100px", height: "100px", borderRadius: "14px", overflow: "hidden", border: `2.5px solid ${accentColor}`, margin: "0 auto", boxShadow: "0 4px 15px rgba(0,0,0,0.15)" }}>
-                          <img src={photo} alt="Photo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                        </div>
-                      )}
-
-                      <div>
-                        <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
-                          {isArabic ? "بيانات الاتصال" : "Contact Info"}
-                        </div>
-                        <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "10px", color: templateStyle === "clean-white" ? "#475569" : "#94a3b8" }}>
-                          {curDoc.email && <div>📧 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{curDoc.email}</span></div>}
-                          {curDoc.phone && <div>📞 <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{curDoc.phone}</span></div>}
-                          {curDoc.location && <div>📍 {curDoc.location}</div>}
-                          {curDoc.linkedin && <div>🔗 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{curDoc.linkedin}</span></div>}
-                        </div>
-                      </div>
-
-                      {showSkills && curDoc.skills.length > 0 && (
-                        <div>
-                          <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
-                            {isArabic ? "المهارات والقدرات" : "Skills & Competencies"}
-                          </div>
-                          <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
-                            {curDoc.skills.map((sk, i) => (
-                              <span key={i} style={{ background: templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${accentColor}40`, color: templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "2px 7px", borderRadius: "5px", fontSize: "9.5px", fontWeight: "700" }}>
-                                {sk}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {showEducation && curDoc.education.length > 0 && (
-                        <div>
-                          <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
-                            {isArabic ? "المؤهلات العلمية" : "Education"}
-                          </div>
-                          {curDoc.education.map((edu, i) => (
-                            <div key={i} style={{ fontSize: "10px", marginBottom: "6px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
-                              <strong>{edu.degree}</strong>
-                              <div style={{ color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8" }}>{edu.school} {edu.year ? `(${edu.year})` : ""}</div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {showCertifications && curDoc.certifications.length > 0 && (
-                        <div>
-                          <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
-                            {isArabic ? "الشهادات والاعتمادات" : "Certifications"}
-                          </div>
-                          {curDoc.certifications.map((cert, i) => (
-                            <div key={i} style={{ fontSize: "10px", marginBottom: "4px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
-                              • {cert.title}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {showQrCode && qrCodeDataUrl && (
-                        <div style={{ marginTop: "12px", padding: "8px", background: templateStyle === "clean-white" ? "#f8fafc" : "rgba(255,255,255,0.05)", borderRadius: "10px", border: `1.5px solid ${accentColor}40`, display: "flex", flexDirection: "column", alignItems: "center", gap: "3px" }}>
-                          <img src={qrCodeDataUrl} alt="QR Code" style={{ width: "68px", height: "68px", objectFit: "contain" }} />
-                          <span style={{ fontSize: "8px", fontWeight: "900", color: accentColor, letterSpacing: "0.5px" }}>
-                            {isArabic ? "الموقع التفاعلي" : "LIVE PORTFOLIO"}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* MAIN BODY */}
-                    <div>
-                      <div style={{ borderBottom: `2.5px solid ${accentColor}`, paddingBottom: "14px", marginBottom: "18px" }}>
-                        <h2 style={{ fontSize: "28px", fontWeight: "900", margin: "0 0 4px 0", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
-                          {curDoc.fullName || (isArabic ? "الاسم الكامل" : "Your Name")}
-                        </h2>
-                        <div style={{ fontSize: "13.5px", fontWeight: "700", color: accentColor }}>
-                          {curDoc.jobTitle || (isArabic ? "المسمى الوظيفي" : "Professional Title")}
-                        </div>
-                      </div>
-
-                      {curDoc.summary && (
-                        <div style={{ marginBottom: "18px" }}>
-                          <div style={{ fontSize: "12px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
-                            {isArabic ? "الهدف المهني والملخص التنفيذي" : "Executive Summary"}
-                          </div>
-                          <p style={{ fontSize: "11px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
-                            {curDoc.summary}
-                          </p>
-                        </div>
-                      )}
-
-                      {curDoc.experiences.length > 0 && (
-                        <div>
-                          <div style={{ fontSize: "12px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
-                            {isArabic ? "الخبرات المهنية والعملية" : "Work Experience"}
-                          </div>
-                          <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-                            {curDoc.experiences.map((exp, i) => (
-                              <div key={exp.id || i}>
-                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
-                                  <div>
-                                    <strong style={{ fontSize: "12.5px", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
-                                      {exp.role}
-                                    </strong>
-                                    <span style={{ fontSize: "11.5px", color: accentColor, marginLeft: isArabic ? "0" : "6px", marginRight: isArabic ? "6px" : "0", fontWeight: "700" }}>
-                                      | {exp.company}
-                                    </span>
-                                  </div>
-                                  <span style={{ fontSize: "10.5px", color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
-                                    {exp.date}
-                                  </span>
-                                </div>
-
-                                <ul style={{ margin: "3px 0 0 0", paddingLeft: isArabic ? "0" : "16px", paddingRight: isArabic ? "16px" : "0", fontSize: "10.5px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.5" }}>
-                                  {exp.bullets.map((b: string, bi: number) => (
-                                    <li key={bi} style={{ marginBottom: "2px" }}>{b}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  /* SINGLE COLUMN / EXECUTIVE / MINIMAL LAYOUT */
-                  <div>
-                    {/* HEADER ROW */}
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: `2.5px solid ${accentColor}`, paddingBottom: "16px", marginBottom: "20px", gap: "20px" }}>
-                      <div style={{ flex: 1 }}>
-                        <h2 style={{ fontSize: "28px", fontWeight: "900", margin: "0 0 4px 0", letterSpacing: "0.5px", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
-                          {curDoc.fullName || (isArabic ? "الاسم الكامل" : "Your Name")}
-                        </h2>
-                        <div style={{ fontSize: "13.5px", fontWeight: "700", color: accentColor, marginBottom: "10px" }}>
-                          {curDoc.jobTitle || (isArabic ? "المسمى الوظيفي" : "Professional Title")}
-                        </div>
-
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", fontSize: "11px", color: templateStyle === "clean-white" ? "#475569" : "#94a3b8", fontWeight: "600" }}>
-                          {curDoc.email && <div>📧 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{curDoc.email}</span></div>}
-                          {curDoc.phone && <div>📞 <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{curDoc.phone}</span></div>}
-                          {curDoc.location && <div>📍 {curDoc.location}</div>}
-                          {curDoc.linkedin && <div>🔗 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{curDoc.linkedin}</span></div>}
-                        </div>
-                      </div>
-
-                      <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
-                        {showQrCode && qrCodeDataUrl && (
-                          <div style={{ padding: "4px", background: "#ffffff", borderRadius: "8px", border: `1.5px solid ${accentColor}`, display: "flex", flexDirection: "column", alignItems: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
-                            <img src={qrCodeDataUrl} alt="QR" style={{ width: "55px", height: "55px", objectFit: "contain" }} />
-                            <span style={{ fontSize: "6.5px", fontWeight: "900", color: "#0f172a", marginTop: "1px" }}>
-                              {isArabic ? "الموقع" : "PORTFOLIO"}
-                            </span>
-                          </div>
-                        )}
-
-                        {showPhoto && photo && (
-                          <div style={{ width: "75px", height: "75px", borderRadius: "12px", overflow: "hidden", border: `2px solid ${accentColor}`, flexShrink: 0, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
-                            <img src={photo} alt="Photo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* EXECUTIVE SUMMARY */}
-                    {curDoc.summary && (
-                      <div style={{ marginBottom: "20px" }}>
-                        <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>
-                          {isArabic ? "الهدف المهني والملخص التنفيذي" : "Executive Summary"}
-                        </div>
-                        <p style={{ fontSize: "11px", lineHeight: "1.65", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
-                          {curDoc.summary}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* WORK EXPERIENCE */}
-                    {curDoc.experiences.length > 0 && (
-                      <div style={{ marginBottom: "20px" }}>
-                        <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
-                          {isArabic ? "الخبرات المهنية والعملية" : "Professional Work Experience"}
-                        </div>
-
-                        <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-                          {curDoc.experiences.map((exp, i) => (
-                            <div key={exp.id || i}>
-                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
-                                <div>
-                                  <strong style={{ fontSize: "13px", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
-                                    {exp.role}
-                                  </strong>
-                                  <span style={{ fontSize: "12px", color: accentColor, marginLeft: isArabic ? "0" : "8px", marginRight: isArabic ? "8px" : "0", fontWeight: "700" }}>
-                                    | {exp.company}
-                                  </span>
-                                </div>
-                                <span style={{ fontSize: "11px", color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
-                                  {exp.date}
-                                </span>
-                              </div>
-
-                              <ul style={{ margin: "4px 0 0 0", paddingLeft: isArabic ? "0" : "18px", paddingRight: isArabic ? "18px" : "0", fontSize: "11px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.55" }}>
-                                {exp.bullets.map((b: string, bi: number) => (
-                                  <li key={bi} style={{ marginBottom: "2px" }}>{b}</li>
-                                ))}
-                              </ul>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* TECHNICAL SKILLS */}
-                    {showSkills && curDoc.skills.length > 0 && (
-                      <div style={{ marginBottom: "20px" }}>
-                        <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "10px" }}>
-                          {isArabic ? "المهارات التقنية والقدرات" : "Core Technical Skills"}
-                        </div>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                          {curDoc.skills.map((sk, i) => (
-                            <span key={i} style={{ background: templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${accentColor}40`, color: templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "3px 9px", borderRadius: "6px", fontSize: "10.5px", fontWeight: "700" }}>
-                              {sk}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* EDUCATION & CERTIFICATIONS DUAL ROW */}
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-                      {showEducation && curDoc.education.length > 0 && (
-                        <div>
-                          <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "8px" }}>
-                            {isArabic ? "المؤهلات العلمية" : "Academic Education"}
-                          </div>
-                          {curDoc.education.map((edu, i) => (
-                            <div key={i} style={{ fontSize: "11px", marginBottom: "6px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
-                              <strong>{edu.degree}</strong>
-                              <div style={{ color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontSize: "10.5px" }}>{edu.school} {edu.year ? `(${edu.year})` : ""}</div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {showCertifications && curDoc.certifications.length > 0 && (
-                        <div>
-                          <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "8px" }}>
-                            {isArabic ? "الشهادات والاعتمادات" : "Certified Training"}
-                          </div>
-                          {curDoc.certifications.map((cert, i) => (
-                            <div key={i} style={{ fontSize: "10.5px", marginBottom: "4px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
-                              • {cert.title}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
+              <div style={{ boxShadow: "0 25px 70px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06)", borderRadius: "4px", overflow: "hidden" }}>
+                {renderDocumentContent(curDoc, isArabic)}
               </div>
             </div>
           </section>
