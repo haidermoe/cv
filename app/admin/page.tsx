@@ -205,13 +205,7 @@ export default function AdminPage() {
   useEffect(() => {
     let isMounted = true;
     import("qrcode").then((QRCode) => {
-      const target = data?.cvDocument?.qrCodeTarget || "portfolio";
-      let urlToEncode = "https://cv-wine-tau.vercel.app";
-      if (target === "linkedin") {
-        urlToEncode = data?.cvDocument?.linkedin ? (data.cvDocument.linkedin.startsWith("http") ? data.cvDocument.linkedin : `https://${data.cvDocument.linkedin}`) : "https://linkedin.com/in/haidermoe";
-      } else if (target === "custom" && data?.cvDocument?.qrCodeCustomUrl) {
-        urlToEncode = data.cvDocument.qrCodeCustomUrl;
-      }
+      const urlToEncode = data?.cvDocument?.qrCodeCustomUrl || "https://cv-wine-tau.vercel.app";
 
       QRCode.toDataURL(urlToEncode, {
         width: 320,
@@ -225,7 +219,7 @@ export default function AdminPage() {
       }).catch((e) => console.error("QR Error:", e));
     });
     return () => { isMounted = false; };
-  }, [data?.cvDocument?.qrCodeTarget, data?.cvDocument?.qrCodeCustomUrl, data?.cvDocument?.linkedin, qrForegroundColor, qrBackgroundColor]);
+  }, [data?.cvDocument?.qrCodeCustomUrl, qrForegroundColor, qrBackgroundColor]);
 
   const handleDownloadQrCode = () => {
     if (!qrCodeDataUrl) return;
@@ -1964,43 +1958,55 @@ export default function AdminPage() {
                         <span style={{ fontSize: "10.5px", background: "#1e293b", color: "#38bdf8", padding: "3px 8px", borderRadius: "6px", fontWeight: "700" }}>ماسح ذكي</span>
                       </div>
 
-                      {/* TARGET SELECTOR */}
-                      <div style={{ marginBottom: "12px" }}>
-                        <label style={{ display: "block", fontSize: "11.5px", color: "#94a3b8", marginBottom: "6px" }}>الرابط الموجه إليه الـ QR Code:</label>
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px", marginBottom: "8px" }}>
-                          {[
-                            { id: "portfolio", label: "الموقع التفاعلي" },
-                            { id: "linkedin", label: "LinkedIn" },
-                            { id: "custom", label: "رابط مخصص" },
-                          ].map((t) => (
-                            <button
-                              key={t.id}
-                              onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeTarget: t.id as any } })}
-                              style={{
-                                background: (data.cvDocument?.qrCodeTarget || "portfolio") === t.id ? "#2563eb" : "#151624",
-                                color: (data.cvDocument?.qrCodeTarget || "portfolio") === t.id ? "#ffffff" : "#94a3b8",
-                                border: "1px solid #334155",
-                                padding: "6px 4px",
-                                borderRadius: "6px",
-                                fontSize: "11px",
-                                fontWeight: "800",
-                                cursor: "pointer",
-                              }}
-                            >
-                              {t.label}
-                            </button>
-                          ))}
-                        </div>
+                      {/* DIRECT LINK INPUT & QUICK PRESETS */}
+                      <div style={{ marginBottom: "14px" }}>
+                        <label style={{ display: "block", fontSize: "12px", color: "#60a5fa", fontWeight: "800", marginBottom: "6px" }}>
+                          رابط الـ QR Code (اكتب أو الصق أي رابط تريده مباشرة):
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="https://your-custom-link.com"
+                          value={data.cvDocument?.qrCodeCustomUrl !== undefined ? data.cvDocument.qrCodeCustomUrl : "https://cv-wine-tau.vercel.app"}
+                          onChange={(e) => {
+                            setData({
+                              ...data,
+                              cvDocument: {
+                                ...(data.cvDocument || ({} as any)),
+                                qrCodeCustomUrl: e.target.value,
+                              },
+                            });
+                          }}
+                          style={{ width: "100%", padding: "9px 12px", borderRadius: "8px", background: "#151624", border: "1.5px solid #3b82f6", color: "#ffffff", fontSize: "13px", fontWeight: "700", marginBottom: "8px", boxSizing: "border-box" }}
+                        />
 
-                        {data.cvDocument?.qrCodeTarget === "custom" && (
-                          <input
-                            type="text"
-                            placeholder="https://your-custom-link.com"
-                            value={data.cvDocument?.qrCodeCustomUrl || ""}
-                            onChange={(e) => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeCustomUrl: e.target.value } })}
-                            style={{ width: "100%", padding: "8px 10px", borderRadius: "8px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "12px", marginBottom: "8px" }}
-                          />
-                        )}
+                        {/* QUICK PRESET BUTTONS */}
+                        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", alignItems: "center" }}>
+                          <span style={{ fontSize: "11px", color: "#94a3b8" }}>روابط سريعة:</span>
+                          <button
+                            onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeCustomUrl: "https://cv-wine-tau.vercel.app" } })}
+                            style={{ background: "#1e293b", color: "#38bdf8", border: "1px solid #334155", padding: "4px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: "700", cursor: "pointer" }}
+                          >
+                            الموقع الرسمي
+                          </button>
+                          <button
+                            onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeCustomUrl: data.cvDocument?.linkedin ? (data.cvDocument.linkedin.startsWith("http") ? data.cvDocument.linkedin : `https://${data.cvDocument.linkedin}`) : "https://linkedin.com/in/haidermoe" } })}
+                            style={{ background: "#1e293b", color: "#38bdf8", border: "1px solid #334155", padding: "4px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: "700", cursor: "pointer" }}
+                          >
+                            LinkedIn
+                          </button>
+                          <button
+                            onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeCustomUrl: "https://wa.me/9647718964778" } })}
+                            style={{ background: "#1e293b", color: "#38bdf8", border: "1px solid #334155", padding: "4px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: "700", cursor: "pointer" }}
+                          >
+                            WhatsApp
+                          </button>
+                          <button
+                            onClick={() => setData({ ...data, cvDocument: { ...(data.cvDocument || ({} as any)), qrCodeCustomUrl: "https://github.com/haidermoe" } })}
+                            style={{ background: "#1e293b", color: "#38bdf8", border: "1px solid #334155", padding: "4px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: "700", cursor: "pointer" }}
+                          >
+                            GitHub
+                          </button>
+                        </div>
                       </div>
 
                       {/* QR PREVIEW & DOWNLOAD */}
