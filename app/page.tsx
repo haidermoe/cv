@@ -83,18 +83,15 @@ const translations = {
     toolsTag: "03 — الأدوات والنظم التفاعلية",
     toolsTitle: "أدوات برمجية طوّرتها لتسريع وأتمتة العمليات",
     toolsSubtitle: "حلول ويب وأتمتة سريعة صممتها لمعالجة ملفات الإكسل الضخمة وتنزيل الصور وتحديث الأسعار والمخزون.",
-    tool1Badge: "أداة حية تفاعلية • 0ms Engine",
     tool1Title: "مقارنة وتحديث أسعار إكسل (Tekno Diff)",
-    tool1Desc: "أداة ويب تفاعلية فائقة السرعة تعمل داخل المتصفح مباشرة، لمقارنة ملفات الإكسل الكبيرة، كشف فروقات الأسعار والمخزون، وتحديث آلاف المنتجات بنقرة زر بدون أي تأخير.",
-    tool1Action: "تشغيل أداة مقارنة الإكسل مباشرة",
-    tool2Badge: "أتمتة سريعة • Bulk Downloader",
+    tool1Desc: "أداة ويب تفاعلية لمقارنة ملفات الإكسل الكبيرة، كشف فروقات الأسعار والمخزون، وتحديث آلاف المنتجات بنقرة زر وبكل دقة.",
+    tool1Action: "مقارنة ملفات الإكسل",
     tool2Title: "تنزيل وتسمية الصور من الإكسل (Image Downloader)",
-    tool2Desc: "أداة لاستخراج روابط الصور من ملفات الإكسل والـ CSV، تنزيلها بالتوازي وتسميتها بأسماء المنتجات الصحيحة، وضغطها في ملف ZIP بضغطة زر واحدة.",
-    tool2Action: "تشغيل أداة تنزيل الصور مباشرة",
-    tool3Badge: "محرك تفاعلي حي • 100% ATS Ready",
-    tool3Title: "محرك السيرة الذاتية الذكي ومولد الـ PDF",
-    tool3Desc: "أداة ويب تفاعلية ثنائية اللغة (عربي / إنجليزي) تتيح معاينة وتخصيص السيرة الذاتية عبر 9 قوالب متخصصة لمختلف المجالات، مع توليد فوري للـ QR Code وتصدير ملف PDF عالي الدقة مطابق لمعايير A4 و ATS.",
-    tool3Action: "تشغيل محرك السيرة الذاتية المباشر",
+    tool2Desc: "أداة لاستخراج روابط الصور من ملفات الإكسل والـ CSV، تنزيلها وتسميتها بأسماء المنتجات الصحيحة، وحفظها في ملف ZIP بضغطة زر.",
+    tool2Action: "تنزيل الصور من الإكسل",
+    tool3Title: "إنشاء سيرة ذاتية احترافية",
+    tool3Desc: "أداة تفاعلية ثنائية اللغة (عربي / إنجليزي) تتيح تخصيص وتصميم السيرة الذاتية عبر قوالب متخصصة، مع توليد فوري للـ QR Code وتصدير ملف PDF عالي الدقة مطابق للمعايير.",
+    tool3Action: "إنشاء سيرة ذاتية",
     eduTag: "04 — التعليم والشهادات",
     eduTitle: "المؤهلات الأكاديمية والتدريب المعتمد",
     edu1Year: "2022 - 2026",
@@ -171,18 +168,15 @@ const translations = {
     toolsTag: "03 — INTERACTIVE TOOLS",
     toolsTitle: "Custom-Built Software Tools & Automation",
     toolsSubtitle: "High-performance browser-based tools built for large-scale Excel processing, bulk image downloads, and data syncing.",
-    tool1Badge: "Live Interactive Tool • 0ms Engine",
     tool1Title: "Tekno Excel Diff & Price Matcher",
-    tool1Desc: "Instant client-side web tool to compare massive Excel sheets, detect price & inventory discrepancies, and sync thousands of products in milliseconds.",
-    tool1Action: "Launch Excel Diff Tool Live",
-    tool2Badge: "Fast Automation • Bulk Downloader",
+    tool1Desc: "Fast browser-based tool to compare large Excel sheets, detect price & stock discrepancies, and sync catalog products accurately.",
+    tool1Action: "Open Excel Diff",
     tool2Title: "Bulk Excel Image Downloader & Renamer",
-    tool2Desc: "Extract image URLs from Excel or CSV catalogs, download concurrently, rename by product names, and package into a ZIP archive instantly.",
-    tool2Action: "Launch Image Downloader Live",
-    tool3Badge: "Live Engine • 100% ATS Ready",
-    tool3Title: "Interactive ATS CV Studio & PDF Engine",
-    tool3Desc: "Interactive dual-language (AR/EN) CV generator with 9 industry-specialized presets, dynamic QR code studio, and instant print-ready ISO A4 PDF export.",
-    tool3Action: "Launch Interactive CV Studio Live",
+    tool2Desc: "Extract image URLs from Excel/CSV catalogs, download concurrently, rename with product names, and export as ZIP with one click.",
+    tool2Action: "Open Image Downloader",
+    tool3Title: "Professional ATS CV Builder",
+    tool3Desc: "Interactive bilingual (AR/EN) CV builder with industry-specialized presets, dynamic QR code studio, and instant print-ready ISO A4 PDF export.",
+    tool3Action: "Build Your CV",
     eduTag: "04 — EDUCATION & CERTIFICATES",
     eduTitle: "Academic Qualifications & Certified Training",
     edu1Year: "2022 - 2026",
@@ -949,23 +943,14 @@ export default function Home() {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                minHeight: "340px",
+                minHeight: "310px",
                 transition: "all 0.3s ease"
               }}
             >
               <div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px", flexWrap: "wrap", gap: "10px" }}>
-                  <span style={{ background: "rgba(37, 99, 235, 0.12)", color: "#2563eb", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
-                    {t.tool1Badge}
-                  </span>
-                  <span style={{ background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)", color: tColors.mutedText, padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
-                    XLSX / XLS / CSV
-                  </span>
-                </div>
-
-                <h3 style={{ fontSize: "22px", fontWeight: "900", color: tColors.text, marginBottom: "12px" }}>{t.tool1Title}</h3>
+                <h3 style={{ fontSize: "22px", fontWeight: "900", color: tColors.text, marginBottom: "14px", lineHeight: "1.3" }}>{t.tool1Title}</h3>
                 
-                <p style={{ color: tColors.subtext, fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
+                <p style={{ color: tColors.subtext, fontSize: "14.5px", lineHeight: "1.8", fontWeight: "500", margin: 0 }}>
                   {t.tool1Desc}
                 </p>
               </div>
@@ -1005,23 +990,14 @@ export default function Home() {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                minHeight: "340px",
+                minHeight: "310px",
                 transition: "all 0.3s ease"
               }}
             >
               <div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px", flexWrap: "wrap", gap: "10px" }}>
-                  <span style={{ background: "rgba(124, 58, 237, 0.12)", color: "#7c3aed", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
-                    {t.tool2Badge}
-                  </span>
-                  <span style={{ background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)", color: tColors.mutedText, padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
-                    Multi-threading / ZIP
-                  </span>
-                </div>
-
-                <h3 style={{ fontSize: "22px", fontWeight: "900", color: tColors.text, marginBottom: "12px" }}>{t.tool2Title}</h3>
+                <h3 style={{ fontSize: "22px", fontWeight: "900", color: tColors.text, marginBottom: "14px", lineHeight: "1.3" }}>{t.tool2Title}</h3>
                 
-                <p style={{ color: tColors.subtext, fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
+                <p style={{ color: tColors.subtext, fontSize: "14.5px", lineHeight: "1.8", fontWeight: "500", margin: 0 }}>
                   {t.tool2Desc}
                 </p>
               </div>
@@ -1049,7 +1025,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* TOOL 3: INTERACTIVE ATS CV STUDIO & PDF ENGINE */}
+            {/* TOOL 3: PROFESSIONAL ATS CV BUILDER */}
             <div
               className="awsmd-dark-card"
               style={{
@@ -1061,23 +1037,14 @@ export default function Home() {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                minHeight: "340px",
+                minHeight: "310px",
                 transition: "all 0.3s ease"
               }}
             >
               <div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px", flexWrap: "wrap", gap: "10px" }}>
-                  <span style={{ background: "rgba(5, 150, 105, 0.12)", color: "#059669", padding: "6px 14px", borderRadius: "20px", fontSize: "12.5px", fontWeight: "800" }}>
-                    {t.tool3Badge}
-                  </span>
-                  <span style={{ background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)", color: tColors.mutedText, padding: "4px 10px", borderRadius: "14px", fontSize: "11.5px", fontWeight: "700" }}>
-                    ISO A4 / 9 Presets
-                  </span>
-                </div>
-
-                <h3 style={{ fontSize: "22px", fontWeight: "900", color: tColors.text, marginBottom: "12px" }}>{t.tool3Title}</h3>
+                <h3 style={{ fontSize: "22px", fontWeight: "900", color: tColors.text, marginBottom: "14px", lineHeight: "1.3" }}>{t.tool3Title}</h3>
                 
-                <p style={{ color: tColors.subtext, fontSize: "14.5px", lineHeight: "1.75", fontWeight: "500", margin: 0 }}>
+                <p style={{ color: tColors.subtext, fontSize: "14.5px", lineHeight: "1.8", fontWeight: "500", margin: 0 }}>
                   {t.tool3Desc}
                 </p>
               </div>

@@ -1197,7 +1197,7 @@ export default function PublicCvBuilderPage() {
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <h1 style={{ fontSize: "17px", fontWeight: "900", margin: 0, color: isDark ? "#ffffff" : "#0f172a" }}>
-                  {isArabic ? "صانع السيرة الذاتية ومولد الـ PDF الذكي" : "Interactive ATS CV Builder & PDF Engine"}
+                  {isArabic ? "إنشاء سيرة ذاتية احترافية" : "Professional ATS CV Builder"}
                 </h1>
                 <span style={{ background: "#16a34a", color: "#ffffff", padding: "2px 8px", borderRadius: "12px", fontSize: "10px", fontWeight: "900" }}>
                   BILINGUAL AR / EN
