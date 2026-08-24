@@ -1590,12 +1590,18 @@ ul {
   }
 
   /* LIGHT THEME: ROYAL BLUE NEON HOVER INTERACTION */
-  .theme-light .awsmd-dark-card:hover,
-  .theme-light .awsmd-stat-card:hover {
+  .theme-light .awsmd-dark-card:hover {
     transform: translateY(-8px) scale(1.015) !important;
     border-color: #2563eb !important;
     background: #ffffff !important;
     box-shadow: 0 20px 45px rgba(37, 99, 235, 0.16), 0 0 30px rgba(37, 99, 235, 0.4), inset 0 0 15px rgba(37, 99, 235, 0.04) !important;
+  }
+
+  .theme-light .awsmd-stat-card:hover {
+    transform: translateY(-8px) scale(1.015) !important;
+    border-color: #2563eb !important;
+    background: #f2f0f1 !important;
+    box-shadow: 0 20px 45px rgba(37, 99, 235, 0.16), 0 0 30px rgba(37, 99, 235, 0.4) !important;
   }
 
   .theme-light .awsmd-cert-pill:hover {
@@ -1607,12 +1613,18 @@ ul {
   }
 
   /* DARK THEME: NEON RED HOVER INTERACTION */
-  .theme-dark .awsmd-dark-card:hover,
-  .theme-dark .awsmd-stat-card:hover {
+  .theme-dark .awsmd-dark-card:hover {
     transform: translateY(-8px) scale(1.015) !important;
     border-color: #ef4444 !important;
     background: #191422 !important;
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7), 0 0 32px rgba(239, 68, 68, 0.55), 0 0 50px rgba(239, 68, 68, 0.25), inset 0 0 15px rgba(239, 68, 68, 0.08) !important;
+  }
+
+  .theme-dark .awsmd-stat-card:hover {
+    transform: translateY(-8px) scale(1.015) !important;
+    border-color: #ef4444 !important;
+    background: #f2f0f1 !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 32px rgba(239, 68, 68, 0.55), 0 0 50px rgba(239, 68, 68, 0.25) !important;
   }
 
   .theme-dark .awsmd-cert-pill:hover {
