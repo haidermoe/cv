@@ -2267,7 +2267,7 @@ export default function AdminPage() {
                           >
                             {/* TWO COLUMN SIDEBAR LAYOUT MODE */}
                             {data.cvDocument?.layoutFormat === "two-column-sidebar" ? (
-                              <div style={{ display: "grid", gridTemplateColumns: isArabic ? "1fr 240px" : "240px 1fr", gap: "28px", alignItems: "start" }}>
+                              <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", gap: "28px", alignItems: "start" }}>
                                 
                                 {/* SIDEBAR */}
                                 <div style={{ borderRight: isArabic ? "none" : `2px solid ${data.cvDocument?.accentColor || "#2563eb"}30`, borderLeft: isArabic ? `2px solid ${data.cvDocument?.accentColor || "#2563eb"}30` : "none", paddingRight: isArabic ? "0" : "20px", paddingLeft: isArabic ? "20px" : "0", display: "flex", flexDirection: "column", gap: "18px" }}>
