@@ -273,29 +273,27 @@ export default function ThanksPage() {
         {/* RIGHT TOP ACTIONS */}
         <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
           
-          {/* THEME TOGGLE BUTTON */}
+          {/* THEME TOGGLE BUTTON (ICON ONLY) */}
           <button
             onClick={toggleTheme}
-            title={lang === "AR" ? "تبديل المظهر (فاتح / داكن)" : "Toggle Theme (Light / Dark)"}
+            title={lang === "AR" ? (isDark ? "الوضع الفاتح" : "الوضع الداكن") : (isDark ? "Light Mode" : "Dark Mode")}
             style={{
+              width: isDesktop ? "36px" : "32px",
+              height: isDesktop ? "36px" : "32px",
+              borderRadius: "50%",
               background: isDark ? "#1e2235" : "#ffffff",
               border: isDark ? "1px solid rgba(96, 165, 250, 0.3)" : "1.5px solid #2563eb",
               color: isDark ? "#60a5fa" : "#2563eb",
-              padding: isDesktop ? "7px 14px" : "6px 10px",
-              borderRadius: "50px",
-              fontSize: isDesktop ? "12px" : "11px",
-              fontWeight: "800",
-              display: "inline-flex",
+              display: "flex",
               alignItems: "center",
-              gap: "6px",
+              justifyContent: "center",
               cursor: "pointer",
-              fontFamily: "'Outfit', sans-serif",
               boxShadow: "0 4px 15px rgba(0,0,0,0.06)",
               transition: "all 0.3s ease"
             }}
           >
             {isDark ? (
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="5"/>
                 <line x1="12" y1="1" x2="12" y2="3"/>
                 <line x1="12" y1="21" x2="12" y2="23"/>
@@ -307,11 +305,10 @@ export default function ThanksPage() {
                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
               </svg>
             ) : (
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
               </svg>
             )}
-            <span>{isDark ? (lang === "AR" ? "فاتح" : "Light") : (lang === "AR" ? "داكن" : "Dark")}</span>
           </button>
 
           <button
