@@ -51,6 +51,15 @@ export interface PortfolioData {
     titleAR: string;
     titleEN: string;
   }>;
+  typography?: {
+    fontFamilyAR: string;
+    fontFamilyEN: string;
+    heroTitleScale: string;
+    bioFontSize: string;
+    bodyLineHeight: string;
+    headingWeight: string;
+    letterSpacing: string;
+  };
 }
 
 const DATA_FILE_PATH = path.join(process.cwd(), 'data', 'portfolio.json');
@@ -91,6 +100,15 @@ export function getPortfolioData(): PortfolioData {
     experiences: [],
     education: [],
     certifications: [],
+    typography: {
+      fontFamilyAR: "'Tajawal', sans-serif",
+      fontFamilyEN: "'Outfit', sans-serif",
+      heroTitleScale: "normal",
+      bioFontSize: "18px",
+      bodyLineHeight: "1.7",
+      headingWeight: "900",
+      letterSpacing: "normal",
+    },
   };
 }
 

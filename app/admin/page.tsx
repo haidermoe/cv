@@ -12,7 +12,7 @@ export default function AdminPage() {
 
   const [data, setData] = useState<PortfolioData | null>(null);
   const [isLoadingData, setIsLoadingData] = useState(false);
-  const [activeTab, setActiveTab] = useState<"general" | "stats" | "experiences" | "education" | "cv">("general");
+  const [activeTab, setActiveTab] = useState<"general" | "stats" | "experiences" | "education" | "cv" | "typography">("general");
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [saveMessage, setSaveMessage] = useState("");
 
@@ -25,7 +25,7 @@ export default function AdminPage() {
   const [previewLang, setPreviewLang] = useState<"AR" | "EN">("AR");
   const [previewDevice, setPreviewDevice] = useState<"mobile" | "desktop">("mobile");
   const [isPreviewMinimized, setIsPreviewMinimized] = useState(false);
-  const [previewSectionTab, setPreviewSectionTab] = useState<"auto" | "general" | "stats" | "experiences" | "education" | "cv" | "all">("auto");
+  const [previewSectionTab, setPreviewSectionTab] = useState<"auto" | "general" | "stats" | "experiences" | "education" | "cv" | "typography" | "all">("auto");
 
   useEffect(() => {
     checkAuth();
@@ -423,6 +423,7 @@ export default function AdminPage() {
             { id: "experiences", label: "الخبرات العملية" },
             { id: "education", label: "التعليم والشهادات" },
             { id: "cv", label: "ملف السيرة الذاتية (PDF)" },
+            { id: "typography", label: "الخطوط والطباعة" },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -963,6 +964,255 @@ export default function AdminPage() {
             </div>
           </div>
         )}
+
+        {/* TAB 6: TYPOGRAPHY & FONTS */}
+        {activeTab === "typography" && data && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
+            <div style={{ background: "#12131f", padding: "30px", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <h3 style={{ fontSize: "18px", fontWeight: "900", marginBottom: "8px", color: "#60a5fa" }}>إعدادات الخطوط والطباعة (Typography Settings)</h3>
+              <p style={{ fontSize: "14px", color: "#94a3b8", lineHeight: "1.6", marginBottom: "24px" }}>
+                تحكم بنوع الخط العربي والإنجليزي، أحجام العناوين، وسُمك الخطوط وارتفاع الأسطر عبر كل صفحات الموقع.
+              </p>
+
+              {/* 1. ARABIC FONT SELECTOR */}
+              <div style={{ marginBottom: "28px", background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
+                <label style={{ display: "block", fontSize: "14px", fontWeight: "800", color: "#ffffff", marginBottom: "12px" }}>
+                  نوع الخط العربي الأساسي (Arabic Font Family)
+                </label>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "10px" }}>
+                  {[
+                    { name: "Tajawal", label: "تجاول (Tajawal)", font: "Tajawal, sans-serif" },
+                    { name: "Cairo", label: "كايرو (Cairo)", font: "Cairo, sans-serif" },
+                    { name: "Alexandria", label: "الإسكندرية (Alexandria)", font: "Alexandria, sans-serif" },
+                    { name: "Almarai", label: "المراعي (Almarai)", font: "Almarai, sans-serif" },
+                    { name: "IBM Plex Sans Arabic", label: "آي بي إم بلكس (IBM Plex)", font: "'IBM Plex Sans Arabic', sans-serif" },
+                    { name: "Readex Pro", label: "ريدكس برو (Readex Pro)", font: "'Readex Pro', sans-serif" },
+                    { name: "Changa", label: "شانغا (Changa)", font: "Changa, sans-serif" },
+                    { name: "Vazirmatn", label: "وزير متن (Vazirmatn)", font: "Vazirmatn, sans-serif" },
+                  ].map((f) => {
+                    const isSelected = (data.typography?.fontFamilyAR || "Tajawal").includes(f.name);
+                    return (
+                      <button
+                        key={f.name}
+                        onClick={() => setData({
+                          ...data,
+                          typography: {
+                            ...(data.typography || {
+                              fontFamilyAR: "Tajawal",
+                              fontFamilyEN: "Outfit",
+                              heroTitleScale: "normal",
+                              bioFontSize: "18px",
+                              bodyLineHeight: "1.7",
+                              headingWeight: "900",
+                              letterSpacing: "normal",
+                            }),
+                            fontFamilyAR: f.name,
+                          }
+                        })}
+                        style={{
+                          background: isSelected ? "#2563eb" : "#151624",
+                          color: isSelected ? "#ffffff" : "#cbd5e1",
+                          border: isSelected ? "2px solid #60a5fa" : "1px solid #334155",
+                          padding: "14px 12px",
+                          borderRadius: "12px",
+                          cursor: "pointer",
+                          textAlign: "center",
+                          fontFamily: f.font,
+                          transition: "all 0.2s",
+                        }}
+                      >
+                        <div style={{ fontSize: "14px", fontWeight: "800", marginBottom: "4px" }}>{f.label}</div>
+                        <div style={{ fontSize: "11px", opacity: 0.8 }}>أبجد هوز حطي كلمن</div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 2. ENGLISH FONT SELECTOR */}
+              <div style={{ marginBottom: "28px", background: "#0a0b12", padding: "20px", borderRadius: "16px", border: "1px solid #334155" }}>
+                <label style={{ display: "block", fontSize: "14px", fontWeight: "800", color: "#ffffff", marginBottom: "12px" }}>
+                  نوع الخط الإنجليزي الأساسي (English Font Family)
+                </label>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "10px" }}>
+                  {[
+                    { name: "Outfit", label: "Outfit", font: "'Outfit', sans-serif" },
+                    { name: "Inter", label: "Inter", font: "'Inter', sans-serif" },
+                    { name: "Plus Jakarta Sans", label: "Plus Jakarta Sans", font: "'Plus Jakarta Sans', sans-serif" },
+                    { name: "Space Grotesk", label: "Space Grotesk", font: "'Space Grotesk', sans-serif" },
+                    { name: "Poppins", label: "Poppins", font: "'Poppins', sans-serif" },
+                    { name: "Montserrat", label: "Montserrat", font: "'Montserrat', sans-serif" },
+                    { name: "Syne", label: "Syne", font: "'Syne', sans-serif" },
+                    { name: "Sora", label: "Sora", font: "'Sora', sans-serif" },
+                  ].map((f) => {
+                    const isSelected = (data.typography?.fontFamilyEN || "Outfit").includes(f.name);
+                    return (
+                      <button
+                        key={f.name}
+                        onClick={() => setData({
+                          ...data,
+                          typography: {
+                            ...(data.typography || {
+                              fontFamilyAR: "Tajawal",
+                              fontFamilyEN: "Outfit",
+                              heroTitleScale: "normal",
+                              bioFontSize: "18px",
+                              bodyLineHeight: "1.7",
+                              headingWeight: "900",
+                              letterSpacing: "normal",
+                            }),
+                            fontFamilyEN: f.name,
+                          }
+                        })}
+                        style={{
+                          background: isSelected ? "#2563eb" : "#151624",
+                          color: isSelected ? "#ffffff" : "#cbd5e1",
+                          border: isSelected ? "2px solid #60a5fa" : "1px solid #334155",
+                          padding: "14px 12px",
+                          borderRadius: "12px",
+                          cursor: "pointer",
+                          textAlign: "center",
+                          fontFamily: f.font,
+                          transition: "all 0.2s",
+                        }}
+                      >
+                        <div style={{ fontSize: "14px", fontWeight: "800", marginBottom: "4px" }}>{f.label}</div>
+                        <div style={{ fontSize: "11px", opacity: 0.8 }}>Digital Results & Engineering</div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 3. SIZES & LINE HEIGHTS */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "18px" }}>
+                {/* BIO FONT SIZE */}
+                <div style={{ background: "#0a0b12", padding: "16px", borderRadius: "14px", border: "1px solid #334155" }}>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#94a3b8", marginBottom: "8px" }}>
+                    حجم خط النبذة التعريفية (Bio Font Size)
+                  </label>
+                  <select
+                    value={data.typography?.bioFontSize || "18px"}
+                    onChange={(e) => setData({
+                      ...data,
+                      typography: {
+                        ...(data.typography || {
+                          fontFamilyAR: "Tajawal",
+                          fontFamilyEN: "Outfit",
+                          heroTitleScale: "normal",
+                          bioFontSize: "18px",
+                          bodyLineHeight: "1.7",
+                          headingWeight: "900",
+                          letterSpacing: "normal",
+                        }),
+                        bioFontSize: e.target.value,
+                      }
+                    })}
+                    style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "14px" }}
+                  >
+                    <option value="15px">صغير (15px)</option>
+                    <option value="16px">متوسط قياسي (16px)</option>
+                    <option value="18px">كبير مريح (18px - المقترح)</option>
+                    <option value="20px">كبير جداً (20px)</option>
+                    <option value="22px">ضخم بارز (22px)</option>
+                  </select>
+                </div>
+
+                {/* HEADING WEIGHT */}
+                <div style={{ background: "#0a0b12", padding: "16px", borderRadius: "14px", border: "1px solid #334155" }}>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#94a3b8", marginBottom: "8px" }}>
+                    سُمك العناوين (Heading Weight)
+                  </label>
+                  <select
+                    value={data.typography?.headingWeight || "900"}
+                    onChange={(e) => setData({
+                      ...data,
+                      typography: {
+                        ...(data.typography || {
+                          fontFamilyAR: "Tajawal",
+                          fontFamilyEN: "Outfit",
+                          heroTitleScale: "normal",
+                          bioFontSize: "18px",
+                          bodyLineHeight: "1.7",
+                          headingWeight: "900",
+                          letterSpacing: "normal",
+                        }),
+                        headingWeight: e.target.value,
+                      }
+                    })}
+                    style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "14px" }}
+                  >
+                    <option value="600">نصف عريض (Semi-Bold 600)</option>
+                    <option value="700">عريض قياسي (Bold 700)</option>
+                    <option value="800">عريض بارز (Extra-Bold 800)</option>
+                    <option value="900">سُمك فائق فاخر (Black 900 - المقترح)</option>
+                  </select>
+                </div>
+
+                {/* LINE HEIGHT */}
+                <div style={{ background: "#0a0b12", padding: "16px", borderRadius: "14px", border: "1px solid #334155" }}>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#94a3b8", marginBottom: "8px" }}>
+                    تباعد الأسطر والفقرات (Line Height)
+                  </label>
+                  <select
+                    value={data.typography?.bodyLineHeight || "1.7"}
+                    onChange={(e) => setData({
+                      ...data,
+                      typography: {
+                        ...(data.typography || {
+                          fontFamilyAR: "Tajawal",
+                          fontFamilyEN: "Outfit",
+                          heroTitleScale: "normal",
+                          bioFontSize: "18px",
+                          bodyLineHeight: "1.7",
+                          headingWeight: "900",
+                          letterSpacing: "normal",
+                        }),
+                        bodyLineHeight: e.target.value,
+                      }
+                    })}
+                    style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "14px" }}
+                  >
+                    <option value="1.5">مضغوط (1.5)</option>
+                    <option value="1.7">متوازن ومريح (1.7 - المقترح)</option>
+                    <option value="1.9">واسع ومفتوح (1.9)</option>
+                    <option value="2.1">واسع جداً (2.1)</option>
+                  </select>
+                </div>
+
+                {/* HERO TITLE SCALE */}
+                <div style={{ background: "#0a0b12", padding: "16px", borderRadius: "14px", border: "1px solid #334155" }}>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#94a3b8", marginBottom: "8px" }}>
+                    مقياس عناوين الهيرو (Hero Title Scale)
+                  </label>
+                  <select
+                    value={data.typography?.heroTitleScale || "normal"}
+                    onChange={(e) => setData({
+                      ...data,
+                      typography: {
+                        ...(data.typography || {
+                          fontFamilyAR: "Tajawal",
+                          fontFamilyEN: "Outfit",
+                          heroTitleScale: "normal",
+                          bioFontSize: "18px",
+                          bodyLineHeight: "1.7",
+                          headingWeight: "900",
+                          letterSpacing: "normal",
+                        }),
+                        heroTitleScale: e.target.value,
+                      }
+                    })}
+                    style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", background: "#151624", border: "1px solid #334155", color: "#ffffff", fontSize: "14px" }}
+                  >
+                    <option value="normal">قياسي متناسق (Normal)</option>
+                    <option value="large">كبير بارز (Large +15%)</option>
+                    <option value="huge">عملاق وجريء (Huge +30%)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
           </div>
 
         {/* STICKY SIDE-BY-SIDE LIVE PREVIEW COLUMN */}
@@ -1094,6 +1344,7 @@ export default function AdminPage() {
                 { id: "experiences", label: "الخبرات" },
                 { id: "education", label: "التعليم" },
                 { id: "cv", label: "ملف السيرة" },
+                { id: "typography", label: "الخطوط" },
                 { id: "all", label: "عرض الكل" },
               ].map((pill) => {
                 const isPillActive = previewSectionTab === pill.id;
@@ -1132,6 +1383,8 @@ export default function AdminPage() {
                 display: "flex",
                 flexDirection: "column",
                 gap: "16px",
+                fontFamily: previewLang === "AR" ? `'${data.typography?.fontFamilyAR || "Tajawal"}', sans-serif` : `'${data.typography?.fontFamilyEN || "Outfit"}', sans-serif`,
+                lineHeight: data.typography?.bodyLineHeight || "1.7",
               }}
               dir={previewLang === "AR" ? "rtl" : "ltr"}
             >
@@ -1154,9 +1407,28 @@ export default function AdminPage() {
                   (previewSectionTab === "auto" ? activeTab : previewSectionTab) === "stats" ? "الإحصائيات والأرقام" :
                   (previewSectionTab === "auto" ? activeTab : previewSectionTab) === "experiences" ? "الخبرات العملية" :
                   (previewSectionTab === "auto" ? activeTab : previewSectionTab) === "education" ? "التعليم والشهادات" :
-                  (previewSectionTab === "auto" ? activeTab : previewSectionTab) === "cv" ? "ملف السيرة الذاتية" : "كل الأقسام"
+                  (previewSectionTab === "auto" ? activeTab : previewSectionTab) === "cv" ? "ملف السيرة الذاتية" :
+                  (previewSectionTab === "auto" ? activeTab : previewSectionTab) === "typography" ? "الخطوط والطباعة" : "كل الأقسام"
                 }
               </div>
+
+              {/* TYPOGRAPHY SAMPLE PREVIEW */}
+              {((previewSectionTab === "auto" && activeTab === "typography") || previewSectionTab === "typography") && (
+                <div style={{ background: "#11121d", padding: "16px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                  <span style={{ fontSize: "11px", fontWeight: "900", color: "#60a5fa", display: "block", marginBottom: "8px" }}>
+                    معاينة عينة الخط النشط (Active Typography Sample)
+                  </span>
+                  <div style={{ fontSize: "18px", fontWeight: data.typography?.headingWeight || "900", color: "#ffffff", marginBottom: "6px" }}>
+                    {previewLang === "AR" ? "نصنع أفضل النتائج الرقمية" : "WE CREATE AWESOME DIGITAL RESULTS"}
+                  </div>
+                  <div style={{ fontSize: "13px", color: "#60a5fa", fontWeight: "700", marginBottom: "10px" }}>
+                    الخط الحالي: {previewLang === "AR" ? data.typography?.fontFamilyAR || "Tajawal" : data.typography?.fontFamilyEN || "Outfit"} | السُمك: {data.typography?.headingWeight || "900"}
+                  </div>
+                  <p style={{ fontSize: data.typography?.bioFontSize || "16px", color: "#cbd5e1", lineHeight: data.typography?.bodyLineHeight || "1.7", margin: 0 }}>
+                    {data.translations[previewLang]?.bio || (previewLang === "AR" ? data.translations.AR.bio : data.translations.EN.bio)}
+                  </p>
+                </div>
+              )}
 
               {/* 1. LIVE HERO & BIO SECTION */}
               {((previewSectionTab === "auto" && activeTab === "general") || previewSectionTab === "general" || previewSectionTab === "all") && (
@@ -1165,7 +1437,7 @@ export default function AdminPage() {
                     قسم النبذة والهيرو (Bio & Hero)
                   </span>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-                    <span style={{ fontSize: "14px", fontWeight: "900", color: "#ffffff" }}>
+                    <span style={{ fontSize: "15px", fontWeight: data.typography?.headingWeight || "900", color: "#ffffff" }}>
                       {previewLang === "AR" ? data.general.nameAR : data.general.nameEN}
                     </span>
                     <span style={{ background: "#ffffff", color: "#000000", padding: "4px 10px", borderRadius: "20px", fontSize: "10.5px", fontWeight: "900" }}>
@@ -1173,7 +1445,7 @@ export default function AdminPage() {
                     </span>
                   </div>
 
-                  <p style={{ fontSize: "12px", color: "#94a3b8", lineHeight: "1.6", margin: "0 0 10px 0" }}>
+                  <p style={{ fontSize: data.typography?.bioFontSize || "14px", color: "#94a3b8", lineHeight: data.typography?.bodyLineHeight || "1.6", margin: "0 0 10px 0" }}>
                     {data.translations[previewLang]?.bio || (previewLang === "AR" ? data.translations.AR.bio : data.translations.EN.bio)}
                   </p>
 

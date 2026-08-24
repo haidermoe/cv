@@ -47,7 +47,7 @@ export default function RootLayout({
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;600;700;800;900&family=Almarai:wght@300;400;700;800&family=Cairo:wght@400;600;700;800;900&family=Changa:wght@400;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Inter:wght@400;600;700;800;900&family=Montserrat:wght@400;600;700;800;900&family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Poppins:wght@400;600;700;800;900&family=Readex+Pro:wght@400;600;700&family=Sora:wght@400;600;700;800&family=Space+Grotesk:wght@400;600;700&family=Syne:wght@700;800&family=Tajawal:wght@300;400;500;700;800;900&family=Vazirmatn:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="bg-[#0e0d15] text-slate-100 min-h-screen antialiased selection:bg-blue-500 selection:text-white" style={{ fontFamily: "'Tajawal', 'Outfit', sans-serif" }}>
         <VisitorTracker />

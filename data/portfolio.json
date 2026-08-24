@@ -239,5 +239,14 @@
       "titleAR": "تدريب السلامة والصحة المهنية — معهد التكنولوجيا بغداد",
       "titleEN": "Occupational Safety Training — Institute of Technology Baghdad"
     }
-  ]
+  ],
+  "typography": {
+    "fontFamilyAR": "Tajawal",
+    "fontFamilyEN": "Outfit",
+    "heroTitleScale": "normal",
+    "bioFontSize": "18px",
+    "bodyLineHeight": "1.7",
+    "headingWeight": "900",
+    "letterSpacing": "normal"
+  }
 }

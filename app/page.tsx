@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { PortfolioData } from "@/lib/portfolio";
 
 // REUSABLE FLIP-TEXT LINK COMPONENT
 function FlipLink({ children, href, download, target, style, color = "#0f111a", hoverColor = "#2563eb" }: { children: React.ReactNode; href: string; download?: string; target?: string; style?: React.CSSProperties; color?: string; hoverColor?: string }) {
@@ -262,6 +263,18 @@ export default function Home() {
   };
 
   const [isScrolledPastHero, setIsScrolledPastHero] = useState(false);
+  const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null);
+
+  useEffect(() => {
+    fetch("/api/admin/portfolio")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.ok && json.data) {
+          setPortfolioData(json.data);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -343,7 +356,7 @@ export default function Home() {
         background: "#0e0d15",
         color: "#ffffff",
         minHeight: "100vh",
-        fontFamily: lang === "AR" ? "'Tajawal', sans-serif" : "'Outfit', sans-serif"
+        fontFamily: lang === "AR" ? `'${portfolioData?.typography?.fontFamilyAR || "Tajawal"}', sans-serif` : `'${portfolioData?.typography?.fontFamilyEN || "Outfit"}', sans-serif`
       }}
     >
       {/* AWSMD TOP ACTION BUTTONS MATCHING SCREENSHOT */}
