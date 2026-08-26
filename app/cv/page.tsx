@@ -39,8 +39,9 @@ interface LanguageSpecificData {
   certifications: CvCertification[];
 }
 
-// BUILT-IN BIDIRECTIONAL TRANSLATION DICTIONARY
+// BUILT-IN BIDIRECTIONAL TRANSLATION & TRANSLITERATION DICTIONARY
 const TRANSLATION_MAP: Record<string, string> = {
+  // Job Titles
   "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة": "Computer Science Specialist | Data Operations & Workflow Consultant",
   "Computer Science Specialist | Data Operations & Workflow Consultant": "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة",
   "حيدر محمد شوكت": "Haider M. Shwkat",
@@ -55,12 +56,48 @@ const TRANSLATION_MAP: Record<string, string> = {
   "Software Engineer": "مهندس برمجيات",
   "مطور ويب وتطبيقات": "Full-Stack Web Developer",
   "Full-Stack Web Developer": "مطور ويب وتطبيقات",
+  "مهندس معماري": "Architectural Engineer",
+  "Architectural Engineer": "مهندس معماري",
+  "مهندس مدني": "Civil Engineer",
+  "Civil Engineer": "مهندس مدني",
+  "مهندس ميكانيك": "Mechanical Engineer",
+  "Mechanical Engineer": "مهندس ميكانيك",
+  "مهندس كهرباء": "Electrical Engineer",
+  "Electrical Engineer": "مهندس كهرباء",
   "محلل بيانات": "Data Analyst",
   "Data Analyst": "محلل بيانات",
   "مدير مشاريع": "Project Manager",
   "Project Manager": "مدير مشاريع",
   "مهندس شبكات": "Network Engineer",
   "Network Engineer": "مهندس شبكات",
+  "طبيب عام": "General Physician",
+  "General Physician": "طبيب عام",
+  "طبيب أسنان": "Dentist",
+  "Dentist": "طبيب أسنان",
+  "صيدلي": "Pharmacist",
+  "Pharmacist": "صيدلي",
+  "محاسب مالي": "Financial Accountant",
+  "Financial Accountant": "محاسب مالي",
+  "مدير مالي": "Financial Manager",
+  "Financial Manager": "مدير مالي",
+  "أخصائي تسويق رقمي": "Digital Marketing Specialist",
+  "Digital Marketing Specialist": "أخصائي تسويق رقمي",
+  "مدير مبيعات": "Sales Manager",
+  "Sales Manager": "مدير مبيعات",
+  "مصمم جرافيك": "Graphic Designer",
+  "Graphic Designer": "مصمم جرافيك",
+  "مصمم واجهات وتجربة المستخدم": "UI/UX Designer",
+  "UI/UX Designer": "مصمم واجهات وتجربة المستخدم",
+  "مترجم": "Translator",
+  "Translator": "مترجم",
+  "محامي واستشاري قانوني": "Lawyer & Legal Consultant",
+  "Lawyer & Legal Consultant": "محامي واستشاري قانوني",
+  "أستاذ جامعي": "University Professor",
+  "University Professor": "أستاذ جامعي",
+  "معلم": "Teacher",
+  "Teacher": "معلم",
+
+  // Companies, Universities & Places
   "تكنو ستور — بغداد، العراق": "Techno Store — Baghdad, Iraq",
   "Techno Store — Baghdad, Iraq": "تكنو ستور — بغداد، العراق",
   "مشاريع قطاع الدفاع والتجارة الإلكترونية": "Multi-Client / Defense & E-commerce Projects",
@@ -69,10 +106,32 @@ const TRANSLATION_MAP: Record<string, string> = {
   "Events & Telecommunications Sector — Baghdad": "قطاع الفعاليات والاتصالات — بغداد",
   "بغداد، العراق": "Baghdad, Iraq",
   "Baghdad, Iraq": "بغداد، العراق",
+  "العراق": "Iraq",
+  "Iraq": "العراق",
+  "بغداد": "Baghdad",
+  "Baghdad": "بغداد",
+  "أربيل": "Erbil",
+  "Erbil": "أربيل",
+  "البصرة": "Basra",
+  "Basra": "البصرة",
+  "الموصل": "Mosul",
+  "Mosul": "الموصل",
+  "دبي، الإمارات": "Dubai, UAE",
+  "Dubai, UAE": "دبي، الإمارات",
+  "الرياض، السعودية": "Riyadh, KSA",
+  "Riyadh, KSA": "الرياض، السعودية",
   "جامعة دجلة – بغداد": "Dijlah University – Baghdad",
   "Dijlah University – Baghdad": "جامعة دجلة – بغداد",
+  "جامعة بغداد": "University of Baghdad",
+  "University of Baghdad": "جامعة بغداد",
+  "الجامعة المستنصرية": "Mustansiriyah University",
+  "Mustansiriyah University": "الجامعة المستنصرية",
+  "الجامعة التكنولوجية": "University of Technology",
+  "University of Technology": "الجامعة التكنولوجية",
   "معهد التكنولوجيا – بغداد": "Institute of Technology – Baghdad",
   "Institute of Technology – Baghdad": "معهد التكنولوجيا – بغداد",
+
+  // Dates & Degrees
   "2025 - الحالي": "2025 - Present",
   "2025 - Present": "2025 - الحالي",
   "2024 - الحالي": "2024 - Present",
@@ -83,6 +142,16 @@ const TRANSLATION_MAP: Record<string, string> = {
   "2019 - 2021": "2019 - 2021",
   "بكالوريوس في علوم الحاسوب (Computer Science)": "Bachelor's Degree in Computer Science",
   "Bachelor's Degree in Computer Science": "بكالوريوس في علوم الحاسوب (Computer Science)",
+  "بكالوريوس هندسة": "Bachelor of Engineering",
+  "Bachelor of Engineering": "بكالوريوس هندسة",
+  "بكالوريوس إدارة أعمال": "Bachelor of Business Administration",
+  "Bachelor of Business Administration": "بكالوريوس إدارة أعمال",
+  "دبلوم عالي": "Higher Diploma",
+  "Higher Diploma": "دبلوم عالي",
+  "ماجستير": "Master's Degree",
+  "Master's Degree": "ماجستير",
+  "دكتوراه": "PhD",
+  "PhD": "دكتوراه",
   "دبلوم في الصناعات الكيماوية (Chemical Industry)": "Diploma in Chemical Industry",
   "Diploma in Chemical Industry": "دبلوم في الصناعات الكيماوية (Chemical Industry)",
   "شهادة CCNA 1: Introduction to Networks — جامعة دجلة": "CCNA 1: Introduction to Networks — Dijlah University",
@@ -91,6 +160,8 @@ const TRANSLATION_MAP: Record<string, string> = {
   "Sales and Customer Service Skills — EarthLink Telecommunications": "شهادة مهارات المبيعات وخدمة العملاء — شركة إيرثلنك",
   "تدريب السلامة والصحة المهنية — معهد التكنولوجيا بغداد": "Occupational Safety Training — Institute of Technology Baghdad",
   "Occupational Safety Training — Institute of Technology Baghdad": "تدريب السلامة والصحة المهنية — معهد التكنولوجيا بغداد",
+
+  // Skills
   "أتمتة بايثون وبرمجة السكربتات": "Python Automation & Scripting",
   "Python Automation & Scripting": "أتمتة بايثون وبرمجة السكربتات",
   "هيكلة وإدارة قواعد البيانات الضخمة SQL": "SQL & High-Volume Database Architecture",
@@ -105,7 +176,73 @@ const TRANSLATION_MAP: Record<string, string> = {
   "Linux Server Operations & Bash": "إدارة خوادم لينكس والـ Bash Scripts",
   "إدارة المشاريع بالمنهجيات المرنة Agile": "Agile Project & Team Leadership",
   "Agile Project & Team Leadership": "إدارة المشاريع بالمنهجيات المرنة Agile",
+  "إدارة الوقت وتنظيم المهام": "Time Management & Task Organization",
+  "Time Management & Task Organization": "إدارة الوقت وتنظيم المهام",
+  "التواصل الفعال والعمل الجماعي": "Effective Communication & Teamwork",
+  "Effective Communication & Teamwork": "التواصل الفعال والعمل الجماعي",
+  "حل المشكلات المعقدة": "Complex Problem Solving",
+  "Complex Problem Solving": "حل المشكلات المعقدة",
 };
+
+// Common Arabic Names dictionary for perfect transliteration
+const ARABIC_NAMES_MAP: Record<string, string> = {
+  "محمد": "Mohammed", "أحمد": "Ahmed", "احمد": "Ahmed", "علي": "Ali", "حسين": "Hussein",
+  "حسن": "Hassan", "عمر": "Omar", "عثمان": "Othman", "مصطفى": "Mustafa", "يوسف": "Youssef",
+  "إبراهيم": "Ibrahim", "ابراهيم": "Ibrahim", "خالد": "Khalid", "سارة": "Sarah", "ساره": "Sarah",
+  "فاطمة": "Fatima", "فاطمه": "Fatima", "زينب": "Zainab", "مريم": "Maryam", "نور": "Noor",
+  "هدى": "Huda", "زيد": "Zaid", "سيف": "Saif", "شوكت": "Shwkat", "عبدالله": "Abdullah",
+  "عبد الله": "Abdullah", "عبدالرحمن": "Abdulrahman", "عبد الرحمن": "Abdulrahman",
+  "محمود": "Mahmoud", "طارق": "Tariq", "ياسر": "Yasser", "كريم": "Karim", "سامر": "Samer",
+  "ماجد": "Majid", "حمزة": "Hamza", "بلال": "Bilal", "عمار": "Ammar", "أيمن": "Ayman",
+  "ليث": "Laith", "حيدر": "Haider", "جعفر": "Jaafar", "أنس": "Anas", "أوس": "Aws",
+  "رائد": "Raid", "وسام": "Wissam", "مهند": "Mohannad", "زياد": "Ziad", "بشار": "Bashar"
+};
+
+function transliterateArabicToEnglish(arText: string): string {
+  if (!arText) return "";
+  const words = arText.trim().split(/\s+/);
+  return words.map((w) => {
+    if (ARABIC_NAMES_MAP[w]) return ARABIC_NAMES_MAP[w];
+    if (TRANSLATION_MAP[w]) return TRANSLATION_MAP[w];
+
+    const letterMap: Record<string, string> = {
+      "أ": "A", "إ": "E", "آ": "Aa", "ا": "a", "ب": "b", "ت": "t", "ث": "Th",
+      "ج": "j", "ح": "h", "خ": "Kh", "د": "d", "ذ": "Dh", "ر": "r", "ز": "z",
+      "س": "s", "ش": "Sh", "ص": "S", "ض": "D", "ط": "T", "ظ": "Z", "ع": "A",
+      "غ": "Gh", "ف": "f", "ق": "Q", "ك": "k", "ل": "l", "م": "m", "ن": "n",
+      "ه": "h", "و": "w", "ي": "y", "ى": "a", "ة": "a", "ء": "", "ئ": "e", "ؤ": "o",
+    };
+
+    let result = "";
+    for (let i = 0; i < w.length; i++) {
+      const char = w[i];
+      if (i === 0 && letterMap[char]) {
+        result += letterMap[char].charAt(0).toUpperCase() + letterMap[char].slice(1);
+      } else if (letterMap[char]) {
+        result += letterMap[char].toLowerCase();
+      } else {
+        result += char;
+      }
+    }
+    return result || w;
+  }).join(" ");
+}
+
+function translateOrTransliterate(text: string, targetLang: "AR" | "EN"): string {
+  if (!text || !text.trim()) return "";
+  const trimmed = text.trim();
+  if (TRANSLATION_MAP[trimmed]) return TRANSLATION_MAP[trimmed];
+
+  if (targetLang === "EN") {
+    const hasArabic = /[\u0600-\u06FF]/.test(trimmed);
+    if (hasArabic) {
+      return transliterateArabicToEnglish(trimmed);
+    }
+    return trimmed;
+  } else {
+    return trimmed;
+  }
+}
 
 const DEFAULT_AR_DATA: LanguageSpecificData = {
   fullName: "حيدر محمد شوكت",
@@ -257,11 +394,34 @@ const DEFAULT_EN_DATA: LanguageSpecificData = {
   ]
 };
 
-function translateText(text: string): string {
-  if (!text || !text.trim()) return "";
-  const trimmed = text.trim();
-  if (TRANSLATION_MAP[trimmed]) return TRANSLATION_MAP[trimmed];
-  return text;
+function convertDocLanguage(sourceDoc: LanguageSpecificData, targetLang: "AR" | "EN"): LanguageSpecificData {
+  return {
+    fullName: translateOrTransliterate(sourceDoc.fullName, targetLang),
+    jobTitle: translateOrTransliterate(sourceDoc.jobTitle, targetLang),
+    summary: translateOrTransliterate(sourceDoc.summary, targetLang),
+    email: sourceDoc.email || "",
+    phone: sourceDoc.phone || "",
+    location: translateOrTransliterate(sourceDoc.location, targetLang),
+    linkedin: sourceDoc.linkedin || "",
+    skills: (sourceDoc.skills || []).map((s) => translateOrTransliterate(s, targetLang)),
+    experiences: (sourceDoc.experiences || []).map((exp) => ({
+      ...exp,
+      role: translateOrTransliterate(exp.role, targetLang),
+      company: translateOrTransliterate(exp.company, targetLang),
+      date: translateOrTransliterate(exp.date, targetLang),
+      bullets: (exp.bullets || []).map((b) => translateOrTransliterate(b, targetLang)),
+    })),
+    education: (sourceDoc.education || []).map((edu) => ({
+      ...edu,
+      school: translateOrTransliterate(edu.school, targetLang),
+      degree: translateOrTransliterate(edu.degree, targetLang),
+      year: translateOrTransliterate(edu.year, targetLang),
+    })),
+    certifications: (sourceDoc.certifications || []).map((c) => ({
+      ...c,
+      title: translateOrTransliterate(c.title, targetLang),
+    })),
+  };
 }
 
 export default function PublicCvBuilderPage() {
@@ -317,9 +477,17 @@ export default function PublicCvBuilderPage() {
   const curDoc = lang === "AR" ? docAR : docEN;
   const setCurDoc = (updater: (prev: LanguageSpecificData) => LanguageSpecificData) => {
     if (lang === "AR") {
-      setDocAR(updater);
+      setDocAR((prev) => {
+        const next = updater(prev);
+        setDocEN(convertDocLanguage(next, "EN"));
+        return next;
+      });
     } else {
-      setDocEN(updater);
+      setDocEN((prev) => {
+        const next = updater(prev);
+        setDocAR(convertDocLanguage(next, "AR"));
+        return next;
+      });
     }
   };
 
@@ -351,74 +519,12 @@ export default function PublicCvBuilderPage() {
     if (targetLang === lang) return;
 
     if (targetLang === "EN") {
-      if (!docEN.fullName || docEN.fullName === DEFAULT_EN_DATA.fullName) {
-        if (docAR.fullName && docAR.fullName !== DEFAULT_AR_DATA.fullName) {
-          const autoTranslatedEN: LanguageSpecificData = {
-            fullName: translateText(docAR.fullName),
-            jobTitle: translateText(docAR.jobTitle),
-            summary: translateText(docAR.summary),
-            email: docAR.email,
-            phone: docAR.phone,
-            location: translateText(docAR.location),
-            linkedin: docAR.linkedin,
-            skills: docAR.skills.map((s) => translateText(s)),
-            experiences: docAR.experiences.map((exp) => ({
-              ...exp,
-              role: translateText(exp.role),
-              company: translateText(exp.company),
-              date: translateText(exp.date),
-              bullets: exp.bullets.map((b) => translateText(b)),
-            })),
-            education: docAR.education.map((edu) => ({
-              ...edu,
-              school: translateText(edu.school),
-              degree: translateText(edu.degree),
-              year: translateText(edu.year),
-            })),
-            certifications: docAR.certifications.map((c) => ({
-              ...c,
-              title: translateText(c.title),
-            })),
-          };
-          setDocEN(autoTranslatedEN);
-        }
-      }
+      setDocEN(convertDocLanguage(docAR, "EN"));
       setLang("EN");
       setFontFamily("Outfit");
       showToast("تم التحويل الفوري إلى النسخة الإنجليزية (English Mode)");
     } else {
-      if (!docAR.fullName || docAR.fullName === DEFAULT_AR_DATA.fullName) {
-        if (docEN.fullName && docEN.fullName !== DEFAULT_EN_DATA.fullName) {
-          const autoTranslatedAR: LanguageSpecificData = {
-            fullName: translateText(docEN.fullName),
-            jobTitle: translateText(docEN.jobTitle),
-            summary: translateText(docEN.summary),
-            email: docEN.email,
-            phone: docEN.phone,
-            location: translateText(docEN.location),
-            linkedin: docEN.linkedin,
-            skills: docEN.skills.map((s) => translateText(s)),
-            experiences: docEN.experiences.map((exp) => ({
-              ...exp,
-              role: translateText(exp.role),
-              company: translateText(exp.company),
-              date: translateText(exp.date),
-              bullets: exp.bullets.map((b) => translateText(b)),
-            })),
-            education: docEN.education.map((edu) => ({
-              ...edu,
-              school: translateText(edu.school),
-              degree: translateText(edu.degree),
-              year: translateText(edu.year),
-            })),
-            certifications: docEN.certifications.map((c) => ({
-              ...c,
-              title: translateText(c.title),
-            })),
-          };
-          setDocAR(autoTranslatedAR);
-        }
-      }
+      setDocAR(convertDocLanguage(docEN, "AR"));
       setLang("AR");
       setFontFamily("Tajawal");
       showToast("تم التحويل الفوري إلى النسخة العربية (Arabic Mode)");
@@ -428,15 +534,17 @@ export default function PublicCvBuilderPage() {
   const handleLoadSampleData = () => {
     if (lang === "AR") {
       setDocAR({ ...DEFAULT_AR_DATA });
+      setDocEN({ ...DEFAULT_EN_DATA });
       showToast("تم تحميل نموذج سيرة ذاتية جاهز باللغة العربية");
     } else {
       setDocEN({ ...DEFAULT_EN_DATA });
+      setDocAR({ ...DEFAULT_AR_DATA });
       showToast("Loaded ready English sample resume");
     }
   };
 
   const handleClearCurrent = () => {
-    if (window.confirm(lang === "AR" ? "هل أنت متأكد من تفريغ كافة الحقول للغة الحالية؟" : "Are you sure you want to clear all fields for the active language?")) {
+    if (window.confirm(lang === "AR" ? "هل أنت متأكد من تفريغ كافة الحقول؟" : "Are you sure you want to clear all fields?")) {
       const emptyDoc: LanguageSpecificData = {
         fullName: "",
         jobTitle: "",
@@ -448,10 +556,11 @@ export default function PublicCvBuilderPage() {
         skills: [],
         experiences: [],
         education: [],
-        certifications: []
+        certifications: [],
       };
-      setCurDoc(() => emptyDoc);
-      showToast(lang === "AR" ? "تم تفريغ الحقول" : "Cleared all fields");
+      setDocAR(emptyDoc);
+      setDocEN(emptyDoc);
+      showToast(lang === "AR" ? "تم تفريغ كافة الحقول بنجاح" : "All fields cleared");
     }
   };
 
@@ -629,6 +738,18 @@ export default function PublicCvBuilderPage() {
     setIsGeneratingPdf(true);
 
     try {
+      // Force fresh synchronization so target export DOM gets the user's latest edited data
+      if (lang === "AR") {
+        const freshEN = convertDocLanguage(docAR, "EN");
+        setDocEN(freshEN);
+      } else {
+        const freshAR = convertDocLanguage(docEN, "AR");
+        setDocAR(freshAR);
+      }
+
+      // Small delay to allow React to update export DOM elements
+      await new Promise((res) => setTimeout(res, 250));
+
       if (choice === "AR") {
         showToast("جاري تنزيل ملف الـ PDF باللغة العربية...");
         await generateSinglePdfFromExportDom("AR");
@@ -641,7 +762,7 @@ export default function PublicCvBuilderPage() {
         showToast("جاري تجهيز وتنزيل النسختين (العربية والإنجليزية)...");
         // 1. Download Arabic
         await generateSinglePdfFromExportDom("AR");
-        await new Promise((res) => setTimeout(res, 600));
+        await new Promise((res) => setTimeout(res, 800));
         // 2. Download English
         await generateSinglePdfFromExportDom("EN");
         showToast("تم تنزيل النسختين العربية والإنجليزية بنجاح");
