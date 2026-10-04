@@ -283,6 +283,8 @@ export default function Home() {
 
   const [isScrolledPastHero, setIsScrolledPastHero] = useState(false);
   const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null);
+  const currentCvHref = lang === "AR" ? "/HAIDER_M_SHWKAT_CV_AR.pdf" : (portfolioData?.general.cvPdfPath || "/HAIDER_M_SHWKAT_CV_2026.pdf");
+  const currentCvName = lang === "AR" ? "HAIDER_M_SHWKAT_CV_AR.pdf" : "HAIDER_M_SHWKAT_CV_2026.pdf";
 
   useEffect(() => {
     const updateFromLocalOrApi = () => {
@@ -340,8 +342,8 @@ export default function Home() {
         setLang((prev) => (prev === "AR" ? "EN" : "AR"));
       } else if (key === "d" || key === "c") {
         const cvLink = document.createElement("a");
-        cvLink.href = portfolioData?.general.cvPdfPath || "/HAIDER_M_SHWKAT_CV_2026.pdf";
-        cvLink.download = "HAIDER_M_SHWKAT_CV_2026.pdf";
+        cvLink.href = currentCvHref;
+        cvLink.download = currentCvName;
         cvLink.click();
       } else if (key === "s") {
         document.getElementById("stats")?.scrollIntoView({ behavior: "smooth" });
@@ -648,8 +650,8 @@ export default function Home() {
         </nav>
 
         <a
-          href="/HAIDER_M_SHWKAT_CV_2026.pdf"
-          download="HAIDER_M_SHWKAT_CV_2026.pdf"
+          href={currentCvHref}
+          download={currentCvName}
           target="_blank"
           rel="noopener noreferrer"
           className="awsmd-btn-glow"
@@ -727,8 +729,8 @@ export default function Home() {
 
             <div className="mobile-only-cv-btn" style={{ marginTop: "25px" }}>
               <a
-                href="/HAIDER_M_SHWKAT_CV_2026.pdf"
-                download="HAIDER_M_SHWKAT_CV_2026.pdf"
+                href={currentCvHref}
+                download={currentCvName}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="awsmd-btn-glow"
@@ -1529,8 +1531,8 @@ export default function Home() {
             </div>
 
             <a
-              href="/HAIDER_M_SHWKAT_CV_2026.pdf"
-              download="HAIDER_M_SHWKAT_CV_2026.pdf"
+              href={currentCvHref}
+              download={currentCvName}
               target="_blank"
               rel="noopener noreferrer"
               style={{

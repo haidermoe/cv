@@ -627,8 +627,8 @@ export default function TeknoPage() {
         </nav>
 
         <a
-          href="/HAIDER_M_SHWKAT_CV_2026.pdf"
-          download="HAIDER_M_SHWKAT_CV_2026.pdf"
+          href={lang === "AR" ? "/HAIDER_M_SHWKAT_CV_AR.pdf" : "/HAIDER_M_SHWKAT_CV_2026.pdf"}
+          download={lang === "AR" ? "HAIDER_M_SHWKAT_CV_AR.pdf" : "HAIDER_M_SHWKAT_CV_2026.pdf"}
           target="_blank"
           rel="noopener noreferrer"
           className="awsmd-btn-glow"
@@ -831,8 +831,8 @@ export default function TeknoPage() {
               </div>
 
               <a
-                href="/HAIDER_M_SHWKAT_CV_2026.pdf"
-                download="HAIDER_M_SHWKAT_CV_2026.pdf"
+                href={lang === "AR" ? "/HAIDER_M_SHWKAT_CV_AR.pdf" : "/HAIDER_M_SHWKAT_CV_2026.pdf"}
+                download={lang === "AR" ? "HAIDER_M_SHWKAT_CV_AR.pdf" : "HAIDER_M_SHWKAT_CV_2026.pdf"}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
