@@ -125,6 +125,13 @@
       "video": "media/pruzina-color.mp4"
     },
     {
+      "id": "stat-3",
+      "value": "4",
+      "textAR": "أنظمة برمجية وحلول أتمتة مؤسسية مطوّرة (بايوغارد، تيربوشير، ديجت فورم، وسكربت أودو ومسواك)",
+      "textEN": "Proprietary systems & automation engineered (BioGuard, TurboShare, DigitForm, Odoo-Miswag)",
+      "video": "media/time-color.mp4"
+    },
+    {
       "id": "stat-4",
       "value": "+2K",
       "textAR": "مستخدم تم ربطهم وتغطيتهم بشبكات الـ FTTH الحديثة بنظام EPON",

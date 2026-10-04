@@ -49,7 +49,7 @@ const translations = {
     statsTitle: "أرقام مثبتة من المسيرة المهنية",
     stat1: "سجل بيانات متكامل تمت هندسته وأرشفته لمشروع في قطاع الدفاع",
     stat2: "مشترك نشط تم تقديم الدعم الفني والصيانة الميدانية الكاملة لهم",
-    stat3: "مطاعم تعمل بنظام ERP & POS المتكامل الذي طوّره ونشره حيدر",
+    stat3: "أنظمة برمجية وحلول أتمتة مؤسسية مطوّرة (بايوغارد، تيربوشير، ديجت فورم، وسكربت أودو ومسواك)",
     stat4: "مستخدم تم ربطهم وتغطيتهم بشبكات الـ FTTH الحديثة بنظام EPON",
     expTag: "02 — الخبرات العملية",
     expTitle: "سجل مهني حافل بتحقيق الأهداف والنتائج",
@@ -138,7 +138,7 @@ const translations = {
     statsTitle: "Proven Track Record Numbers",
     stat1: "Multi-platform data records engineered and managed for a Defense Sector project",
     stat2: "Active network subscribers and clients provided with full technical support",
-    stat3: "Active restaurants powered by custom-built ERP & POS management system",
+    stat3: "Proprietary systems & automation engineered (BioGuard, TurboShare, DigitForm, Odoo-Miswag)",
     stat4: "Active users connected via modern FTTH / EPON fiber optic networks",
     expTag: "02 — WORK EXPERIENCE",
     expTitle: "Proven Career Journey & High-Impact Results",
@@ -804,6 +804,15 @@ export default function Home() {
             <video src="media/pruzina-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 1, transition: "transform 0.4s ease" }}></video>
           </div>
 
+          {/* STAT CARD 3 */}
+          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0", transition: "all 0.3s ease" }}>
+            <div style={{ position: "relative", zIndex: 2 }}>
+              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>4</span>
+              <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat3}</p>
+            </div>
+            <video src="media/time-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 1, transition: "transform 0.4s ease" }}></video>
+          </div>
+
           {/* STAT CARD 4 */}
           <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0", transition: "all 0.3s ease" }}>
             <div style={{ position: "relative", zIndex: 2 }}>
@@ -1083,6 +1092,78 @@ export default function Home() {
                 >
                   <span>{t.tool3Action}</span>
                 </Link>
+              </div>
+            </div>
+
+            {/* TOOL 4: PROPRIETARY IN-HOUSE SYSTEMS */}
+            <div
+              className="awsmd-dark-card"
+              style={{
+                background: tColors.cardBg,
+                padding: "36px 30px",
+                borderRadius: "28px",
+                border: "1.5px solid rgba(234, 88, 12, 0.35)",
+                boxShadow: "0 10px 30px rgba(234, 88, 12, 0.08)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                minHeight: "310px",
+                transition: "all 0.3s ease"
+              }}
+            >
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+                  <h3 style={{ fontSize: "22px", fontWeight: "900", color: tColors.text, margin: 0, lineHeight: "1.3" }}>
+                    {lang === "AR" ? "أنظمة وحلول برمجية خاصة" : "Proprietary Enterprise Systems"}
+                  </h3>
+                  <span style={{ background: "rgba(234, 88, 12, 0.15)", color: "#ea580c", padding: "4px 10px", borderRadius: "12px", fontSize: "11px", fontWeight: "800" }}>
+                    {lang === "AR" ? "أنظمة مؤسسية" : "In-House"}
+                  </span>
+                </div>
+                
+                <p style={{ color: tColors.subtext, fontSize: "14px", lineHeight: "1.7", fontWeight: "500", margin: "0 0 14px 0" }}>
+                  {lang === "AR"
+                    ? "حلول برمجية طوّرتها خصيصاً لبيئات العمل والشركات لتحسين الكفاءة وضبط العمليات:"
+                    : "Tailored software solutions built for internal operations & workflow optimization:"}
+                </p>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "9px" }}>
+                  <div style={{ fontSize: "13px", color: tColors.text, fontWeight: "600", display: "flex", alignItems: "baseline", gap: "6px" }}>
+                    <span style={{ color: "#ea580c", fontWeight: "900" }}>•</span>
+                    <span><strong>بايوغارد (BioGuard):</strong> {lang === "AR" ? "بصمة وحضور ذكي بالـ GPS و 2FA" : "GPS & 2FA attendance tracking"}</span>
+                  </div>
+                  <div style={{ fontSize: "13px", color: tColors.text, fontWeight: "600", display: "flex", alignItems: "baseline", gap: "6px" }}>
+                    <span style={{ color: "#ea580c", fontWeight: "900" }}>•</span>
+                    <span><strong>تيربوشير (TurboShare):</strong> {lang === "AR" ? "مشاركة ملفات وإيميلات عبر الشبكة الداخلية" : "Secure high-speed intranet file & mail hub"}</span>
+                  </div>
+                  <div style={{ fontSize: "13px", color: tColors.text, fontWeight: "600", display: "flex", alignItems: "baseline", gap: "6px" }}>
+                    <span style={{ color: "#ea580c", fontWeight: "900" }}>•</span>
+                    <span><strong>ديجت فورم (DigitForm):</strong> {lang === "AR" ? "رقمنة الاستمارات عبر الهاتف وطباعة A4 فورية" : "Mobile form digitization & instant A4 print"}</span>
+                  </div>
+                  <div style={{ fontSize: "13px", color: tColors.text, fontWeight: "600", display: "flex", alignItems: "baseline", gap: "6px" }}>
+                    <span style={{ color: "#ea580c", fontWeight: "900" }}>•</span>
+                    <span><strong>إدارة_متجر_أودو_ومسواك.bat:</strong> {lang === "AR" ? "أتمتة مزامنة Odoo ومنصة مسواك" : "Automated Odoo & Miswag sync engine"}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ marginTop: "24px" }}>
+                <span
+                  style={{
+                    background: isDark ? "rgba(255, 255, 255, 0.06)" : "rgba(0, 0, 0, 0.04)",
+                    color: tColors.mutedText,
+                    padding: "8px 18px",
+                    borderRadius: "50px",
+                    fontSize: "12.5px",
+                    fontWeight: "700",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    border: tColors.cardBorder,
+                  }}
+                >
+                  🔒 {lang === "AR" ? "أنظمة خاصة بجهات العمل (غير معروضة للعامة)" : "Proprietary internal systems"}
+                </span>
               </div>
             </div>
 
