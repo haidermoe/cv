@@ -269,6 +269,7 @@ const DEFAULT_AR_DATA: LanguageSpecificData = {
       date: "2025 - الحالي",
       bullets: [
         "برمجة وتطوير سكربتات أتمتة مخصصة بلغة بايثون لمعالجة ورفع آلاف المنتجات والبيانات الضخمة واختصار وقت الإنجاز من عدة أيام إلى دقائق معدودة.",
+        "تطوير ونشر أداة الأتمتة المخصصة (إدارة_متجر_أودو_ومسواك.bat) للربط والمزامنة الفورية للمخزون والمنتجات بين نظام Odoo ERP ومنصة وتطبيق مسواك بدقة 100%.",
         "إدارة كتالوج المنتجات والمخزون الحي والأسعار لآلاف المنتجات عبر المنصات المختلفة بدقة تامة وبنسبة خطأ 0%.",
         "أتمتة وتكامل مزامنة المخزون والأسعار بين قواعد البيانات الداخلية وأبرز تطبيقات التوصيل العراقية (مسواق، طماطة، جاهز، الريان).",
         "الإشراف على عمليات المبيعات اليومية وإدارة حملات الفيديو التسويقية الرقمية وتحليل سلوك العملاء لزيادة الإيرادات."
@@ -281,7 +282,9 @@ const DEFAULT_AR_DATA: LanguageSpecificData = {
       date: "2023 - 2025",
       bullets: [
         "بناء وهيكلة قاعدة بيانات ضخمة تضم أكثر من 22,000 سجل متعدد المنصات لمشروع في قطاع الدفاع مع إمكانية الفرز المتقدم حسب المناطق وجهات الاتصال.",
-        "تصميم وإطلاق نظام ERP و POS متكامل لإدارة المطاعم والمخزون يعمل حالياً بكفاءة في 3 فروع نشطة.",
+        "تطوير نظام بايوغارد (BioGuard): منظومة حضور وانصراف ذكية معتمدة على الـ GPS والمصادقة الثنائية (2FA) للتحقق الموثوق من الأجهزة ومنع التلاعب.",
+        "تطوير برنامج تيربوشير (TurboShare): منصة مشاركة ملفات ومراسلات داخلية فائقة السرعة عبر الشبكة المحلية (Intranet) بخصوصية تامة.",
+        "تطوير نظام ديجت فورم (DigitForm): تطبيق لرقمنة الاستمارات والمعاملات الورقية عبر الهاتف مع توليد وطباعة فورية بقياس A4 قياسي.",
         "حل مشاكل هيكلة الكتالوجات البرمجية والـ API Rate Limits لمنصات تجارة إلكترونية عراقية رائدة (مثل شركة الريان).",
         "إنتاج وإخراج أكثر من 60 فيديو إعلاني تجاري وشروحات تقنية لشركاء التجزئة (Lito Store, Techno Store)."
       ]
@@ -344,6 +347,7 @@ const DEFAULT_EN_DATA: LanguageSpecificData = {
       date: "2025 - Present",
       bullets: [
         "Engineered custom Python scripts and browser automation tools to streamline large-scale SKU uploads, cutting data processing time from days to minutes.",
+        "Developed and deployed the custom automation tool (إدارة_متجر_أودو_ومسواك.bat), enabling real-time product, price, and inventory sync between Odoo ERP and the Miswag platform.",
         "Managed cataloging, stock accuracy, and pricing across platforms for thousands of active SKUs with zero error rates.",
         "Automated inventory feeds and content sync between internal databases and major Iraqi delivery apps (Miswag, Tamata, Jahez, Al-Rayan).",
         "Supervised daily branch sales operations, managed digital video reels marketing, and leveraged customer insights to boost revenue."
@@ -356,7 +360,9 @@ const DEFAULT_EN_DATA: LanguageSpecificData = {
       date: "2023 - 2025",
       bullets: [
         "Built a comprehensive database system of 22,000+ multi-platform records for a Defense Sector project with region and contact filtering.",
-        "Designed and deployed a fully functional ERP & POS restaurant management system currently driving operations across 3 active restaurants.",
+        "Developed BioGuard: An enterprise attendance tracking system utilizing GPS geofencing and 2FA device authentication to prevent spoofing.",
+        "Developed TurboShare: A high-speed local intranet hub for secure file transfer and internal messaging, isolated from external networks.",
+        "Developed DigitForm: A mobile-first form digitization platform replacing paper workflows with instant ISO A4 print-ready PDF generation.",
         "Resolved critical catalog structures, API rate limits, and product feature bugs for prominent Iraqi e-commerce platforms (e.g. Al-Rayan).",
         "Produced and executed over 60 commercial reels, technical tutorials, and brand video campaigns for retail partners (Lito Store, Techno Store)."
       ]

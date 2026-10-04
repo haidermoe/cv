@@ -58,6 +58,7 @@ const translations = {
     exp1Role: "أخصائي عمليات التجارة الإلكترونية، البيانات والمبيعات",
     exp1Bullets: [
       "أتمتة وهندسة سكربتات بايثون وأدوات متصفح لرفع وتحديث آلاف المنتجات (SKUs)، مقلصاً زمن المعالجة من أيام إلى دقائق معدودة.",
+      "تطوير ونشر أداة الأتمتة المخصصة (إدارة_متجر_أودو_ومسواك.bat) للربط والمزامنة الفورية للمخزون والمنتجات بين نظام Odoo ERP ومنصة وتطبيق مسواك بدقة 100%.",
       "إدارة كتالوجات المنتجات والتسعير والمخزون لآلاف المنتجات النشطة مع الحفاظ على سلامة البيانات بنسبة خطأ 0%.",
       "الربط والمزامنة الآلية للمخزون والمنتجات بين قواعد البيانات وتطبيقات التوصيل العراقية الكبرى (مسواك، طماطة، جاهز، الريان).",
       "الإشراف على مبيعات الفروع اليومية، وإدارة التسويق الرقمي عبر الريلز، واستثمار ملاحظات الزبائن لزيادة الإيرادات."
@@ -67,7 +68,9 @@ const translations = {
     exp2Role: "استشاري حر لعمليات البيانات والحلول التقنية",
     exp2Bullets: [
       "هندسة وبناء منظومة قواعد بيانات شاملة تضم أكثر من 22,000 سجل لقطاع الدفاع مع نظام فلترة للمناطق والاتصال.",
-      "تصميم ونشر نظام ERP و POS متكامل لإدارة المطاعم يعمل حالياً بنجاح ويقود العمليات في 3 مطاعم نشطة.",
+      "تطوير نظام بايوغارد (BioGuard): منظومة حضور وانصراف ذكية معتمدة على الـ GPS والمصادقة الثنائية (2FA) للتحقق الموثوق من الأجهزة ومنع التلاعب.",
+      "تطوير برنامج تيربوشير (TurboShare): منصة مشاركة ملفات ومراسلات داخلية فائقة السرعة عبر الشبكة المحلية (Intranet) بخصوصية تامة.",
+      "تطوير نظام ديجت فورم (DigitForm): تطبيق لرقمنة الاستمارات والمعاملات الورقية عبر الهاتف مع توليد وطباعة فورية بقياس A4 قياسي.",
       "حل المشكلات التقنية الحرجة وتجاوز قيود الـ API وهيكلة الكتالوجات لمنصات تجارة إلكترونية كبرى مثل منصة الريان.",
       "إنتاج وتنفيذ أكثر من 60 فيديو ترويجي وحملات ريلز تعليمية لشركاء التجزئة (Lito Store, Techno Store)."
     ],
@@ -144,6 +147,7 @@ const translations = {
     exp1Role: "E-Commerce, Data Operations & Sales Specialist",
     exp1Bullets: [
       "Engineered custom Python scripts and browser automation tools to streamline large-scale SKU uploads, cutting data processing time from days to minutes.",
+      "Developed and deployed the custom automation tool (إدارة_متجر_أودو_ومسواك.bat), enabling real-time product, price, and inventory sync between Odoo ERP and the Miswag platform.",
       "Managed cataloging, stock accuracy, and pricing across platforms for thousands of active SKUs with zero error rates.",
       "Automated inventory feeds and content sync between internal databases and major Iraqi delivery apps (Miswag, Tamata, Jahez, Al-Rayan).",
       "Supervised daily branch sales operations, managed digital video reels marketing, and leveraged customer insights to boost revenue."
@@ -153,7 +157,9 @@ const translations = {
     exp2Role: "Freelance Data & Technical Operations Consultant",
     exp2Bullets: [
       "Built a comprehensive database system of 22,000+ multi-platform records for a Defense Sector project with region and contact filtering.",
-      "Designed and deployed a fully functional ERP & POS restaurant management system currently driving operations across 3 active restaurants.",
+      "Developed BioGuard: An enterprise attendance tracking system utilizing GPS geofencing and 2FA device authentication to prevent spoofing.",
+      "Developed TurboShare: A high-speed local intranet hub for secure file transfer and internal messaging, isolated from external networks.",
+      "Developed DigitForm: A mobile-first form digitization platform replacing paper workflows with instant ISO A4 print-ready PDF generation.",
       "Resolved critical catalog structures, API rate limits, and product feature bugs for prominent Iraqi e-commerce platforms (e.g. Al-Rayan).",
       "Produced and executed over 60 commercial reels, technical tutorials, and brand video campaigns for retail partners (Lito Store, Techno Store)."
     ],
@@ -796,15 +802,6 @@ export default function Home() {
               <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat2}</p>
             </div>
             <video src="media/pruzina-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 1, transition: "transform 0.4s ease" }}></video>
-          </div>
-
-          {/* STAT CARD 3 */}
-          <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0", transition: "all 0.3s ease" }}>
-            <div style={{ position: "relative", zIndex: 2 }}>
-              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>3</span>
-              <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat3}</p>
-            </div>
-            <video src="media/time-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 1, transition: "transform 0.4s ease" }}></video>
           </div>
 
           {/* STAT CARD 4 */}
