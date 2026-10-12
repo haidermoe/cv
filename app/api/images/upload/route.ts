@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. High-speed Public CDN: Imgur API (Global CDN, direct links, permanent)
-    const imgurClientIds = ["546c25a59c58ad7", "1ceddedc03a5d71"];
+    const imgurClientIds = ["546c25a59c58ad7", "1ceddedc03a5d71"].sort(() => Math.random() - 0.5);
     for (const clientId of imgurClientIds) {
       try {
         const imgurForm = new FormData();

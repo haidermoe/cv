@@ -606,30 +606,36 @@ export default function ImageDownloaderPage() {
 
         setCurrentUploadText(`${currentFile.name} (${idx + 1}/${totalCount})`);
 
-        try {
-          const form = new FormData();
-          form.append("image", currentFile);
+        let success = false;
+        for (let attempt = 0; attempt < 2; attempt++) {
+          try {
+            const form = new FormData();
+            form.append("image", currentFile);
 
-          const res = await fetch("/api/images/upload", {
-            method: "POST",
-            body: form,
-          });
+            const res = await fetch("/api/images/upload", {
+              method: "POST",
+              body: form,
+            });
 
-          if (res.ok) {
-            const data = await res.json();
-            if (data && data.url) {
-              results.push({
-                name: currentFile.name,
-                url: data.url,
-                direct_url: data.direct_url || data.url,
-                size: currentFile.size,
-              });
+            if (res.ok) {
+              const data = await res.json();
+              if (data && data.url) {
+                results.push({
+                  name: currentFile.name,
+                  url: data.url,
+                  direct_url: data.direct_url || data.url,
+                  size: currentFile.size,
+                });
+                success = true;
+                break;
+              }
             }
-          } else {
-            console.warn("Upload failed for:", currentFile.name);
+          } catch (err) {
+            console.error("Upload error:", err);
           }
-        } catch (err) {
-          console.error("Upload error:", err);
+          if (attempt === 0) {
+            await new Promise((r) => setTimeout(r, 800));
+          }
         }
 
         completedCount++;
