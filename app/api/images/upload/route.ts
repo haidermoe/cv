@@ -20,11 +20,13 @@ export async function POST(req: NextRequest) {
     if (vercelBlobToken) {
       try {
         const cleanName = fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
-        const blobRes = await fetch(`https://blob.vercel-storage.com/${Date.now()}-${cleanName}`, {
+        const blobRes = await fetch(`https://blob.vercel-storage.com/${Date.now()}-${cleanName}?access=public`, {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${vercelBlobToken}`,
             "x-api-version": "7",
+            "x-access": "public",
+            "x-add-random-suffix": "true",
             "content-type": mimeType,
           },
           body: buffer,
