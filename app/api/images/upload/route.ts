@@ -15,7 +15,40 @@ export async function POST(req: NextRequest) {
     const mimeType = file.type || "image/jpeg";
     const fileName = file.name || "image.png";
 
-    // 1. Try ImgBB if a valid custom API key is supplied in environment variables
+    // 1. Permanent Storage: Vercel Blob (Built-in to Vercel, unlimited, permanent)
+    const vercelBlobToken = process.env.BLOB_READ_WRITE_TOKEN;
+    if (vercelBlobToken) {
+      try {
+        const cleanName = fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
+        const blobRes = await fetch(`https://blob.vercel-storage.com/${Date.now()}-${cleanName}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${vercelBlobToken}`,
+            "x-api-version": "7",
+            "content-type": mimeType,
+          },
+          body: buffer,
+        });
+
+        if (blobRes.ok) {
+          const blobData = await blobRes.json();
+          if (blobData?.url) {
+            return NextResponse.json({
+              success: true,
+              name: fileName,
+              url: blobData.url,
+              direct_url: blobData.url,
+              thumb: blobData.url,
+              size: file.size,
+            });
+          }
+        }
+      } catch (errBlob) {
+        console.warn("Vercel Blob upload failed:", errBlob);
+      }
+    }
+
+    // 2. Permanent Storage: ImgBB (if custom valid API key provided)
     const customImgbbKey = process.env.IMGBB_API_KEY;
     if (customImgbbKey && customImgbbKey !== "d0c41031f0ca9b626e2e0ea943485c21") {
       try {
@@ -41,11 +74,11 @@ export async function POST(req: NextRequest) {
           });
         }
       } catch (err) {
-        console.warn("ImgBB custom upload failed, falling back to Imgur/Catbox:", err);
+        console.warn("ImgBB custom upload failed:", err);
       }
     }
 
-    // 2. High-speed Public CDN: Imgur API (Global CDN, direct links, permanent)
+    // 3. Permanent High-Speed CDN: Imgur API (Direct permanent links)
     const imgurClientIds = ["546c25a59c58ad7", "1ceddedc03a5d71"].sort(() => Math.random() - 0.5);
     for (const clientId of imgurClientIds) {
       try {
@@ -81,7 +114,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // 3. Fallback: Catbox (Permanent file hosting)
+    // 4. Permanent Storage: Catbox (Permanent direct file hosting)
     try {
       const catboxForm = new FormData();
       catboxForm.append("reqtype", "fileupload");
@@ -113,35 +146,8 @@ export async function POST(req: NextRequest) {
       console.warn("Catbox upload failed:", err2);
     }
 
-    // 4. Fallback: Tmpfiles (Instant direct download link)
-    try {
-      const tmpForm = new FormData();
-      const blob = new Blob([buffer], { type: mimeType });
-      tmpForm.append("file", blob, fileName);
-
-      const tmpRes = await fetch("https://tmpfiles.org/api/v1/upload", {
-        method: "POST",
-        body: tmpForm,
-      });
-
-      const tmpData = await tmpRes.json();
-      if (tmpData?.status === "success" && tmpData?.data?.url) {
-        const directUrl = tmpData.data.url.replace("tmpfiles.org/", "tmpfiles.org/dl/");
-        return NextResponse.json({
-          success: true,
-          name: fileName,
-          url: directUrl,
-          direct_url: directUrl,
-          thumb: directUrl,
-          size: file.size,
-        });
-      }
-    } catch (err3) {
-      console.warn("Tmpfiles upload failed:", err3);
-    }
-
     return NextResponse.json(
-      { error: "Failed to upload image to public CDN" },
+      { error: "Failed to upload image to permanent storage" },
       { status: 500 }
     );
   } catch (error: any) {

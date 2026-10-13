@@ -595,7 +595,7 @@ export default function ImageDownloaderPage() {
     const totalCount = uploadFiles.length;
     let completedCount = 0;
 
-    const concurrency = 4;
+    const concurrency = 2;
     let currentIndex = 0;
 
     const uploadWorker = async () => {
@@ -607,7 +607,7 @@ export default function ImageDownloaderPage() {
         setCurrentUploadText(`${currentFile.name} (${idx + 1}/${totalCount})`);
 
         let success = false;
-        for (let attempt = 0; attempt < 2; attempt++) {
+        for (let attempt = 0; attempt < 3; attempt++) {
           try {
             const form = new FormData();
             form.append("image", currentFile);
@@ -633,13 +633,14 @@ export default function ImageDownloaderPage() {
           } catch (err) {
             console.error("Upload error:", err);
           }
-          if (attempt === 0) {
-            await new Promise((r) => setTimeout(r, 800));
+          if (!success) {
+            await new Promise((r) => setTimeout(r, 1200 * (attempt + 1)));
           }
         }
 
         completedCount++;
         setUploadProgress(Math.round((completedCount / totalCount) * 100));
+        await new Promise((r) => setTimeout(r, 300));
       }
     };
 
