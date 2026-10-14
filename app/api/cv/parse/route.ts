@@ -48,14 +48,13 @@ function parseCvRuleBased(rawText: string): LanguageSpecificData {
 
   // 3. Full Name Extraction
   let fullName = "";
-  const nameMatch = text.match(/(?:اسم(?: الشخصية)?|الاسم الكامل|الاسم|Name)\s*:?\s*([\u0600-\u06FF\s]+?)(?=\s*\(|\s*عنوان|\s*رقم|\s*البريد|\s*تاريخ|\s*\n|$)/i);
+  const nameMatch = text.match(/(?:(?:الاسم الكامل|اسم الشخصية|اسم|الاسم|Name)\s*:?\s*)([\u0600-\u06FF\s]+?)(?=\s*\(|\s*عنوان|\s*رقم|\s*البريد|\s*تاريخ|\s*\n|$)/i);
   if (nameMatch && nameMatch[1].trim().length > 2) {
     fullName = nameMatch[1].trim();
   }
   if (!fullName) {
-    // If not found with keyword, check first line if it looks like a person's name
     const firstLine = text.split(/\r?\n/)[0]?.trim();
-    if (firstLine && !firstLine.includes("@") && !firstLine.includes("07") && firstLine.length < 35) {
+    if (firstLine && !firstLine.includes("@") && !firstLine.includes("07") && firstLine.length < 40) {
       const cleanFirst = firstLine.replace(/^(?:الاسم|Name)\s*:?\s*/i, "").trim();
       if (/^[\u0600-\u06FF\sA-Za-z]+$/.test(cleanFirst)) {
         fullName = cleanFirst;
@@ -82,169 +81,228 @@ function parseCvRuleBased(rawText: string): LanguageSpecificData {
     location = "العراق";
   }
 
-  // 5. LinkedIn Extraction
+  // 5. LinkedIn
   const linkedinMatch = text.match(/(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/[A-Za-z0-9_-]+/);
   const linkedin = linkedinMatch ? linkedinMatch[0] : "";
 
-  // 6. Section Bound Extraction (Regex segmentation)
-  const summaryMatch = text.match(
-    /(?:الهدف المهني(?: والملخص التنفيذي)?|الملخص التنفيذي|النبذة المهنية|النبذة|Summary)\s*:?\s*([\s\S]*?)(?=(?:التحصيل الدراسي|التعليم|الخبرات المهنية|الخبرات|الخبرة|المهارات|Work Experience|$))/i
-  );
-  let summary = summaryMatch ? summaryMatch[1].trim() : "";
+  // 6. Line-anchored Section Header Grouping
+  const sectionHeaders = [
+    { key: "summary", regex: /^(?:الهدف المهني(?: والملخص التنفيذي)?|الملخص التنفيذي|النبذة المهنية|النبذة|الملخص|Summary)(?:\s*\([^)]*\))?\s*:?/i },
+    { key: "education", regex: /^(?:التحصيل الدراسي|الشهادات الأكاديمية|المؤهلات العلمية|التعليم|Education)(?:\s*\([^)]*\))?\s*:?/i },
+    { key: "experience", regex: /^(?:الخبرات المهنية(?: والعملية)?|الخبرات|سجل الخبرات|الخبرة|سجل العمل|Work Experience|Experience)(?:\s*\([^)]*\))?\s*:?/i },
+    { key: "skills", regex: /^(?:المهارات والقدرات|المهارات|Skills & Competencies|Skills)(?:\s*\([^)]*\))?\s*:?/i },
+    { key: "certifications", regex: /^(?:الشهادات والدورات(?: التدريبية)?|الشهادات والاعتمادات|الشهادات|الدورات(?: التدريبية)?|Certifications|Courses)(?:\s*\([^)]*\))?\s*:?/i },
+  ];
 
-  const eduMatch = text.match(
-    /(?:التحصيل الدراسي|الشهادات الأكاديمية|التعليم|Education)\s*:?\s*([\s\S]*?)(?=(?:الخبرات المهنية|الخبرات|الخبرة|المهارات|الشهادات|Work Experience|$))/i
-  );
-  const eduRaw = eduMatch ? eduMatch[1].trim() : "";
+  const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  const sections: {
+    summary: string[];
+    education: string[];
+    experience: string[];
+    skills: string[];
+    certifications: string[];
+  } = {
+    summary: [],
+    education: [],
+    experience: [],
+    skills: [],
+    certifications: [],
+  };
 
-  const expMatch = text.match(
-    /(?:الخبرات المهنية(?:\s*\([\w\s]+\))?|الخبرات|الخبرة|سجل الخبرات|Work Experience)\s*:?\s*([\s\S]*?)(?=(?:المهارات|الشهادات والدورات التدريبية|الشهادات|الدورات|Skills|Education|$))/i
-  );
-  const expRaw = expMatch ? expMatch[1].trim() : "";
+  let currentSection: keyof typeof sections | null = null;
 
-  const skillsMatch = text.match(
-    /(?:المهارات(?:\s*\([\w\s]+\))?|المهارات والقدرات|Skills)\s*:?\s*([\s\S]*?)(?=(?:الشهادات والدورات التدريبية|الشهادات|الدورات|Certifications|$))/i
-  );
-  const skillsRaw = skillsMatch ? skillsMatch[1].trim() : "";
+  for (const line of lines) {
+    let matchedHeader = false;
+    for (const h of sectionHeaders) {
+      if (h.regex.test(line)) {
+        currentSection = h.key as keyof typeof sections;
+        matchedHeader = true;
+        const rest = line.replace(h.regex, "").trim();
+        if (rest) sections[currentSection].push(rest);
+        break;
+      }
+    }
 
-  const certsMatch = text.match(
-    /(?:الشهادات والدورات التدريبية(?:\s*\([\w\s&]+\))?|الشهادات|الدورات التدريبية|الدورات|Certifications)\s*:?\s*([\s\S]*?)$/i
-  );
-  const certsRaw = certsMatch ? certsMatch[1].trim() : "";
+    if (!matchedHeader) {
+      if (currentSection) {
+        sections[currentSection].push(line);
+      }
+    }
+  }
 
-  // 7. Process Experience Items
+  // Fallback: If sections were not detected by line headers (e.g. single-block pasted text)
+  if (sections.experience.length === 0 && sections.skills.length === 0) {
+    const summaryM = text.match(/(?:الهدف المهني(?: والملخص التنفيذي)?|الملخص التنفيذي|النبذة المهنية|النبذة|Summary)(?:\s*\([^)]*\))?\s*:?\s*([\s\S]*?)(?=(?:التحصيل الدراسي|التعليم|الخبرات|الخبرة|المهارات|Skills|Work Experience|$))/i);
+    if (summaryM) sections.summary.push(summaryM[1].trim());
+
+    const eduM = text.match(/(?:التحصيل الدراسي|الشهادات الأكاديمية|المؤهلات العلمية|التعليم|Education)(?:\s*\([^)]*\))?\s*:?\s*([\s\S]*?)(?=(?:الخبرات|الخبرة|المهارات|الشهادات|Skills|Work Experience|$))/i);
+    if (eduM) sections.education.push(eduM[1].trim());
+
+    const expM = text.match(/(?:الخبرات المهنية(?: والعملية)?|الخبرات|سجل الخبرات|الخبرة|Work Experience)(?:\s*\([^)]*\))?\s*:?\s*([\s\S]*?)(?=(?:المهارات|Skills|الشهادات|Certifications|$))/i);
+    if (expM) sections.experience.push(expM[1].trim());
+
+    const skillsM = text.match(/(?:المهارات والقدرات|المهارات|Skills & Competencies|Skills)(?:\s*\([^)]*\))?\s*:?\s*([\s\S]*?)(?=(?:الشهادات|الدورات|Certifications|$))/i);
+    if (skillsM) sections.skills.push(skillsM[1].trim());
+
+    const certsM = text.match(/(?:الشهادات والدورات(?: التدريبية)?|الشهادات والاعتمادات|الشهادات|الدورات|Certifications|Courses)(?:\s*\([^)]*\))?\s*:?\s*([\s\S]*?)$/i);
+    if (certsM) sections.certifications.push(certsM[1].trim());
+  }
+
+  // Clean Summary
+  let summary = sections.summary
+    .join(" ")
+    .replace(/^\s*\((?:Summary|نبذة|ملخص|الهدف)\)\s*:?\s*/i, "")
+    .trim();
+
+  // Clean Skills
+  const rawSkillsText = sections.skills.join("، ");
+  let skills = rawSkillsText
+    .split(/[,،•\n\r]/)
+    .map((s) => s.replace(/^[•\-\*\d\.\)]\s*/, "").trim())
+    .filter((s) => s.length > 2 && s.length < 50);
+
+  // Experience Processing
   const experiences: CvExperience[] = [];
-  if (expRaw) {
-    const rawLines = expRaw.split(/\r?\n/).map((l) => l.trim()).filter((l) => l.length > 5);
-    rawLines.forEach((line, idx) => {
-      let role = "";
-      let company = "";
+  const roleKeywords = /مدير|مندوب|مسؤول|أخصائي|محاسب|مهندس|مشرف|فني|موظف|مساعد|مطور|مبرمج|مصمم|باحث|محلل|Manager|Specialist|Officer|Lead|Engineer|Developer/i;
+  const companyKeywords = /شركة|مؤسسة|محل|معرض|مذخر|مستشفى|مركز|مكتب|وكالة|مصنع|Company|Store|Mall|Agency|Clinic|Hospital/i;
+
+  sections.experience.forEach((line, idx) => {
+    // If line contains pipe separators: Role | Company | Date | Bullets
+    if (line.includes("|")) {
+      const parts = line.split("|").map((p) => p.trim());
+      let role = parts[0].replace(/^[•\-\*\d\.\)]\s*/, "").trim();
+      let company = parts[1] || "";
       let date = "";
       let bullets: string[] = [];
 
-      // Pattern: Role | Company (Date): Bullets
-      if (line.includes("|")) {
-        const pipeParts = line.split("|");
-        role = pipeParts[0].trim().replace(/^[•\-\*\d\.\)]\s*/, "");
-        const rest = pipeParts.slice(1).join("|").trim();
-
-        // Extract Date from parentheses e.g. (تشرين الثاني 2025 - حتى الآن)
-        const dateMatch = rest.match(/\(([^)]+)\)/);
-        if (dateMatch) {
-          date = dateMatch[1].trim();
+      // Check for dates in subsequent parts
+      for (let i = 2; i < parts.length; i++) {
+        const p = parts[i];
+        if (!date && (/(?:19|20)\d{2}|الآن|سنة|أشهر|شهر|حتى/i.test(p) || p.length < 35)) {
+          date = p;
+        } else if (p.length > 5) {
+          bullets.push(p);
         }
-
-        const afterDate = rest.replace(/\([^)]+\)/, "").trim();
-        const colonIndex = afterDate.indexOf(":");
-        if (colonIndex !== -1) {
-          company = afterDate.substring(0, colonIndex).trim();
-          const desc = afterDate.substring(colonIndex + 1).trim();
-          if (desc) bullets = [desc];
-        } else {
-          company = afterDate.trim();
-        }
-      } else {
-        // Line without pipe, try colon or dash
-        const clean = line.replace(/^[•\-\*\d\.\)]\s*/, "");
-        const dateMatch = clean.match(/\(([^)]+)\)/);
-        if (dateMatch) date = dateMatch[1].trim();
-
-        const withoutDate = clean.replace(/\([^)]+\)/, "").trim();
-        const parts = withoutDate.split(/[-–:]\s*/);
-        role = parts[0]?.trim() || "مسؤول";
-        company = parts.slice(1).join(" - ").trim() || role;
       }
 
-      if (role) {
-        experiences.push({
-          id: String(idx + 1),
-          role,
-          company: company || role,
-          date: date || "2024 - حتى الآن",
-          bullets: bullets.length ? bullets : ["إدارة وتنفيذ المهام الوظيفية وتحقيق النتائج المطلوبة"],
-        });
+      // Check if parts[0] is actually company and another part is role
+      if (companyKeywords.test(role) && !roleKeywords.test(role)) {
+        for (let i = 1; i < parts.length; i++) {
+          if (roleKeywords.test(parts[i])) {
+            const foundRole = parts[i].trim();
+            company = role;
+            role = foundRole;
+            break;
+          }
+        }
       }
-    });
-  }
 
-  // 8. Process Education Items
+      // Check if date was inside parentheses in role or company
+      if (!date) {
+        const dMatch = line.match(/\(([^)]*(?:(?:19|20)\d{2}|الآن)[^)]*)\)/);
+        if (dMatch) date = dMatch[1].trim();
+      }
+
+      // Filter out redundant bullets matching role or company
+      bullets = bullets.filter((b) => b !== role && b !== company);
+
+      experiences.push({
+        id: String(idx + 1),
+        role: role || "مسؤول",
+        company: company || role,
+        date: date || "2024 - حتى الآن",
+        bullets: bullets.length > 0 ? bullets : ["إدارة وتنفيذ المهام الوظيفية وتحقيق النتائج المطلوبة"],
+      });
+    } else {
+      // Dash or colon format: Role - Company (Date): Bullets
+      const clean = line.replace(/^[•\-\*\d\.\)]\s*/, "");
+      const dMatch = clean.match(/\(([^)]+)\)/);
+      const date = dMatch ? dMatch[1].trim() : "2024 - حتى الآن";
+      const withoutDate = clean.replace(/\([^)]+\)/, "").trim();
+
+      const parts = withoutDate.split(/[-–:]\s*/);
+      const role = parts[0]?.trim() || "مسؤول";
+      const company = parts[1]?.trim() || role;
+      const desc = parts.slice(2).join(" - ").trim();
+
+      experiences.push({
+        id: String(idx + 1),
+        role,
+        company,
+        date,
+        bullets: desc ? [desc] : ["إدارة وتنفيذ المهام الوظيفية والمستهدفات المحددة"],
+      });
+    }
+  });
+
+  // Education Processing
   const education: CvEducation[] = [];
-  if (eduRaw) {
-    const lines = eduRaw.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
-    lines.forEach((line, idx) => {
+  sections.education.forEach((line, idx) => {
+    // Extract date/years (parenthesized or explicit range)
+    const parenDateMatch = line.match(/\(([^)]*(?:(?:19|20)\d{2}|الآن)[^)]*)\)/);
+    let year = "";
+    let clean = line;
+
+    if (parenDateMatch) {
+      year = parenDateMatch[1].trim();
+      clean = line.replace(parenDateMatch[0], "").trim();
+    } else {
       const yearMatch =
-        line.match(/(?:(?:كانون|شباط|آذار|نيسان|أيار|حزيران|تموز|آب|أيلول|تشرين|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*\s*)?(?:19|20)\d{2}\s*[-–toإلى\s]+\s*(?:(?:(?:كانون|شباط|آذار|نيسان|أيار|حزيران|تموز|آب|أيلول|تشرين|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*\s*)?(?:19|20)\d{2}|حتى الآن|إلى الآن|Present)/i) ||
+        line.match(/(?:(?:كانون الأول|كانون الثاني|تشرين الأول|تشرين الثاني|شباط|آذار|نيسان|أيار|حزيران|تموز|آب|أيلول|تشرين|كانون|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*\s*)?(?:19|20)\d{2}\s*[-–toإلى\s]+\s*(?:(?:كانون الأول|كانون الثاني|تشرين الأول|تشرين الثاني|شباط|آذار|نيسان|أيار|حزيران|تموز|آب|أيلول|تشرين|كانون|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*\s*)?(?:19|20)\d{2}|حتى الآن|إلى الآن|Present/i) ||
         line.match(/(?:19|20)\d{2}\s*[-–toإلى\s]+(?:19|20)\d{2}/) ||
         line.match(/(?:19|20)\d{2}/);
 
-      const year = yearMatch ? yearMatch[0].trim() : "2020 - 2024";
-      const clean = line.replace(year, "").replace(/[\(\)]/g, "").replace(/^[•\-\*\d\.\)]\s*/, "").trim();
+      year = yearMatch ? yearMatch[0].trim() : "2020 - 2024";
+      clean = line.replace(year, "").trim();
+    }
 
-      const parts = clean.split(/[-–|،,]\s*/);
-      const degree = parts[0]?.trim() || "بكالوريوس";
-      const school = parts.slice(1).join(" - ").trim() || degree;
+    clean = clean.replace(/[\(\)]/g, "").replace(/^[•\-\*\d\.\)]\s*/, "").replace(/[-–|،,]\s*$/, "").trim();
+    const parts = clean.split(/[-–|،,]\s*/);
+    const degree = parts[0]?.trim() || "بكالوريوس";
+    const school = parts.slice(1).join(" - ").trim() || degree;
 
-      education.push({
-        id: String(idx + 1),
-        degree,
-        school,
-        year,
-      });
+    education.push({
+      id: String(idx + 1),
+      degree,
+      school,
+      year: year || "2020 - 2024",
     });
-  }
+  });
 
-  // 9. Process Skills
-  let skills: string[] = [];
-  if (skillsRaw) {
-    skills = skillsRaw
-      .split(/[,،•\n\r]/)
-      .map((s) => s.replace(/^[•\-\*\d\.\)]\s*/, "").trim())
-      .filter((s) => s.length > 2);
-  }
-
-  // 10. Process Certifications
+  // Certifications Processing
   const certifications: CvCertification[] = [];
-  if (certsRaw) {
-    const lines = certsRaw
-      .split(/\r?\n/)
-      .map((l) => l.replace(/^[•\-\*\d\.\)]\s*/, "").trim())
-      .filter((l) => l.length > 3);
-
-    lines.forEach((l, idx) => {
+  sections.certifications.forEach((line, idx) => {
+    const clean = line.replace(/^[•\-\*\d\.\)]\s*/, "").trim();
+    if (clean.length > 3) {
       certifications.push({
         id: String(idx + 1),
-        title: l,
+        title: clean,
       });
-    });
-  }
+    }
+  });
 
-  // 11. Determine Job Title
+  // Determine Job Title
   let jobTitle = "";
-  if (experiences.length > 0) {
+  if (experiences.length > 0 && experiences[0].role) {
     jobTitle = experiences[0].role;
   }
   if (!jobTitle) {
     const jobMatch = text.match(/(?:المسمى الوظيفي|الوظيفة|المهنة)\s*:?\s*([^\n\r]+)/i);
     if (jobMatch) jobTitle = jobMatch[1].trim();
-    else if (/مدير مبيعات/.test(text)) jobTitle = "مدير مبيعات";
-    else if (/مبيعات/.test(text)) jobTitle = "أخصائي مبيعات";
-    else if (/محاسب/.test(text)) jobTitle = "محاسب مالي";
   }
 
-  // If summary was not caught by regex, extract clean bio
-  if (!summary) {
-    if (experiences.length > 0) {
-      summary = `مهني طموح ومتخصص في ${jobTitle || "إدارة الأعمال"}، يمتلك خبرة عملية مثبتة في تنظيم وإدارة المهام وتحقيق أعلى مستويات الأداء.`;
-    }
+  // Summary generation fallback if missing
+  if (!summary && experiences.length > 0) {
+    summary = `مهني طموح ومتخصص في ${jobTitle || "إدارة الأعمال"}، يمتلك خبرة عملية مثبتة في تنظيم وإدارة المهام وتحقيق أعلى مستويات الأداء.`;
   }
 
   return {
-    fullName: fullName || "",
-    jobTitle: jobTitle || "",
+    fullName,
+    jobTitle,
     summary,
     email,
     phone,
-    location: location || "",
+    location,
     linkedin,
     skills,
     experiences,

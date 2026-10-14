@@ -418,8 +418,8 @@ export default function PublicCvBuilderPage() {
   const [docEN, setDocEN] = useState<LanguageSpecificData>(DEFAULT_EN_DATA);
 
   // SHARED ASSET & VISIBILITY STATES
-  const [photo, setPhoto] = useState<string>("/cv-photo.png");
-  const [showPhoto, setShowPhoto] = useState<boolean>(true);
+  const [photo, setPhoto] = useState<string>("");
+  const [showPhoto, setShowPhoto] = useState<boolean>(false);
   const [qrUrl, setQrUrl] = useState<string>("https://cv-wine-tau.vercel.app");
   const [showQrCode, setShowQrCode] = useState<boolean>(true);
   const [showSkills, setShowSkills] = useState<boolean>(true);
@@ -635,6 +635,7 @@ export default function PublicCvBuilderPage() {
     reader.onload = (event) => {
       if (event.target?.result) {
         setPhoto(event.target.result as string);
+        setShowPhoto(true);
         showToast(lang === "AR" ? "تم تعيين الصورة الشخصية بنجاح" : "Profile photo uploaded successfully");
       }
     };
