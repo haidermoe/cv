@@ -222,158 +222,214 @@ function translateOrTransliterate(text: string, targetLang: "AR" | "EN"): string
 }
 
 const DEFAULT_AR_DATA: LanguageSpecificData = {
-  fullName: "حيدر محمد شوكت",
-  jobTitle: "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة",
-  summary: "متخصص في علوم الحاسوب وهندسة نظم البيانات وإدارة العمليات التقنية، بخبرة عملية مثبتة في أتمتة العمليات البرمجية وبناء وتطوير قواعد البيانات الضخمة (+22,000 سجل) وتكامل منصات التجارة الإلكترونية وإدارة شبكات الألياف الضوئية FTTH.",
-  email: "haider.m.shwkat@outlook.com",
-  phone: "+964 771 896 4778",
-  location: "بغداد، العراق",
-  linkedin: "linkedin.com/in/haidermoe",
+  fullName: "سجاد هاني",
+  jobTitle: "أخصائي مبيعات وإدارة العمليات التجارية",
+  summary: "مهني طموح ومتعدد المهارات بخبرة عملية قوية في إدارة المبيعات، الحسابات، التسويق الرقمي، والمبيعات الميدانية والطبية. أمتلك سجلاً حافلاً في العمل على البرامج المحاسبية (مثل برنامج البيان)، وإدارة المخزون، وتحليل البيانات عبر برامج Office، بالإضافة إلى مهارات عالية في صناعة الحملات الإعلانية وإدارة العمليات التجارية.",
+  email: "hany76734@gmail.com",
+  phone: "07859312867",
+  location: "بغداد / بغداد الجديدة (تولد: 28 نيسان 2002)",
+  linkedin: "linkedin.com/in/sajjadhani",
   skills: [
-    "أتمتة بايثون وبرمجة السكربتات",
-    "هيكلة وإدارة قواعد البيانات الضخمة SQL",
-    "تكامل أنظمة ERP وفودكس للتجارة الإلكترونية",
-    "إدارة وتشغيل شبكات FTTH و EPON الضوئية",
-    "تنظيف وتدقيق وضمان جودة البيانات",
-    "إدارة خوادم لينكس والـ Bash Scripts",
-    "إدارة المشاريع بالمنهجيات المرنة Agile",
+    "صناعة وإدارة الإعلانات الممولة (Facebook & Instagram)",
+    "البرامج المكتبية ومعالجة البيانات المتقدمة (Excel & Word)",
+    "أنظمة وبيانات التطبيقات والاشتراكات الرقمية (IPTV)",
+    "البرامج المحاسبية وجرد المخازن (برنامج البيان)",
+    "مهارات البيع، التفاوض المباشر وإدارة علاقات العملاء",
   ],
   experiences: [
     {
       id: "exp-1",
-      role: "أخصائي عمليات التجارة الإلكترونية، البيانات والمبيعات",
-      company: "تكنو ستور — بغداد، العراق",
-      date: "2025 - الحالي",
+      role: "مدير مبيعات",
+      company: "محل للألعاب – مول الجادرية، بغداد",
+      date: "تشرين الثاني 2025 – حتى الآن",
       bullets: [
-        "برمجة وتطوير سكربتات أتمتة مخصصة بلغة بايثون لمعالجة ورفع آلاف المنتجات والبيانات الضخمة واختصار وقت الإنجاز من عدة أيام إلى دقائق معدودة.",
-        "تطوير ونشر أداة الأتمتة المخصصة (إدارة_متجر_أودو_ومسواك.bat) للربط والمزامنة الفورية للمخزون والمنتجات بين نظام Odoo ERP ومنصة وتطبيق مسواك بدقة 100%.",
-        "إدارة كتالوج المنتجات والمخزون الحي والأسعار لآلاف المنتجات عبر المنصات المختلفة بدقة تامة وبنسبة خطأ 0%.",
-        "أتمتة وتكامل مزامنة المخزون والأسعار بين قواعد البيانات الداخلية وأبرز تطبيقات التوصيل العراقية (مسواق، طماطة، جاهز، الريان).",
-        "الإشراف على عمليات المبيعات اليومية وإدارة حملات الفيديو التسويقية الرقمية وتحليل سلوك العملاء لزيادة الإيرادات."
+        "الإشراف الكامل على عمليات البيع داخل المعرض وإدارة تجربة العملاء وتقديم خدمة متميزة.",
+        "متابعة حركة المنتجات وحركة المخزون وتحقيق الأهداف البيعية الشهرية المحددة بدقة."
       ]
     },
     {
       id: "exp-2",
-      role: "استشاري حر لعمليات البيانات والحلول التقنية",
-      company: "مشاريع قطاع الدفاع والتجارة الإلكترونية",
-      date: "2023 - 2025",
+      role: "مندوب مبيعات ميداني",
+      company: "شركة الهدف المباشر الطبية – بغداد",
+      date: "أيلول 2025 – تشرين الأول 2025",
       bullets: [
-        "بناء وهيكلة قاعدة بيانات ضخمة تضم أكثر من 22,000 سجل متعدد المنصات لمشروع في قطاع الدفاع مع إمكانية الفرز المتقدم حسب المناطق وجهات الاتصال.",
-        "تطوير نظام بايوغارد (BioGuard): منظومة حضور وانصراف ذكية معتمدة على الـ GPS والمصادقة الثنائية (2FA) للتحقق الموثوق من الأجهزة ومنع التلاعب.",
-        "تطوير برنامج تيربوشير (TurboShare): منصة مشاركة ملفات ومراسلات داخلية فائقة السرعة عبر الشبكة المحلية (Intranet) بخصوصية تامة.",
-        "تطوير نظام ديجت فورم (DigitForm): تطبيق لرقمنة الاستمارات والمعاملات الورقية عبر الهاتف مع توليد وطباعة فورية بقياس A4 قياسي.",
-        "حل مشاكل هيكلة الكتالوجات البرمجية والـ API Rate Limits لمنصات تجارة إلكترونية عراقية رائدة (مثل شركة الريان).",
-        "إنتاج وإخراج أكثر من 60 فيديو إعلاني تجاري وشروحات تقنية لشركاء التجزئة (Lito Store, Techno Store)."
+        "العمل الميداني على ترويج وبيع المنتجات والأجهزة الطبية وبناء علاقات متينة مع الصيدليات والمراكز الطبية والمستشفيات."
       ]
     },
     {
       id: "exp-3",
-      role: "مسؤول عمليات ومنسق دعم الشبكات",
-      company: "قطاع الفعاليات والاتصالات — بغداد",
-      date: "2019 - 2023",
+      role: "مدير مبيعات",
+      company: "شركة توديا لتجارة كاميرات المراقبة ومنظومات الطاقة الشمسية",
+      date: "آب 2024 – أيلول 2025",
       bullets: [
-        "قيادة فرق العمليات لتخطيط وتنظيم وتنفيذ فعاليات ومؤتمرات كبرى لأكثر من 150+ شخص بكفاءة عالية.",
-        "الإشراف الميداني على إنشاء وتشغيل شبكات الألياف الضوئية FTTH عبر 3 قواطع وربط أكثر من 2,000+ مستخدم بتقنية EPON.",
-        "إدارة ومعالجة الأعطال التقنية والصيانة الشاملة لقاعدة مشتركين تضم أكثر من 3,000+ عميل نشط."
+        "قيادة المبيعات المباشرة داخل الشركة، إدارة المفاوضات مع كبار العملاء وتطوير استراتيجيات البيع وتوسيع قنوات التوزيع."
+      ]
+    },
+    {
+      id: "exp-4",
+      role: "مدير حسابات ومخازن",
+      company: "شركة توديا لتجارة كاميرات المراقبة ومنظومات الطاقة الشمسية",
+      date: "آب 2024 – شباط 2025",
+      bullets: [
+        "إدارة العمليات المالية والحسابية والفواتير باستخدام برنامج البيان، إدخال المواد (Items)، ومتابعة الجرد الدوري للمخزن."
+      ]
+    },
+    {
+      id: "exp-5",
+      role: "مبيعات ومندوب تجاري وعلمي",
+      company: "مذخر المنجد للأدوية – بغداد",
+      date: "كانون الثاني 2023 – تموز 2024",
+      bullets: [
+        "إدارة مبيعات الجملة داخل المذخر مع معالجة وإصدار الفواتير بدقة على الأنظمة المحاسبية (برنامج البيان).",
+        "العمل كمندوب مبيعات علمي وتجاري على الصيدليات والعيادات الطبية، عرض وبيع الأدوية وإعداد فواتير الحسابات والتحصيلات."
+      ]
+    },
+    {
+      id: "exp-6",
+      role: "مسؤول مبيعات وإدارة صفحة رقمية",
+      company: "منصة بيع الاشتراكات الرقمية",
+      date: "كانون الثاني 2024 – حتى الآن",
+      bullets: [
+        "إدارة مبيعات الاشتراكات الشهرية والسنوية للقنوات المشفرة والأفلام والمسلسلات (IPTV).",
+        "إدارة مدخلات ومخرجات بيانات التطبيقات والاشتراكات وتفعيل الحسابات بكفاءة وسرعة عالية."
+      ]
+    },
+    {
+      id: "exp-7",
+      role: "مسؤول مبيعات ومتجر إلكتروني",
+      company: "صفحة لافندر (Lavender) للساعات والإكسسوارات",
+      date: "نيسان 2022 – تشرين الأول 2023",
+      bullets: [
+        "إدارة الطلبات والحجوزات عبر فيسبوك وإنستغرام، تجهيز الطلبيات والتنسيق الكامل مع شركات التوصيل والشحن."
+      ]
+    },
+    {
+      id: "exp-8",
+      role: "سكرتير عيادة طبية",
+      company: "عيادة جراحة العظام والكسور (د. مروان سليم)",
+      date: "كانون الثاني 2018 – شباط 2020",
+      bullets: [
+        "إدارة حجوزات واستقبال المراجعين، حفظ وتنظيم السجلات الطبية وجدول مواعيد العيادة بدقة واحترافية."
       ]
     }
   ],
   education: [
     {
       id: "edu-1",
-      school: "جامعة دجلة – بغداد",
-      degree: "بكالوريوس في علوم الحاسوب (Computer Science)",
-      year: "2022 - 2026"
-    },
-    {
-      id: "edu-2",
-      school: "معهد التكنولوجيا – بغداد",
-      degree: "دبلوم في الصناعات الكيماوية (Chemical Industry)",
-      year: "2019 - 2021"
+      school: "جامعة المشرق – بغداد",
+      degree: "بكالوريوس تقنيات التحليلات المرضية",
+      year: "تشرين الأول 2020 – أيار 2024"
     }
   ],
   certifications: [
-    { id: "cert-1", title: "شهادة CCNA 1: Introduction to Networks — جامعة دجلة" },
-    { id: "cert-2", title: "شهادة مهارات المبيعات وخدمة العملاء — شركة إيرثلنك" },
-    { id: "cert-3", title: "تدريب السلامة والصحة المهنية — معهد التكنولوجيا بغداد" }
+    { id: "cert-1", title: "دورة متخصصة في صناعة الحملات الإعلانية على Facebook & Instagram" },
+    { id: "cert-2", title: "دورة متقدمة في البرامج المكتبية ومعالجة الجداول والنصوص (Microsoft Excel & Word)" }
   ]
 };
 
 const DEFAULT_EN_DATA: LanguageSpecificData = {
-  fullName: "Haider M. Shwkat",
-  jobTitle: "Computer Science Specialist | Data Operations & Workflow Consultant",
-  summary: "Computer Science Specialist & Data Operations Consultant with extensive experience in workflow automation, large-scale database management (22K+ records), e-commerce catalog integrity, and optical network infrastructure (FTTH/EPON).",
-  email: "haider.m.shwkat@outlook.com",
-  phone: "+964 771 896 4778",
-  location: "Baghdad, Iraq",
-  linkedin: "linkedin.com/in/haidermoe",
+  fullName: "Sajjad Hani",
+  jobTitle: "Sales Specialist & Commercial Operations Lead",
+  summary: "Ambitious and versatile professional with extensive practical experience in sales management, financial accounting, digital marketing, as well as field and pharmaceutical sales. Proven track record in operating accounting software (such as Al-Bayan ERP), inventory control, and business data analytics via Microsoft Office suite, alongside high proficiency in executing high-ROI advertising campaigns and optimizing commercial operations.",
+  email: "hany76734@gmail.com",
+  phone: "07859312867",
+  location: "Baghdad, Iraq (DOB: 28 Apr 2002)",
+  linkedin: "linkedin.com/in/sajjadhani",
   skills: [
-    "Python Automation & Scripting",
-    "SQL & High-Volume Database Architecture",
-    "E-Commerce & Foodics ERP Workflows",
-    "FTTH & EPON Optical Network Management",
-    "Data Cleansing & Integrity Verification",
-    "Linux Server Operations & Bash",
-    "Agile Project & Team Leadership"
+    "Paid Advertising & Social Media Campaigns (Facebook & Instagram)",
+    "Advanced Data Sheets & Microsoft Office (Excel & Word)",
+    "Digital Subscription Systems & App Data Management (IPTV)",
+    "Accounting & Inventory ERP Software (Al-Bayan)",
+    "Direct & Field Sales, Negotiations & Client Relationship Management",
   ],
   experiences: [
     {
       id: "exp-1",
-      role: "E-Commerce, Data Operations & Sales Specialist",
-      company: "Techno Store — Baghdad, Iraq",
-      date: "2025 - Present",
+      role: "Sales Manager",
+      company: "Gaming & Retail Store — Al-Jadriya Mall, Baghdad",
+      date: "Nov 2025 – Present",
       bullets: [
-        "Engineered custom Python scripts and browser automation tools to streamline large-scale SKU uploads, cutting data processing time from days to minutes.",
-        "Developed and deployed the custom automation tool (إدارة_متجر_أودو_ومسواك.bat), enabling real-time product, price, and inventory sync between Odoo ERP and the Miswag platform.",
-        "Managed cataloging, stock accuracy, and pricing across platforms for thousands of active SKUs with zero error rates.",
-        "Automated inventory feeds and content sync between internal databases and major Iraqi delivery apps (Miswag, Tamata, Jahez, Al-Rayan).",
-        "Supervised daily branch sales operations, managed digital video reels marketing, and leveraged customer insights to boost revenue."
+        "Supervising complete showroom sales operations, team workflow, and elevating customer retail experience.",
+        "Monitoring inventory turnover, restocking schedules, and consistently surpassing monthly revenue targets."
       ]
     },
     {
       id: "exp-2",
-      role: "Freelance Data & Technical Operations Consultant",
-      company: "Multi-Client / Defense & E-commerce Projects",
-      date: "2023 - 2025",
+      role: "Field Medical Sales Representative",
+      company: "Al-Hadaf Al-Mubashir Medical Co. — Baghdad",
+      date: "Sep 2025 – Oct 2025",
       bullets: [
-        "Built a comprehensive database system of 22,000+ multi-platform records for a Defense Sector project with region and contact filtering.",
-        "Developed BioGuard: An enterprise attendance tracking system utilizing GPS geofencing and 2FA device authentication to prevent spoofing.",
-        "Developed TurboShare: A high-speed local intranet hub for secure file transfer and internal messaging, isolated from external networks.",
-        "Developed DigitForm: A mobile-first form digitization platform replacing paper workflows with instant ISO A4 print-ready PDF generation.",
-        "Resolved critical catalog structures, API rate limits, and product feature bugs for prominent Iraqi e-commerce platforms (e.g. Al-Rayan).",
-        "Produced and executed over 60 commercial reels, technical tutorials, and brand video campaigns for retail partners (Lito Store, Techno Store)."
+        "Managing field distribution and promotion of pharmaceuticals and medical supplies, cultivating strategic partnerships with pharmacies, clinics, and hospitals."
       ]
     },
     {
       id: "exp-3",
-      role: "Operations Lead & Network Support Coordinator",
-      company: "Events & Telecommunications Sector — Baghdad",
-      date: "2019 - 2023",
+      role: "Sales Manager",
+      company: "Tudia Security Cameras & Solar Energy Systems",
+      date: "Aug 2024 – Sep 2025",
       bullets: [
-        "Led operational teams to plan, coordinate, and execute large-scale corporate and public events for 150+ guests with high efficiency.",
-        "Directed the construction and deployment of FTTH networks across 3 districts, connecting 2,000+ active users using EPON systems.",
-        "Managed end-to-end troubleshooting and maintenance coordination for a subscriber base of 3,000+ active network clients."
+        "Leading in-house commercial sales, B2B client negotiations, and expanding wholesale distribution networks."
+      ]
+    },
+    {
+      id: "exp-4",
+      role: "Accounts & Inventory Manager",
+      company: "Tudia Security Cameras & Solar Energy Systems",
+      date: "Aug 2024 – Feb 2025",
+      bullets: [
+        "Managing financial records, billing, and SKU item cataloging using Al-Bayan ERP, while conducting periodic warehouse inventory audits."
+      ]
+    },
+    {
+      id: "exp-5",
+      role: "Medical & Commercial Sales Associate",
+      company: "Al-Munjid Pharmaceutical Store — Baghdad",
+      date: "Jan 2023 – Jul 2024",
+      bullets: [
+        "Handling wholesale pharmacy sales counter, billing workflows, and invoice processing via Al-Bayan ERP.",
+        "Serving as commercial and scientific representative across community clinics and pharmacies, presenting product lines and reconciling accounts."
+      ]
+    },
+    {
+      id: "exp-6",
+      role: "Digital Sales & Operations Lead",
+      company: "Digital Subscriptions Platform",
+      date: "Jan 2024 – Present",
+      bullets: [
+        "Directing monthly and annual subscription sales for premium streaming channels, video on demand, and IPTV services.",
+        "Managing application database input/output, user credentials, and service activation workflows with high precision."
+      ]
+    },
+    {
+      id: "exp-7",
+      role: "E-Commerce Sales Specialist",
+      company: "Lavender Watches & Accessories Store",
+      date: "Apr 2022 – Oct 2023",
+      bullets: [
+        "Managing customer inquiries, reservations, and order fulfillment via Facebook and Instagram, coordinating courier delivery logistics."
+      ]
+    },
+    {
+      id: "exp-8",
+      role: "Medical Clinic Secretary",
+      company: "Orthopedic & Fracture Clinic (Dr. Marwan Saleem)",
+      date: "Jan 2018 – Feb 2020",
+      bullets: [
+        "Directing patient reception, appointments scheduling, clinic filing, and medical calendar management with high professionalism."
       ]
     }
   ],
   education: [
     {
       id: "edu-1",
-      school: "Dijlah University – Baghdad",
-      degree: "Bachelor's Degree in Computer Science",
-      year: "2022 - 2026"
-    },
-    {
-      id: "edu-2",
-      school: "Institute of Technology – Baghdad",
-      degree: "Diploma in Chemical Industry",
-      year: "2019 - 2021"
+      school: "Al-Mashreq University — Baghdad",
+      degree: "B.Sc. in Medical Laboratory Technology",
+      year: "Oct 2020 – May 2024"
     }
   ],
   certifications: [
-    { id: "cert-1", title: "CCNA 1: Introduction to Networks — Dijlah University" },
-    { id: "cert-2", title: "Sales and Customer Service Skills — EarthLink Telecommunications" },
-    { id: "cert-3", title: "Occupational Safety Training — Institute of Technology Baghdad" }
+    { id: "cert-1", title: "Professional Advertising Specialist — Facebook & Instagram Ads" },
+    { id: "cert-2", title: "Advanced Microsoft Office Productivity & Data Processing (Excel & Word)" }
   ]
 };
 
@@ -553,12 +609,19 @@ export default function PublicCvBuilderPage() {
     if (targetLang === lang) return;
 
     if (targetLang === "EN") {
-      const isEnglishBlank =
-        !docEN.summary ||
-        docEN.summary === DEFAULT_EN_DATA.summary ||
-        /[\u0600-\u06FF]/.test(docEN.summary || "");
+      const hasEnglishData =
+        Boolean(docEN.fullName && /[a-zA-Z]/.test(docEN.fullName)) ||
+        Boolean(docEN.summary && /[a-zA-Z]/.test(docEN.summary));
 
-      if (isEnglishBlank && docAR.summary) {
+      if (hasEnglishData) {
+        setLang("EN");
+        setFontFamily("Outfit");
+        showToast("تم التحويل للنسخة الإنجليزية الاحترافية ✨");
+        return;
+      }
+
+      // If no English data exists at all and Arabic exists, translate
+      if (docAR.summary || docAR.fullName) {
         await translateDocumentToEnglish();
       } else {
         setLang("EN");
@@ -568,7 +631,7 @@ export default function PublicCvBuilderPage() {
     } else {
       setLang("AR");
       setFontFamily("Tajawal");
-      showToast("Arabic Mode");
+      showToast("تم التحويل للنسخة العربية 🇮🇶");
     }
   };
 
@@ -797,6 +860,108 @@ export default function PublicCvBuilderPage() {
     pdf.save(pdfFileName);
   };
 
+  // 100% SELECTABLE VECTOR TEXT PDF (ATS FRIENDLY) VIA NATIVE PRINT/SAVE
+  const generateSelectableTextPdf = (targetLang: "AR" | "EN") => {
+    setIsExportModalOpen(false);
+    const isTargetArabic = targetLang === "AR";
+    const elementId = isTargetArabic ? "cv-export-arabic-desk" : "cv-export-english-desk";
+    const element = document.getElementById(elementId);
+    if (!element) {
+      showToast("تعذر العثور على عنصر التصدير");
+      return;
+    }
+
+    const activeData = isTargetArabic ? docAR : docEN;
+    const docTitle = `${(activeData.fullName || "CV").replace(/[^a-zA-Z0-9_\u0600-\u06FF]/g, "_")}_${targetLang}_ATS`;
+
+    showToast(isTargetArabic ? "جاري فتح نافذة حفظ الـ PDF بنصوص حقيقية قابلة للتحديد (Vector Text)..." : "Opening Selectable Text PDF Export (ATS Compliant)...");
+
+    // Remove any previous print iframe
+    const oldIframe = document.getElementById("ats-vector-print-iframe");
+    if (oldIframe) oldIframe.remove();
+
+    const iframe = document.createElement("iframe");
+    iframe.id = "ats-vector-print-iframe";
+    iframe.style.position = "fixed";
+    iframe.style.right = "-9999px";
+    iframe.style.bottom = "-9999px";
+    iframe.style.width = "794px";
+    iframe.style.height = "1123px";
+    iframe.style.border = "none";
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentWindow?.document;
+    if (!doc) return;
+
+    const cloned = element.cloneNode(true) as HTMLElement;
+    cloned.style.margin = "0 auto";
+    cloned.style.boxShadow = "none";
+    cloned.style.border = "none";
+    cloned.style.width = "100%";
+
+    doc.open();
+    doc.write(`
+      <!DOCTYPE html>
+      <html dir="${isTargetArabic ? 'rtl' : 'ltr'}" lang="${isTargetArabic ? 'ar' : 'en'}">
+      <head>
+        <meta charset="utf-8" />
+        <title>${docTitle}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+        <style>
+          * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+          }
+          @page {
+            size: A4 portrait;
+            margin: 0;
+          }
+          html, body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            font-family: ${isTargetArabic ? "'Tajawal', sans-serif" : "'Outfit', sans-serif"};
+            -webkit-font-smoothing: antialiased;
+          }
+          body {
+            width: 794px;
+            margin: 0 auto;
+          }
+          @media print {
+            body {
+              width: 100%;
+              margin: 0;
+              padding: 0;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        ${cloned.outerHTML}
+      </body>
+      </html>
+    `);
+    doc.close();
+
+    setTimeout(() => {
+      try {
+        iframe.contentWindow?.focus();
+        iframe.contentWindow?.print();
+      } catch (e) {
+        console.error("Print to PDF error:", e);
+      }
+      setTimeout(() => {
+        try {
+          iframe.remove();
+        } catch (_) {}
+      }, 5000);
+    }, 600);
+  };
+
   // DOWNLOAD HANDLER (CHOICES: AR, EN, OR BOTH)
   const handleExecuteExport = async (choice: "AR" | "EN" | "BOTH") => {
     setIsExportModalOpen(false);
@@ -805,12 +970,11 @@ export default function PublicCvBuilderPage() {
     try {
       // Smart synchronization: Translate professionally for English export only if not already translated
       if (choice === "EN" || choice === "BOTH") {
-        const isEnglishEmptyOrArabic =
-          !docEN.summary ||
-          /[\u0600-\u06FF]/.test(docEN.summary || "") ||
-          docEN.summary === DEFAULT_EN_DATA.summary;
+        const hasEnglishData =
+          Boolean(docEN.fullName && /[a-zA-Z]/.test(docEN.fullName)) ||
+          Boolean(docEN.summary && /[a-zA-Z]/.test(docEN.summary));
 
-        if (isEnglishEmptyOrArabic && docAR.summary) {
+        if (!hasEnglishData && docAR.summary) {
           showToast("جاري تجهيز الترجمة الإنجليزية الاحترافية قبل التصدير...");
           try {
             const res = await fetch("/api/translate", {
@@ -1265,79 +1429,126 @@ export default function PublicCvBuilderPage() {
           >
             <div>
               <h2 style={{ fontSize: "21px", fontWeight: "900", color: "#0f172a", margin: "0 0 8px 0" }}>
-                {isArabic ? "اختر صيغة تنزيل السيرة الذاتية" : "Choose Download Format"}
+                {isArabic ? "خيارات تصدير السيرة الذاتية (PDF)" : "Resume PDF Export Options"}
               </h2>
               <p style={{ fontSize: "13px", color: "#64748b", margin: 0, lineHeight: "1.5" }}>
-                {isArabic ? "هل ترغب في تنزيل النسخة العربية أم الإنجليزية أم كلاهما معاً؟" : "Would you like to export Arabic, English, or Both versions?"}
+                {isArabic ? "اختر الطريقة المناسبة: حفظ كملف PDF بنصوص حقيقية قابلة للتحديد والنسخ (متوافق مع أنظمة التوظيف ATS) أو تنزيل مباشر" : "Select between Vector ATS-friendly text PDF or direct file download"}
               </p>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              {/* OPTION 1: ARABIC ONLY */}
-              <button
-                onClick={() => handleExecuteExport("AR")}
-                style={{
-                  background: "#15803d",
-                  color: "#ffffff",
-                  border: "none",
-                  padding: "14px 20px",
-                  borderRadius: "14px",
-                  fontSize: "14.5px",
-                  fontWeight: "900",
-                  cursor: "pointer",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  boxShadow: "0 4px 15px rgba(21,128,61,0.25)",
-                }}
-              >
-                <span>تنزيل النسخة العربية فقط</span>
-                <span style={{ fontSize: "12px", background: "rgba(255,255,255,0.2)", padding: "3px 8px", borderRadius: "8px" }}>AR PDF</span>
-              </button>
+            {/* SECTION 1: ATS VECTOR TEXT PDF (SELECTABLE & SEARCHABLE) */}
+            <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: "16px", padding: "16px", textAlign: isArabic ? "right" : "left" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+                <span style={{ fontSize: "14px", fontWeight: "900", color: "#166534" }}>
+                  ✨ {isArabic ? "حفظ كـ PDF نصي عالي الدقة (نصوص قابلة للتحديد والنسخ)" : "Vector Selectable Text PDF (ATS Approved)"}
+                </span>
+                <span style={{ fontSize: "11px", background: "#dcfce7", color: "#15803d", padding: "2px 8px", borderRadius: "6px", fontWeight: "800" }}>ATS 100%</span>
+              </div>
+              <p style={{ fontSize: "12px", color: "#15803d", margin: "0 0 12px 0", lineHeight: "1.4" }}>
+                {isArabic ? "أفضل خيار للتقديم للشركات وأنظمة التوظيف: نصوص رقمية حقيقية قابلة للنسخ والبحث بدون أن تتحول لصورة." : "Standard vector text format: enables text selection, copying, and seamless parsing by recruitment ATS scanners."}
+              </p>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button
+                  onClick={() => generateSelectableTextPdf("AR")}
+                  style={{
+                    flex: 1,
+                    background: "#16a34a",
+                    color: "#ffffff",
+                    border: "none",
+                    padding: "12px 14px",
+                    borderRadius: "10px",
+                    fontSize: "13.5px",
+                    fontWeight: "900",
+                    cursor: "pointer",
+                    boxShadow: "0 3px 10px rgba(22,163,74,0.3)",
+                  }}
+                >
+                  📄 {isArabic ? "حفظ النسخة العربية (نص حقيقي)" : "Save Arabic (Text PDF)"}
+                </button>
+                <button
+                  onClick={() => generateSelectableTextPdf("EN")}
+                  style={{
+                    flex: 1,
+                    background: "#0284c7",
+                    color: "#ffffff",
+                    border: "none",
+                    padding: "12px 14px",
+                    borderRadius: "10px",
+                    fontSize: "13.5px",
+                    fontWeight: "900",
+                    cursor: "pointer",
+                    boxShadow: "0 3px 10px rgba(2,132,199,0.3)",
+                  }}
+                >
+                  📄 {isArabic ? "حفظ النسخة الإنجليزية (نص حقيقي)" : "Save English (Text PDF)"}
+                </button>
+              </div>
+            </div>
 
-              {/* OPTION 2: ENGLISH ONLY */}
-              <button
-                onClick={() => handleExecuteExport("EN")}
-                style={{
-                  background: "#0284c7",
-                  color: "#ffffff",
-                  border: "none",
-                  padding: "14px 20px",
-                  borderRadius: "14px",
-                  fontSize: "14.5px",
-                  fontWeight: "900",
-                  cursor: "pointer",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  boxShadow: "0 4px 15px rgba(2,132,199,0.25)",
-                }}
-              >
-                <span>Download English Version Only</span>
-                <span style={{ fontSize: "12px", background: "rgba(255,255,255,0.2)", padding: "3px 8px", borderRadius: "8px" }}>EN PDF</span>
-              </button>
-
-              {/* OPTION 3: BOTH VERSIONS */}
-              <button
-                onClick={() => handleExecuteExport("BOTH")}
-                style={{
-                  background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
-                  color: "#ffffff",
-                  border: "none",
-                  padding: "15px 20px",
-                  borderRadius: "14px",
-                  fontSize: "15px",
-                  fontWeight: "900",
-                  cursor: "pointer",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  boxShadow: "0 8px 25px rgba(37,99,235,0.35)",
-                }}
-              >
-                <span>تنزيل اللغتين معاً (AR + EN)</span>
-                <span style={{ fontSize: "12px", background: "rgba(255,255,255,0.25)", padding: "3px 8px", borderRadius: "8px" }}>ملفان 2x PDF</span>
-              </button>
+            {/* SECTION 2: DIRECT DOWNLOAD */}
+            <div style={{ borderTop: "1px solid #e2e8f0", paddingTop: "14px" }}>
+              <div style={{ fontSize: "12px", fontWeight: "800", color: "#64748b", marginBottom: "10px", textAlign: "center" }}>
+                {isArabic ? "أو التنزيل المباشر كملف فوري:" : "Or Direct File Download:"}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                <button
+                  onClick={() => handleExecuteExport("AR")}
+                  style={{
+                    background: "#f8fafc",
+                    color: "#0f172a",
+                    border: "1px solid #cbd5e1",
+                    padding: "10px 16px",
+                    borderRadius: "10px",
+                    fontSize: "13px",
+                    fontWeight: "800",
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <span>⬇️ {isArabic ? "تنزيل النسخة العربية كملف مباشر" : "Download Arabic PDF File"}</span>
+                  <span style={{ fontSize: "11px", color: "#64748b" }}>AR PDF</span>
+                </button>
+                <button
+                  onClick={() => handleExecuteExport("EN")}
+                  style={{
+                    background: "#f8fafc",
+                    color: "#0f172a",
+                    border: "1px solid #cbd5e1",
+                    padding: "10px 16px",
+                    borderRadius: "10px",
+                    fontSize: "13px",
+                    fontWeight: "800",
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <span>⬇️ {isArabic ? "تنزيل النسخة الإنجليزية كملف مباشر" : "Download English PDF File"}</span>
+                  <span style={{ fontSize: "11px", color: "#64748b" }}>EN PDF</span>
+                </button>
+                <button
+                  onClick={() => handleExecuteExport("BOTH")}
+                  style={{
+                    background: "#f1f5f9",
+                    color: "#2563eb",
+                    border: "1px dashed #93c5fd",
+                    padding: "10px 16px",
+                    borderRadius: "10px",
+                    fontSize: "13px",
+                    fontWeight: "800",
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <span>⬇️ {isArabic ? "تنزيل اللغتين معاً (2x PDF)" : "Download Both (AR + EN)"}</span>
+                  <span style={{ fontSize: "11px", color: "#2563eb" }}>AR + EN</span>
+                </button>
+              </div>
             </div>
 
             <button
@@ -1610,14 +1821,35 @@ export default function PublicCvBuilderPage() {
             >
               <span>
                 {isTranslating
-                  ? "جاري الترجمة الاحترافية..."
+                  ? "جاري التحويل..."
                   : isArabic
-                  ? "ترجمة احترافية للإنجليزية (EN)"
-                  : "النسخة العربية (AR)"}
+                  ? "🇬🇧 النسخة الإنجليزية (EN)"
+                  : "🇮🇶 النسخة العربية (AR)"}
               </span>
             </button>
 
-            {/* UNIFIED DOWNLOAD PDF BUTTON (OPENS MODAL WITH AR/EN/BOTH CHOICES) */}
+            {/* DIRECT ATS SELECTABLE TEXT VECTOR PDF BUTTON */}
+            <button
+              onClick={() => generateSelectableTextPdf(lang)}
+              style={{
+                background: "#0284c7",
+                color: "#ffffff",
+                border: "none",
+                padding: "10px 18px",
+                borderRadius: "10px",
+                fontSize: "13px",
+                fontWeight: "900",
+                cursor: "pointer",
+                boxShadow: "0 4px 14px rgba(2,132,199,0.3)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <span>📄 {isArabic ? "حفظ كـ PDF نصي (ATS)" : "Save Text PDF (ATS)"}</span>
+            </button>
+
+            {/* UNIFIED DOWNLOAD PDF BUTTON (OPENS MODAL WITH ALL CHOICES) */}
             <button
               onClick={() => setIsExportModalOpen(true)}
               disabled={isGeneratingPdf}
@@ -1625,7 +1857,7 @@ export default function PublicCvBuilderPage() {
                 background: "#16a34a",
                 color: "#ffffff",
                 border: "none",
-                padding: "10px 22px",
+                padding: "10px 20px",
                 borderRadius: "10px",
                 fontSize: "13.5px",
                 fontWeight: "900",
@@ -1636,7 +1868,7 @@ export default function PublicCvBuilderPage() {
                 gap: "8px",
               }}
             >
-              <span>{isGeneratingPdf ? (isArabic ? "جاري التصدير..." : "Exporting...") : (isArabic ? "تحميل السيرة الذاتية PDF" : "Download Resume PDF")}</span>
+              <span>{isGeneratingPdf ? (isArabic ? "جاري التصدير..." : "Exporting...") : (isArabic ? "📥 خيارات التصدير والتحميل" : "📥 Export Options")}</span>
             </button>
           </div>
         </div>
