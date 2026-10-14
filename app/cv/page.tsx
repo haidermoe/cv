@@ -490,6 +490,7 @@ export default function PublicCvBuilderPage() {
       if (data?.success && data?.doc) {
         setDocAR(data.doc);
         setIsSmartParserOpen(false);
+        setSmartParserInput("");
         showToast("تم استخراج كافة البيانات وتعبئة السيرة الذاتية بنجاح! ✨");
 
         // Automatically prepare English translation in background
