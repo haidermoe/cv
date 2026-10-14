@@ -458,6 +458,9 @@ export default function PublicCvBuilderPage() {
   };
 
   const [isTranslating, setIsTranslating] = useState<boolean>(false);
+  const [isSmartParserOpen, setIsSmartParserOpen] = useState<boolean>(false);
+  const [smartParserInput, setSmartParserInput] = useState<string>("");
+  const [isParsing, setIsParsing] = useState<boolean>(false);
 
   const curDoc = lang === "AR" ? docAR : docEN;
   const setCurDoc = (updater: (prev: LanguageSpecificData) => LanguageSpecificData) => {
@@ -465,6 +468,51 @@ export default function PublicCvBuilderPage() {
       setDocAR((prev) => updater(prev));
     } else {
       setDocEN((prev) => updater(prev));
+    }
+  };
+
+  // SMART AI RESUME PARSER HANDLER
+  const handleExecuteSmartParse = async () => {
+    if (!smartParserInput.trim()) {
+      showToast("يرجى لصق النص أو المعلومات أولاً");
+      return;
+    }
+    setIsParsing(true);
+    showToast("جاري القراءة والترتيب الذكي بالذكاء الاصطناعي... ✨");
+
+    try {
+      const res = await fetch("/api/cv/parse", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: smartParserInput }),
+      });
+      const data = await res.json();
+      if (data?.success && data?.doc) {
+        setDocAR(data.doc);
+        setIsSmartParserOpen(false);
+        showToast("تم استخراج كافة البيانات وتعبئة السيرة الذاتية بنجاح! ✨");
+
+        // Automatically prepare English translation in background
+        fetch("/api/translate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ doc: data.doc }),
+        })
+          .then((r) => r.json())
+          .then((trData) => {
+            if (trData?.success && trData?.doc) {
+              setDocEN(trData.doc);
+            }
+          })
+          .catch(() => {});
+      } else {
+        showToast("تعذر استخراج البيانات من النص");
+      }
+    } catch (err) {
+      console.error("Parse error:", err);
+      showToast("حدث خطأ أثناء معالجة النص");
+    } finally {
+      setIsParsing(false);
     }
   };
 
@@ -1308,6 +1356,122 @@ export default function PublicCvBuilderPage() {
         </div>
       )}
 
+      {/* AI SMART PARSER MODAL */}
+      {isSmartParserOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(15, 23, 42, 0.65)",
+            backdropFilter: "blur(8px)",
+            zIndex: 10000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+          onClick={() => setIsSmartParserOpen(false)}
+        >
+          <div
+            style={{
+              background: isDark ? "#1e2235" : "#ffffff",
+              border: isDark ? "1px solid #334155" : "1px solid #e2e8f0",
+              borderRadius: "24px",
+              padding: "28px 24px",
+              maxWidth: "580px",
+              width: "100%",
+              boxShadow: "0 25px 60px rgba(0,0,0,0.25)",
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                <span style={{ fontSize: "22px" }}>✨</span>
+                <h2 style={{ fontSize: "19px", fontWeight: "900", color: isDark ? "#ffffff" : "#0f172a", margin: 0 }}>
+                  {isArabic ? "القارئ الذكي للسيرة الذاتية (AI Smart Parser)" : "AI Smart Resume Parser"}
+                </h2>
+              </div>
+              <p style={{ fontSize: "12.5px", color: isDark ? "#94a3b8" : "#64748b", margin: 0, lineHeight: "1.6" }}>
+                {isArabic
+                  ? "الصق أي نص عشوائي، رسالة واتساب، نبذة عن خبراتك، أو سيرة ذاتية قديمة هنا، وسيقوم النظام الذكي باستخراج اسمك، وظيفتك، خبراتك، دراستك، ومهاراتك وترتيبها وتعبئتها فوراً في السيرة الذاتية!"
+                  : "Paste any unstructured text, WhatsApp message, or raw bio notes here. The Smart Parser will extract and format your information into the CV automatically!"}
+              </p>
+            </div>
+
+            <textarea
+              rows={9}
+              value={smartParserInput}
+              onChange={(e) => setSmartParserInput(e.target.value)}
+              placeholder={
+                isArabic
+                  ? "مثال:\nاسمي سجاد هاني، مبيعات، رقمي 07859312867، بغداد العراق\nمهني طموح ومتعدد المهارات بخبرة قوية بإدارة المبيعات والحسابات...\nالخبرات:\n- مسؤول مبيعات بمول الجادرية من 2025 الى الآن\n- شركة توذية لكاميرات المراقبة ومنظومات الطاقة 2024-2025\n- مذخر المنجد للأدوية 2023-2024\nالتعليم:\nبكالوريوس تقنيات التحليلات المرضية - جامعة المشرق 2020-2024\nالمهارات: إدارة المبيعات، خدمة العملاء، إكسل، إدارة الحملات"
+                  : "Example:\nName: Sajjad Hany\nRole: Sales Specialist\nPhone: 07859312867, Baghdad, Iraq\nExperience: 2 years at Al-Jadriya Mall...\nEducation: B.Sc. in Medical Laboratory..."
+              }
+              style={{
+                width: "100%",
+                padding: "12px 14px",
+                background: isDark ? "#0f172a" : "#f8fafc",
+                border: isDark ? "1px solid #334155" : "1px solid #cbd5e1",
+                borderRadius: "12px",
+                fontSize: "13px",
+                color: isDark ? "#ffffff" : "#0f172a",
+                outline: "none",
+                fontFamily: "inherit",
+                lineHeight: "1.6",
+                resize: "vertical",
+              }}
+            />
+
+            <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
+              <button
+                onClick={() => setIsSmartParserOpen(false)}
+                disabled={isParsing}
+                style={{
+                  background: "transparent",
+                  border: isDark ? "1px solid #475569" : "1px solid #cbd5e1",
+                  color: isDark ? "#cbd5e1" : "#64748b",
+                  padding: "10px 18px",
+                  borderRadius: "10px",
+                  fontSize: "13px",
+                  fontWeight: "700",
+                  cursor: "pointer",
+                }}
+              >
+                {isArabic ? "إلغاء" : "Cancel"}
+              </button>
+
+              <button
+                onClick={handleExecuteSmartParse}
+                disabled={isParsing}
+                style={{
+                  background: "linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)",
+                  color: "#ffffff",
+                  border: "none",
+                  padding: "10px 22px",
+                  borderRadius: "10px",
+                  fontSize: "13.5px",
+                  fontWeight: "900",
+                  cursor: isParsing ? "wait" : "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  boxShadow: "0 4px 18px rgba(124, 58, 237, 0.4)",
+                  opacity: isParsing ? 0.7 : 1,
+                }}
+              >
+                <span>{isParsing ? "جاري الترتيب الذكي... ✨" : "ترتيب وتعبئة السيرة الذاتية ✨"}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* TOP HEADER */}
       <header
         style={{
@@ -1403,6 +1567,28 @@ export default function PublicCvBuilderPage() {
               )}
             </button>
 
+            {/* AI SMART PARSER BUTTON */}
+            <button
+              onClick={() => setIsSmartParserOpen(true)}
+              style={{
+                background: "linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)",
+                color: "#ffffff",
+                border: "none",
+                padding: "9px 18px",
+                borderRadius: "10px",
+                fontSize: "13px",
+                fontWeight: "900",
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                boxShadow: "0 4px 14px rgba(124, 58, 237, 0.35)",
+                transition: "all 0.3s ease",
+              }}
+            >
+              <span>✨ {isArabic ? "القارئ الذكي (لصق وترتيب)" : "AI Smart Parser"}</span>
+            </button>
+
             {/* INSTANT BILINGUAL TRANSLATE TOGGLE BUTTON */}
             <button
               onClick={() => handleInstantSwitchLanguage(isArabic ? "EN" : "AR")}
@@ -1475,6 +1661,26 @@ export default function PublicCvBuilderPage() {
               </div>
 
               <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                <button
+                  onClick={() => setIsSmartParserOpen(true)}
+                  style={{
+                    background: "linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)",
+                    color: "#ffffff",
+                    border: "none",
+                    padding: "6px 12px",
+                    borderRadius: "6px",
+                    fontSize: "11.5px",
+                    fontWeight: "900",
+                    cursor: "pointer",
+                    boxShadow: "0 2px 8px rgba(124, 58, 237, 0.35)",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "4px",
+                  }}
+                >
+                  <span>✨ {isArabic ? "القارئ الذكي (لصق وترتيب)" : "AI Parser"}</span>
+                </button>
+
                 <button
                   onClick={handleClearCurrent}
                   style={{
