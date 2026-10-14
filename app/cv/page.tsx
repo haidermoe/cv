@@ -1408,11 +1408,7 @@ export default function PublicCvBuilderPage() {
               rows={9}
               value={smartParserInput}
               onChange={(e) => setSmartParserInput(e.target.value)}
-              placeholder={
-                isArabic
-                  ? "مثال:\nاسمي سجاد هاني، مبيعات، رقمي 07859312867، بغداد العراق\nمهني طموح ومتعدد المهارات بخبرة قوية بإدارة المبيعات والحسابات...\nالخبرات:\n- مسؤول مبيعات بمول الجادرية من 2025 الى الآن\n- شركة توذية لكاميرات المراقبة ومنظومات الطاقة 2024-2025\n- مذخر المنجد للأدوية 2023-2024\nالتعليم:\nبكالوريوس تقنيات التحليلات المرضية - جامعة المشرق 2020-2024\nالمهارات: إدارة المبيعات، خدمة العملاء، إكسل، إدارة الحملات"
-                  : "Example:\nName: Sajjad Hany\nRole: Sales Specialist\nPhone: 07859312867, Baghdad, Iraq\nExperience: 2 years at Al-Jadriya Mall...\nEducation: B.Sc. in Medical Laboratory..."
-              }
+              placeholder={isArabic ? "الصق النص أو الرسالة أو النبذة هنا..." : "Paste your text, message, or bio notes here..."}
               style={{
                 width: "100%",
                 padding: "12px 14px",

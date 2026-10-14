@@ -178,31 +178,16 @@ function parseCvRuleBased(rawText: string): LanguageSpecificData {
   }
 
   return {
-    fullName: fullName || "سجاد هاني",
-    jobTitle: jobTitle || "أخصائي مبيعات",
+    fullName: fullName || "",
+    jobTitle: jobTitle || "",
     summary: summary || "",
     email,
     phone,
-    location: location || "بغداد، العراق",
+    location: location || "",
     linkedin,
-    skills: skills.length > 0 ? skills : ["إدارة المبيعات", "التواصل الفعال", "حل المشكلات", "العمل الجماعي"],
-    experiences: experiences.length > 0 ? experiences : [
-      {
-        id: "1",
-        role: jobTitle || "مسؤول مبيعات",
-        company: "شركة تجارية",
-        date: "2024 - حتى الآن",
-        bullets: ["إدارة وتنسيق العمليات وتحقيق المستهدفات المطلوبة"],
-      },
-    ],
-    education: education.length > 0 ? education : [
-      {
-        id: "1",
-        degree: "شهادة البكالوريوس",
-        school: "الجامعة",
-        year: "2020 - 2024",
-      },
-    ],
+    skills,
+    experiences,
+    education,
     certifications,
   };
 }
