@@ -187,7 +187,7 @@ const TRANSLATION_MAP: Record<string, string> = {
 // Common Arabic Names dictionary for perfect transliteration
 const ARABIC_NAMES_MAP: Record<string, string> = {
   "محمد": "Mohammed", "أحمد": "Ahmed", "احمد": "Ahmed", "علي": "Ali", "حسين": "Hussein",
-  "حسن": "Hassan", "عمر": "Omar", "عثمان": "Othman", "مصطفى": "Mustafa", "يوسف": "Youssef",
+  "سجاد": "Sajjad", "هاني": "Hani", "حسن": "Hassan", "عمر": "Omar", "عثمان": "Othman", "مصطفى": "Mustafa", "يوسف": "Youssef",
   "إبراهيم": "Ibrahim", "ابراهيم": "Ibrahim", "خالد": "Khalid", "سارة": "Sarah", "ساره": "Sarah",
   "فاطمة": "Fatima", "فاطمه": "Fatima", "زينب": "Zainab", "مريم": "Maryam", "نور": "Noor",
   "هدى": "Huda", "زيد": "Zaid", "سيف": "Saif", "شوكت": "Shwkat", "عبدالله": "Abdullah",
@@ -198,50 +198,27 @@ const ARABIC_NAMES_MAP: Record<string, string> = {
   "رائد": "Raid", "وسام": "Wissam", "مهند": "Mohannad", "زياد": "Ziad", "بشار": "Bashar"
 };
 
-function transliterateArabicToEnglish(arText: string): string {
-  if (!arText) return "";
-  const words = arText.trim().split(/\s+/);
-  return words.map((w) => {
-    if (ARABIC_NAMES_MAP[w]) return ARABIC_NAMES_MAP[w];
-    if (TRANSLATION_MAP[w]) return TRANSLATION_MAP[w];
-
-    const letterMap: Record<string, string> = {
-      "أ": "A", "إ": "E", "آ": "Aa", "ا": "a", "ب": "b", "ت": "t", "ث": "Th",
-      "ج": "j", "ح": "h", "خ": "Kh", "د": "d", "ذ": "Dh", "ر": "r", "ز": "z",
-      "س": "s", "ش": "Sh", "ص": "S", "ض": "D", "ط": "T", "ظ": "Z", "ع": "A",
-      "غ": "Gh", "ف": "f", "ق": "Q", "ك": "k", "ل": "l", "م": "m", "ن": "n",
-      "ه": "h", "و": "w", "ي": "y", "ى": "a", "ة": "a", "ء": "", "ئ": "e", "ؤ": "o",
-    };
-
-    let result = "";
-    for (let i = 0; i < w.length; i++) {
-      const char = w[i];
-      if (i === 0 && letterMap[char]) {
-        result += letterMap[char].charAt(0).toUpperCase() + letterMap[char].slice(1);
-      } else if (letterMap[char]) {
-        result += letterMap[char].toLowerCase();
-      } else {
-        result += char;
-      }
-    }
-    return result || w;
-  }).join(" ");
-}
-
 function translateOrTransliterate(text: string, targetLang: "AR" | "EN"): string {
   if (!text || !text.trim()) return "";
   const trimmed = text.trim();
   if (TRANSLATION_MAP[trimmed]) return TRANSLATION_MAP[trimmed];
+  if (ARABIC_NAMES_MAP[trimmed]) return ARABIC_NAMES_MAP[trimmed];
 
-  if (targetLang === "EN") {
-    const hasArabic = /[\u0600-\u06FF]/.test(trimmed);
-    if (hasArabic) {
-      return transliterateArabicToEnglish(trimmed);
-    }
-    return trimmed;
-  } else {
-    return trimmed;
+  // If it's a name with multiple known parts
+  const words = trimmed.split(/\s+/);
+  if (words.length <= 4 && words.every((w) => ARABIC_NAMES_MAP[w])) {
+    return words.map((w) => ARABIC_NAMES_MAP[w]).join(" ");
   }
+
+  // Fast replacement of date keywords or known phrases
+  let processed = trimmed;
+  for (const [ar, en] of Object.entries(TRANSLATION_MAP)) {
+    if (processed.includes(ar)) {
+      processed = processed.replaceAll(ar, en);
+    }
+  }
+
+  return processed;
 }
 
 const DEFAULT_AR_DATA: LanguageSpecificData = {
@@ -480,20 +457,69 @@ export default function PublicCvBuilderPage() {
     setTimeout(() => setToastMessage(""), 3500);
   };
 
+  const [isTranslating, setIsTranslating] = useState<boolean>(false);
+
   const curDoc = lang === "AR" ? docAR : docEN;
   const setCurDoc = (updater: (prev: LanguageSpecificData) => LanguageSpecificData) => {
     if (lang === "AR") {
-      setDocAR((prev) => {
-        const next = updater(prev);
-        setDocEN(convertDocLanguage(next, "EN"));
-        return next;
-      });
+      setDocAR((prev) => updater(prev));
     } else {
-      setDocEN((prev) => {
-        const next = updater(prev);
-        setDocAR(convertDocLanguage(next, "AR"));
-        return next;
+      setDocEN((prev) => updater(prev));
+    }
+  };
+
+  // PROFESSIONAL ASYNC TRANSLATION TO ENGLISH
+  const translateDocumentToEnglish = async () => {
+    setIsTranslating(true);
+    showToast("جاري الترجمة الذكية الاحترافية للإنجليزية...");
+    try {
+      const res = await fetch("/api/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ doc: docAR }),
       });
+      const data = await res.json();
+      if (data?.success && data?.doc) {
+        setDocEN(data.doc);
+        setLang("EN");
+        setFontFamily("Outfit");
+        showToast("تمت الترجمة الاحترافية بنجاح!");
+      } else {
+        setDocEN(convertDocLanguage(docAR, "EN"));
+        setLang("EN");
+        setFontFamily("Outfit");
+      }
+    } catch (err) {
+      console.error("Translation error:", err);
+      setDocEN(convertDocLanguage(docAR, "EN"));
+      setLang("EN");
+      setFontFamily("Outfit");
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
+  // INSTANT BIDIRECTIONAL LANGUAGE SWITCH & TRANSLATION
+  const handleInstantSwitchLanguage = async (targetLang: "AR" | "EN") => {
+    if (targetLang === lang) return;
+
+    if (targetLang === "EN") {
+      const isEnglishBlank =
+        !docEN.summary ||
+        docEN.summary === DEFAULT_EN_DATA.summary ||
+        /[\u0600-\u06FF]/.test(docEN.summary || "");
+
+      if (isEnglishBlank && docAR.summary) {
+        await translateDocumentToEnglish();
+      } else {
+        setLang("EN");
+        setFontFamily("Outfit");
+        showToast("English Mode");
+      }
+    } else {
+      setLang("AR");
+      setFontFamily("Tajawal");
+      showToast("Arabic Mode");
     }
   };
 
@@ -519,23 +545,6 @@ export default function PublicCvBuilderPage() {
   useEffect(() => {
     fetch("/api/track?path=/cv&page=Public_Bilingual_CV_Builder").catch(() => {});
   }, []);
-
-  // INSTANT BIDIRECTIONAL LANGUAGE SWITCH & TRANSLATION
-  const handleInstantSwitchLanguage = (targetLang: "AR" | "EN") => {
-    if (targetLang === lang) return;
-
-    if (targetLang === "EN") {
-      setDocEN(convertDocLanguage(docAR, "EN"));
-      setLang("EN");
-      setFontFamily("Outfit");
-      showToast("تم التحويل الفوري إلى النسخة الإنجليزية (English Mode)");
-    } else {
-      setDocAR(convertDocLanguage(docEN, "AR"));
-      setLang("AR");
-      setFontFamily("Tajawal");
-      showToast("تم التحويل الفوري إلى النسخة العربية (Arabic Mode)");
-    }
-  };
 
   const handleLoadSampleData = () => {
     if (lang === "AR") {
@@ -744,13 +753,30 @@ export default function PublicCvBuilderPage() {
     setIsGeneratingPdf(true);
 
     try {
-      // Force fresh synchronization so target export DOM gets the user's latest edited data
-      if (lang === "AR") {
-        const freshEN = convertDocLanguage(docAR, "EN");
-        setDocEN(freshEN);
-      } else {
-        const freshAR = convertDocLanguage(docEN, "AR");
-        setDocAR(freshAR);
+      // Smart synchronization: Translate professionally for English export only if not already translated
+      if (choice === "EN" || choice === "BOTH") {
+        const isEnglishEmptyOrArabic =
+          !docEN.summary ||
+          /[\u0600-\u06FF]/.test(docEN.summary || "") ||
+          docEN.summary === DEFAULT_EN_DATA.summary;
+
+        if (isEnglishEmptyOrArabic && docAR.summary) {
+          showToast("جاري تجهيز الترجمة الإنجليزية الاحترافية قبل التصدير...");
+          try {
+            const res = await fetch("/api/translate", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ doc: docAR }),
+            });
+            const data = await res.json();
+            if (data?.success && data?.doc) {
+              setDocEN(data.doc);
+              await new Promise((res) => setTimeout(res, 400));
+            }
+          } catch (e) {
+            console.warn("Translation failed before export", e);
+          }
+        }
       }
 
       // Small delay to allow React to update export DOM elements
@@ -1380,6 +1406,7 @@ export default function PublicCvBuilderPage() {
             {/* INSTANT BILINGUAL TRANSLATE TOGGLE BUTTON */}
             <button
               onClick={() => handleInstantSwitchLanguage(isArabic ? "EN" : "AR")}
+              disabled={isTranslating}
               style={{
                 background: isDark ? "#1e2235" : "#ffffff",
                 color: isDark ? "#ffffff" : "#0f172a",
@@ -1388,15 +1415,22 @@ export default function PublicCvBuilderPage() {
                 borderRadius: "10px",
                 fontSize: "13px",
                 fontWeight: "900",
-                cursor: "pointer",
+                cursor: isTranslating ? "wait" : "pointer",
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "8px",
                 boxShadow: "0 4px 12px rgba(37,99,235,0.12)",
                 transition: "all 0.3s ease",
+                opacity: isTranslating ? 0.7 : 1,
               }}
             >
-              <span>{isArabic ? "تحويل مباشر إلى الإنجليزية (EN)" : "تحويل مباشر إلى العربية (AR)"}</span>
+              <span>
+                {isTranslating
+                  ? "جاري الترجمة الاحترافية..."
+                  : isArabic
+                  ? "ترجمة احترافية للإنجليزية (EN)"
+                  : "النسخة العربية (AR)"}
+              </span>
             </button>
 
             {/* UNIFIED DOWNLOAD PDF BUTTON (OPENS MODAL WITH AR/EN/BOTH CHOICES) */}
