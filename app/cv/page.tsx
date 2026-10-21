@@ -489,6 +489,7 @@ export default function PublicCvBuilderPage() {
   const [accentColor, setAccentColor] = useState<string>("#2563eb");
   const [fontFamily, setFontFamily] = useState<string>("Tajawal");
   const [fontSizeScale, setFontSizeScale] = useState<"compact" | "normal" | "large">("normal");
+  const [fontScalePercent, setFontScalePercent] = useState<number>(100);
   const [pageMargin, setPageMargin] = useState<"compact" | "normal" | "wide">("normal");
   const [lineSpacing, setLineSpacing] = useState<"compact" | "normal" | "relaxed">("normal");
 
@@ -714,6 +715,7 @@ export default function PublicCvBuilderPage() {
     setLayoutFormat(p.format);
     setFontFamily(lang === "AR" ? "Tajawal" : p.font);
     setFontSizeScale(p.fontSize);
+    setFontScalePercent(p.fontSize === "compact" ? 90 : p.fontSize === "large" ? 115 : 100);
     setPageMargin(p.margin);
     setLineSpacing(p.spacing);
     showToast(lang === "AR" ? `تم تطبيق قالب: ${p.title}` : `Applied preset: ${p.title}`);
@@ -1025,7 +1027,8 @@ export default function PublicCvBuilderPage() {
 
   // REUSABLE DOCUMENT RENDERER (USED FOR BOTH PREVIEW AND ZERO-SCALE EXPORT CANVAS)
   const renderDocumentContent = (docData: LanguageSpecificData, isDocArabic: boolean, canvasId?: string) => {
-    const docFontFamily = isDocArabic ? "'Tajawal', sans-serif" : "'Outfit', sans-serif";
+    const docFontFamily = isDocArabic ? `'${fontFamily || "Tajawal"}', sans-serif` : `'${fontFamily || "Outfit"}', sans-serif`;
+    const scale = (basePx: number) => `${(basePx * (fontScalePercent / 100)).toFixed(1)}px`;
 
     return (
       <div
@@ -1038,7 +1041,7 @@ export default function PublicCvBuilderPage() {
           padding: pageMargin === "compact" ? "28px 32px" : pageMargin === "wide" ? "56px 60px" : "44px 48px",
           boxSizing: "border-box",
           fontFamily: docFontFamily,
-          fontSize: fontSizeScale === "compact" ? "10.5px" : fontSizeScale === "large" ? "12.5px" : "11.5px",
+          fontSize: scale(11.5),
           lineHeight: lineSpacing === "compact" ? "1.45" : lineSpacing === "relaxed" ? "1.85" : "1.65",
           letterSpacing: "normal",
           textRendering: "geometricPrecision",
@@ -1058,10 +1061,10 @@ export default function PublicCvBuilderPage() {
               )}
 
               <div>
-                <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                <div style={{ fontSize: scale(11.5), fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
                   {isDocArabic ? "بيانات الاتصال" : "Contact Info"}
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "10px", color: templateStyle === "clean-white" ? "#475569" : "#94a3b8" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: scale(10), color: templateStyle === "clean-white" ? "#475569" : "#94a3b8" }}>
                   {docData.email && <div>📧 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{docData.email}</span></div>}
                   {docData.phone && <div>📞 <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{docData.phone}</span></div>}
                   {docData.location && <div>📍 {docData.location}</div>}
@@ -1071,12 +1074,12 @@ export default function PublicCvBuilderPage() {
 
               {showSkills && docData.skills.length > 0 && (
                 <div>
-                  <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                  <div style={{ fontSize: scale(11.5), fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
                     {isDocArabic ? "المهارات والقدرات" : "Skills & Competencies"}
                   </div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
                     {docData.skills.map((sk, i) => (
-                      <span key={i} style={{ background: templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${accentColor}40`, color: templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "2px 7px", borderRadius: "5px", fontSize: "9.5px", fontWeight: "700" }}>
+                      <span key={i} style={{ background: templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${accentColor}40`, color: templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "2px 7px", borderRadius: "5px", fontSize: scale(9.5), fontWeight: "700" }}>
                         {sk}
                       </span>
                     ))}
@@ -1086,11 +1089,11 @@ export default function PublicCvBuilderPage() {
 
               {showEducation && docData.education.length > 0 && (
                 <div>
-                  <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                  <div style={{ fontSize: scale(11.5), fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
                     {isDocArabic ? "المؤهلات العلمية" : "Education"}
                   </div>
                   {docData.education.map((edu, i) => (
-                    <div key={i} style={{ fontSize: "10px", marginBottom: "6px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                    <div key={i} style={{ fontSize: scale(10), marginBottom: "6px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
                       <strong>{edu.degree}</strong>
                       <div style={{ color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8" }}>{edu.school} {edu.year ? `(${edu.year})` : ""}</div>
                     </div>
@@ -1100,11 +1103,11 @@ export default function PublicCvBuilderPage() {
 
               {showCertifications && docData.certifications.length > 0 && (
                 <div>
-                  <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                  <div style={{ fontSize: scale(11.5), fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
                     {isDocArabic ? "الشهادات والاعتمادات" : "Certifications"}
                   </div>
                   {docData.certifications.map((cert, i) => (
-                    <div key={i} style={{ fontSize: "10px", marginBottom: "4px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                    <div key={i} style={{ fontSize: scale(10), marginBottom: "4px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
                       • {cert.title}
                     </div>
                   ))}
@@ -1114,7 +1117,7 @@ export default function PublicCvBuilderPage() {
               {showQrCode && qrCodeDataUrl && (
                 <div style={{ marginTop: "12px", padding: "8px", background: templateStyle === "clean-white" ? "#f8fafc" : "rgba(255,255,255,0.05)", borderRadius: "10px", border: `1.5px solid ${accentColor}40`, display: "flex", flexDirection: "column", alignItems: "center", gap: "3px" }}>
                   <img src={qrCodeDataUrl} alt="QR Code" style={{ width: "68px", height: "68px", objectFit: "contain" }} />
-                  <span style={{ fontSize: "8px", fontWeight: "900", color: accentColor }}>
+                  <span style={{ fontSize: scale(8), fontWeight: "900", color: accentColor }}>
                     {isDocArabic ? "الموقع التفاعلي" : "LIVE PORTFOLIO"}
                   </span>
                 </div>
@@ -1124,20 +1127,20 @@ export default function PublicCvBuilderPage() {
             {/* MAIN BODY */}
             <div>
               <div style={{ borderBottom: `2.5px solid ${accentColor}`, paddingBottom: "14px", marginBottom: "18px" }}>
-                <h2 style={{ fontSize: "28px", fontWeight: "900", margin: "0 0 4px 0", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                <h2 style={{ fontSize: scale(28), fontWeight: "900", margin: "0 0 4px 0", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
                   {docData.fullName || (isDocArabic ? "الاسم الكامل" : "Your Name")}
                 </h2>
-                <div style={{ fontSize: "13.5px", fontWeight: "700", color: accentColor }}>
+                <div style={{ fontSize: scale(13.5), fontWeight: "700", color: accentColor }}>
                   {docData.jobTitle || (isDocArabic ? "المسمى الوظيفي" : "Professional Title")}
                 </div>
               </div>
 
               {docData.summary && (
                 <div style={{ marginBottom: "18px" }}>
-                  <div style={{ fontSize: "12px", fontWeight: "900", color: accentColor, marginBottom: "6px" }}>
+                  <div style={{ fontSize: scale(12), fontWeight: "900", color: accentColor, marginBottom: "6px" }}>
                     {isDocArabic ? "الهدف المهني والملخص التنفيذي" : "Executive Summary"}
                   </div>
-                  <p style={{ fontSize: "11px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
+                  <p style={{ fontSize: scale(11), color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
                     {docData.summary}
                   </p>
                 </div>
@@ -1145,7 +1148,7 @@ export default function PublicCvBuilderPage() {
 
               {docData.experiences.length > 0 && (
                 <div>
-                  <div style={{ fontSize: "12px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
+                  <div style={{ fontSize: scale(12), fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
                     {isDocArabic ? "الخبرات المهنية والعملية" : "Work Experience"}
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
@@ -1153,19 +1156,19 @@ export default function PublicCvBuilderPage() {
                       <div key={exp.id || i}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
                           <div>
-                            <strong style={{ fontSize: "12.5px", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                            <strong style={{ fontSize: scale(12.5), color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
                               {exp.role}
                             </strong>
-                            <span style={{ fontSize: "11.5px", color: accentColor, marginLeft: isDocArabic ? "0" : "6px", marginRight: isDocArabic ? "6px" : "0", fontWeight: "700" }}>
+                            <span style={{ fontSize: scale(11.5), color: accentColor, marginLeft: isDocArabic ? "0" : "6px", marginRight: isDocArabic ? "6px" : "0", fontWeight: "700" }}>
                               | {exp.company}
                             </span>
                           </div>
-                          <span style={{ fontSize: "10.5px", color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
+                          <span style={{ fontSize: scale(10.5), color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
                             {exp.date}
                           </span>
                         </div>
 
-                        <ul style={{ margin: "3px 0 0 0", paddingLeft: isDocArabic ? "0" : "16px", paddingRight: isDocArabic ? "16px" : "0", fontSize: "10.5px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.5" }}>
+                        <ul style={{ margin: "3px 0 0 0", paddingLeft: isDocArabic ? "0" : "16px", paddingRight: isDocArabic ? "16px" : "0", fontSize: scale(10.5), color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.5" }}>
                           {exp.bullets.map((b: string, bi: number) => (
                             <li key={bi} style={{ marginBottom: "2px" }}>{b}</li>
                           ))}
@@ -1183,14 +1186,14 @@ export default function PublicCvBuilderPage() {
             {/* HEADER ROW */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: `2.5px solid ${accentColor}`, paddingBottom: "16px", marginBottom: "20px", gap: "20px" }}>
               <div style={{ flex: 1 }}>
-                <h2 style={{ fontSize: "28px", fontWeight: "900", margin: "0 0 4px 0", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                <h2 style={{ fontSize: scale(28), fontWeight: "900", margin: "0 0 4px 0", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
                   {docData.fullName || (isDocArabic ? "الاسم الكامل" : "Your Name")}
                 </h2>
-                <div style={{ fontSize: "13.5px", fontWeight: "700", color: accentColor, marginBottom: "10px" }}>
+                <div style={{ fontSize: scale(13.5), fontWeight: "700", color: accentColor, marginBottom: "10px" }}>
                   {docData.jobTitle || (isDocArabic ? "المسمى الوظيفي" : "Professional Title")}
                 </div>
 
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", fontSize: "11px", color: templateStyle === "clean-white" ? "#475569" : "#94a3b8", fontWeight: "600" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", fontSize: scale(11), color: templateStyle === "clean-white" ? "#475569" : "#94a3b8", fontWeight: "600" }}>
                   {docData.email && <div>📧 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{docData.email}</span></div>}
                   {docData.phone && <div>📞 <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{docData.phone}</span></div>}
                   {docData.location && <div>📍 {docData.location}</div>}
@@ -1202,7 +1205,7 @@ export default function PublicCvBuilderPage() {
                 {showQrCode && qrCodeDataUrl && (
                   <div style={{ padding: "4px", background: "#ffffff", borderRadius: "8px", border: `1.5px solid ${accentColor}`, display: "flex", flexDirection: "column", alignItems: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
                     <img src={qrCodeDataUrl} alt="QR" style={{ width: "55px", height: "55px", objectFit: "contain" }} />
-                    <span style={{ fontSize: "6.5px", fontWeight: "900", color: "#0f172a", marginTop: "1px" }}>
+                    <span style={{ fontSize: scale(6.5), fontWeight: "900", color: "#0f172a", marginTop: "1px" }}>
                       {isDocArabic ? "الموقع" : "PORTFOLIO"}
                     </span>
                   </div>
@@ -1219,10 +1222,10 @@ export default function PublicCvBuilderPage() {
             {/* EXECUTIVE SUMMARY */}
             {docData.summary && (
               <div style={{ marginBottom: "20px" }}>
-                <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, marginBottom: "6px" }}>
+                <div style={{ fontSize: scale(12.5), fontWeight: "900", color: accentColor, marginBottom: "6px" }}>
                   {isDocArabic ? "الهدف المهني والملخص التنفيذي" : "Executive Summary"}
                 </div>
-                <p style={{ fontSize: "11px", lineHeight: "1.65", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
+                <p style={{ fontSize: scale(11), lineHeight: "1.65", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
                   {docData.summary}
                 </p>
               </div>
@@ -1231,7 +1234,7 @@ export default function PublicCvBuilderPage() {
             {/* WORK EXPERIENCE */}
             {docData.experiences.length > 0 && (
               <div style={{ marginBottom: "20px" }}>
-                <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
+                <div style={{ fontSize: scale(12.5), fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
                   {isDocArabic ? "الخبرات المهنية والعملية" : "Professional Work Experience"}
                 </div>
 
@@ -1240,19 +1243,19 @@ export default function PublicCvBuilderPage() {
                     <div key={exp.id || i}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
                         <div>
-                          <strong style={{ fontSize: "13px", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                          <strong style={{ fontSize: scale(13), color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
                             {exp.role}
                           </strong>
-                          <span style={{ fontSize: "12px", color: accentColor, marginLeft: isDocArabic ? "0" : "8px", marginRight: isDocArabic ? "8px" : "0", fontWeight: "700" }}>
+                          <span style={{ fontSize: scale(12), color: accentColor, marginLeft: isDocArabic ? "0" : "8px", marginRight: isDocArabic ? "8px" : "0", fontWeight: "700" }}>
                             | {exp.company}
                           </span>
                         </div>
-                        <span style={{ fontSize: "11px", color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
+                        <span style={{ fontSize: scale(11), color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
                           {exp.date}
                         </span>
                       </div>
 
-                      <ul style={{ margin: "4px 0 0 0", paddingLeft: isDocArabic ? "0" : "18px", paddingRight: isDocArabic ? "18px" : "0", fontSize: "11px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.55" }}>
+                      <ul style={{ margin: "4px 0 0 0", paddingLeft: isDocArabic ? "0" : "18px", paddingRight: isDocArabic ? "18px" : "0", fontSize: scale(11), color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.55" }}>
                         {exp.bullets.map((b: string, bi: number) => (
                           <li key={bi} style={{ marginBottom: "2px" }}>{b}</li>
                         ))}
@@ -1266,12 +1269,12 @@ export default function PublicCvBuilderPage() {
             {/* TECHNICAL SKILLS */}
             {showSkills && docData.skills.length > 0 && (
               <div style={{ marginBottom: "20px" }}>
-                <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "10px" }}>
+                <div style={{ fontSize: scale(12.5), fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "10px" }}>
                   {isDocArabic ? "المهارات التقنية والقدرات" : "Core Technical Skills"}
                 </div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
                   {docData.skills.map((sk, i) => (
-                    <span key={i} style={{ background: templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${accentColor}40`, color: templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "3px 9px", borderRadius: "6px", fontSize: "10.5px", fontWeight: "700" }}>
+                    <span key={i} style={{ background: templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${accentColor}40`, color: templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "3px 9px", borderRadius: "6px", fontSize: scale(10.5), fontWeight: "700" }}>
                       {sk}
                     </span>
                   ))}
@@ -1283,13 +1286,13 @@ export default function PublicCvBuilderPage() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
               {showEducation && docData.education.length > 0 && (
                 <div>
-                  <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "8px" }}>
+                  <div style={{ fontSize: scale(12.5), fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "8px" }}>
                     {isDocArabic ? "المؤهلات العلمية" : "Academic Education"}
                   </div>
                   {docData.education.map((edu, i) => (
-                    <div key={i} style={{ fontSize: "11px", marginBottom: "6px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                    <div key={i} style={{ fontSize: scale(11), marginBottom: "6px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
                       <strong>{edu.degree}</strong>
-                      <div style={{ color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontSize: "10.5px" }}>{edu.school} {edu.year ? `(${edu.year})` : ""}</div>
+                      <div style={{ color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontSize: scale(10.5) }}>{edu.school} {edu.year ? `(${edu.year})` : ""}</div>
                     </div>
                   ))}
                 </div>
@@ -1297,11 +1300,11 @@ export default function PublicCvBuilderPage() {
 
               {showCertifications && docData.certifications.length > 0 && (
                 <div>
-                  <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "8px" }}>
+                  <div style={{ fontSize: scale(12.5), fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "8px" }}>
                     {isDocArabic ? "الشهادات والاعتمادات" : "Certified Training"}
                   </div>
                   {docData.certifications.map((cert, i) => (
-                    <div key={i} style={{ fontSize: "10.5px", marginBottom: "4px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                    <div key={i} style={{ fontSize: scale(10.5), marginBottom: "4px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
                       • {cert.title}
                     </div>
                   ))}
@@ -2575,6 +2578,151 @@ export default function PublicCvBuilderPage() {
                         {th.label}
                       </button>
                     ))}
+                  </div>
+                </div>
+
+                {/* FONT FAMILY SELECTOR */}
+                <div>
+                  <label style={{ display: "block", fontSize: "11.5px", color: "#64748b", marginBottom: "6px" }}>
+                    {isArabic ? "نوع الخط (Font Family):" : "Font Family:"}
+                  </label>
+                  <select
+                    value={fontFamily}
+                    onChange={(e) => setFontFamily(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "8px 10px",
+                      background: "#f8fafc",
+                      border: "1px solid #e2e8f0",
+                      borderRadius: "8px",
+                      color: "#0f172a",
+                      fontSize: "12px",
+                      fontWeight: "700",
+                      cursor: "pointer",
+                      outline: "none",
+                    }}
+                  >
+                    {isArabic ? (
+                      <>
+                        <option value="Tajawal">تجوال (Tajawal - قياسي رسمي)</option>
+                        <option value="Cairo">القاهرة (Cairo - عصري بارز)</option>
+                        <option value="Alexandria">الإسكندرية (Alexandria - أنيق)</option>
+                        <option value="Almarai">المراعي (Almarai - شاشة مريح)</option>
+                        <option value="Readex Pro">ريدكس برو (Readex Pro - حديث)</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="Outfit">Outfit (Modern Clean)</option>
+                        <option value="Inter">Inter (Global Corporate)</option>
+                        <option value="Plus Jakarta Sans">Plus Jakarta Sans (Executive)</option>
+                        <option value="Poppins">Poppins (Friendly Bold)</option>
+                        <option value="Montserrat">Montserrat (Classic Clean)</option>
+                      </>
+                    )}
+                  </select>
+                </div>
+
+                {/* FONT SIZE CONTROLLER */}
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                    <label style={{ fontSize: "11.5px", color: "#64748b", fontWeight: "700" }}>
+                      {isArabic ? "حجم الخط (Font Size):" : "Font Size Scale:"}
+                    </label>
+                    <span style={{ fontSize: "11.5px", fontWeight: "800", color: "#2563eb", background: "#eff6ff", padding: "2px 8px", borderRadius: "6px" }}>
+                      {fontScalePercent}%
+                    </span>
+                  </div>
+
+                  {/* Quick Preset Buttons */}
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px", marginBottom: "8px" }}>
+                    {[
+                      { id: "compact", percent: 90, label: isArabic ? "مضغوط (90%)" : "Compact (90%)" },
+                      { id: "normal", percent: 100, label: isArabic ? "قياسي (100%)" : "Normal (100%)" },
+                      { id: "large", percent: 115, label: isArabic ? "كبير (115%)" : "Large (115%)" },
+                    ].map((sz) => (
+                      <button
+                        key={sz.id}
+                        type="button"
+                        onClick={() => {
+                          setFontSizeScale(sz.id as any);
+                          setFontScalePercent(sz.percent);
+                        }}
+                        style={{
+                          background: fontScalePercent === sz.percent ? "#2563eb" : "#f8fafc",
+                          color: fontScalePercent === sz.percent ? "#ffffff" : "#475569",
+                          border: "1px solid #e2e8f0",
+                          padding: "7px 4px",
+                          borderRadius: "8px",
+                          fontSize: "11px",
+                          fontWeight: "800",
+                          cursor: "pointer",
+                          transition: "all 0.2s ease",
+                        }}
+                      >
+                        {sz.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Fine-tuning Slider & Stepper */}
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "#f8fafc", padding: "8px 10px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                    <button
+                      type="button"
+                      onClick={() => setFontScalePercent((prev) => Math.max(80, prev - 5))}
+                      title={isArabic ? "تصغير الخط" : "Decrease font size"}
+                      style={{
+                        width: "28px",
+                        height: "28px",
+                        borderRadius: "6px",
+                        border: "1px solid #cbd5e1",
+                        background: "#ffffff",
+                        color: "#0f172a",
+                        fontWeight: "900",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "14px",
+                      }}
+                    >
+                      -
+                    </button>
+                    <input
+                      type="range"
+                      min="80"
+                      max="130"
+                      step="2"
+                      value={fontScalePercent}
+                      onChange={(e) => {
+                        const val = Number(e.target.value);
+                        setFontScalePercent(val);
+                        if (val <= 92) setFontSizeScale("compact");
+                        else if (val >= 112) setFontSizeScale("large");
+                        else setFontSizeScale("normal");
+                      }}
+                      style={{ flex: 1, accentColor: "#2563eb", cursor: "pointer" }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setFontScalePercent((prev) => Math.min(130, prev + 5))}
+                      title={isArabic ? "تكبير الخط" : "Increase font size"}
+                      style={{
+                        width: "28px",
+                        height: "28px",
+                        borderRadius: "6px",
+                        border: "1px solid #cbd5e1",
+                        background: "#ffffff",
+                        color: "#0f172a",
+                        fontWeight: "900",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "14px",
+                      }}
+                    >
+                      +
+                    </button>
                   </div>
                 </div>
 
