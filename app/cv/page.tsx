@@ -222,214 +222,130 @@ function translateOrTransliterate(text: string, targetLang: "AR" | "EN"): string
 }
 
 const DEFAULT_AR_DATA: LanguageSpecificData = {
-  fullName: "سجاد هاني",
-  jobTitle: "أخصائي مبيعات وإدارة العمليات التجارية",
-  summary: "مهني طموح ومتعدد المهارات بخبرة عملية قوية في إدارة المبيعات، الحسابات، التسويق الرقمي، والمبيعات الميدانية والطبية. أمتلك سجلاً حافلاً في العمل على البرامج المحاسبية (مثل برنامج البيان)، وإدارة المخزون، وتحليل البيانات عبر برامج Office، بالإضافة إلى مهارات عالية في صناعة الحملات الإعلانية وإدارة العمليات التجارية.",
-  email: "hany76734@gmail.com",
-  phone: "07859312867",
-  location: "بغداد / بغداد الجديدة (تولد: 28 نيسان 2002)",
-  linkedin: "linkedin.com/in/sajjadhani",
+  fullName: "حيدر محمد شوكت",
+  jobTitle: "خريج علوم حاسوب",
+  summary: "خريج علوم حاسوب طموح وشديد التنظيم، يتمتع بخلفية عملية قوية في إدارة البيانات، الدعم الإداري، والأرشفة الرقمية للوثائق. يمتلك خبرة عملية مثبتة في التعامل مع قواعد البيانات الكبيرة (أكثر من 22 ألف سجل)، تنظيم المعاملات المكتبية، ومتابعة سجلات الحضور والانصراف. كفاءة عالية في إعداد تقارير متقدمة عبر برنامج Microsoft Excel، المخاطبات الرسمية، وضمان دقة البيانات والالتزام بأعلى معايير السرية المهنية. يسعى لتوظيف مهاراته التنظيمية والتقنية والتحليلية لدعم العمليات الإدارية والموارد البشرية بكفاءة وموثوقية.",
+  email: "haider.m.shwkat@outlook.com",
+  phone: "07718964778",
+  location: "بغداد، العراق",
+  linkedin: "",
   skills: [
-    "صناعة وإدارة الإعلانات الممولة (Facebook & Instagram)",
-    "البرامج المكتبية ومعالجة البيانات المتقدمة (Excel & Word)",
-    "أنظمة وبيانات التطبيقات والاشتراكات الرقمية (IPTV)",
-    "البرامج المحاسبية وجرد المخازن (برنامج البيان)",
-    "مهارات البيع، التفاوض المباشر وإدارة علاقات العملاء",
+    "Microsoft Office (إكسل متقدم، وورد، باوربوينت)",
+    "إدارة البيانات والأرشفة الرقمية",
+    "إجراءات متابعة الحضور والانصراف وسجلات الدوام",
+    "الدعم الإداري وحل المشكلات التشغيلية",
+    "خدمة العملاء والتنسيق المشترك بين الأقسام",
+    "سرية بيانات الموظفين وأخلاقيات العمل المؤسسي",
+    "اللغة الإنجليزية (مستوى مهني متقدم: محادثة وكتابة) | العربية (اللغة الأم)",
+    "الترجمة المهنية للمستندات والمعاملات (إنجليزي ↔ عربي)",
   ],
   experiences: [
     {
       id: "exp-1",
-      role: "مدير مبيعات",
-      company: "محل للألعاب – مول الجادرية، بغداد",
-      date: "تشرين الثاني 2025 – حتى الآن",
+      role: "مساعد الدعم الإداري والعمليات",
+      company: "تكنو ستور (Techno Store) – بغداد",
+      date: "2025 – حتى الآن",
       bullets: [
-        "الإشراف الكامل على عمليات البيع داخل المعرض وإدارة تجربة العملاء وتقديم خدمة متميزة.",
-        "متابعة حركة المنتجات وحركة المخزون وتحقيق الأهداف البيعية الشهرية المحددة بدقة."
+        "متابعة سجلات الحضور والانصراف: تدقيق ومطابقة سجلات دوام الموظفين، إجازاتهم، والعمل الإضافي، وتسوية الفروقات لضمان انضباط ودقة مسيرات الرواتب.",
+        "رقمنة النماذج والعمليات: أتمتة النماذج الورقية وسجلات العهد عبر نظام DigitForm، مما ساهم في تقليل الأخطاء اليدوية بنسبة 40% وتسريع استرجاع البيانات.",
+        "تحليلات وإحصاءات متقدمة بـ Excel: بناء وتحديث لوحات متابعة وتقارير تشغيلية لمراقبة الأداء، ساعات العمل، ومعدلات الدوران الوظيفي لإدارة الشركة.",
+        "التنسيق المشترك بين الأقسام: العمل كنقطة وصل وتنسيق مع مسؤولي الموارد البشرية والمشتريات لتسهيل إجراءات التعيين وتهيئة الموظفين الجدد وصرف المستحقات."
       ]
     },
     {
       id: "exp-2",
-      role: "مندوب مبيعات ميداني",
-      company: "شركة الهدف المباشر الطبية – بغداد",
-      date: "أيلول 2025 – تشرين الأول 2025",
+      role: "مساعد التوثيق والخدمات المكتبية",
+      company: "المكتبة الجامعية",
+      date: "2023 – 2024",
       bullets: [
-        "العمل الميداني على ترويج وبيع المنتجات والأجهزة الطبية وبناء علاقات متينة مع الصيدليات والمراكز الطبية والمستشفيات."
-      ]
-    },
-    {
-      id: "exp-3",
-      role: "مدير مبيعات",
-      company: "شركة توديا لتجارة كاميرات المراقبة ومنظومات الطاقة الشمسية",
-      date: "آب 2024 – أيلول 2025",
-      bullets: [
-        "قيادة المبيعات المباشرة داخل الشركة، إدارة المفاوضات مع كبار العملاء وتطوير استراتيجيات البيع وتوسيع قنوات التوزيع."
-      ]
-    },
-    {
-      id: "exp-4",
-      role: "مدير حسابات ومخازن",
-      company: "شركة توديا لتجارة كاميرات المراقبة ومنظومات الطاقة الشمسية",
-      date: "آب 2024 – شباط 2025",
-      bullets: [
-        "إدارة العمليات المالية والحسابية والفواتير باستخدام برنامج البيان، إدخال المواد (Items)، ومتابعة الجرد الدوري للمخزن."
-      ]
-    },
-    {
-      id: "exp-5",
-      role: "مبيعات ومندوب تجاري وعلمي",
-      company: "مذخر المنجد للأدوية – بغداد",
-      date: "كانون الثاني 2023 – تموز 2024",
-      bullets: [
-        "إدارة مبيعات الجملة داخل المذخر مع معالجة وإصدار الفواتير بدقة على الأنظمة المحاسبية (برنامج البيان).",
-        "العمل كمندوب مبيعات علمي وتجاري على الصيدليات والعيادات الطبية، عرض وبيع الأدوية وإعداد فواتير الحسابات والتحصيلات."
-      ]
-    },
-    {
-      id: "exp-6",
-      role: "مسؤول مبيعات وإدارة صفحة رقمية",
-      company: "منصة بيع الاشتراكات الرقمية",
-      date: "كانون الثاني 2024 – حتى الآن",
-      bullets: [
-        "إدارة مبيعات الاشتراكات الشهرية والسنوية للقنوات المشفرة والأفلام والمسلسلات (IPTV).",
-        "إدارة مدخلات ومخرجات بيانات التطبيقات والاشتراكات وتفعيل الحسابات بكفاءة وسرعة عالية."
-      ]
-    },
-    {
-      id: "exp-7",
-      role: "مسؤول مبيعات ومتجر إلكتروني",
-      company: "صفحة لافندر (Lavender) للساعات والإكسسوارات",
-      date: "نيسان 2022 – تشرين الأول 2023",
-      bullets: [
-        "إدارة الطلبات والحجوزات عبر فيسبوك وإنستغرام، تجهيز الطلبيات والتنسيق الكامل مع شركات التوصيل والشحن."
-      ]
-    },
-    {
-      id: "exp-8",
-      role: "سكرتير عيادة طبية",
-      company: "عيادة جراحة العظام والكسور (د. مروان سليم)",
-      date: "كانون الثاني 2018 – شباط 2020",
-      bullets: [
-        "إدارة حجوزات واستقبال المراجعين، حفظ وتنظيم السجلات الطبية وجدول مواعيد العيادة بدقة واحترافية."
+        "تنسيق المستندات والمراسلات: صياغة وتدقيق الكتب والمراسلات والتقارير الرسمية بدقة لغوية وتنظيمية عالية، وتوزيعها وفق القنوات المعتمدة.",
+        "أرشفة السجلات الضخمة: إدارة وفهرسة وتصنيف أكثر من 22,000 سجل وملف أكاديمي وإداري، مما قلل وقت البحث عن الوثائق بنسبة 60%.",
+        "العمليات المكتبية الروتينية: توجيه استفسارات المراجعين، إدخال وتحديث البيانات الرقمية، ومتابعة متطلبات الصيانة والمواد المكتبية الدورية."
       ]
     }
   ],
   education: [
     {
       id: "edu-1",
-      school: "جامعة المشرق – بغداد",
-      degree: "بكالوريوس تقنيات التحليلات المرضية",
-      year: "تشرين الأول 2020 – أيار 2024"
+      school: "جامعة دجلة – بغداد",
+      degree: "بكالوريوس علوم الحاسوب (تخرج متوقع 2026)",
+      year: "2022 – 2026"
+    },
+    {
+      id: "edu-2",
+      school: "معهد التكنولوجيا – بغداد",
+      degree: "دبلوم الصناعات الكيماوية والتقنية",
+      year: "2019 – 2021"
     }
   ],
   certifications: [
-    { id: "cert-1", title: "دورة متخصصة في صناعة الحملات الإعلانية على Facebook & Instagram" },
-    { id: "cert-2", title: "دورة متقدمة في البرامج المكتبية ومعالجة الجداول والنصوص (Microsoft Excel & Word)" }
+    { id: "cert-1", title: "دورة مهارات المبيعات وخدمة العملاء — شركة إيرثلنك (EarthLink)" },
+    { id: "cert-2", title: "تدريب السلامة والصحة المهنية (OSH) — معهد التكنولوجيا" },
+    { id: "cert-3", title: "شهادة CCNA 1: مقدمة في شبكات الاتصال — جامعة دجلة" }
   ]
 };
 
 const DEFAULT_EN_DATA: LanguageSpecificData = {
-  fullName: "Sajjad Hani",
-  jobTitle: "Sales Specialist & Commercial Operations Lead",
-  summary: "Ambitious and versatile professional with extensive practical experience in sales management, financial accounting, digital marketing, as well as field and pharmaceutical sales. Proven track record in operating accounting software (such as Al-Bayan ERP), inventory control, and business data analytics via Microsoft Office suite, alongside high proficiency in executing high-ROI advertising campaigns and optimizing commercial operations.",
-  email: "hany76734@gmail.com",
-  phone: "07859312867",
-  location: "Baghdad, Iraq (DOB: 28 Apr 2002)",
-  linkedin: "linkedin.com/in/sajjadhani",
+  fullName: "HAIDER M. SHWKAT",
+  jobTitle: "Computer Science Graduate",
+  summary: "Detail-oriented and ambitious Computer Science graduate with a solid operational background in Data Management, Administrative Support, and digital record keeping. Proven track record in managing large-scale databases (22K+ records), streamlining routine office paperwork, and monitoring attendance tracking workflows. Highly proficient in advanced Microsoft Excel reporting, official correspondence, and database integrity with strict adherence to confidentiality. Committed to leveraging strong organizational, technical, and analytical skills to deliver reliable HR and administrative operations.",
+  email: "haider.m.shwkat@outlook.com",
+  phone: "+964 771 896 4778",
+  location: "Baghdad, Iraq",
+  linkedin: "",
   skills: [
-    "Paid Advertising & Social Media Campaigns (Facebook & Instagram)",
-    "Advanced Data Sheets & Microsoft Office (Excel & Word)",
-    "Digital Subscription Systems & App Data Management (IPTV)",
-    "Accounting & Inventory ERP Software (Al-Bayan)",
-    "Direct & Field Sales, Negotiations & Client Relationship Management",
+    "Microsoft Office (Advanced Excel, Word, PowerPoint)",
+    "Data Management & digital archive",
+    "Time & Attendance Tracking Procedures",
+    "Administrative Support & Problem Solving",
+    "Customer Care & Team Coordination",
+    "Personnel Data Confidentiality & Workplace Ethics",
+    "English (Professional Proficiency: Spoken & Written) | Arabic (Native)",
+    "Professional Document Translation (English ↔ Arabic)",
   ],
   experiences: [
     {
       id: "exp-1",
-      role: "Sales Manager",
-      company: "Gaming & Retail Store — Al-Jadriya Mall, Baghdad",
-      date: "Nov 2025 – Present",
+      role: "Administrative & Operations Support Associate",
+      company: "Techno Store, Baghdad",
+      date: "2025 – Present",
       bullets: [
-        "Supervising complete showroom sales operations, team workflow, and elevating customer retail experience.",
-        "Monitoring inventory turnover, restocking schedules, and consistently surpassing monthly revenue targets."
+        "Time & Attendance Tracking: Monitored and reconciled employee attendance logs, leave requests, and overtime hours, ensuring data integrity for payroll and compliance reporting.",
+        "Forms Digitization: Transitioned paper-based office requests to DigitForm templates, cutting document retrieval time and minimizing manual data entry errors by 40%.",
+        "Advanced Excel Analytics: Maintained operational spreadsheets using VLOOKUP, pivot tables, and automated summaries to report staffing hours and resource allocation.",
+        "Cross-Departmental Coordination: Liaised with internal teams, HR personnel, and procurement vendors to support onboarding logistics, office supply inventory, and routine administrative requests."
       ]
     },
     {
       id: "exp-2",
-      role: "Field Medical Sales Representative",
-      company: "Al-Hadaf Al-Mubashir Medical Co. — Baghdad",
-      date: "Sep 2025 – Oct 2025",
+      role: "Office Services & Documentation Associate",
+      company: "University library",
+      date: "2023 – 2024",
       bullets: [
-        "Managing field distribution and promotion of pharmaceuticals and medical supplies, cultivating strategic partnerships with pharmacies, clinics, and hospitals."
-      ]
-    },
-    {
-      id: "exp-3",
-      role: "Sales Manager",
-      company: "Tudia Security Cameras & Solar Energy Systems",
-      date: "Aug 2024 – Sep 2025",
-      bullets: [
-        "Leading in-house commercial sales, B2B client negotiations, and expanding wholesale distribution networks."
-      ]
-    },
-    {
-      id: "exp-4",
-      role: "Accounts & Inventory Manager",
-      company: "Tudia Security Cameras & Solar Energy Systems",
-      date: "Aug 2024 – Feb 2025",
-      bullets: [
-        "Managing financial records, billing, and SKU item cataloging using Al-Bayan ERP, while conducting periodic warehouse inventory audits."
-      ]
-    },
-    {
-      id: "exp-5",
-      role: "Medical & Commercial Sales Associate",
-      company: "Al-Munjid Pharmaceutical Store — Baghdad",
-      date: "Jan 2023 – Jul 2024",
-      bullets: [
-        "Handling wholesale pharmacy sales counter, billing workflows, and invoice processing via Al-Bayan ERP.",
-        "Serving as commercial and scientific representative across community clinics and pharmacies, presenting product lines and reconciling accounts."
-      ]
-    },
-    {
-      id: "exp-6",
-      role: "Digital Sales & Operations Lead",
-      company: "Digital Subscriptions Platform",
-      date: "Jan 2024 – Present",
-      bullets: [
-        "Directing monthly and annual subscription sales for premium streaming channels, video on demand, and IPTV services.",
-        "Managing application database input/output, user credentials, and service activation workflows with high precision."
-      ]
-    },
-    {
-      id: "exp-7",
-      role: "E-Commerce Sales Specialist",
-      company: "Lavender Watches & Accessories Store",
-      date: "Apr 2022 – Oct 2023",
-      bullets: [
-        "Managing customer inquiries, reservations, and order fulfillment via Facebook and Instagram, coordinating courier delivery logistics."
-      ]
-    },
-    {
-      id: "exp-8",
-      role: "Medical Clinic Secretary",
-      company: "Orthopedic & Fracture Clinic (Dr. Marwan Saleem)",
-      date: "Jan 2018 – Feb 2020",
-      bullets: [
-        "Directing patient reception, appointments scheduling, clinic filing, and medical calendar management with high professionalism."
+        "Document Formatting & Correspondence: Drafted, proofread, and formatted formal letters, administrative forms, and internal reports according to strict institutional standards.",
+        "High-Volume Record Archiving: Digitized, indexed, and cataloged an archive of 22,000+ files and academic records, improving record retrieval efficiency by 60%.",
+        "Routine Office Operations: Handled visitor inquiries, incoming correspondence, database entry updates, and supply replenishment requests with high organizational discipline."
       ]
     }
   ],
   education: [
     {
       id: "edu-1",
-      school: "Al-Mashreq University — Baghdad",
-      degree: "B.Sc. in Medical Laboratory Technology",
-      year: "Oct 2020 – May 2024"
+      school: "Dijlah University — Baghdad",
+      degree: "Bachelor of Science in Computer Science (Expected 2026)",
+      year: "2022 – 2026"
+    },
+    {
+      id: "edu-2",
+      school: "Institute of Technology — Baghdad",
+      degree: "Diploma in Chemical Industry & Technology",
+      year: "2019 – 2021"
     }
   ],
   certifications: [
-    { id: "cert-1", title: "Professional Advertising Specialist — Facebook & Instagram Ads" },
-    { id: "cert-2", title: "Advanced Microsoft Office Productivity & Data Processing (Excel & Word)" }
+    { id: "cert-1", title: "Sales and Customer Service Skills — EarthLink Telecommunications" },
+    { id: "cert-2", title: "Occupational Safety & Health Training — Institute of Technology" },
+    { id: "cert-3", title: "CCNA 1: Introduction to Networks — Dijlah University" }
   ]
 };
 
