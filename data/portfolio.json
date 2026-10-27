@@ -23,8 +23,8 @@
       "becomeClient": "كُن عميلاً",
       "heroLine1": "نصنع أفضل",
       "heroLine2": "النتائج",
-      "heroLine3": "الرقمية",
-      "bio": "حيدر محمد شوكت — متخصص في علوم الحاسوب واستشاري عمليات البيانات والأتمتة بلغة Python، إدارة قواعد البيانات الضخمة (+22K سجل)، تكامل التجارة الإلكترونية، ونشر أنظمة ERP وشبكات FTTH.",
+      "heroLine3": "الإدارية والعمليات",
+      "bio": "حيدر محمد شوكت — خريج علوم حاسوب ومتخصص في إدارة البيانات، الدعم الإداري، والأرشفة الرقمية للوثائق، مع كفاءة متقدمة في إعداد تقارير Excel ومتابعة الحضور والانصراف والمخاطبات الرسمية وضمان سرية البيانات.",
       "statsTag": "01 — الإحصائيات والأرقام",
       "statsTitle": "أرقام مثبتة من المسيرة المهنية",
       "expTag": "02 — الخبرات العملية",
@@ -70,10 +70,10 @@
       "navContact": "Contact Us",
       "downloadCV": "Download PDF",
       "becomeClient": "Become a Client",
-      "heroLine1": "WE CREATE",
-      "heroLine2": "AWESOME",
-      "heroLine3": "DIGITAL RESULTS",
-      "bio": "Haider M. Shwkat — Computer Science Specialist & Data Operations Consultant with extensive experience in workflow automation, large-scale database management (22K+ records), e-commerce catalog integrity, and network infrastructure.",
+      "heroLine1": "DELIVERING",
+      "heroLine2": "RELIABLE",
+      "heroLine3": "ADMIN & OPERATIONS",
+      "bio": "Haider M. Shwkat — Computer Science graduate with a solid operational background in Data Management, Administrative Support, and digital record keeping. Highly proficient in advanced Microsoft Excel reporting, attendance tracking workflows, and official correspondence.",
       "statsTag": "01 — STATS & NUMBERS",
       "statsTitle": "Proven Track Record Numbers",
       "expTag": "02 — WORK EXPERIENCE",
@@ -113,107 +113,77 @@
     {
       "id": "stat-1",
       "value": "+22K",
-      "textAR": "سجل بيانات متكامل تمت هندسته وأرشفته لمشروع في قطاع الدفاع",
-      "textEN": "Multi-platform data records engineered and managed for a Defense Sector project",
+      "textAR": "وثيقة وسجل أكاديمي وإداري تمت إدارتها وفهرستها في الأرشيف الرقمي بدقة تامة",
+      "textEN": "Academic and administrative records digitized, cataloged, and managed in the digital archive",
       "video": "media/volchek-color.mp4"
     },
     {
       "id": "stat-2",
-      "value": "+3K",
-      "textAR": "مشترك نشط تم تقديم الدعم الفني والصيانة الميدانية الكاملة لهم",
-      "textEN": "Active network subscribers and clients provided with full technical support",
+      "value": "60%",
+      "textAR": "تقليص زمن استرجاع المستندات والبحث عنها بفضل الفهرسة الرقمية المحكمة",
+      "textEN": "Improvement in record retrieval and document search efficiency via digital indexing",
       "video": "media/pruzina-color.mp4"
     },
     {
       "id": "stat-3",
-      "value": "4",
-      "textAR": "أنظمة برمجية وحلول أتمتة مؤسسية مطوّرة (بايوغارد، تيربوشير، ديجت فورم، وسكربت أودو ومسواك)",
-      "textEN": "Proprietary systems & automation engineered (BioGuard, TurboShare, DigitForm, Odoo-Miswag)",
+      "value": "40%",
+      "textAR": "تقليل الأخطاء اليدوية وأتمتة النماذج والمعاملات الورقية عبر نظام DigitForm",
+      "textEN": "Reduction in manual entry errors and turnaround time through DigitForm automation",
       "video": "media/time-color.mp4"
     },
     {
       "id": "stat-4",
-      "value": "+2K",
-      "textAR": "مستخدم تم ربطهم وتغطيتهم بشبكات الـ FTTH الحديثة بنظام EPON",
-      "textEN": "Active users connected via modern FTTH / EPON fiber optic networks",
+      "value": "100%",
+      "textAR": "نسبة الدقة في إعداد تقارير Microsoft Excel التشغيلية ومطابقة سجلات الحضور والانصراف",
+      "textEN": "Proven accuracy rate in advanced Excel reporting, attendance reconciliation, and compliance",
       "video": "media/ball-color.mp4"
     }
   ],
   "experiences": [
     {
       "id": "exp-1",
-      "dateAR": "2025 - حتى الآن",
-      "dateEN": "2025 - Present",
+      "dateAR": "2025 – حتى الآن",
+      "dateEN": "2025 – Present",
       "companyAR": "تكنو ستور — بغداد",
-      "companyEN": "Techno Store — Baghdad, Iraq",
-      "roleAR": "أخصائي عمليات التجارة الإلكترونية، البيانات والمبيعات",
-      "roleEN": "E-Commerce, Data Operations & Sales Specialist",
-      "link": "/tekno",
-      "actionAR": "تشغيل أداة تكنو",
-      "actionEN": "Launch Tekno Tool",
+      "companyEN": "Techno Store, Baghdad",
+      "roleAR": "مساعد الدعم الإداري والعمليات",
+      "roleEN": "Administrative & Operations Support Associate",
+      "link": "",
+      "actionAR": "",
+      "actionEN": "",
       "bulletsAR": [
-        "أتمتة وهندسة سكربتات بايثون وأدوات متصفح لرفع وتحديث آلاف المنتجات (SKUs)، مقلصاً زمن المعالجة من أيام إلى دقائق معدودة.",
-        "تطوير ونشر أداة الأتمتة المخصصة (إدارة_متجر_أودو_ومسواك.bat) للربط والمزامنة الفورية للمخزون والمنتجات بين نظام Odoo ERP ومنصة وتطبيق مسواك بدقة 100%.",
-        "إدارة كتالوجات المنتجات والتسعير والمخزون لآلاف المنتجات النشطة مع الحفاظ على سلامة البيانات بنسبة خطأ 0%.",
-        "الربط والمزامنة الآلية للمخزون والمنتجات بين قواعد البيانات وتطبيقات التوصيل العراقية الكبرى (مسواك، طماطة، جاهز، الريان).",
-        "الإشراف على مبيعات الفروع اليومية، وإدارة التسويق الرقمي عبر الريلز، واستثمار ملاحظات الزبائن لزيادة الإيرادات."
+        "متابعة سجلات الحضور والانصراف: تدقيق ومطابقة سجلات تسجيل الحضور والانصراف وساعات العمل الإضافي وطلبات الإجازات للموظفين، وتسوية بيانات الحضور الشهرية لتجهيز مسيرات الرواتب بدقة.",
+        "رقمنة النماذج (DigitForm): تحويل المعاملات الورقية والنماذج التشغيلية اليدوية إلى صيغ ونماذج رقمية موحدة بقياس A4، مما سرّع إجراءات الأرشفة ودورات الموافقات الداخلية.",
+        "تحليلات وإحصاءات متقدمة بـ Excel: بناء وتحديث جداول بيانات تفصيلية وتقارير تشغيلية دورية باستخدام Microsoft Excel بمعدل دقة 100%.",
+        "التنسيق المشترك بين الأقسام: تيسير وتنسيق التواصل الإداري الداخلي بين أقسام العمليات والمبيعات والحسابات لضمان انسيابية العمل والامتثال لسياسات المؤسسة."
       ],
       "bulletsEN": [
-        "Engineered custom Python scripts and browser automation tools to streamline large-scale SKU uploads, cutting data processing time from days to minutes.",
-        "Developed and deployed the custom automation tool (إدارة_متجر_أودو_ومسواك.bat), enabling real-time product, price, and inventory sync between Odoo ERP and the Miswag platform.",
-        "Managed cataloging, stock accuracy, and pricing across platforms for thousands of active SKUs with zero error rates.",
-        "Automated inventory feeds and content sync between internal databases and major Iraqi delivery apps (Miswag, Tamata, Jahez, Al-Rayan).",
-        "Supervised daily branch sales operations, managed digital video reels marketing, and leveraged customer insights to boost revenue."
+        "Time & Attendance Tracking: Monitored and verified employee clock-in/out records, overtime hours, and leave requests; reconciled monthly attendance data ready for payroll preparation.",
+        "Forms Digitization (DigitForm): Converted manual paper forms and operational templates into standardized digital A4 formats, expediting internal archiving and approval turnaround.",
+        "Advanced Excel Analytics: Built structured spreadsheets and recurring operations reports using Microsoft Excel with a proven 100% accuracy rate.",
+        "Cross-Departmental Coordination: Facilitated seamless administrative communication between operations, sales, and accounts, ensuring consistent workflow continuity and policy compliance."
       ]
     },
     {
       "id": "exp-2",
-      "dateAR": "2023 - 2025",
-      "dateEN": "2023 - 2025",
-      "companyAR": "مشاريع متعددة / قطاع الدفاع والتجارة الإلكترونية",
-      "companyEN": "Multi-Client / Defense & E-commerce Projects",
-      "roleAR": "استشاري حر لعمليات البيانات والحلول التقنية",
-      "roleEN": "Freelance Data & Technical Operations Consultant",
+      "dateAR": "2023 – 2024",
+      "dateEN": "2023 – 2024",
+      "companyAR": "المكتبة الجامعية (University Library)",
+      "companyEN": "University library",
+      "roleAR": "مساعد التوثيق والخدمات المكتبية",
+      "roleEN": "Office Services & Documentation Associate",
       "link": "",
       "actionAR": "",
       "actionEN": "",
       "bulletsAR": [
-        "هندسة وبناء منظومة قواعد بيانات شاملة تضم أكثر من 22,000 سجل لقطاع الدفاع مع نظام فلترة للمناطق والاتصال.",
-        "تطوير نظام بايوغارد (BioGuard): منظومة حضور وانصراف ذكية معتمدة على الـ GPS والمصادقة الثنائية (2FA) للتحقق الموثوق من الأجهزة ومنع التلاعب.",
-        "تطوير برنامج تيربوشير (TurboShare): منصة مشاركة ملفات ومراسلات داخلية فائقة السرعة عبر الشبكة المحلية (Intranet) بخصوصية تامة.",
-        "تطوير نظام ديجت فورم (DigitForm): تطبيق لرقمنة الاستمارات والمعاملات الورقية عبر الهاتف مع توليد وطباعة فورية بقياس A4 قياسي.",
-        "حل المشكلات التقنية الحرجة وتجاوز قيود الـ API وهيكلة الكتالوجات لمنصات تجارة إلكترونية كبرى مثل منصة الريان.",
-        "إنتاج وتنفيذ أكثر من 60 فيديو ترويجي وحملات ريلز تعليمية لشركاء التجزئة (Lito Store, Techno Store)."
+        "تنسيق المستندات والمراسلات: صياغة وتنسيق وتدقيق الكتب الرسمية والنماذج والمعاملات الإدارية باستخدام Microsoft Word بسرعة طباعة عالية ودقة لغوية وتنظيمية متناهية.",
+        "أرشفة السجلات الضخمة: تنظيم وتصنيف وإدارة أرشيف رقمي يضم أكثر من 22,000 وثيقة وسجل أكاديمي وإداري، مع الالتزام الصارم بسرية وخصوصية البيانات.",
+        "العمليات المكتبية الروتينية: تنفيذ عمليات المسح الضوئي والأرشفة الإلكترونية، وحفظ الملفات، ومعالجة استفسارات المراجعين والتعامل مع الطلبات العاجلة بكفاءة عالية."
       ],
       "bulletsEN": [
-        "Built a comprehensive database system of 22,000+ multi-platform records for a Defense Sector project with region and contact filtering.",
-        "Developed BioGuard: An enterprise attendance tracking system utilizing GPS geofencing and 2FA device authentication to prevent spoofing.",
-        "Developed TurboShare: A high-speed local intranet hub for secure file transfer and internal messaging, isolated from external networks.",
-        "Developed DigitForm: A mobile-first form digitization platform replacing paper workflows with instant ISO A4 print-ready PDF generation.",
-        "Resolved critical catalog structures, API rate limits, and product feature bugs for prominent Iraqi e-commerce platforms (e.g. Al-Rayan).",
-        "Produced and executed over 60 commercial reels, technical tutorials, and brand video campaigns for retail partners (Lito Store, Techno Store)."
-      ]
-    },
-    {
-      "id": "exp-3",
-      "dateAR": "2019 - 2023",
-      "dateEN": "2019 - 2023",
-      "companyAR": "قطاع الفعاليات والاتصالات — بغداد",
-      "companyEN": "Events & Telecommunications Sector — Baghdad",
-      "roleAR": "مسؤول عمليات ومنسق دعم الشبكات",
-      "roleEN": "Operations Lead & Network Support Coordinator",
-      "link": "",
-      "actionAR": "",
-      "actionEN": "",
-      "bulletsAR": [
-        "قيادة وإدارة فرق العمل لتخطيط وتنفيذ فعاليات ومؤتمرات كبرى لأكثر من 150 ضيفاً بأعلى معايير الجودة.",
-        "الإشراف على مد وبناء شبكات الألياف الضوئية FTTH عبر 3 مناطق، وربط أكثر من 2000 مستخدم نشط بنظام EPON.",
-        "إدارة وتنسيق الدعم الفني والصيانة الميدانية لقاعدة مشتركين تضم أكثر من 3000 عميل شبكات."
-      ],
-      "bulletsEN": [
-        "Led operational teams to plan, coordinate, and execute large-scale corporate and public events for 150+ guests with high efficiency.",
-        "Directed the construction and deployment of FTTH networks across 3 districts, connecting 2,000+ active users using EPON systems.",
-        "Managed end-to-end troubleshooting and maintenance coordination for a subscriber base of 3,000+ active network clients."
+        "Document Formatting & Correspondence: Drafted, formatted, and proofread official letters, forms, and administrative documentation using Microsoft Word with rapid typing and meticulous precision.",
+        "High-Volume Record Archiving: Organized, categorized, and managed a digital archive of over 22,000 documents and records, maintaining strict adherence to client privacy and confidentiality.",
+        "Routine Office Operations: Executed scanning, digital archiving, filing, and customer inquiry processing, resolving routine requests under tight deadlines."
       ]
     }
   ],

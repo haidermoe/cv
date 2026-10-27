@@ -40,47 +40,35 @@ const translations = {
     navEducation: "التعليم",
     navContact: "تواصل معي",
     downloadCV: "تحميل ملف السيرة PDF",
-    becomeClient: "كُن عميلاً",
+    becomeClient: "تواصل للتوظيف",
     heroLine1: "نصنع أفضل",
     heroLine2: "النتائج",
-    heroLine3: "الرقمية",
-    bio: "حيدر محمد شوكت — متخصص في علوم الحاسوب واستشاري عمليات البيانات والأتمتة بلغة Python، إدارة قواعد البيانات الضخمة (+22K سجل)، تكامل التجارة الإلكترونية، ونشر أنظمة ERP وشبكات FTTH.",
+    heroLine3: "الإدارية والعمليات",
+    bio: "حيدر محمد شوكت — خريج علوم حاسوب ومتخصص في إدارة البيانات، الدعم الإداري، والأرشفة الرقمية للوثائق، مع كفاءة متقدمة في إعداد تقارير Excel ومتابعة الحضور والانصراف والمخاطبات الرسمية وضمان سرية البيانات.",
     statsTag: "01 — الإحصائيات والأرقام",
-    statsTitle: "أرقام مثبتة من المسيرة المهنية",
-    stat1: "سجل بيانات متكامل تمت هندسته وأرشفته لمشروع في قطاع الدفاع",
-    stat2: "مشترك نشط تم تقديم الدعم الفني والصيانة الميدانية الكاملة لهم",
-    stat3: "أنظمة برمجية وحلول أتمتة مؤسسية مطوّرة (بايوغارد، تيربوشير، ديجت فورم، وسكربت أودو ومسواك)",
-    stat4: "مستخدم تم ربطهم وتغطيتهم بشبكات الـ FTTH الحديثة بنظام EPON",
+    statsTitle: "أرقام مثبتة من المسيرة الإدارية والعمليات",
+    stat1: "وثيقة وسجل أكاديمي وإداري تمت إدارتها وفهرستها في الأرشيف الرقمي بدقة تامة",
+    stat2: "تقليص زمن استرجاع المستندات والبحث عنها بفضل الفهرسة الرقمية المحكمة",
+    stat3: "تقليل الأخطاء اليدوية وأتمتة النماذج والمعاملات الورقية عبر نظام DigitForm",
+    stat4: "نسبة الدقة في إعداد تقارير Microsoft Excel التشغيلية ومطابقة سجلات الحضور والانصراف",
     expTag: "02 — الخبرات العملية",
     expTitle: "سجل مهني حافل بتحقيق الأهداف والنتائج",
-    exp1Date: "2025 - حتى الآن",
+    exp1Date: "2025 – حتى الآن",
     exp1Company: "تكنو ستور — بغداد",
-    exp1Role: "أخصائي عمليات التجارة الإلكترونية، البيانات والمبيعات",
+    exp1Role: "مساعد الدعم الإداري والعمليات",
     exp1Bullets: [
-      "أتمتة وهندسة سكربتات بايثون وأدوات متصفح لرفع وتحديث آلاف المنتجات (SKUs)، مقلصاً زمن المعالجة من أيام إلى دقائق معدودة.",
-      "تطوير ونشر أداة الأتمتة المخصصة (إدارة_متجر_أودو_ومسواك.bat) للربط والمزامنة الفورية للمخزون والمنتجات بين نظام Odoo ERP ومنصة وتطبيق مسواك بدقة 100%.",
-      "إدارة كتالوجات المنتجات والتسعير والمخزون لآلاف المنتجات النشطة مع الحفاظ على سلامة البيانات بنسبة خطأ 0%.",
-      "الربط والمزامنة الآلية للمخزون والمنتجات بين قواعد البيانات وتطبيقات التوصيل العراقية الكبرى (مسواك، طماطة، جاهز، الريان).",
-      "الإشراف على مبيعات الفروع اليومية، وإدارة التسويق الرقمي عبر الريلز، واستثمار ملاحظات الزبائن لزيادة الإيرادات."
+      "متابعة سجلات الحضور والانصراف: تدقيق ومطابقة سجلات تسجيل الحضور والانصراف وساعات العمل الإضافي وطلبات الإجازات للموظفين، وتسوية بيانات الحضور الشهرية لتجهيز مسيرات الرواتب بدقة.",
+      "رقمنة النماذج (DigitForm): تحويل المعاملات الورقية والنماذج التشغيلية اليدوية إلى صيغ ونماذج رقمية موحدة بقياس A4، مما سرّع إجراءات الأرشفة ودورات الموافقات الداخلية.",
+      "تحليلات وإحصاءات متقدمة بـ Excel: بناء وتحديث جداول بيانات تفصيلية وتقارير تشغيلية دورية باستخدام Microsoft Excel بمعدل دقة 100%.",
+      "التنسيق المشترك بين الأقسام: تيسير وتنسيق التواصل الإداري الداخلي بين أقسام العمليات والمبيعات والحسابات لضمان انسيابية العمل والامتثال لسياسات المؤسسة."
     ],
-    exp2Date: "2023 - 2025",
-    exp2Company: "مشاريع متعددة / قطاع الدفاع والتجارة الإلكترونية",
-    exp2Role: "استشاري حر لعمليات البيانات والحلول التقنية",
+    exp2Date: "2023 – 2024",
+    exp2Company: "المكتبة الجامعية (University Library)",
+    exp2Role: "مساعد التوثيق والخدمات المكتبية",
     exp2Bullets: [
-      "هندسة وبناء منظومة قواعد بيانات شاملة تضم أكثر من 22,000 سجل لقطاع الدفاع مع نظام فلترة للمناطق والاتصال.",
-      "تطوير نظام بايوغارد (BioGuard): منظومة حضور وانصراف ذكية معتمدة على الـ GPS والمصادقة الثنائية (2FA) للتحقق الموثوق من الأجهزة ومنع التلاعب.",
-      "تطوير برنامج تيربوشير (TurboShare): منصة مشاركة ملفات ومراسلات داخلية فائقة السرعة عبر الشبكة المحلية (Intranet) بخصوصية تامة.",
-      "تطوير نظام ديجت فورم (DigitForm): تطبيق لرقمنة الاستمارات والمعاملات الورقية عبر الهاتف مع توليد وطباعة فورية بقياس A4 قياسي.",
-      "حل المشكلات التقنية الحرجة وتجاوز قيود الـ API وهيكلة الكتالوجات لمنصات تجارة إلكترونية كبرى مثل منصة الريان.",
-      "إنتاج وتنفيذ أكثر من 60 فيديو ترويجي وحملات ريلز تعليمية لشركاء التجزئة (Lito Store, Techno Store)."
-    ],
-    exp3Date: "2019 - 2023",
-    exp3Company: "قطاع الفعاليات والاتصالات — بغداد",
-    exp3Role: "مسؤول عمليات ومنسق دعم الشبكات",
-    exp3Bullets: [
-      "قيادة وإدارة فرق العمل لتخطيط وتنفيذ فعاليات ومؤتمرات كبرى لأكثر من 150 ضيفاً بأعلى معايير الجودة.",
-      "الإشراف على مد وبناء شبكات الألياف الضوئية FTTH عبر 3 مناطق، وربط أكثر من 2000 مستخدم نشط بنظام EPON.",
-      "إدارة وتنسيق الدعم الفني والصيانة الميدانية لقاعدة مشتركين تضم أكثر من 3000 عميل شبكات."
+      "تنسيق المستندات والمراسلات: صياغة وتنسيق وتدقيق الكتب الرسمية والنماذج والمعاملات الإدارية باستخدام Microsoft Word بسرعة طباعة عالية ودقة لغوية وتنظيمية متناهية.",
+      "أرشفة السجلات الضخمة: تنظيم وتصنيف وإدارة أرشيف رقمي يضم أكثر من 22,000 وثيقة وسجل أكاديمي وإداري، مع الالتزام الصارم بسرية وخصوصية البيانات.",
+      "العمليات المكتبية الروتينية: تنفيذ عمليات المسح الضوئي والأرشفة الإلكترونية، وحفظ الملفات، ومعالجة استفسارات المراجعين والتعامل مع الطلبات العاجلة بكفاءة عالية."
     ],
     navTools: "الأدوات",
     toolsTag: "03 — الأدوات والنظم التفاعلية",
@@ -106,18 +94,18 @@ const translations = {
     cert1: "شهادة CCNA 1: Introduction to Networks — جامعة دجلة",
     cert2: "شهادة مهارات المبيعات وخدمة العملاء — شركة إيرثلنك",
     cert3: "تدريب السلامة والصحة المهنية — معهد التكنولوجيا بغداد",
-    footerSubtitle: "جاهز لمساعدتك في بناء وإدارة أفضل نظام بيانات، أتمتة برمجية، وتجارة إلكترونية.",
+    footerSubtitle: "جاهز لدعم وتطوير العمليات الإدارية، إدارة قواعد البيانات، والأرشفة الرقمية بكفاءة عالية.",
     drawerTitle: "مرحباً! أخبرنا بكل التفاصيل",
-    drawerSubtitle: "يسعدنا التعاون معك لبناء وتطوير حلول برمجية وبيانات استثنائية.",
-    nameLabel: "الاسم والشركة / Name & Company",
+    drawerSubtitle: "يسعدنا التواصل معك لبحث فرص العمل والتعاون المهني المشترك.",
+    nameLabel: "الاسم والجهة / Name & Company",
     emailLabel: "البريد الإلكتروني / Your Email",
-    projectLabel: "أخبرنا المزيد عن مشروعك / Tell us more about your project",
-    namePlaceholder: "حيدر من تكنو ستور",
-    emailPlaceholder: "haider@example.com",
-    projectPlaceholder: "اكتب تفاصيل مشروعك أو فكرتك المميزة هنا...",
-    submitBtn: "إرسال الطلب",
-    submittedTitle: "تم إرسال طلبك بنجاح!",
-    submittedText: "سنقوم بالتواصل معك في أسرع وقت ممكن."
+    projectLabel: "تفاصيل الفرصة أو الاستفسار / Opportunity Details",
+    namePlaceholder: "الاسم الكامل أو اسم الشركة",
+    emailPlaceholder: "haider.m.shwkat@outlook.com",
+    projectPlaceholder: "اكتب تفاصيل الاستفسار أو الوظيفة هنا...",
+    submitBtn: "إرسال الرسالة",
+    submittedTitle: "تم إرسال رسالتك بنجاح!",
+    submittedText: "سنقوم بالرد والتواصل معك في أقرب وقت."
   },
   EN: {
     logo: "Haider Mohamed",
@@ -129,47 +117,35 @@ const translations = {
     navEducation: "Education",
     navContact: "Contact Us",
     downloadCV: "Download PDF",
-    becomeClient: "Become a Client",
-    heroLine1: "WE CREATE",
-    heroLine2: "AWESOME",
-    heroLine3: "DIGITAL RESULTS",
-    bio: "Haider M. Shwkat — Computer Science Specialist & Data Operations Consultant with extensive experience in workflow automation, large-scale database management (22K+ records), e-commerce catalog integrity, and network infrastructure.",
+    becomeClient: "Contact Me",
+    heroLine1: "DELIVERING",
+    heroLine2: "RELIABLE",
+    heroLine3: "ADMIN & OPERATIONS",
+    bio: "Haider M. Shwkat — Computer Science graduate with a solid operational background in Data Management, Administrative Support, and digital record keeping. Highly proficient in advanced Microsoft Excel reporting, attendance tracking workflows, and official correspondence.",
     statsTag: "01 — STATS & NUMBERS",
-    statsTitle: "Proven Track Record Numbers",
-    stat1: "Multi-platform data records engineered and managed for a Defense Sector project",
-    stat2: "Active network subscribers and clients provided with full technical support",
-    stat3: "Proprietary systems & automation engineered (BioGuard, TurboShare, DigitForm, Odoo-Miswag)",
-    stat4: "Active users connected via modern FTTH / EPON fiber optic networks",
+    statsTitle: "Proven Track Record in Operations & Data",
+    stat1: "Academic and administrative records digitized, cataloged, and managed in the digital archive",
+    stat2: "Improvement in record retrieval and document search efficiency via digital indexing",
+    stat3: "Reduction in manual entry errors and turnaround time through DigitForm automation",
+    stat4: "Proven accuracy rate in advanced Excel reporting, attendance reconciliation, and compliance",
     expTag: "02 — WORK EXPERIENCE",
     expTitle: "Proven Career Journey & High-Impact Results",
-    exp1Date: "2025 - Present",
+    exp1Date: "2025 – Present",
     exp1Company: "Techno Store — Baghdad, Iraq",
-    exp1Role: "E-Commerce, Data Operations & Sales Specialist",
+    exp1Role: "Administrative & Operations Support Associate",
     exp1Bullets: [
-      "Engineered custom Python scripts and browser automation tools to streamline large-scale SKU uploads, cutting data processing time from days to minutes.",
-      "Developed and deployed the custom automation tool (إدارة_متجر_أودو_ومسواك.bat), enabling real-time product, price, and inventory sync between Odoo ERP and the Miswag platform.",
-      "Managed cataloging, stock accuracy, and pricing across platforms for thousands of active SKUs with zero error rates.",
-      "Automated inventory feeds and content sync between internal databases and major Iraqi delivery apps (Miswag, Tamata, Jahez, Al-Rayan).",
-      "Supervised daily branch sales operations, managed digital video reels marketing, and leveraged customer insights to boost revenue."
+      "Time & Attendance Tracking: Monitored and verified employee clock-in/out records, overtime hours, and leave requests; reconciled monthly attendance data ready for payroll preparation.",
+      "Forms Digitization (DigitForm): Converted manual paper forms and operational templates into standardized digital A4 formats, expediting internal archiving and approval turnaround.",
+      "Advanced Excel Analytics: Built structured spreadsheets and recurring operations reports using Microsoft Excel with a proven 100% accuracy rate.",
+      "Cross-Departmental Coordination: Facilitated seamless administrative communication between operations, sales, and accounts, ensuring consistent workflow continuity and policy compliance."
     ],
-    exp2Date: "2023 - 2025",
-    exp2Company: "Multi-Client / Defense & E-commerce Projects",
-    exp2Role: "Freelance Data & Technical Operations Consultant",
+    exp2Date: "2023 – 2024",
+    exp2Company: "University library",
+    exp2Role: "Office Services & Documentation Associate",
     exp2Bullets: [
-      "Built a comprehensive database system of 22,000+ multi-platform records for a Defense Sector project with region and contact filtering.",
-      "Developed BioGuard: An enterprise attendance tracking system utilizing GPS geofencing and 2FA device authentication to prevent spoofing.",
-      "Developed TurboShare: A high-speed local intranet hub for secure file transfer and internal messaging, isolated from external networks.",
-      "Developed DigitForm: A mobile-first form digitization platform replacing paper workflows with instant ISO A4 print-ready PDF generation.",
-      "Resolved critical catalog structures, API rate limits, and product feature bugs for prominent Iraqi e-commerce platforms (e.g. Al-Rayan).",
-      "Produced and executed over 60 commercial reels, technical tutorials, and brand video campaigns for retail partners (Lito Store, Techno Store)."
-    ],
-    exp3Date: "2019 - 2023",
-    exp3Company: "Events & Telecommunications Sector — Baghdad",
-    exp3Role: "Operations Lead & Network Support Coordinator",
-    exp3Bullets: [
-      "Led operational teams to plan, coordinate, and execute large-scale corporate and public events for 150+ guests with high efficiency.",
-      "Directed the construction and deployment of FTTH networks across 3 districts, connecting 2,000+ active users using EPON systems.",
-      "Managed end-to-end troubleshooting and maintenance coordination for a subscriber base of 3,000+ active network clients."
+      "Document Formatting & Correspondence: Drafted, formatted, and proofread official letters, forms, and administrative documentation using Microsoft Word with rapid typing and meticulous precision.",
+      "High-Volume Record Archiving: Organized, categorized, and managed a digital archive of over 22,000 documents and records, maintaining strict adherence to client privacy and confidentiality.",
+      "Routine Office Operations: Executed scanning, digital archiving, filing, and customer inquiry processing, resolving routine requests under tight deadlines."
     ],
     toolsTag: "03 — INTERACTIVE TOOLS",
     toolsTitle: "Custom-Built Software Tools & Automation",
@@ -194,17 +170,17 @@ const translations = {
     cert1: "CCNA 1: Introduction to Networks — Dijlah University",
     cert2: "Sales and Customer Service Skills — EarthLink Telecommunications",
     cert3: "Occupational Safety Training — Institute of Technology Baghdad",
-    footerSubtitle: "Ready to help you build and scale data-driven software, automation pipelines & e-commerce systems.",
+    footerSubtitle: "Ready to support operational efficiency, database management, and digital archiving with high precision.",
     drawerTitle: "Hey! Tell us all the things",
-    drawerSubtitle: "We’d love to hear about your project and build something amazing together.",
+    drawerSubtitle: "We’d love to hear from you regarding opportunities and professional collaboration.",
     nameLabel: "Name & Company",
     emailLabel: "Your Email",
-    projectLabel: "Tell us more about your project",
-    namePlaceholder: "Haider from Techno Store",
-    emailPlaceholder: "haider@example.com",
-    projectPlaceholder: "Write your project details or great ideas here...",
-    submitBtn: "Submit Request",
-    submittedTitle: "Request Submitted Successfully!",
+    projectLabel: "Opportunity Details or Inquiries",
+    namePlaceholder: "Full Name or Company",
+    emailPlaceholder: "haider.m.shwkat@outlook.com",
+    projectPlaceholder: "Write your inquiry or job opportunity details here...",
+    submitBtn: "Submit Message",
+    submittedTitle: "Message Sent Successfully!",
     submittedText: "We will get back to you as soon as possible."
   }
 };
@@ -800,7 +776,7 @@ export default function Home() {
           {/* STAT CARD 2 */}
           <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0", transition: "all 0.3s ease" }}>
             <div style={{ position: "relative", zIndex: 2 }}>
-              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>+3K</span>
+              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>60%</span>
               <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat2}</p>
             </div>
             <video src="media/pruzina-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 1, transition: "transform 0.4s ease" }}></video>
@@ -809,7 +785,7 @@ export default function Home() {
           {/* STAT CARD 3 */}
           <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0", transition: "all 0.3s ease" }}>
             <div style={{ position: "relative", zIndex: 2 }}>
-              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>4</span>
+              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>40%</span>
               <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat3}</p>
             </div>
             <video src="media/time-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 1, transition: "transform 0.4s ease" }}></video>
@@ -818,7 +794,7 @@ export default function Home() {
           {/* STAT CARD 4 */}
           <div className="awsmd-stat-card" style={{ background: "#f2f0f1", padding: "26px 26px 40px 26px", borderRadius: "24px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", minHeight: "280px", border: "1px solid #e2e8f0", transition: "all 0.3s ease" }}>
             <div style={{ position: "relative", zIndex: 2 }}>
-              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>+2K</span>
+              <span dir="ltr" style={{ fontSize: "52px", fontWeight: "900", color: "#0f111a", display: "block", textAlign: lang === "AR" ? "right" : "left", lineHeight: "1.0", marginBottom: "8px" }}>100%</span>
               <p style={{ color: "#475569", fontSize: "16px", lineHeight: "1.5", fontWeight: "700", textAlign: lang === "AR" ? "right" : "left", maxWidth: "88%" }}>{t.stat4}</p>
             </div>
             <video src="media/ball-color.mp4" autoPlay loop muted playsInline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback" style={{ width: "120px", height: "120px", position: "absolute", bottom: "-5px", left: lang === "AR" ? "-5px" : "auto", right: lang === "EN" ? "-5px" : "auto", objectFit: "cover", pointerEvents: "none", zIndex: 1, opacity: 1, transition: "transform 0.4s ease" }}></video>
@@ -835,29 +811,26 @@ export default function Home() {
             <h2 style={{ fontSize: "40px", fontWeight: "900", marginTop: "10px", color: tColors.text }}>{t.expTitle}</h2>
           </div>
 
-          {/* 3 HIGH-IMPACT CARDS RESPONSIVE GRID */}
+          {/* 2 HIGH-IMPACT CARDS RESPONSIVE GRID MATCHING VERIFIED CV */}
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
               gap: "24px",
             }}
           >
             {/* CARD 1: TECHNO STORE */}
-            <Link
-              href="/tekno"
+            <div
               className="awsmd-dark-card"
               style={{
                 background: tColors.cardBg,
-                padding: "30px 26px",
+                padding: "32px 28px",
                 borderRadius: "24px",
                 border: "1.5px solid rgba(37, 99, 235, 0.35)",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                textDecoration: "none",
                 color: tColors.text,
-                cursor: "pointer",
                 transition: "all 0.3s ease",
                 boxShadow: "0 10px 30px rgba(37, 99, 235, 0.08)",
                 minHeight: "280px",
@@ -866,71 +839,43 @@ export default function Home() {
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
                   <span style={{ background: "rgba(37, 99, 235, 0.12)", color: "#2563eb", padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800" }}>{t.exp1Date}</span>
-                  <span style={{ background: "#2563eb", color: "#ffffff", padding: "5px 12px", borderRadius: "20px", fontSize: "11.5px", fontWeight: "800", display: "inline-flex", alignItems: "center", gap: "4px" }}>
-                    <span>{lang === "AR" ? "تشغيل أداة تكنو" : "Launch Tekno Tool"}</span>
-                  </span>
                 </div>
                 <h3 style={{ fontSize: "22px", fontWeight: "800", color: tColors.text, marginBottom: "4px" }}>{t.exp1Company}</h3>
-                <p style={{ color: "#2563eb", fontSize: "14px", fontWeight: "700", marginBottom: "14px" }}>{t.exp1Role}</p>
+                <p style={{ color: "#2563eb", fontSize: "14.5px", fontWeight: "700", marginBottom: "14px" }}>{t.exp1Role}</p>
               </div>
               <ul style={{ color: tColors.subtext, fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
                 {t.exp1Bullets.map((b, i) => (
                   <li key={i}>{b}</li>
                 ))}
               </ul>
-            </Link>
+            </div>
 
-            {/* CARD 2: FREELANCE CONSULTANT / DEFENSE & E-COMMERCE */}
+            {/* CARD 2: UNIVERSITY LIBRARY */}
             <div
               className="awsmd-dark-card"
               style={{
                 background: tColors.cardBg,
-                padding: "30px 26px",
+                padding: "32px 28px",
                 borderRadius: "24px",
                 border: tColors.cardBorder,
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
+                color: tColors.text,
                 minHeight: "280px",
                 boxShadow: tColors.cardShadow,
                 transition: "all 0.3s ease"
               }}
             >
               <div>
-                <span style={{ background: isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.06)", color: tColors.text, padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "14px" }}>{t.exp2Date}</span>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+                  <span style={{ background: isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.06)", color: tColors.text, padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800" }}>{t.exp2Date}</span>
+                </div>
                 <h3 style={{ fontSize: "22px", fontWeight: "800", color: tColors.text, marginBottom: "4px" }}>{t.exp2Company}</h3>
-                <p style={{ color: tColors.mutedText, fontSize: "14px", fontWeight: "600", marginBottom: "14px" }}>{t.exp2Role}</p>
+                <p style={{ color: tColors.mutedText, fontSize: "14.5px", fontWeight: "600", marginBottom: "14px" }}>{t.exp2Role}</p>
               </div>
               <ul style={{ color: tColors.subtext, fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
                 {t.exp2Bullets.map((b, i) => (
-                  <li key={i}>{b}</li>
-                ))}
-              </ul>
-            </div>
-
-            {/* CARD 3: EVENTS & TELECOMMUNICATIONS */}
-            <div
-              className="awsmd-dark-card"
-              style={{
-                background: tColors.cardBg,
-                padding: "30px 26px",
-                borderRadius: "24px",
-                border: tColors.cardBorder,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                minHeight: "280px",
-                boxShadow: tColors.cardShadow,
-                transition: "all 0.3s ease"
-              }}
-            >
-              <div>
-                <span style={{ background: isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.06)", color: tColors.text, padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: "800", display: "inline-block", marginBottom: "14px" }}>{t.exp3Date}</span>
-                <h3 style={{ fontSize: "22px", fontWeight: "800", color: tColors.text, marginBottom: "4px" }}>{t.exp3Company}</h3>
-                <p style={{ color: tColors.mutedText, fontSize: "14px", fontWeight: "600", marginBottom: "14px" }}>{t.exp3Role}</p>
-              </div>
-              <ul style={{ color: tColors.subtext, fontSize: "13.5px", margin: 0, paddingRight: lang === "AR" ? "16px" : "0", paddingLeft: lang === "EN" ? "16px" : "0", lineHeight: "1.7", fontWeight: "500" }}>
-                {t.exp3Bullets.map((b, i) => (
                   <li key={i}>{b}</li>
                 ))}
               </ul>
