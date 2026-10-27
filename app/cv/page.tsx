@@ -246,21 +246,21 @@ const DEFAULT_AR_DATA: LanguageSpecificData = {
       company: "تكنو ستور (Techno Store) – بغداد",
       date: "2025 – حتى الآن",
       bullets: [
-        "متابعة سجلات الحضور والانصراف: تدقيق ومطابقة سجلات دوام الموظفين، إجازاتهم، والعمل الإضافي، وتسوية الفروقات لضمان انضباط ودقة مسيرات الرواتب.",
-        "رقمنة النماذج والعمليات: أتمتة النماذج الورقية وسجلات العهد عبر نظام DigitForm، مما ساهم في تقليل الأخطاء اليدوية بنسبة 40% وتسريع استرجاع البيانات.",
-        "تحليلات وإحصاءات متقدمة بـ Excel: بناء وتحديث لوحات متابعة وتقارير تشغيلية لمراقبة الأداء، ساعات العمل، ومعدلات الدوران الوظيفي لإدارة الشركة.",
-        "التنسيق المشترك بين الأقسام: العمل كنقطة وصل وتنسيق مع مسؤولي الموارد البشرية والمشتريات لتسهيل إجراءات التعيين وتهيئة الموظفين الجدد وصرف المستحقات."
+        "متابعة سجلات الحضور والانصراف: تدقيق ومطابقة سجلات تسجيل الحضور والانصراف وساعات العمل الإضافي وطلبات الإجازات للموظفين، وتسوية بيانات الحضور الشهرية لتجهيز مسيرات الرواتب بدقة.",
+        "رقمنة النماذج (DigitForm): تحويل المعاملات الورقية والنماذج التشغيلية اليدوية إلى صيغ ونماذج رقمية موحدة بقياس A4، مما سرّع إجراءات الأرشفة ودورات الموافقات الداخلية.",
+        "تحليلات وإحصاءات متقدمة بـ Excel: بناء وتحديث جداول بيانات تفصيلية وتقارير تشغيلية دورية باستخدام Microsoft Excel بمعدل دقة 100%.",
+        "التنسيق المشترك بين الأقسام: تيسير وتنسيق التواصل الإداري الداخلي بين أقسام العمليات والمبيعات والحسابات لضمان انسيابية العمل والامتثال لسياسات المؤسسة."
       ]
     },
     {
       id: "exp-2",
       role: "مساعد التوثيق والخدمات المكتبية",
-      company: "المكتبة الجامعية",
+      company: "المكتبة الجامعية (University Library)",
       date: "2023 – 2024",
       bullets: [
-        "تنسيق المستندات والمراسلات: صياغة وتدقيق الكتب والمراسلات والتقارير الرسمية بدقة لغوية وتنظيمية عالية، وتوزيعها وفق القنوات المعتمدة.",
-        "أرشفة السجلات الضخمة: إدارة وفهرسة وتصنيف أكثر من 22,000 سجل وملف أكاديمي وإداري، مما قلل وقت البحث عن الوثائق بنسبة 60%.",
-        "العمليات المكتبية الروتينية: توجيه استفسارات المراجعين، إدخال وتحديث البيانات الرقمية، ومتابعة متطلبات الصيانة والمواد المكتبية الدورية."
+        "تنسيق المستندات والمراسلات: صياغة وتنسيق وتدقيق الكتب الرسمية والنماذج والمعاملات الإدارية باستخدام Microsoft Word بسرعة طباعة عالية ودقة لغوية وتنظيمية متناهية.",
+        "أرشفة السجلات الضخمة: تنظيم وتصنيف وإدارة أرشيف رقمي يضم أكثر من 22,000 وثيقة وسجل أكاديمي وإداري، مع الالتزام الصارم بسرية وخصوصية البيانات.",
+        "العمليات المكتبية الروتينية: تنفيذ عمليات المسح الضوئي والأرشفة الإلكترونية، وحفظ الملفات، ومعالجة استفسارات المراجعين والتعامل مع الطلبات العاجلة بكفاءة عالية."
       ]
     }
   ],
@@ -300,7 +300,7 @@ const DEFAULT_EN_DATA: LanguageSpecificData = {
     "Administrative Support & Problem Solving",
     "Customer Care & Team Coordination",
     "Personnel Data Confidentiality & Workplace Ethics",
-    "English (Professional Proficiency: Spoken & Written) | Arabic (Native)",
+    "English (Professional Proficiency: Spoken & Written) Arabic (Native)",
     "Professional Document Translation (English ↔ Arabic)",
   ],
   experiences: [
@@ -310,10 +310,10 @@ const DEFAULT_EN_DATA: LanguageSpecificData = {
       company: "Techno Store, Baghdad",
       date: "2025 – Present",
       bullets: [
-        "Time & Attendance Tracking: Monitored and reconciled employee attendance logs, leave requests, and overtime hours, ensuring data integrity for payroll and compliance reporting.",
-        "Forms Digitization: Transitioned paper-based office requests to DigitForm templates, cutting document retrieval time and minimizing manual data entry errors by 40%.",
-        "Advanced Excel Analytics: Maintained operational spreadsheets using VLOOKUP, pivot tables, and automated summaries to report staffing hours and resource allocation.",
-        "Cross-Departmental Coordination: Liaised with internal teams, HR personnel, and procurement vendors to support onboarding logistics, office supply inventory, and routine administrative requests."
+        "Time & Attendance Tracking: Monitored and verified employee clock-in/out records, overtime hours, and leave requests; reconciled monthly attendance data ready for payroll preparation.",
+        "Forms Digitization (DigitForm): Converted manual paper forms and operational templates into standardized digital A4 formats, expediting internal archiving and approval turnaround.",
+        "Advanced Excel Analytics: Built structured spreadsheets and recurring operations reports using Microsoft Excel with a proven 100% accuracy rate.",
+        "Cross-Departmental Coordination: Facilitated seamless administrative communication between operations, sales, and accounts, ensuring consistent workflow continuity and policy compliance."
       ]
     },
     {
@@ -322,9 +322,9 @@ const DEFAULT_EN_DATA: LanguageSpecificData = {
       company: "University library",
       date: "2023 – 2024",
       bullets: [
-        "Document Formatting & Correspondence: Drafted, proofread, and formatted formal letters, administrative forms, and internal reports according to strict institutional standards.",
-        "High-Volume Record Archiving: Digitized, indexed, and cataloged an archive of 22,000+ files and academic records, improving record retrieval efficiency by 60%.",
-        "Routine Office Operations: Handled visitor inquiries, incoming correspondence, database entry updates, and supply replenishment requests with high organizational discipline."
+        "Document Formatting & Correspondence: Drafted, formatted, and proofread official letters, forms, and administrative documentation using Microsoft Word with rapid typing and meticulous precision.",
+        "High-Volume Record Archiving: Organized, categorized, and managed a digital archive of over 22,000 documents and records, maintaining strict adherence to client privacy and confidentiality.",
+        "Routine Office Operations: Executed scanning, digital archiving, filing, and customer inquiry processing, resolving routine requests under tight deadlines."
       ]
     }
   ],
