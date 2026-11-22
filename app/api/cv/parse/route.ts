@@ -132,8 +132,9 @@ function parseCvRuleBased(rawText: string): LanguageSpecificData {
         date = dateMatch[1].trim();
       }
 
-      const beforeDate = dateMatch ? trimmed.substring(0, dateMatch.index).trim() : trimmed;
-      const afterDate = dateMatch ? trimmed.substring(dateMatch.index + dateMatch[0].length).trim() : "";
+      const matchIndex = dateMatch?.index ?? -1;
+      const beforeDate = dateMatch && matchIndex >= 0 ? trimmed.substring(0, matchIndex).trim() : trimmed;
+      const afterDate = dateMatch && matchIndex >= 0 ? trimmed.substring(matchIndex + dateMatch[0].length).trim() : "";
 
       let role = "";
       let company = "";
