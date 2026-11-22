@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { CV_TEMPLATES_PRESETS } from "@/lib/cvPresets";
 import { useTheme } from "@/app/hooks/useTheme";
+import WaveMesh from "@/components/ui/wave-mesh";
 
 interface CvExperience {
   id: string;
@@ -1165,31 +1166,17 @@ export default function PublicCvBuilderPage() {
         transition: "background 0.3s ease, color 0.3s ease",
       }}
     >
-      {/* 3D CONCAVE DOT GRID BACKGROUND LAYER (MATCHING /images & /tekno) */}
-      <div
+      {/* WAVE MESH GENERAL BACKGROUND LAYER */}
+      <WaveMesh
+        colors={isDark ? ["#0e0d15", "#c9d6ea", "#ef4444"] : ["#f2f1f6", "#1b1a17", "#2563eb"]}
+        crests={true}
         style={{
           position: "fixed",
-          inset: "-15%",
+          inset: 0,
           zIndex: 0,
           pointerEvents: "none",
-          overflow: "hidden",
-          perspective: "1000px",
         }}
-      >
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            backgroundImage: `radial-gradient(${isDark ? "rgba(255, 255, 255, 0.14)" : "rgba(15, 17, 26, 0.16)"} 1.5px, transparent 1.5px)`,
-            backgroundSize: "20px 20px",
-            transform: `perspective(1000px) rotateX(${16 + mousePos.y * 14}deg) rotateY(${mousePos.x * 16}deg) scale(1.25)`,
-            transformOrigin: "center center",
-            transition: "transform 0.08s linear, background-image 0.3s ease",
-            maskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
-            WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0.15) 100%)",
-          }}
-        />
-      </div>
+      />
 
       {/* HIDDEN FILE INPUT FOR PHOTO */}
       <input
