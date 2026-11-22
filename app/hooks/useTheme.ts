@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from 'react';
 export type ThemeMode = 'light' | 'dark';
 
 export function useTheme() {
-  const [theme, setThemeState] = useState<ThemeMode>('dark');
+  const [theme, setThemeState] = useState<ThemeMode>('light');
 
   useEffect(() => {
     const saved = localStorage.getItem('haider_theme') as ThemeMode | null;
