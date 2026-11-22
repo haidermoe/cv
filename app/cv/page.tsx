@@ -223,44 +223,58 @@ function translateOrTransliterate(text: string, targetLang: "AR" | "EN"): string
 
 const DEFAULT_AR_DATA: LanguageSpecificData = {
   fullName: "حيدر محمد شوكت",
-  jobTitle: "خريج علوم حاسوب",
-  summary: "خريج علوم حاسوب طموح وشديد التنظيم، يتمتع بخلفية عملية قوية في إدارة البيانات، الدعم الإداري، والأرشفة الرقمية للوثائق. يمتلك خبرة عملية مثبتة في التعامل مع قواعد البيانات الكبيرة (أكثر من 22 ألف سجل)، تنظيم المعاملات المكتبية، ومتابعة سجلات الحضور والانصراف. كفاءة عالية في إعداد تقارير متقدمة عبر برنامج Microsoft Excel، المخاطبات الرسمية، وضمان دقة البيانات والالتزام بأعلى معايير السرية المهنية. يسعى لتوظيف مهاراته التنظيمية والتقنية والتحليلية لدعم العمليات الإدارية والموارد البشرية بكفاءة وموثوقية.",
+  jobTitle: "متخصص علوم الحاسوب | استشاري عمليات البيانات والأنظمة",
+  summary: "متخصص في علوم الحاسوب وهندسة نظم البيانات وإدارة العمليات التقنية، بخبرة عملية مثبتة في أتمتة العمليات البرمجية وبناء وتطوير قواعد البيانات الضخمة (+22,000 سجل) وتكامل منصات التجارة الإلكترونية وإدارة شبكات الألياف الضوئية FTTH.",
   email: "haider.m.shwkat@outlook.com",
-  phone: "07718964778",
+  phone: "+964 771 896 4778",
   location: "بغداد، العراق",
-  linkedin: "",
+  linkedin: "linkedin.com/in/haidermoe",
   skills: [
-    "Microsoft Office (إكسل متقدم، وورد، باوربوينت)",
-    "إدارة البيانات والأرشفة الرقمية",
-    "إجراءات متابعة الحضور والانصراف وسجلات الدوام",
-    "الدعم الإداري وحل المشكلات التشغيلية",
-    "خدمة العملاء والتنسيق المشترك بين الأقسام",
-    "سرية بيانات الموظفين وأخلاقيات العمل المؤسسي",
-    "اللغة الإنجليزية (مستوى مهني متقدم: محادثة وكتابة) | العربية (اللغة الأم)",
-    "الترجمة المهنية للمستندات والمعاملات (إنجليزي ↔ عربي)",
+    "أتمتة بايثون وبرمجة السكربتات",
+    "هيكلة وإدارة قواعد البيانات الضخمة SQL",
+    "تكامل أنظمة ERP وفودكس للتجارة الإلكترونية",
+    "إدارة وتشغيل شبكات FTTH و EPON الضوئية",
+    "تنظيف وتدقيق وضمان جودة البيانات",
+    "إدارة خوادم لينكس والـ Bash Scripts",
+    "إدارة المشاريع بالمنهجيات المرنة Agile",
   ],
   experiences: [
     {
       id: "exp-1",
-      role: "مساعد الدعم الإداري والعمليات",
-      company: "تكنو ستور (Techno Store) – بغداد",
-      date: "2025 – حتى الآن",
+      role: "أخصائي عمليات التجارة الإلكترونية، البيانات والمبيعات",
+      company: "تكنو ستور — بغداد، العراق",
+      date: "2025 - الحالي",
       bullets: [
-        "متابعة سجلات الحضور والانصراف: تدقيق ومطابقة سجلات تسجيل الحضور والانصراف وساعات العمل الإضافي وطلبات الإجازات للموظفين، وتسوية بيانات الحضور الشهرية لتجهيز مسيرات الرواتب بدقة.",
-        "رقمنة النماذج (DigitForm): تحويل المعاملات الورقية والنماذج التشغيلية اليدوية إلى صيغ ونماذج رقمية موحدة بقياس A4، مما سرّع إجراءات الأرشفة ودورات الموافقات الداخلية.",
-        "تحليلات وإحصاءات متقدمة بـ Excel: بناء وتحديث جداول بيانات تفصيلية وتقارير تشغيلية دورية باستخدام Microsoft Excel بمعدل دقة 100%.",
-        "التنسيق المشترك بين الأقسام: تيسير وتنسيق التواصل الإداري الداخلي بين أقسام العمليات والمبيعات والحسابات لضمان انسيابية العمل والامتثال لسياسات المؤسسة."
+        "برمجة وتطوير سكربتات أتمتة مخصصة بلغة بايثون لمعالجة ورفع آلاف المنتجات والبيانات الضخمة واختصار وقت الإنجاز من عدة أيام إلى دقائق معدودة.",
+        "تطوير ونشر أداة الأتمتة المخصصة (إدارة_متجر_أودو_ومسواك.bat) للربط والمزامنة الفورية للمخزون والمنتجات بين نظام Odoo ERP ومنصة وتطبيق مسواك بدقة 100%.",
+        "إدارة كتالوج المنتجات والمخزون الحي والأسعار لآلاف المنتجات عبر المنصات المختلفة بدقة تامة وبنسبة خطأ 0%.",
+        "أتمتة وتكامل مزامنة المخزون والأسعار بين قواعد البيانات الداخلية وأبرز تطبيقات التوصيل العراقية (مسواق، طماطة، جاهز، الريان).",
+        "الإشراف على عمليات المبيعات اليومية وإدارة حملات الفيديو التسويقية الرقمية وتحليل سلوك العملاء لزيادة الإيرادات."
       ]
     },
     {
       id: "exp-2",
-      role: "مساعد التوثيق والخدمات المكتبية",
-      company: "المكتبة الجامعية (University Library)",
-      date: "2023 – 2024",
+      role: "استشاري حر لعمليات البيانات والحلول التقنية",
+      company: "مشاريع قطاع الدفاع والتجارة الإلكترونية",
+      date: "2023 - 2025",
       bullets: [
-        "تنسيق المستندات والمراسلات: صياغة وتنسيق وتدقيق الكتب الرسمية والنماذج والمعاملات الإدارية باستخدام Microsoft Word بسرعة طباعة عالية ودقة لغوية وتنظيمية متناهية.",
-        "أرشفة السجلات الضخمة: تنظيم وتصنيف وإدارة أرشيف رقمي يضم أكثر من 22,000 وثيقة وسجل أكاديمي وإداري، مع الالتزام الصارم بسرية وخصوصية البيانات.",
-        "العمليات المكتبية الروتينية: تنفيذ عمليات المسح الضوئي والأرشفة الإلكترونية، وحفظ الملفات، ومعالجة استفسارات المراجعين والتعامل مع الطلبات العاجلة بكفاءة عالية."
+        "بناء وهيكلة قاعدة بيانات ضخمة تضم أكثر من 22,000 سجل متعدد المنصات لمشروع في قطاع الدفاع مع إمكانية الفرز المتقدم حسب المناطق وجهات الاتصال.",
+        "تطوير نظام بايوغارد (BioGuard): منظومة حضور وانصراف ذكية معتمدة على الـ GPS والمصادقة الثنائية (2FA) للتحقق الموثوق من الأجهزة ومنع التلاعب.",
+        "تطوير برنامج تيربوشير (TurboShare): منصة مشاركة ملفات ومراسلات داخلية فائقة السرعة عبر الشبكة المحلية (Intranet) بخصوصية تامة.",
+        "تطوير نظام ديجت فورم (DigitForm): تطبيق لرقمنة الاستمارات والمعاملات الورقية عبر الهاتف مع توليد وطباعة فورية بقياس A4 قياسي.",
+        "حل مشاكل هيكلة الكتالوجات البرمجية والـ API Rate Limits لمنصات تجارة إلكترونية عراقية رائدة (مثل شركة الريان).",
+        "إنتاج وإخراج أكثر من 60 فيديو إعلاني تجاري وشروحات تقنية لشركاء التجزئة (Lito Store, Techno Store)."
+      ]
+    },
+    {
+      id: "exp-3",
+      role: "مسؤول عمليات ومنسق دعم الشبكات",
+      company: "قطاع الفعاليات والاتصالات — بغداد",
+      date: "2019 - 2023",
+      bullets: [
+        "قيادة فرق العمليات لتخطيط وتنظيم وتنفيذ فعاليات ومؤتمرات كبرى لأكثر من 150+ شخص بكفاءة عالية.",
+        "الإشراف الميداني على إنشاء وتشغيل شبكات الألياف الضوئية FTTH عبر 3 قواطع وربط أكثر من 2,000+ مستخدم بتقنية EPON.",
+        "إدارة ومعالجة الأعطال التقنية والصيانة الشاملة لقاعدة مشتركين تضم أكثر من 3,000+ عميل نشط."
       ]
     }
   ],
@@ -268,84 +282,98 @@ const DEFAULT_AR_DATA: LanguageSpecificData = {
     {
       id: "edu-1",
       school: "جامعة دجلة – بغداد",
-      degree: "بكالوريوس علوم الحاسوب (تخرج متوقع 2026)",
-      year: "2022 – 2026"
+      degree: "بكالوريوس في علوم الحاسوب (Computer Science)",
+      year: "2022 - 2026"
     },
     {
       id: "edu-2",
       school: "معهد التكنولوجيا – بغداد",
-      degree: "دبلوم الصناعات الكيماوية والتقنية",
-      year: "2019 – 2021"
+      degree: "دبلوم في الصناعات الكيماوية (Chemical Industry)",
+      year: "2019 - 2021"
     }
   ],
   certifications: [
-    { id: "cert-1", title: "دورة مهارات المبيعات وخدمة العملاء — شركة إيرثلنك (EarthLink)" },
-    { id: "cert-2", title: "تدريب السلامة والصحة المهنية (OSH) — معهد التكنولوجيا" },
-    { id: "cert-3", title: "شهادة CCNA 1: مقدمة في شبكات الاتصال — جامعة دجلة" }
+    { id: "cert-1", title: "شهادة CCNA 1: Introduction to Networks — جامعة دجلة" },
+    { id: "cert-2", title: "شهادة مهارات المبيعات وخدمة العملاء — شركة إيرثلنك" },
+    { id: "cert-3", title: "تدريب السلامة والصحة المهنية — معهد التكنولوجيا بغداد" }
   ]
 };
 
 const DEFAULT_EN_DATA: LanguageSpecificData = {
-  fullName: "HAIDER M. SHWKAT",
-  jobTitle: "Computer Science Graduate",
-  summary: "Detail-oriented and ambitious Computer Science graduate with a solid operational background in Data Management, Administrative Support, and digital record keeping. Proven track record in managing large-scale databases (22K+ records), streamlining routine office paperwork, and monitoring attendance tracking workflows. Highly proficient in advanced Microsoft Excel reporting, official correspondence, and database integrity with strict adherence to confidentiality. Committed to leveraging strong organizational, technical, and analytical skills to deliver reliable HR and administrative operations.",
+  fullName: "Haider M. Shwkat",
+  jobTitle: "Computer Science Specialist | Data Operations & Workflow Consultant",
+  summary: "Computer Science Specialist & Data Operations Consultant with extensive experience in workflow automation, large-scale database management (22K+ records), e-commerce catalog integrity, and optical network infrastructure (FTTH/EPON).",
   email: "haider.m.shwkat@outlook.com",
   phone: "+964 771 896 4778",
   location: "Baghdad, Iraq",
-  linkedin: "",
+  linkedin: "linkedin.com/in/haidermoe",
   skills: [
-    "Microsoft Office (Advanced Excel, Word, PowerPoint)",
-    "Data Management & digital archive",
-    "Time & Attendance Tracking Procedures",
-    "Administrative Support & Problem Solving",
-    "Customer Care & Team Coordination",
-    "Personnel Data Confidentiality & Workplace Ethics",
-    "English (Professional Proficiency: Spoken & Written) Arabic (Native)",
-    "Professional Document Translation (English ↔ Arabic)",
+    "Python Automation & Scripting",
+    "SQL & High-Volume Database Architecture",
+    "E-Commerce & Foodics ERP Workflows",
+    "FTTH & EPON Optical Network Management",
+    "Data Cleansing & Integrity Verification",
+    "Linux Server Operations & Bash",
+    "Agile Project & Team Leadership"
   ],
   experiences: [
     {
       id: "exp-1",
-      role: "Administrative & Operations Support Associate",
-      company: "Techno Store, Baghdad",
-      date: "2025 – Present",
+      role: "E-Commerce, Data Operations & Sales Specialist",
+      company: "Techno Store — Baghdad, Iraq",
+      date: "2025 - Present",
       bullets: [
-        "Time & Attendance Tracking: Monitored and verified employee clock-in/out records, overtime hours, and leave requests; reconciled monthly attendance data ready for payroll preparation.",
-        "Forms Digitization (DigitForm): Converted manual paper forms and operational templates into standardized digital A4 formats, expediting internal archiving and approval turnaround.",
-        "Advanced Excel Analytics: Built structured spreadsheets and recurring operations reports using Microsoft Excel with a proven 100% accuracy rate.",
-        "Cross-Departmental Coordination: Facilitated seamless administrative communication between operations, sales, and accounts, ensuring consistent workflow continuity and policy compliance."
+        "Engineered custom Python scripts and browser automation tools to streamline large-scale SKU uploads, cutting data processing time from days to minutes.",
+        "Developed and deployed the custom automation tool (إدارة_متجر_أودو_ومسواك.bat), enabling real-time product, price, and inventory sync between Odoo ERP and the Miswag platform.",
+        "Managed cataloging, stock accuracy, and pricing across platforms for thousands of active SKUs with zero error rates.",
+        "Automated inventory feeds and content sync between internal databases and major Iraqi delivery apps (Miswag, Tamata, Jahez, Al-Rayan).",
+        "Supervised daily branch sales operations, managed digital video reels marketing, and leveraged customer insights to boost revenue."
       ]
     },
     {
       id: "exp-2",
-      role: "Office Services & Documentation Associate",
-      company: "University library",
-      date: "2023 – 2024",
+      role: "Freelance Data & Technical Operations Consultant",
+      company: "Multi-Client / Defense & E-commerce Projects",
+      date: "2023 - 2025",
       bullets: [
-        "Document Formatting & Correspondence: Drafted, formatted, and proofread official letters, forms, and administrative documentation using Microsoft Word with rapid typing and meticulous precision.",
-        "High-Volume Record Archiving: Organized, categorized, and managed a digital archive of over 22,000 documents and records, maintaining strict adherence to client privacy and confidentiality.",
-        "Routine Office Operations: Executed scanning, digital archiving, filing, and customer inquiry processing, resolving routine requests under tight deadlines."
+        "Built a comprehensive database system of 22,000+ multi-platform records for a Defense Sector project with region and contact filtering.",
+        "Developed BioGuard: An enterprise attendance tracking system utilizing GPS geofencing and 2FA device authentication to prevent spoofing.",
+        "Developed TurboShare: A high-speed local intranet hub for secure file transfer and internal messaging, isolated from external networks.",
+        "Developed DigitForm: A mobile-first form digitization platform replacing paper workflows with instant ISO A4 print-ready PDF generation.",
+        "Resolved critical catalog structures, API rate limits, and product feature bugs for prominent Iraqi e-commerce platforms (e.g. Al-Rayan).",
+        "Produced and executed over 60 commercial reels, technical tutorials, and brand video campaigns for retail partners (Lito Store, Techno Store)."
+      ]
+    },
+    {
+      id: "exp-3",
+      role: "Operations Lead & Network Support Coordinator",
+      company: "Events & Telecommunications Sector — Baghdad",
+      date: "2019 - 2023",
+      bullets: [
+        "Led operational teams to plan, coordinate, and execute large-scale corporate and public events for 150+ guests with high efficiency.",
+        "Directed the construction and deployment of FTTH networks across 3 districts, connecting 2,000+ active users using EPON systems.",
+        "Managed end-to-end troubleshooting and maintenance coordination for a subscriber base of 3,000+ active network clients."
       ]
     }
   ],
   education: [
     {
       id: "edu-1",
-      school: "Dijlah University — Baghdad",
-      degree: "Bachelor of Science in Computer Science (Expected 2026)",
-      year: "2022 – 2026"
+      school: "Dijlah University – Baghdad",
+      degree: "Bachelor's Degree in Computer Science",
+      year: "2022 - 2026"
     },
     {
       id: "edu-2",
-      school: "Institute of Technology — Baghdad",
-      degree: "Diploma in Chemical Industry & Technology",
-      year: "2019 – 2021"
+      school: "Institute of Technology – Baghdad",
+      degree: "Diploma in Chemical Industry",
+      year: "2019 - 2021"
     }
   ],
   certifications: [
-    { id: "cert-1", title: "Sales and Customer Service Skills — EarthLink Telecommunications" },
-    { id: "cert-2", title: "Occupational Safety & Health Training — Institute of Technology" },
-    { id: "cert-3", title: "CCNA 1: Introduction to Networks — Dijlah University" }
+    { id: "cert-1", title: "CCNA 1: Introduction to Networks — Dijlah University" },
+    { id: "cert-2", title: "Sales and Customer Service Skills — EarthLink Telecommunications" },
+    { id: "cert-3", title: "Occupational Safety Training — Institute of Technology Baghdad" }
   ]
 };
 
@@ -405,7 +433,6 @@ export default function PublicCvBuilderPage() {
   const [accentColor, setAccentColor] = useState<string>("#2563eb");
   const [fontFamily, setFontFamily] = useState<string>("Tajawal");
   const [fontSizeScale, setFontSizeScale] = useState<"compact" | "normal" | "large">("normal");
-  const [fontScalePercent, setFontScalePercent] = useState<number>(100);
   const [pageMargin, setPageMargin] = useState<"compact" | "normal" | "wide">("normal");
   const [lineSpacing, setLineSpacing] = useState<"compact" | "normal" | "relaxed">("normal");
 
@@ -526,19 +553,12 @@ export default function PublicCvBuilderPage() {
     if (targetLang === lang) return;
 
     if (targetLang === "EN") {
-      const hasEnglishData =
-        Boolean(docEN.fullName && /[a-zA-Z]/.test(docEN.fullName)) ||
-        Boolean(docEN.summary && /[a-zA-Z]/.test(docEN.summary));
+      const isEnglishBlank =
+        !docEN.summary ||
+        docEN.summary === DEFAULT_EN_DATA.summary ||
+        /[\u0600-\u06FF]/.test(docEN.summary || "");
 
-      if (hasEnglishData) {
-        setLang("EN");
-        setFontFamily("Outfit");
-        showToast("تم التحويل للنسخة الإنجليزية الاحترافية ✨");
-        return;
-      }
-
-      // If no English data exists at all and Arabic exists, translate
-      if (docAR.summary || docAR.fullName) {
+      if (isEnglishBlank && docAR.summary) {
         await translateDocumentToEnglish();
       } else {
         setLang("EN");
@@ -548,7 +568,7 @@ export default function PublicCvBuilderPage() {
     } else {
       setLang("AR");
       setFontFamily("Tajawal");
-      showToast("تم التحويل للنسخة العربية 🇮🇶");
+      showToast("Arabic Mode");
     }
   };
 
@@ -631,7 +651,6 @@ export default function PublicCvBuilderPage() {
     setLayoutFormat(p.format);
     setFontFamily(lang === "AR" ? "Tajawal" : p.font);
     setFontSizeScale(p.fontSize);
-    setFontScalePercent(p.fontSize === "compact" ? 90 : p.fontSize === "large" ? 115 : 100);
     setPageMargin(p.margin);
     setLineSpacing(p.spacing);
     showToast(lang === "AR" ? `تم تطبيق قالب: ${p.title}` : `Applied preset: ${p.title}`);
@@ -778,108 +797,6 @@ export default function PublicCvBuilderPage() {
     pdf.save(pdfFileName);
   };
 
-  // 100% SELECTABLE VECTOR TEXT PDF (ATS FRIENDLY) VIA NATIVE PRINT/SAVE
-  const generateSelectableTextPdf = (targetLang: "AR" | "EN") => {
-    setIsExportModalOpen(false);
-    const isTargetArabic = targetLang === "AR";
-    const elementId = isTargetArabic ? "cv-export-arabic-desk" : "cv-export-english-desk";
-    const element = document.getElementById(elementId);
-    if (!element) {
-      showToast("تعذر العثور على عنصر التصدير");
-      return;
-    }
-
-    const activeData = isTargetArabic ? docAR : docEN;
-    const docTitle = `${(activeData.fullName || "CV").replace(/[^a-zA-Z0-9_\u0600-\u06FF]/g, "_")}_${targetLang}_ATS`;
-
-    showToast(isTargetArabic ? "جاري فتح نافذة حفظ الـ PDF بنصوص حقيقية قابلة للتحديد (Vector Text)..." : "Opening Selectable Text PDF Export (ATS Compliant)...");
-
-    // Remove any previous print iframe
-    const oldIframe = document.getElementById("ats-vector-print-iframe");
-    if (oldIframe) oldIframe.remove();
-
-    const iframe = document.createElement("iframe");
-    iframe.id = "ats-vector-print-iframe";
-    iframe.style.position = "fixed";
-    iframe.style.right = "-9999px";
-    iframe.style.bottom = "-9999px";
-    iframe.style.width = "794px";
-    iframe.style.height = "1123px";
-    iframe.style.border = "none";
-    document.body.appendChild(iframe);
-
-    const doc = iframe.contentWindow?.document;
-    if (!doc) return;
-
-    const cloned = element.cloneNode(true) as HTMLElement;
-    cloned.style.margin = "0 auto";
-    cloned.style.boxShadow = "none";
-    cloned.style.border = "none";
-    cloned.style.width = "100%";
-
-    doc.open();
-    doc.write(`
-      <!DOCTYPE html>
-      <html dir="${isTargetArabic ? 'rtl' : 'ltr'}" lang="${isTargetArabic ? 'ar' : 'en'}">
-      <head>
-        <meta charset="utf-8" />
-        <title>${docTitle}</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
-        <style>
-          * {
-            box-sizing: border-box;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-            color-adjust: exact !important;
-          }
-          @page {
-            size: A4 portrait;
-            margin: 0;
-          }
-          html, body {
-            margin: 0;
-            padding: 0;
-            background: #ffffff;
-            font-family: ${isTargetArabic ? "'Tajawal', sans-serif" : "'Outfit', sans-serif"};
-            -webkit-font-smoothing: antialiased;
-          }
-          body {
-            width: 794px;
-            margin: 0 auto;
-          }
-          @media print {
-            body {
-              width: 100%;
-              margin: 0;
-              padding: 0;
-            }
-          }
-        </style>
-      </head>
-      <body>
-        ${cloned.outerHTML}
-      </body>
-      </html>
-    `);
-    doc.close();
-
-    setTimeout(() => {
-      try {
-        iframe.contentWindow?.focus();
-        iframe.contentWindow?.print();
-      } catch (e) {
-        console.error("Print to PDF error:", e);
-      }
-      setTimeout(() => {
-        try {
-          iframe.remove();
-        } catch (_) {}
-      }, 5000);
-    }, 600);
-  };
-
   // DOWNLOAD HANDLER (CHOICES: AR, EN, OR BOTH)
   const handleExecuteExport = async (choice: "AR" | "EN" | "BOTH") => {
     setIsExportModalOpen(false);
@@ -888,11 +805,12 @@ export default function PublicCvBuilderPage() {
     try {
       // Smart synchronization: Translate professionally for English export only if not already translated
       if (choice === "EN" || choice === "BOTH") {
-        const hasEnglishData =
-          Boolean(docEN.fullName && /[a-zA-Z]/.test(docEN.fullName)) ||
-          Boolean(docEN.summary && /[a-zA-Z]/.test(docEN.summary));
+        const isEnglishEmptyOrArabic =
+          !docEN.summary ||
+          /[\u0600-\u06FF]/.test(docEN.summary || "") ||
+          docEN.summary === DEFAULT_EN_DATA.summary;
 
-        if (!hasEnglishData && docAR.summary) {
+        if (isEnglishEmptyOrArabic && docAR.summary) {
           showToast("جاري تجهيز الترجمة الإنجليزية الاحترافية قبل التصدير...");
           try {
             const res = await fetch("/api/translate", {
@@ -943,8 +861,7 @@ export default function PublicCvBuilderPage() {
 
   // REUSABLE DOCUMENT RENDERER (USED FOR BOTH PREVIEW AND ZERO-SCALE EXPORT CANVAS)
   const renderDocumentContent = (docData: LanguageSpecificData, isDocArabic: boolean, canvasId?: string) => {
-    const docFontFamily = isDocArabic ? `'${fontFamily || "Tajawal"}', sans-serif` : `'${fontFamily || "Outfit"}', sans-serif`;
-    const scale = (basePx: number) => `${(basePx * (fontScalePercent / 100)).toFixed(1)}px`;
+    const docFontFamily = isDocArabic ? "'Tajawal', sans-serif" : "'Outfit', sans-serif";
 
     return (
       <div
@@ -957,7 +874,7 @@ export default function PublicCvBuilderPage() {
           padding: pageMargin === "compact" ? "28px 32px" : pageMargin === "wide" ? "56px 60px" : "44px 48px",
           boxSizing: "border-box",
           fontFamily: docFontFamily,
-          fontSize: scale(11.5),
+          fontSize: fontSizeScale === "compact" ? "10.5px" : fontSizeScale === "large" ? "12.5px" : "11.5px",
           lineHeight: lineSpacing === "compact" ? "1.45" : lineSpacing === "relaxed" ? "1.85" : "1.65",
           letterSpacing: "normal",
           textRendering: "geometricPrecision",
@@ -977,10 +894,10 @@ export default function PublicCvBuilderPage() {
               )}
 
               <div>
-                <div style={{ fontSize: scale(11.5), fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
                   {isDocArabic ? "بيانات الاتصال" : "Contact Info"}
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: scale(10), color: templateStyle === "clean-white" ? "#475569" : "#94a3b8" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "10px", color: templateStyle === "clean-white" ? "#475569" : "#94a3b8" }}>
                   {docData.email && <div>📧 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{docData.email}</span></div>}
                   {docData.phone && <div>📞 <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{docData.phone}</span></div>}
                   {docData.location && <div>📍 {docData.location}</div>}
@@ -990,12 +907,12 @@ export default function PublicCvBuilderPage() {
 
               {showSkills && docData.skills.length > 0 && (
                 <div>
-                  <div style={{ fontSize: scale(11.5), fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                  <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
                     {isDocArabic ? "المهارات والقدرات" : "Skills & Competencies"}
                   </div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
                     {docData.skills.map((sk, i) => (
-                      <span key={i} style={{ background: templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${accentColor}40`, color: templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "2px 7px", borderRadius: "5px", fontSize: scale(9.5), fontWeight: "700" }}>
+                      <span key={i} style={{ background: templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${accentColor}40`, color: templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "2px 7px", borderRadius: "5px", fontSize: "9.5px", fontWeight: "700" }}>
                         {sk}
                       </span>
                     ))}
@@ -1005,11 +922,11 @@ export default function PublicCvBuilderPage() {
 
               {showEducation && docData.education.length > 0 && (
                 <div>
-                  <div style={{ fontSize: scale(11.5), fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                  <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
                     {isDocArabic ? "المؤهلات العلمية" : "Education"}
                   </div>
                   {docData.education.map((edu, i) => (
-                    <div key={i} style={{ fontSize: scale(10), marginBottom: "6px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                    <div key={i} style={{ fontSize: "10px", marginBottom: "6px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
                       <strong>{edu.degree}</strong>
                       <div style={{ color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8" }}>{edu.school} {edu.year ? `(${edu.year})` : ""}</div>
                     </div>
@@ -1019,11 +936,11 @@ export default function PublicCvBuilderPage() {
 
               {showCertifications && docData.certifications.length > 0 && (
                 <div>
-                  <div style={{ fontSize: scale(11.5), fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
+                  <div style={{ fontSize: "11.5px", fontWeight: "900", color: accentColor, marginBottom: "8px", borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "3px" }}>
                     {isDocArabic ? "الشهادات والاعتمادات" : "Certifications"}
                   </div>
                   {docData.certifications.map((cert, i) => (
-                    <div key={i} style={{ fontSize: scale(10), marginBottom: "4px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                    <div key={i} style={{ fontSize: "10px", marginBottom: "4px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
                       • {cert.title}
                     </div>
                   ))}
@@ -1033,7 +950,7 @@ export default function PublicCvBuilderPage() {
               {showQrCode && qrCodeDataUrl && (
                 <div style={{ marginTop: "12px", padding: "8px", background: templateStyle === "clean-white" ? "#f8fafc" : "rgba(255,255,255,0.05)", borderRadius: "10px", border: `1.5px solid ${accentColor}40`, display: "flex", flexDirection: "column", alignItems: "center", gap: "3px" }}>
                   <img src={qrCodeDataUrl} alt="QR Code" style={{ width: "68px", height: "68px", objectFit: "contain" }} />
-                  <span style={{ fontSize: scale(8), fontWeight: "900", color: accentColor }}>
+                  <span style={{ fontSize: "8px", fontWeight: "900", color: accentColor }}>
                     {isDocArabic ? "الموقع التفاعلي" : "LIVE PORTFOLIO"}
                   </span>
                 </div>
@@ -1043,20 +960,20 @@ export default function PublicCvBuilderPage() {
             {/* MAIN BODY */}
             <div>
               <div style={{ borderBottom: `2.5px solid ${accentColor}`, paddingBottom: "14px", marginBottom: "18px" }}>
-                <h2 style={{ fontSize: scale(28), fontWeight: "900", margin: "0 0 4px 0", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                <h2 style={{ fontSize: "28px", fontWeight: "900", margin: "0 0 4px 0", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
                   {docData.fullName || (isDocArabic ? "الاسم الكامل" : "Your Name")}
                 </h2>
-                <div style={{ fontSize: scale(13.5), fontWeight: "700", color: accentColor }}>
+                <div style={{ fontSize: "13.5px", fontWeight: "700", color: accentColor }}>
                   {docData.jobTitle || (isDocArabic ? "المسمى الوظيفي" : "Professional Title")}
                 </div>
               </div>
 
               {docData.summary && (
                 <div style={{ marginBottom: "18px" }}>
-                  <div style={{ fontSize: scale(12), fontWeight: "900", color: accentColor, marginBottom: "6px" }}>
+                  <div style={{ fontSize: "12px", fontWeight: "900", color: accentColor, marginBottom: "6px" }}>
                     {isDocArabic ? "الهدف المهني والملخص التنفيذي" : "Executive Summary"}
                   </div>
-                  <p style={{ fontSize: scale(11), color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
+                  <p style={{ fontSize: "11px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
                     {docData.summary}
                   </p>
                 </div>
@@ -1064,7 +981,7 @@ export default function PublicCvBuilderPage() {
 
               {docData.experiences.length > 0 && (
                 <div>
-                  <div style={{ fontSize: scale(12), fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
+                  <div style={{ fontSize: "12px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
                     {isDocArabic ? "الخبرات المهنية والعملية" : "Work Experience"}
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
@@ -1072,19 +989,19 @@ export default function PublicCvBuilderPage() {
                       <div key={exp.id || i}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
                           <div>
-                            <strong style={{ fontSize: scale(12.5), color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                            <strong style={{ fontSize: "12.5px", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
                               {exp.role}
                             </strong>
-                            <span style={{ fontSize: scale(11.5), color: accentColor, marginLeft: isDocArabic ? "0" : "6px", marginRight: isDocArabic ? "6px" : "0", fontWeight: "700" }}>
+                            <span style={{ fontSize: "11.5px", color: accentColor, marginLeft: isDocArabic ? "0" : "6px", marginRight: isDocArabic ? "6px" : "0", fontWeight: "700" }}>
                               | {exp.company}
                             </span>
                           </div>
-                          <span style={{ fontSize: scale(10.5), color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
+                          <span style={{ fontSize: "10.5px", color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
                             {exp.date}
                           </span>
                         </div>
 
-                        <ul style={{ margin: "3px 0 0 0", paddingLeft: isDocArabic ? "0" : "16px", paddingRight: isDocArabic ? "16px" : "0", fontSize: scale(10.5), color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.5" }}>
+                        <ul style={{ margin: "3px 0 0 0", paddingLeft: isDocArabic ? "0" : "16px", paddingRight: isDocArabic ? "16px" : "0", fontSize: "10.5px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.5" }}>
                           {exp.bullets.map((b: string, bi: number) => (
                             <li key={bi} style={{ marginBottom: "2px" }}>{b}</li>
                           ))}
@@ -1102,14 +1019,14 @@ export default function PublicCvBuilderPage() {
             {/* HEADER ROW */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: `2.5px solid ${accentColor}`, paddingBottom: "16px", marginBottom: "20px", gap: "20px" }}>
               <div style={{ flex: 1 }}>
-                <h2 style={{ fontSize: scale(28), fontWeight: "900", margin: "0 0 4px 0", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                <h2 style={{ fontSize: "28px", fontWeight: "900", margin: "0 0 4px 0", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
                   {docData.fullName || (isDocArabic ? "الاسم الكامل" : "Your Name")}
                 </h2>
-                <div style={{ fontSize: scale(13.5), fontWeight: "700", color: accentColor, marginBottom: "10px" }}>
+                <div style={{ fontSize: "13.5px", fontWeight: "700", color: accentColor, marginBottom: "10px" }}>
                   {docData.jobTitle || (isDocArabic ? "المسمى الوظيفي" : "Professional Title")}
                 </div>
 
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", fontSize: scale(11), color: templateStyle === "clean-white" ? "#475569" : "#94a3b8", fontWeight: "600" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", fontSize: "11px", color: templateStyle === "clean-white" ? "#475569" : "#94a3b8", fontWeight: "600" }}>
                   {docData.email && <div>📧 <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{docData.email}</span></div>}
                   {docData.phone && <div>📞 <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{docData.phone}</span></div>}
                   {docData.location && <div>📍 {docData.location}</div>}
@@ -1121,7 +1038,7 @@ export default function PublicCvBuilderPage() {
                 {showQrCode && qrCodeDataUrl && (
                   <div style={{ padding: "4px", background: "#ffffff", borderRadius: "8px", border: `1.5px solid ${accentColor}`, display: "flex", flexDirection: "column", alignItems: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
                     <img src={qrCodeDataUrl} alt="QR" style={{ width: "55px", height: "55px", objectFit: "contain" }} />
-                    <span style={{ fontSize: scale(6.5), fontWeight: "900", color: "#0f172a", marginTop: "1px" }}>
+                    <span style={{ fontSize: "6.5px", fontWeight: "900", color: "#0f172a", marginTop: "1px" }}>
                       {isDocArabic ? "الموقع" : "PORTFOLIO"}
                     </span>
                   </div>
@@ -1138,10 +1055,10 @@ export default function PublicCvBuilderPage() {
             {/* EXECUTIVE SUMMARY */}
             {docData.summary && (
               <div style={{ marginBottom: "20px" }}>
-                <div style={{ fontSize: scale(12.5), fontWeight: "900", color: accentColor, marginBottom: "6px" }}>
+                <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, marginBottom: "6px" }}>
                   {isDocArabic ? "الهدف المهني والملخص التنفيذي" : "Executive Summary"}
                 </div>
-                <p style={{ fontSize: scale(11), lineHeight: "1.65", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
+                <p style={{ fontSize: "11px", lineHeight: "1.65", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", margin: 0, textAlign: "justify" }}>
                   {docData.summary}
                 </p>
               </div>
@@ -1150,7 +1067,7 @@ export default function PublicCvBuilderPage() {
             {/* WORK EXPERIENCE */}
             {docData.experiences.length > 0 && (
               <div style={{ marginBottom: "20px" }}>
-                <div style={{ fontSize: scale(12.5), fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
+                <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "12px" }}>
                   {isDocArabic ? "الخبرات المهنية والعملية" : "Professional Work Experience"}
                 </div>
 
@@ -1159,19 +1076,19 @@ export default function PublicCvBuilderPage() {
                     <div key={exp.id || i}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "3px" }}>
                         <div>
-                          <strong style={{ fontSize: scale(13), color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
+                          <strong style={{ fontSize: "13px", color: templateStyle === "clean-white" ? "#0f172a" : "#ffffff" }}>
                             {exp.role}
                           </strong>
-                          <span style={{ fontSize: scale(12), color: accentColor, marginLeft: isDocArabic ? "0" : "8px", marginRight: isDocArabic ? "8px" : "0", fontWeight: "700" }}>
+                          <span style={{ fontSize: "12px", color: accentColor, marginLeft: isDocArabic ? "0" : "8px", marginRight: isDocArabic ? "8px" : "0", fontWeight: "700" }}>
                             | {exp.company}
                           </span>
                         </div>
-                        <span style={{ fontSize: scale(11), color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
+                        <span style={{ fontSize: "11px", color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontWeight: "700" }}>
                           {exp.date}
                         </span>
                       </div>
 
-                      <ul style={{ margin: "4px 0 0 0", paddingLeft: isDocArabic ? "0" : "18px", paddingRight: isDocArabic ? "18px" : "0", fontSize: scale(11), color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.55" }}>
+                      <ul style={{ margin: "4px 0 0 0", paddingLeft: isDocArabic ? "0" : "18px", paddingRight: isDocArabic ? "18px" : "0", fontSize: "11px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1", lineHeight: "1.55" }}>
                         {exp.bullets.map((b: string, bi: number) => (
                           <li key={bi} style={{ marginBottom: "2px" }}>{b}</li>
                         ))}
@@ -1185,12 +1102,12 @@ export default function PublicCvBuilderPage() {
             {/* TECHNICAL SKILLS */}
             {showSkills && docData.skills.length > 0 && (
               <div style={{ marginBottom: "20px" }}>
-                <div style={{ fontSize: scale(12.5), fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "10px" }}>
+                <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "10px" }}>
                   {isDocArabic ? "المهارات التقنية والقدرات" : "Core Technical Skills"}
                 </div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
                   {docData.skills.map((sk, i) => (
-                    <span key={i} style={{ background: templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${accentColor}40`, color: templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "3px 9px", borderRadius: "6px", fontSize: scale(10.5), fontWeight: "700" }}>
+                    <span key={i} style={{ background: templateStyle === "clean-white" ? "#f1f5f9" : "rgba(37,99,235,0.15)", border: `1px solid ${accentColor}40`, color: templateStyle === "clean-white" ? "#0f172a" : "#e2e8f0", padding: "3px 9px", borderRadius: "6px", fontSize: "10.5px", fontWeight: "700" }}>
                       {sk}
                     </span>
                   ))}
@@ -1202,13 +1119,13 @@ export default function PublicCvBuilderPage() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
               {showEducation && docData.education.length > 0 && (
                 <div>
-                  <div style={{ fontSize: scale(12.5), fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "8px" }}>
+                  <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "8px" }}>
                     {isDocArabic ? "المؤهلات العلمية" : "Academic Education"}
                   </div>
                   {docData.education.map((edu, i) => (
-                    <div key={i} style={{ fontSize: scale(11), marginBottom: "6px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                    <div key={i} style={{ fontSize: "11px", marginBottom: "6px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
                       <strong>{edu.degree}</strong>
-                      <div style={{ color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontSize: scale(10.5) }}>{edu.school} {edu.year ? `(${edu.year})` : ""}</div>
+                      <div style={{ color: templateStyle === "clean-white" ? "#64748b" : "#94a3b8", fontSize: "10.5px" }}>{edu.school} {edu.year ? `(${edu.year})` : ""}</div>
                     </div>
                   ))}
                 </div>
@@ -1216,11 +1133,11 @@ export default function PublicCvBuilderPage() {
 
               {showCertifications && docData.certifications.length > 0 && (
                 <div>
-                  <div style={{ fontSize: scale(12.5), fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "8px" }}>
+                  <div style={{ fontSize: "12.5px", fontWeight: "900", color: accentColor, borderBottom: "1px solid rgba(148,163,184,0.25)", paddingBottom: "4px", marginBottom: "8px" }}>
                     {isDocArabic ? "الشهادات والاعتمادات" : "Certified Training"}
                   </div>
                   {docData.certifications.map((cert, i) => (
-                    <div key={i} style={{ fontSize: scale(10.5), marginBottom: "4px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
+                    <div key={i} style={{ fontSize: "10.5px", marginBottom: "4px", color: templateStyle === "clean-white" ? "#334155" : "#cbd5e1" }}>
                       • {cert.title}
                     </div>
                   ))}
@@ -1348,126 +1265,79 @@ export default function PublicCvBuilderPage() {
           >
             <div>
               <h2 style={{ fontSize: "21px", fontWeight: "900", color: "#0f172a", margin: "0 0 8px 0" }}>
-                {isArabic ? "خيارات تصدير السيرة الذاتية (PDF)" : "Resume PDF Export Options"}
+                {isArabic ? "اختر صيغة تنزيل السيرة الذاتية" : "Choose Download Format"}
               </h2>
               <p style={{ fontSize: "13px", color: "#64748b", margin: 0, lineHeight: "1.5" }}>
-                {isArabic ? "اختر الطريقة المناسبة: حفظ كملف PDF بنصوص حقيقية قابلة للتحديد والنسخ (متوافق مع أنظمة التوظيف ATS) أو تنزيل مباشر" : "Select between Vector ATS-friendly text PDF or direct file download"}
+                {isArabic ? "هل ترغب في تنزيل النسخة العربية أم الإنجليزية أم كلاهما معاً؟" : "Would you like to export Arabic, English, or Both versions?"}
               </p>
             </div>
 
-            {/* SECTION 1: ATS VECTOR TEXT PDF (SELECTABLE & SEARCHABLE) */}
-            <div style={{ background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: "16px", padding: "16px", textAlign: isArabic ? "right" : "left" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
-                <span style={{ fontSize: "14px", fontWeight: "900", color: "#166534" }}>
-                  ✨ {isArabic ? "حفظ كـ PDF نصي عالي الدقة (نصوص قابلة للتحديد والنسخ)" : "Vector Selectable Text PDF (ATS Approved)"}
-                </span>
-                <span style={{ fontSize: "11px", background: "#dcfce7", color: "#15803d", padding: "2px 8px", borderRadius: "6px", fontWeight: "800" }}>ATS 100%</span>
-              </div>
-              <p style={{ fontSize: "12px", color: "#15803d", margin: "0 0 12px 0", lineHeight: "1.4" }}>
-                {isArabic ? "أفضل خيار للتقديم للشركات وأنظمة التوظيف: نصوص رقمية حقيقية قابلة للنسخ والبحث بدون أن تتحول لصورة." : "Standard vector text format: enables text selection, copying, and seamless parsing by recruitment ATS scanners."}
-              </p>
-              <div style={{ display: "flex", gap: "10px" }}>
-                <button
-                  onClick={() => generateSelectableTextPdf("AR")}
-                  style={{
-                    flex: 1,
-                    background: "#16a34a",
-                    color: "#ffffff",
-                    border: "none",
-                    padding: "12px 14px",
-                    borderRadius: "10px",
-                    fontSize: "13.5px",
-                    fontWeight: "900",
-                    cursor: "pointer",
-                    boxShadow: "0 3px 10px rgba(22,163,74,0.3)",
-                  }}
-                >
-                  📄 {isArabic ? "حفظ النسخة العربية (نص حقيقي)" : "Save Arabic (Text PDF)"}
-                </button>
-                <button
-                  onClick={() => generateSelectableTextPdf("EN")}
-                  style={{
-                    flex: 1,
-                    background: "#0284c7",
-                    color: "#ffffff",
-                    border: "none",
-                    padding: "12px 14px",
-                    borderRadius: "10px",
-                    fontSize: "13.5px",
-                    fontWeight: "900",
-                    cursor: "pointer",
-                    boxShadow: "0 3px 10px rgba(2,132,199,0.3)",
-                  }}
-                >
-                  📄 {isArabic ? "حفظ النسخة الإنجليزية (نص حقيقي)" : "Save English (Text PDF)"}
-                </button>
-              </div>
-            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {/* OPTION 1: ARABIC ONLY */}
+              <button
+                onClick={() => handleExecuteExport("AR")}
+                style={{
+                  background: "#15803d",
+                  color: "#ffffff",
+                  border: "none",
+                  padding: "14px 20px",
+                  borderRadius: "14px",
+                  fontSize: "14.5px",
+                  fontWeight: "900",
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  boxShadow: "0 4px 15px rgba(21,128,61,0.25)",
+                }}
+              >
+                <span>تنزيل النسخة العربية فقط</span>
+                <span style={{ fontSize: "12px", background: "rgba(255,255,255,0.2)", padding: "3px 8px", borderRadius: "8px" }}>AR PDF</span>
+              </button>
 
-            {/* SECTION 2: DIRECT DOWNLOAD */}
-            <div style={{ borderTop: "1px solid #e2e8f0", paddingTop: "14px" }}>
-              <div style={{ fontSize: "12px", fontWeight: "800", color: "#64748b", marginBottom: "10px", textAlign: "center" }}>
-                {isArabic ? "أو التنزيل المباشر كملف فوري:" : "Or Direct File Download:"}
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                <button
-                  onClick={() => handleExecuteExport("AR")}
-                  style={{
-                    background: "#f8fafc",
-                    color: "#0f172a",
-                    border: "1px solid #cbd5e1",
-                    padding: "10px 16px",
-                    borderRadius: "10px",
-                    fontSize: "13px",
-                    fontWeight: "800",
-                    cursor: "pointer",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <span>⬇️ {isArabic ? "تنزيل النسخة العربية كملف مباشر" : "Download Arabic PDF File"}</span>
-                  <span style={{ fontSize: "11px", color: "#64748b" }}>AR PDF</span>
-                </button>
-                <button
-                  onClick={() => handleExecuteExport("EN")}
-                  style={{
-                    background: "#f8fafc",
-                    color: "#0f172a",
-                    border: "1px solid #cbd5e1",
-                    padding: "10px 16px",
-                    borderRadius: "10px",
-                    fontSize: "13px",
-                    fontWeight: "800",
-                    cursor: "pointer",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <span>⬇️ {isArabic ? "تنزيل النسخة الإنجليزية كملف مباشر" : "Download English PDF File"}</span>
-                  <span style={{ fontSize: "11px", color: "#64748b" }}>EN PDF</span>
-                </button>
-                <button
-                  onClick={() => handleExecuteExport("BOTH")}
-                  style={{
-                    background: "#f1f5f9",
-                    color: "#2563eb",
-                    border: "1px dashed #93c5fd",
-                    padding: "10px 16px",
-                    borderRadius: "10px",
-                    fontSize: "13px",
-                    fontWeight: "800",
-                    cursor: "pointer",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <span>⬇️ {isArabic ? "تنزيل اللغتين معاً (2x PDF)" : "Download Both (AR + EN)"}</span>
-                  <span style={{ fontSize: "11px", color: "#2563eb" }}>AR + EN</span>
-                </button>
-              </div>
+              {/* OPTION 2: ENGLISH ONLY */}
+              <button
+                onClick={() => handleExecuteExport("EN")}
+                style={{
+                  background: "#0284c7",
+                  color: "#ffffff",
+                  border: "none",
+                  padding: "14px 20px",
+                  borderRadius: "14px",
+                  fontSize: "14.5px",
+                  fontWeight: "900",
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  boxShadow: "0 4px 15px rgba(2,132,199,0.25)",
+                }}
+              >
+                <span>Download English Version Only</span>
+                <span style={{ fontSize: "12px", background: "rgba(255,255,255,0.2)", padding: "3px 8px", borderRadius: "8px" }}>EN PDF</span>
+              </button>
+
+              {/* OPTION 3: BOTH VERSIONS */}
+              <button
+                onClick={() => handleExecuteExport("BOTH")}
+                style={{
+                  background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
+                  color: "#ffffff",
+                  border: "none",
+                  padding: "15px 20px",
+                  borderRadius: "14px",
+                  fontSize: "15px",
+                  fontWeight: "900",
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  boxShadow: "0 8px 25px rgba(37,99,235,0.35)",
+                }}
+              >
+                <span>تنزيل اللغتين معاً (AR + EN)</span>
+                <span style={{ fontSize: "12px", background: "rgba(255,255,255,0.25)", padding: "3px 8px", borderRadius: "8px" }}>ملفان 2x PDF</span>
+              </button>
             </div>
 
             <button
@@ -1740,35 +1610,14 @@ export default function PublicCvBuilderPage() {
             >
               <span>
                 {isTranslating
-                  ? "جاري التحويل..."
+                  ? "جاري الترجمة الاحترافية..."
                   : isArabic
-                  ? "🇬🇧 النسخة الإنجليزية (EN)"
-                  : "🇮🇶 النسخة العربية (AR)"}
+                  ? "ترجمة احترافية للإنجليزية (EN)"
+                  : "النسخة العربية (AR)"}
               </span>
             </button>
 
-            {/* DIRECT ATS SELECTABLE TEXT VECTOR PDF BUTTON */}
-            <button
-              onClick={() => generateSelectableTextPdf(lang)}
-              style={{
-                background: "#0284c7",
-                color: "#ffffff",
-                border: "none",
-                padding: "10px 18px",
-                borderRadius: "10px",
-                fontSize: "13px",
-                fontWeight: "900",
-                cursor: "pointer",
-                boxShadow: "0 4px 14px rgba(2,132,199,0.3)",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-              }}
-            >
-              <span>📄 {isArabic ? "حفظ كـ PDF نصي (ATS)" : "Save Text PDF (ATS)"}</span>
-            </button>
-
-            {/* UNIFIED DOWNLOAD PDF BUTTON (OPENS MODAL WITH ALL CHOICES) */}
+            {/* UNIFIED DOWNLOAD PDF BUTTON (OPENS MODAL WITH AR/EN/BOTH CHOICES) */}
             <button
               onClick={() => setIsExportModalOpen(true)}
               disabled={isGeneratingPdf}
@@ -1776,7 +1625,7 @@ export default function PublicCvBuilderPage() {
                 background: "#16a34a",
                 color: "#ffffff",
                 border: "none",
-                padding: "10px 20px",
+                padding: "10px 22px",
                 borderRadius: "10px",
                 fontSize: "13.5px",
                 fontWeight: "900",
@@ -1787,7 +1636,7 @@ export default function PublicCvBuilderPage() {
                 gap: "8px",
               }}
             >
-              <span>{isGeneratingPdf ? (isArabic ? "جاري التصدير..." : "Exporting...") : (isArabic ? "📥 خيارات التصدير والتحميل" : "📥 Export Options")}</span>
+              <span>{isGeneratingPdf ? (isArabic ? "جاري التصدير..." : "Exporting...") : (isArabic ? "تحميل السيرة الذاتية PDF" : "Download Resume PDF")}</span>
             </button>
           </div>
         </div>
@@ -2494,151 +2343,6 @@ export default function PublicCvBuilderPage() {
                         {th.label}
                       </button>
                     ))}
-                  </div>
-                </div>
-
-                {/* FONT FAMILY SELECTOR */}
-                <div>
-                  <label style={{ display: "block", fontSize: "11.5px", color: "#64748b", marginBottom: "6px" }}>
-                    {isArabic ? "نوع الخط (Font Family):" : "Font Family:"}
-                  </label>
-                  <select
-                    value={fontFamily}
-                    onChange={(e) => setFontFamily(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "8px 10px",
-                      background: "#f8fafc",
-                      border: "1px solid #e2e8f0",
-                      borderRadius: "8px",
-                      color: "#0f172a",
-                      fontSize: "12px",
-                      fontWeight: "700",
-                      cursor: "pointer",
-                      outline: "none",
-                    }}
-                  >
-                    {isArabic ? (
-                      <>
-                        <option value="Tajawal">تجوال (Tajawal - قياسي رسمي)</option>
-                        <option value="Cairo">القاهرة (Cairo - عصري بارز)</option>
-                        <option value="Alexandria">الإسكندرية (Alexandria - أنيق)</option>
-                        <option value="Almarai">المراعي (Almarai - شاشة مريح)</option>
-                        <option value="Readex Pro">ريدكس برو (Readex Pro - حديث)</option>
-                      </>
-                    ) : (
-                      <>
-                        <option value="Outfit">Outfit (Modern Clean)</option>
-                        <option value="Inter">Inter (Global Corporate)</option>
-                        <option value="Plus Jakarta Sans">Plus Jakarta Sans (Executive)</option>
-                        <option value="Poppins">Poppins (Friendly Bold)</option>
-                        <option value="Montserrat">Montserrat (Classic Clean)</option>
-                      </>
-                    )}
-                  </select>
-                </div>
-
-                {/* FONT SIZE CONTROLLER */}
-                <div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-                    <label style={{ fontSize: "11.5px", color: "#64748b", fontWeight: "700" }}>
-                      {isArabic ? "حجم الخط (Font Size):" : "Font Size Scale:"}
-                    </label>
-                    <span style={{ fontSize: "11.5px", fontWeight: "800", color: "#2563eb", background: "#eff6ff", padding: "2px 8px", borderRadius: "6px" }}>
-                      {fontScalePercent}%
-                    </span>
-                  </div>
-
-                  {/* Quick Preset Buttons */}
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px", marginBottom: "8px" }}>
-                    {[
-                      { id: "compact", percent: 90, label: isArabic ? "مضغوط (90%)" : "Compact (90%)" },
-                      { id: "normal", percent: 100, label: isArabic ? "قياسي (100%)" : "Normal (100%)" },
-                      { id: "large", percent: 115, label: isArabic ? "كبير (115%)" : "Large (115%)" },
-                    ].map((sz) => (
-                      <button
-                        key={sz.id}
-                        type="button"
-                        onClick={() => {
-                          setFontSizeScale(sz.id as any);
-                          setFontScalePercent(sz.percent);
-                        }}
-                        style={{
-                          background: fontScalePercent === sz.percent ? "#2563eb" : "#f8fafc",
-                          color: fontScalePercent === sz.percent ? "#ffffff" : "#475569",
-                          border: "1px solid #e2e8f0",
-                          padding: "7px 4px",
-                          borderRadius: "8px",
-                          fontSize: "11px",
-                          fontWeight: "800",
-                          cursor: "pointer",
-                          transition: "all 0.2s ease",
-                        }}
-                      >
-                        {sz.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Fine-tuning Slider & Stepper */}
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "#f8fafc", padding: "8px 10px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
-                    <button
-                      type="button"
-                      onClick={() => setFontScalePercent((prev) => Math.max(80, prev - 5))}
-                      title={isArabic ? "تصغير الخط" : "Decrease font size"}
-                      style={{
-                        width: "28px",
-                        height: "28px",
-                        borderRadius: "6px",
-                        border: "1px solid #cbd5e1",
-                        background: "#ffffff",
-                        color: "#0f172a",
-                        fontWeight: "900",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "14px",
-                      }}
-                    >
-                      -
-                    </button>
-                    <input
-                      type="range"
-                      min="80"
-                      max="130"
-                      step="2"
-                      value={fontScalePercent}
-                      onChange={(e) => {
-                        const val = Number(e.target.value);
-                        setFontScalePercent(val);
-                        if (val <= 92) setFontSizeScale("compact");
-                        else if (val >= 112) setFontSizeScale("large");
-                        else setFontSizeScale("normal");
-                      }}
-                      style={{ flex: 1, accentColor: "#2563eb", cursor: "pointer" }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setFontScalePercent((prev) => Math.min(130, prev + 5))}
-                      title={isArabic ? "تكبير الخط" : "Increase font size"}
-                      style={{
-                        width: "28px",
-                        height: "28px",
-                        borderRadius: "6px",
-                        border: "1px solid #cbd5e1",
-                        background: "#ffffff",
-                        color: "#0f172a",
-                        fontWeight: "900",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "14px",
-                      }}
-                    >
-                      +
-                    </button>
                   </div>
                 </div>
 
